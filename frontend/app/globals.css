@@ -1,0 +1,37 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --bg: #ffffff;
+  --text: #1a1a1a;
+  --muted: #6b7280;
+  --link: #2563eb;
+  --border: #e5e7eb;
+  --badge-accurate: #10b981;
+  --badge-needs-nuance: #f59e0b;
+  --badge-disagree: #ef4444;
+}
+
+[data-theme="retro"] {
+  --bg: #faf8f3;
+  --text: #2d2d2d;
+  --muted: #6b6b6b;
+  --link: #0066cc;
+  --border: #d4d4d4;
+}
+
+body {
+  color: var(--text);
+  background: var(--bg);
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+}
+
+a {
+  color: var(--link);
+  text-decoration: none;
+}
+
+a:hover {
+  text-decoration: underline;
+}
