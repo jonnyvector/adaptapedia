@@ -65,7 +65,7 @@ export default function SpoilerControl({
   const currentConfig = getPreferenceConfig(currentPreference);
 
   return (
-    <div className="sticky top-0 z-10 bg-surface border-b-2 border-warn shadow-md">
+    <div className="sticky top-0 z-10 bg-background border-b-2 border-warn shadow-md">
       <div className="max-w-6xl mx-auto px-4 py-3 sm:py-4">
         {/* Header with warning indicator */}
         <div className="flex items-center gap-2 mb-3">
