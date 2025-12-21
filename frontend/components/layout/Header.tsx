@@ -41,7 +41,7 @@ export default function Header(): JSX.Element {
 
   return (
     <header
-      className={`sticky top-0 z-50 border-b border-border bg-surface transition-shadow duration-200 ${
+      className={`sticky top-0 z-50 border-b border-border bg-surface/80 backdrop-blur-md transition-shadow duration-200 ${
         isSticky ? 'shadow-md' : ''
       }`}
     >
