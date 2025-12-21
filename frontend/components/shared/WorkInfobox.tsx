@@ -8,8 +8,16 @@ interface WorkInfoboxProps {
 export default function WorkInfobox({ work }: WorkInfoboxProps): JSX.Element {
   const items: Array<{ label: string; value: string | number | JSX.Element }> = [];
 
+  if (work.author) {
+    items.push({ label: 'Author', value: work.author });
+  }
+
   if (work.year) {
     items.push({ label: 'Year', value: work.year });
+  }
+
+  if (work.genre) {
+    items.push({ label: 'Genre', value: work.genre });
   }
 
   if (work.language) {
