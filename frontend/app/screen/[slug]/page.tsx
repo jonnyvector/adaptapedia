@@ -45,7 +45,7 @@ async function getScreenWorkData(slug: string): Promise<ScreenWorkData> {
 
   const adaptationsWithDiffs = await Promise.all(
     adaptationsResponse.results.map(async (adaptation) => {
-      // Fetch diffs for each source book
+      // Fetch safe diffs for preview
       let diffs: DiffItem[] = [];
       try {
         const diffsResponse = (await api.compare.get(
@@ -59,16 +59,31 @@ async function getScreenWorkData(slug: string): Promise<ScreenWorkData> {
         console.error(`Failed to fetch diffs for work ${adaptation.work}:`, error);
       }
 
+      // Get total count including all spoiler levels
+      let totalCount = diffs.length;
+      try {
+        const fullDiffsResponse = (await api.compare.get(
+          adaptation.work,
+          screenWork.id,
+          'FULL',
+          '-vote_counts__accurate'
+        )) as ApiResponse<DiffItem>;
+        totalCount = fullDiffsResponse.results.length;
+      } catch (error) {
+        console.error(`Failed to fetch full diff count for work ${adaptation.work}:`, error);
+      }
+
       return {
         ...adaptation,
         diffs,
+        totalDiffCount: totalCount,
       };
     })
   );
 
-  // Calculate total diff count
+  // Calculate total diff count (including all spoiler levels)
   const totalDiffCount = adaptationsWithDiffs.reduce(
-    (sum, adaptation) => sum + (adaptation.diffs?.length || 0),
+    (sum, adaptation) => sum + (adaptation.totalDiffCount || 0),
     0
   );
 
@@ -204,7 +219,7 @@ export default async function ScreenWorkPage({
                 <div className="space-y-6">
                   {adaptations.map((adaptation) => {
                     const book = adaptation.work_detail;
-                    const diffCount = adaptation.diffs?.length || 0;
+                    const diffCount = adaptation.totalDiffCount || 0;
                     const compareUrl = `/compare/${book.slug}/${screenWork.slug}`;
 
                     return (
