@@ -21,15 +21,11 @@ export default function RootLayout({
           dangerouslySetInnerHTML={{
             __html: `
               (function() {
-                function getTheme() {
-                  const saved = localStorage.getItem('adaptapedia-theme');
-                  if (saved === 'dark' || saved === 'light') return saved;
-                  return window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+                const saved = localStorage.getItem('adaptapedia-theme');
+                if (saved === 'dark' || saved === 'light') {
+                  document.documentElement.setAttribute('data-theme', saved);
                 }
-                const theme = getTheme();
-                if (theme === 'dark') {
-                  document.documentElement.setAttribute('data-theme', 'dark');
-                }
+                // If saved is 'system' or null, don't set attribute - let CSS media query handle it
               })();
             `,
           }}

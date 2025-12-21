@@ -18,14 +18,12 @@ export default function ThemeToggle(): JSX.Element {
 
   // Apply theme to DOM
   const applyTheme = (newTheme: Theme) => {
-    const displayTheme = newTheme === 'system'
-      ? (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light')
-      : newTheme;
-
-    if (displayTheme === 'dark') {
-      document.documentElement.setAttribute('data-theme', 'dark');
-    } else {
+    if (newTheme === 'system') {
+      // Remove data-theme to let system preference take over
       document.documentElement.removeAttribute('data-theme');
+    } else {
+      // Explicitly set light or dark
+      document.documentElement.setAttribute('data-theme', newTheme);
     }
   };
 
