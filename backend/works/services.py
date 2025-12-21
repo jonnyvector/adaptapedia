@@ -103,15 +103,15 @@ class SearchService:
         Search for works with their ranked adaptations.
 
         Returns Work queryset with ranked_adaptations attribute attached.
-        Prioritizes title matches over author/summary matches.
+        Uses fuzzy matching with PostgreSQL trigrams for typo tolerance.
         """
-        from django.db.models import Case, When, IntegerField, Value
+        from django.contrib.postgres.search import TrigramSimilarity
+        from django.db.models import Case, When, IntegerField, Value, Max
 
-        # Search works by title, author, or summary with relevance ranking
-        works = Work.objects.filter(
+        # First try exact/contains matches
+        exact_matches = Work.objects.filter(
             Q(title__icontains=query) | Q(author__icontains=query) | Q(summary__icontains=query)
         ).annotate(
-            # Rank: title match = 3, author match = 2, summary match = 1
             relevance_rank=Case(
                 When(title__icontains=query, then=Value(3)),
                 When(author__icontains=query, then=Value(2)),
@@ -119,7 +119,27 @@ class SearchService:
                 default=Value(0),
                 output_field=IntegerField()
             )
-        ).order_by('-relevance_rank', '-created_at')[:limit]
+        )
+
+        # If we have good exact matches, return those
+        if exact_matches.count() >= 3:
+            works = exact_matches.order_by('-relevance_rank', '-created_at')[:limit]
+        else:
+            # Use fuzzy matching with trigrams
+            works = Work.objects.annotate(
+                title_similarity=TrigramSimilarity('title', query),
+                author_similarity=TrigramSimilarity('author', query),
+                # Calculate max similarity across fields
+                max_similarity=Max(
+                    Case(
+                        When(title_similarity__gte=F('author_similarity'), then=F('title_similarity')),
+                        default=F('author_similarity'),
+                        output_field=FloatField()
+                    )
+                ),
+            ).filter(
+                Q(title_similarity__gte=0.2) | Q(author_similarity__gte=0.2)
+            ).order_by('-max_similarity', '-created_at')[:limit]
 
         # Attach ranked adaptations to each work
         for work in works:
@@ -133,21 +153,40 @@ class SearchService:
         Search for screen works directly (for screen-first searches).
 
         If year is provided, filter by year.
-        Prioritizes title matches over summary matches.
+        Uses fuzzy matching for typo tolerance.
         """
+        from django.contrib.postgres.search import TrigramSimilarity
         from django.db.models import Case, When, IntegerField, Value
 
+        # First try exact/contains matches
         filters = Q(title__icontains=query) | Q(summary__icontains=query)
 
         if year:
             filters &= Q(year=year)
 
-        return ScreenWork.objects.filter(filters).annotate(
-            # Rank: title match = 2, summary match = 1
+        exact_matches = ScreenWork.objects.filter(filters).annotate(
             relevance_rank=Case(
                 When(title__icontains=query, then=Value(2)),
                 When(summary__icontains=query, then=Value(1)),
                 default=Value(0),
                 output_field=IntegerField()
             )
-        ).order_by('-relevance_rank', '-tmdb_popularity', '-year')[:limit]
+        )
+
+        # If we have good exact matches, return those
+        if exact_matches.count() >= 3:
+            works = exact_matches.order_by('-relevance_rank', '-tmdb_popularity', '-year')[:limit]
+        else:
+            # Use fuzzy matching
+            query_obj = ScreenWork.objects.annotate(
+                title_similarity=TrigramSimilarity('title', query),
+            ).filter(
+                title_similarity__gte=0.2
+            )
+
+            if year:
+                query_obj = query_obj.filter(year=year)
+
+            works = query_obj.order_by('-title_similarity', '-tmdb_popularity', '-year')[:limit]
+
+        return works
