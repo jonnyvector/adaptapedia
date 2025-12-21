@@ -103,11 +103,23 @@ class SearchService:
         Search for works with their ranked adaptations.
 
         Returns Work queryset with ranked_adaptations attribute attached.
+        Prioritizes title matches over author/summary matches.
         """
-        # Search works by title, author, or summary
+        from django.db.models import Case, When, IntegerField, Value
+
+        # Search works by title, author, or summary with relevance ranking
         works = Work.objects.filter(
             Q(title__icontains=query) | Q(author__icontains=query) | Q(summary__icontains=query)
-        ).order_by('-created_at')[:limit]
+        ).annotate(
+            # Rank: title match = 3, author match = 2, summary match = 1
+            relevance_rank=Case(
+                When(title__icontains=query, then=Value(3)),
+                When(author__icontains=query, then=Value(2)),
+                When(summary__icontains=query, then=Value(1)),
+                default=Value(0),
+                output_field=IntegerField()
+            )
+        ).order_by('-relevance_rank', '-created_at')[:limit]
 
         # Attach ranked adaptations to each work
         for work in works:
@@ -121,10 +133,21 @@ class SearchService:
         Search for screen works directly (for screen-first searches).
 
         If year is provided, filter by year.
+        Prioritizes title matches over summary matches.
         """
+        from django.db.models import Case, When, IntegerField, Value
+
         filters = Q(title__icontains=query) | Q(summary__icontains=query)
 
         if year:
             filters &= Q(year=year)
 
-        return ScreenWork.objects.filter(filters).order_by('-tmdb_popularity', '-year')[:limit]
+        return ScreenWork.objects.filter(filters).annotate(
+            # Rank: title match = 2, summary match = 1
+            relevance_rank=Case(
+                When(title__icontains=query, then=Value(2)),
+                When(summary__icontains=query, then=Value(1)),
+                default=Value(0),
+                output_field=IntegerField()
+            )
+        ).order_by('-relevance_rank', '-tmdb_popularity', '-year')[:limit]
