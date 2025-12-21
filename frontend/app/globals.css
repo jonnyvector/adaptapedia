@@ -2,79 +2,108 @@
 @tailwind components;
 @tailwind utilities;
 
-/* Light mode (default) - Paper Encyclopedia */
+/* ═══════════════════════════════════════════════════════════
+   BRUTALIST DESIGN SYSTEM
+   Raw. Honest. Functional. No decoration.
+   ═══════════════════════════════════════════════════════════ */
+
 :root {
-  /* Surfaces */
-  --bg: #F7F7F2;
-  --surface: #FFFFFF;
-  --surface2: #F1F3F5;
+  /* Stark palette */
+  --brutalist-black: #000000;
+  --brutalist-white: #FFFFFF;
+  --brutalist-gray-light: #CCCCCC;
+  --brutalist-gray: #808080;
+  --brutalist-gray-dark: #404040;
+  --brutalist-red: #CC0000;
 
-  /* Text */
-  --text: #111827;
-  --muted: #4B5563;
+  /* Semantic mapping */
+  --bg: var(--brutalist-white);
+  --surface: var(--brutalist-white);
+  --surface2: var(--brutalist-gray-light);
 
-  /* Borders */
-  --border: #D1D5DB;
+  --text: var(--brutalist-black);
+  --text-bright: var(--brutalist-black);
+  --muted: var(--brutalist-gray);
 
-  /* Links */
-  --link: #0B63CE;
-  --linkHover: #094EA6;
+  --border: var(--brutalist-black);
+  --border-light: var(--brutalist-gray);
 
-  /* Retro accents (used sparingly) */
-  --cyan: #00B7C2;
-  --magenta: #D81B60;
-  --purple: #6D28D9;
+  --link: var(--brutalist-black);
+  --linkHover: var(--brutalist-red);
 
-  /* Semantic colors */
-  --success: #15803D;
-  --warn: #B45309;
-  --danger: #B91C1C;
-  --info: #2563EB;
+  --accent: var(--brutalist-red);
+
+  --success: var(--brutalist-black);
+  --warn: var(--brutalist-black);
+  --danger: var(--brutalist-red);
+  --info: var(--brutalist-black);
 }
 
-/* Dark mode - Blue-black "terminal" */
+/* Dark mode - inverted */
 [data-theme="dark"] {
-  /* Surfaces */
-  --bg: #0F1419;
-  --surface: #111827;
-  --surface2: #0F172A;
+  --bg: var(--brutalist-black);
+  --surface: var(--brutalist-black);
+  --surface2: var(--brutalist-gray-dark);
 
-  /* Text */
-  --text: #E5E7EB;
-  --muted: #9CA3AF;
+  --text: var(--brutalist-white);
+  --text-bright: var(--brutalist-white);
+  --muted: var(--brutalist-gray);
 
-  /* Borders */
-  --border: #334155;
+  --border: var(--brutalist-white);
+  --border-light: var(--brutalist-gray);
 
-  /* Links */
-  --link: #7DD3FC;
-  --linkHover: #38BDF8;
-
-  /* Retro accents (used sparingly) */
-  --cyan: #22D3EE;
-  --magenta: #FF4DA6;
-  --purple: #A78BFA;
-
-  /* Semantic colors */
-  --success: #34D399;
-  --warn: #FBBF24;
-  --danger: #F87171;
-  --info: #60A5FA;
+  --link: var(--brutalist-white);
+  --linkHover: var(--brutalist-red);
 }
+
+/* ═══════════════════════════════════════════════════════════
+   TYPOGRAPHY - Monospace Everything
+   ═══════════════════════════════════════════════════════════ */
 
 body {
+  font-family: 'Courier New', Courier, monospace;
+  font-size: 14px;
+  line-height: 1.5;
+  font-weight: 400;
   color: var(--text);
   background: var(--bg);
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
-  font-size: 16px;
   overflow-x: hidden;
-  transition: background-color 0.2s ease, color 0.2s ease;
 }
 
+h1, h2, h3, h4, h5, h6 {
+  font-family: 'Courier New', Courier, monospace;
+  font-weight: 700;
+  line-height: 1.2;
+  color: var(--text-bright);
+  margin: 0;
+  text-transform: uppercase;
+}
+
+h1 {
+  font-size: 32px;
+  letter-spacing: 2px;
+  border: 4px solid var(--border);
+  padding: 16px;
+  display: inline-block;
+}
+
+h2 {
+  font-size: 24px;
+  letter-spacing: 1px;
+  border-bottom: 3px solid var(--border);
+  padding-bottom: 8px;
+}
+
+h3 {
+  font-size: 18px;
+  letter-spacing: 1px;
+}
+
+/* Links - underlined, simple */
 a {
   color: var(--link);
-  text-decoration: none;
-  transition: color 0.2s ease;
+  text-decoration: underline;
+  transition: color 0.1s linear;
 }
 
 a:hover {
@@ -82,10 +111,329 @@ a:hover {
   text-decoration: underline;
 }
 
-/* Touch-friendly button styles - minimum touch targets */
+/* ═══════════════════════════════════════════════════════════
+   LAYOUT - Exposed Grid
+   ═══════════════════════════════════════════════════════════ */
+
+.brutalist-grid {
+  position: relative;
+}
+
+.brutalist-grid::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background-image:
+    linear-gradient(var(--border-light) 1px, transparent 1px),
+    linear-gradient(90deg, var(--border-light) 1px, transparent 1px);
+  background-size: 20px 20px;
+  opacity: 0.2;
+  pointer-events: none;
+}
+
+/* ═══════════════════════════════════════════════════════════
+   BOXES - Heavy Borders
+   ═══════════════════════════════════════════════════════════ */
+
+.brutalist-box {
+  border: 3px solid var(--border);
+  padding: 16px;
+  background: var(--surface);
+}
+
+.brutalist-box-thick {
+  border: 5px solid var(--border);
+  padding: 20px;
+  background: var(--surface);
+}
+
+.brutalist-box-double {
+  border: 3px double var(--border);
+  padding: 16px;
+  background: var(--surface);
+}
+
+.brutalist-box-accent {
+  border: 3px solid var(--accent);
+  padding: 16px;
+  background: var(--surface);
+}
+
+/* ═══════════════════════════════════════════════════════════
+   BUTTONS - Stark and Utilitarian
+   ═══════════════════════════════════════════════════════════ */
+
+button, .btn {
+  font-family: 'Courier New', Courier, monospace;
+  font-size: 14px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  padding: 12px 24px;
+  border: 3px solid var(--border);
+  background: var(--bg);
+  color: var(--text);
+  cursor: pointer;
+  transition: all 0.1s linear;
+}
+
+button:hover, .btn:hover {
+  background: var(--border);
+  color: var(--bg);
+}
+
+button:active, .btn:active {
+  border-width: 4px;
+  padding: 11px 23px;
+}
+
+button.primary {
+  background: var(--accent);
+  border-color: var(--accent);
+  color: var(--brutalist-white);
+}
+
+button.primary:hover {
+  background: var(--brutalist-black);
+  border-color: var(--brutalist-black);
+}
+
+/* ═══════════════════════════════════════════════════════════
+   SPLIT SCREEN - Before/After Comparison
+   ═══════════════════════════════════════════════════════════ */
+
+.split-screen {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  border: 3px solid var(--border);
+}
+
+.split-screen-left {
+  border-right: 3px solid var(--border);
+  padding: 16px;
+}
+
+.split-screen-right {
+  padding: 16px;
+}
+
+.split-screen-left::before {
+  content: 'BEFORE:';
+  display: block;
+  font-weight: 700;
+  margin-bottom: 8px;
+  letter-spacing: 1px;
+}
+
+.split-screen-right::before {
+  content: 'AFTER:';
+  display: block;
+  font-weight: 700;
+  margin-bottom: 8px;
+  letter-spacing: 1px;
+}
+
+@media (max-width: 768px) {
+  .split-screen {
+    grid-template-columns: 1fr;
+  }
+
+  .split-screen-left {
+    border-right: none;
+    border-bottom: 3px solid var(--border);
+  }
+}
+
+/* ═══════════════════════════════════════════════════════════
+   TABLES - Raw HTML Style
+   ═══════════════════════════════════════════════════════════ */
+
+table {
+  width: 100%;
+  border: 3px solid var(--border);
+  border-collapse: collapse;
+  font-family: 'Courier New', Courier, monospace;
+}
+
+th, td {
+  border: 1px solid var(--border);
+  padding: 8px 12px;
+  text-align: left;
+}
+
+th {
+  background: var(--border);
+  color: var(--bg);
+  font-weight: 700;
+  text-transform: uppercase;
+}
+
+tr:nth-child(even) {
+  background: var(--surface2);
+}
+
+/* ═══════════════════════════════════════════════════════════
+   FORMS - Brutal Input Fields
+   ═══════════════════════════════════════════════════════════ */
+
+input[type="text"],
+input[type="email"],
+input[type="password"],
+input[type="search"],
+textarea,
+select {
+  font-family: 'Courier New', Courier, monospace;
+  font-size: 14px;
+  padding: 10px;
+  border: 3px solid var(--border);
+  background: var(--bg);
+  color: var(--text);
+  width: 100%;
+}
+
+input[type="text"]:focus,
+input[type="email"]:focus,
+input[type="password"]:focus,
+input[type="search"]:focus,
+textarea:focus,
+select:focus {
+  outline: none;
+  border-color: var(--accent);
+}
+
+/* ═══════════════════════════════════════════════════════════
+   LISTS - Stark and Simple
+   ═══════════════════════════════════════════════════════════ */
+
+ul {
+  list-style: square;
+  padding-left: 24px;
+}
+
+ol {
+  list-style: decimal;
+  padding-left: 24px;
+}
+
+li {
+  margin-bottom: 4px;
+}
+
+/* ═══════════════════════════════════════════════════════════
+   HORIZONTAL RULES
+   ═══════════════════════════════════════════════════════════ */
+
+hr {
+  border: none;
+  border-top: 3px solid var(--border);
+  margin: 24px 0;
+}
+
+hr.thick {
+  border-top: 5px solid var(--border);
+}
+
+hr.accent {
+  border-top: 3px solid var(--accent);
+}
+
+/* ═══════════════════════════════════════════════════════════
+   UTILITY CLASSES
+   ═══════════════════════════════════════════════════════════ */
+
+.text-center { text-align: center; }
+.text-left { text-align: left; }
+.text-right { text-align: right; }
+
+.border-all { border: 3px solid var(--border); }
+.border-top { border-top: 3px solid var(--border); }
+.border-bottom { border-bottom: 3px solid var(--border); }
+.border-left { border-left: 3px solid var(--border); }
+.border-right { border-right: 3px solid var(--border); }
+
+.bg-black { background: var(--brutalist-black); color: var(--brutalist-white); }
+.bg-white { background: var(--brutalist-white); color: var(--brutalist-black); }
+.bg-gray { background: var(--brutalist-gray); color: var(--brutalist-white); }
+.bg-red { background: var(--brutalist-red); color: var(--brutalist-white); }
+
+.text-red { color: var(--brutalist-red); }
+.text-black { color: var(--brutalist-black); }
+.text-white { color: var(--brutalist-white); }
+.text-gray { color: var(--brutalist-gray); }
+
+.uppercase { text-transform: uppercase; }
+.bold { font-weight: 700; }
+
+.p-0 { padding: 0; }
+.p-1 { padding: 8px; }
+.p-2 { padding: 16px; }
+.p-3 { padding: 24px; }
+
+.m-0 { margin: 0; }
+.m-1 { margin: 8px; }
+.m-2 { margin: 16px; }
+.m-3 { margin: 24px; }
+
+.mb-1 { margin-bottom: 8px; }
+.mb-2 { margin-bottom: 16px; }
+.mb-3 { margin-bottom: 24px; }
+
+/* ═══════════════════════════════════════════════════════════
+   ANIMATIONS - Minimal
+   ═══════════════════════════════════════════════════════════ */
+
+@keyframes blink {
+  0%, 49% { opacity: 1; }
+  50%, 100% { opacity: 0; }
+}
+
+.blink {
+  animation: blink 1s step-start infinite;
+}
+
+/* ═══════════════════════════════════════════════════════════
+   ACCESSIBILITY
+   ═══════════════════════════════════════════════════════════ */
+
 @media (hover: none) and (pointer: coarse) {
   button, a {
     min-height: 44px;
     min-width: 44px;
   }
+}
+
+/* ═══════════════════════════════════════════════════════════
+   BLOCKQUOTES - Raw Citation Style
+   ═══════════════════════════════════════════════════════════ */
+
+blockquote {
+  border-left: 5px solid var(--border);
+  padding-left: 16px;
+  margin: 16px 0;
+  font-style: italic;
+}
+
+/* ═══════════════════════════════════════════════════════════
+   CODE BLOCKS - Terminal Style
+   ═══════════════════════════════════════════════════════════ */
+
+code {
+  font-family: 'Courier New', Courier, monospace;
+  background: var(--surface2);
+  padding: 2px 6px;
+  border: 1px solid var(--border);
+}
+
+pre {
+  font-family: 'Courier New', Courier, monospace;
+  background: var(--surface2);
+  padding: 16px;
+  border: 3px solid var(--border);
+  overflow-x: auto;
+}
+
+pre code {
+  background: none;
+  padding: 0;
+  border: none;
 }
