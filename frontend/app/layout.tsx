@@ -16,6 +16,25 @@ export default function RootLayout({
 }): JSX.Element {
   return (
     <html lang="en">
+      <head>
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `
+              (function() {
+                function getTheme() {
+                  const saved = localStorage.getItem('adaptapedia-theme');
+                  if (saved === 'dark' || saved === 'light') return saved;
+                  return window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+                }
+                const theme = getTheme();
+                if (theme === 'dark') {
+                  document.documentElement.setAttribute('data-theme', 'dark');
+                }
+              })();
+            `,
+          }}
+        />
+      </head>
       <body className="flex flex-col min-h-screen">
         <AuthProvider>
           <Header />
