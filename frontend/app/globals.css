@@ -3,315 +3,258 @@
 @tailwind utilities;
 
 /* ═══════════════════════════════════════════════════════════
-   MEMPHIS/POSTMODERN DESIGN SYSTEM
-   Bold. Playful. Geometric. 80s Energy.
+   MINIMALIST/JAPANESE DESIGN SYSTEM
+   Calm. Refined. Breathing room. Subtle elegance.
    ═══════════════════════════════════════════════════════════ */
 
 :root {
-  /* Memphis Color Palette - Bold & Saturated */
-  --memphis-yellow: #FFD700;
-  --memphis-pink: #FF1493;
-  --memphis-blue: #00BFFF;
-  --memphis-red: #FF4444;
-  --memphis-mint: #4ECDC4;
-  --memphis-purple: #9B59B6;
-  --memphis-orange: #FF8C42;
-  --memphis-black: #2C3E50;
-  --memphis-white: #FFFFFF;
-  --memphis-gray: #ECF0F1;
+  /* Soft, muted palette */
+  --zen-white: #FFFFFF;
+  --zen-off-white: #FAFAFA;
+  --zen-paper: #F5F5F5;
+  --zen-stone: #E8E8E8;
+  --zen-gray-light: #D0D0D0;
+  --zen-gray: #9E9E9E;
+  --zen-charcoal: #4A4A4A;
+  --zen-black: #2A2A2A;
+  --zen-accent: #7C9885; /* Soft sage green */
+  --zen-accent-light: #A8BFB0;
 
   /* Semantic mapping */
-  --bg: var(--memphis-white);
-  --surface: var(--memphis-gray);
-  --text: var(--memphis-black);
-  --text-bright: var(--memphis-black);
-
-  --primary: var(--memphis-pink);
-  --secondary: var(--memphis-blue);
-  --accent-1: var(--memphis-yellow);
-  --accent-2: var(--memphis-mint);
-  --accent-3: var(--memphis-purple);
-  --accent-4: var(--memphis-orange);
+  --bg: var(--zen-white);
+  --surface: var(--zen-off-white);
+  --surface-raised: var(--zen-paper);
+  --text: var(--zen-black);
+  --text-muted: var(--zen-gray);
+  --border: var(--zen-stone);
+  --border-subtle: var(--zen-gray-light);
+  --accent: var(--zen-accent);
+  --accent-light: var(--zen-accent-light);
 }
 
 /* ═══════════════════════════════════════════════════════════
-   TYPOGRAPHY - Bold & Friendly
+   TYPOGRAPHY - Refined & Hierarchical
    ═══════════════════════════════════════════════════════════ */
 
 body {
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Arial, sans-serif;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Helvetica Neue', Arial, sans-serif;
   font-size: 16px;
-  line-height: 1.6;
-  font-weight: 400;
+  line-height: 1.8;
+  font-weight: 300;
   color: var(--text);
   background: var(--bg);
   overflow-x: hidden;
+  letter-spacing: 0.01em;
 }
 
 h1, h2, h3, h4, h5, h6 {
-  font-family: Impact, 'Arial Black', sans-serif;
-  font-weight: 900;
-  line-height: 1.1;
-  color: var(--text-bright);
+  font-weight: 300;
+  line-height: 1.4;
+  color: var(--text);
   margin: 0;
-  text-transform: uppercase;
+  letter-spacing: 0.02em;
 }
 
 h1 {
-  font-size: 48px;
-  letter-spacing: 2px;
-  position: relative;
-  display: inline-block;
+  font-size: 40px;
+  margin-bottom: 8px;
 }
 
 h2 {
-  font-size: 32px;
-  letter-spacing: 1px;
+  font-size: 28px;
+  margin-bottom: 24px;
   position: relative;
+  padding-bottom: 16px;
+}
+
+h2::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 48px;
+  height: 1px;
+  background: var(--accent);
 }
 
 h3 {
-  font-size: 24px;
-  letter-spacing: 0.5px;
+  font-size: 20px;
+  margin-bottom: 12px;
+  font-weight: 400;
 }
 
-/* Links */
+/* Links - subtle and refined */
 a {
-  color: var(--primary);
+  color: var(--text);
   text-decoration: none;
-  font-weight: 600;
-  transition: color 0.2s ease;
+  border-bottom: 1px solid var(--border-subtle);
+  transition: all 0.3s ease;
 }
 
 a:hover {
-  color: var(--secondary);
-  text-decoration: underline;
+  color: var(--accent);
+  border-bottom-color: var(--accent);
 }
 
 /* ═══════════════════════════════════════════════════════════
-   GEOMETRIC DECORATIONS
+   CARDS & CONTAINERS - Delicate Borders
    ═══════════════════════════════════════════════════════════ */
 
-.geo-circle {
-  width: 80px;
-  height: 80px;
-  border-radius: 50%;
-  position: absolute;
-  z-index: -1;
+.zen-card {
+  border: 1px solid var(--border);
+  padding: 40px;
+  background: var(--surface);
+  transition: all 0.3s ease;
 }
 
-.geo-square {
-  width: 60px;
-  height: 60px;
-  position: absolute;
-  transform: rotate(45deg);
-  z-index: -1;
+.zen-card:hover {
+  border-color: var(--accent-light);
+  box-shadow: 0 2px 16px rgba(0, 0, 0, 0.04);
 }
 
-.geo-triangle {
-  width: 0;
-  height: 0;
-  border-left: 40px solid transparent;
-  border-right: 40px solid transparent;
-  border-bottom: 70px solid;
-  position: absolute;
-  z-index: -1;
+.zen-card-raised {
+  background: var(--surface-raised);
+  padding: 48px;
+  border: none;
+  box-shadow: 0 1px 8px rgba(0, 0, 0, 0.03);
 }
 
-.dots-pattern {
-  background-image: radial-gradient(circle, var(--memphis-black) 2px, transparent 2px);
-  background-size: 20px 20px;
-  background-position: 0 0;
+.zen-divider {
+  width: 100%;
+  height: 1px;
+  background: var(--border);
+  margin: 64px 0;
 }
 
-.squiggle {
-  position: relative;
-}
-
-.squiggle::after {
-  content: '〰〰〰';
-  position: absolute;
-  font-size: 24px;
-  opacity: 0.3;
+.zen-divider-accent {
+  width: 64px;
+  height: 1px;
+  background: var(--accent);
+  margin: 32px 0;
 }
 
 /* ═══════════════════════════════════════════════════════════
-   CARDS & BOXES - Chunky Borders & Bright Colors
-   ═══════════════════════════════════════════════════════════ */
-
-.memphis-card {
-  border: 5px solid var(--memphis-black);
-  padding: 24px;
-  background: var(--bg);
-  box-shadow: 8px 8px 0 var(--memphis-black);
-  position: relative;
-}
-
-.memphis-card-yellow {
-  border: 5px solid var(--memphis-black);
-  padding: 24px;
-  background: var(--memphis-yellow);
-  box-shadow: 8px 8px 0 var(--memphis-black);
-  position: relative;
-}
-
-.memphis-card-pink {
-  border: 5px solid var(--memphis-black);
-  padding: 24px;
-  background: var(--memphis-pink);
-  box-shadow: 8px 8px 0 var(--memphis-black);
-  color: white;
-  position: relative;
-}
-
-.memphis-card-blue {
-  border: 5px solid var(--memphis-black);
-  padding: 24px;
-  background: var(--memphis-blue);
-  box-shadow: 8px 8px 0 var(--memphis-black);
-  color: white;
-  position: relative;
-}
-
-.memphis-card-mint {
-  border: 5px solid var(--memphis-black);
-  padding: 24px;
-  background: var(--memphis-mint);
-  box-shadow: 8px 8px 0 var(--memphis-black);
-  position: relative;
-}
-
-.memphis-card-gray {
-  border: 5px solid var(--memphis-black);
-  padding: 24px;
-  background: var(--memphis-gray);
-  box-shadow: 8px 8px 0 var(--memphis-black);
-  position: relative;
-}
-
-/* ═══════════════════════════════════════════════════════════
-   BUTTONS - Chunky & Colorful
+   BUTTONS - Minimal & Elegant
    ═══════════════════════════════════════════════════════════ */
 
 button, .btn {
-  font-family: Impact, 'Arial Black', sans-serif;
-  font-size: 16px;
-  font-weight: 900;
-  text-transform: uppercase;
-  letter-spacing: 1px;
-  padding: 16px 32px;
-  border: 4px solid var(--memphis-black);
-  background: var(--memphis-yellow);
-  color: var(--memphis-black);
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Helvetica Neue', Arial, sans-serif;
+  font-size: 14px;
+  font-weight: 400;
+  letter-spacing: 0.05em;
+  padding: 14px 32px;
+  border: 1px solid var(--border);
+  background: transparent;
+  color: var(--text);
   cursor: pointer;
-  transition: all 0.2s ease;
-  box-shadow: 4px 4px 0 var(--memphis-black);
+  transition: all 0.3s ease;
   text-decoration: none;
   display: inline-block;
 }
 
 button:hover, .btn:hover {
-  transform: translate(2px, 2px);
-  box-shadow: 2px 2px 0 var(--memphis-black);
-}
-
-button:active, .btn:active {
-  transform: translate(4px, 4px);
-  box-shadow: none;
+  border-color: var(--accent);
+  background: var(--accent);
+  color: var(--zen-white);
 }
 
 button.primary, .btn.primary {
-  background: var(--memphis-pink);
-  color: white;
+  background: var(--accent);
+  border-color: var(--accent);
+  color: var(--zen-white);
 }
 
-button.secondary, .btn.secondary {
-  background: var(--memphis-blue);
-  color: white;
+button.primary:hover, .btn.primary:hover {
+  background: var(--zen-charcoal);
+  border-color: var(--zen-charcoal);
 }
 
 /* ═══════════════════════════════════════════════════════════
-   COMPARISON LAYOUT - Asymmetric Split
+   COMPARISON LAYOUT - Side by Side with Subtle Divider
    ═══════════════════════════════════════════════════════════ */
 
-.comparison-split {
+.zen-comparison {
   display: grid;
   grid-template-columns: 1fr 1fr;
-  gap: 0;
-  border: 5px solid var(--memphis-black);
-  overflow: hidden;
-}
-
-.comparison-left {
-  background: var(--memphis-yellow);
-  padding: 20px;
-  border-right: 5px solid var(--memphis-black);
+  gap: 48px;
+  padding: 40px 0;
   position: relative;
 }
 
-.comparison-right {
-  background: var(--memphis-pink);
-  padding: 20px;
-  color: white;
-  position: relative;
+.zen-comparison::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 1px;
+  height: 100%;
+  background: var(--border);
+}
+
+.zen-comparison-left,
+.zen-comparison-right {
+  padding: 0 24px;
 }
 
 @media (max-width: 768px) {
-  .comparison-split {
+  .zen-comparison {
     grid-template-columns: 1fr;
+    gap: 32px;
   }
 
-  .comparison-left {
-    border-right: none;
-    border-bottom: 5px solid var(--memphis-black);
+  .zen-comparison::after {
+    display: none;
   }
 }
 
 /* ═══════════════════════════════════════════════════════════
-   STATS - Geometric Grid
+   STATS - Minimal Grid
    ═══════════════════════════════════════════════════════════ */
 
-.stats-grid {
+.zen-stats {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
-  gap: 16px;
+  gap: 1px;
+  background: var(--border);
+  border: 1px solid var(--border);
 }
 
-.stat-box {
-  border: 5px solid var(--memphis-black);
-  padding: 24px;
+.zen-stat {
+  background: var(--surface);
+  padding: 48px 32px;
   text-align: center;
-  box-shadow: 6px 6px 0 var(--memphis-black);
-  position: relative;
+  transition: background 0.3s ease;
 }
 
-.stat-box:nth-child(1) { background: var(--memphis-yellow); }
-.stat-box:nth-child(2) { background: var(--memphis-mint); }
-.stat-box:nth-child(3) { background: var(--memphis-pink); color: white; }
+.zen-stat:hover {
+  background: var(--surface-raised);
+}
 
-.stat-number {
-  font-size: 48px;
-  font-weight: 900;
+.zen-stat-number {
+  font-size: 36px;
+  font-weight: 200;
   line-height: 1;
-  font-family: Impact, 'Arial Black', sans-serif;
+  margin-bottom: 12px;
+  color: var(--text);
 }
 
-.stat-label {
-  font-size: 14px;
-  font-weight: 700;
+.zen-stat-label {
+  font-size: 12px;
+  font-weight: 400;
   text-transform: uppercase;
-  letter-spacing: 1px;
-  margin-top: 8px;
+  letter-spacing: 0.1em;
+  color: var(--text-muted);
 }
 
 @media (max-width: 768px) {
-  .stats-grid {
+  .zen-stats {
     grid-template-columns: 1fr;
   }
 }
 
 /* ═══════════════════════════════════════════════════════════
-   FORMS - Bold & Friendly
+   FORMS - Clean & Simple
    ═══════════════════════════════════════════════════════════ */
 
 input[type="text"],
@@ -320,13 +263,16 @@ input[type="password"],
 input[type="search"],
 textarea,
 select {
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Arial, sans-serif;
-  font-size: 16px;
-  padding: 12px 16px;
-  border: 4px solid var(--memphis-black);
-  background: var(--bg);
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Helvetica Neue', Arial, sans-serif;
+  font-size: 15px;
+  font-weight: 300;
+  padding: 14px 16px;
+  border: none;
+  border-bottom: 1px solid var(--border);
+  background: transparent;
   color: var(--text);
   width: 100%;
+  transition: border-color 0.3s ease;
 }
 
 input[type="text"]:focus,
@@ -336,12 +282,17 @@ input[type="search"]:focus,
 textarea:focus,
 select:focus {
   outline: none;
-  border-color: var(--memphis-pink);
-  box-shadow: 0 0 0 3px rgba(255, 20, 147, 0.2);
+  border-bottom-color: var(--accent);
+}
+
+input::placeholder,
+textarea::placeholder {
+  color: var(--text-muted);
+  font-weight: 300;
 }
 
 /* ═══════════════════════════════════════════════════════════
-   LISTS
+   LISTS - Minimal Markers
    ═══════════════════════════════════════════════════════════ */
 
 ul {
@@ -349,64 +300,57 @@ ul {
   padding-left: 0;
 }
 
+ul li {
+  position: relative;
+  padding-left: 24px;
+  margin-bottom: 12px;
+}
+
 ul li::before {
-  content: '▶';
-  color: var(--memphis-pink);
-  font-weight: bold;
-  display: inline-block;
-  width: 1.2em;
-  margin-left: -1.2em;
-  padding-left: 0.2em;
+  content: '—';
+  position: absolute;
+  left: 0;
+  color: var(--accent);
+  font-weight: 300;
 }
 
 ol {
   list-style: none;
-  counter-reset: memphis-counter;
+  counter-reset: zen-counter;
   padding-left: 0;
 }
 
 ol li {
-  counter-increment: memphis-counter;
+  counter-increment: zen-counter;
   position: relative;
-  padding-left: 48px;
+  padding-left: 40px;
   margin-bottom: 16px;
 }
 
 ol li::before {
-  content: counter(memphis-counter);
+  content: counter(zen-counter, decimal-leading-zero);
   position: absolute;
   left: 0;
-  top: -2px;
-  width: 36px;
-  height: 36px;
-  border: 4px solid var(--memphis-black);
-  background: var(--memphis-yellow);
-  border-radius: 50%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-weight: 900;
-  font-size: 18px;
-  font-family: Impact, 'Arial Black', sans-serif;
+  color: var(--text-muted);
+  font-size: 13px;
+  font-weight: 300;
 }
 
 /* ═══════════════════════════════════════════════════════════
-   HORIZONTAL RULES - Zigzag Pattern
+   HORIZONTAL RULES - Delicate Lines
    ═══════════════════════════════════════════════════════════ */
 
 hr {
   border: none;
-  height: 8px;
-  background: repeating-linear-gradient(
-    45deg,
-    var(--memphis-pink),
-    var(--memphis-pink) 10px,
-    var(--memphis-yellow) 10px,
-    var(--memphis-yellow) 20px,
-    var(--memphis-blue) 20px,
-    var(--memphis-blue) 30px
-  );
-  margin: 32px 0;
+  height: 1px;
+  background: var(--border);
+  margin: 64px 0;
+}
+
+hr.accent {
+  width: 64px;
+  background: var(--accent);
+  margin: 32px auto;
 }
 
 /* ═══════════════════════════════════════════════════════════
@@ -417,57 +361,66 @@ hr {
 .text-left { text-align: left; }
 .text-right { text-align: right; }
 
-.bg-yellow { background: var(--memphis-yellow); }
-.bg-pink { background: var(--memphis-pink); color: white; }
-.bg-blue { background: var(--memphis-blue); color: white; }
-.bg-mint { background: var(--memphis-mint); }
-.bg-gray { background: var(--memphis-gray); }
-.bg-purple { background: var(--memphis-purple); color: white; }
-.bg-orange { background: var(--memphis-orange); }
+.text-muted { color: var(--text-muted); }
+.text-accent { color: var(--accent); }
 
-.text-pink { color: var(--memphis-pink); }
-.text-blue { color: var(--memphis-blue); }
-.text-yellow { color: var(--memphis-yellow); }
-.text-white { color: white; }
-.text-black { color: var(--memphis-black); }
+.uppercase {
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  font-size: 12px;
+  font-weight: 400;
+}
 
-.uppercase { text-transform: uppercase; }
-.bold { font-weight: 700; }
+.mb-1 { margin-bottom: 12px; }
+.mb-2 { margin-bottom: 24px; }
+.mb-3 { margin-bottom: 40px; }
+.mb-4 { margin-bottom: 64px; }
 
-.mb-1 { margin-bottom: 8px; }
-.mb-2 { margin-bottom: 16px; }
-.mb-3 { margin-bottom: 24px; }
-.mb-4 { margin-bottom: 32px; }
-
-.mt-1 { margin-top: 8px; }
-.mt-2 { margin-top: 16px; }
-.mt-3 { margin-top: 24px; }
+.mt-1 { margin-top: 12px; }
+.mt-2 { margin-top: 24px; }
+.mt-3 { margin-top: 40px; }
+.mt-4 { margin-top: 64px; }
 
 .p-0 { padding: 0; }
-.p-1 { padding: 8px; }
-.p-2 { padding: 16px; }
-.p-3 { padding: 24px; }
+.p-1 { padding: 12px; }
+.p-2 { padding: 24px; }
+.p-3 { padding: 40px; }
+
+.pb-1 { padding-bottom: 12px; }
+.pb-2 { padding-bottom: 24px; }
+.pb-3 { padding-bottom: 40px; }
 
 /* ═══════════════════════════════════════════════════════════
-   ANIMATIONS - Bouncy & Fun
+   SPACING - Generous Breathing Room
    ═══════════════════════════════════════════════════════════ */
 
-@keyframes float {
-  0%, 100% { transform: translateY(0px); }
-  50% { transform: translateY(-10px); }
+.section-spacing {
+  margin: 96px 0;
 }
 
-.float {
-  animation: float 3s ease-in-out infinite;
+.container-zen {
+  max-width: 960px;
+  margin: 0 auto;
+  padding: 0 24px;
 }
 
-@keyframes rotate {
-  from { transform: rotate(0deg); }
-  to { transform: rotate(360deg); }
+/* ═══════════════════════════════════════════════════════════
+   ANIMATIONS - Subtle & Gentle
+   ═══════════════════════════════════════════════════════════ */
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
-.rotate-slow {
-  animation: rotate 20s linear infinite;
+.fade-in {
+  animation: fadeIn 0.6s ease-out;
 }
 
 /* ═══════════════════════════════════════════════════════════
@@ -482,26 +435,16 @@ hr {
 }
 
 /* ═══════════════════════════════════════════════════════════
-   BLOCKQUOTES
+   BLOCKQUOTES - Simple Elegance
    ═══════════════════════════════════════════════════════════ */
 
 blockquote {
-  border-left: 8px solid var(--memphis-pink);
-  background: var(--memphis-gray);
-  padding: 16px 24px;
-  margin: 24px 0;
+  border-left: 1px solid var(--accent);
+  padding-left: 32px;
+  margin: 40px 0;
   font-style: italic;
-  position: relative;
-}
-
-blockquote::before {
-  content: '"';
-  font-size: 64px;
-  color: var(--memphis-pink);
-  position: absolute;
-  left: -10px;
-  top: -20px;
-  font-family: Georgia, serif;
+  color: var(--text-muted);
+  font-weight: 300;
 }
 
 /* ═══════════════════════════════════════════════════════════
@@ -509,24 +452,54 @@ blockquote::before {
    ═══════════════════════════════════════════════════════════ */
 
 code {
-  font-family: 'Courier New', Courier, monospace;
-  background: var(--memphis-gray);
-  padding: 4px 8px;
-  border: 2px solid var(--memphis-black);
-  border-radius: 4px;
+  font-family: 'SF Mono', 'Monaco', 'Inconsolata', 'Fira Code', monospace;
+  background: var(--surface-raised);
+  padding: 3px 8px;
+  border-radius: 2px;
+  font-size: 14px;
+  color: var(--zen-charcoal);
 }
 
 pre {
-  font-family: 'Courier New', Courier, monospace;
-  background: var(--memphis-gray);
-  padding: 24px;
-  border: 4px solid var(--memphis-black);
+  font-family: 'SF Mono', 'Monaco', 'Inconsolata', 'Fira Code', monospace;
+  background: var(--surface-raised);
+  padding: 32px;
+  border: 1px solid var(--border);
   overflow-x: auto;
-  box-shadow: 4px 4px 0 var(--memphis-black);
+  line-height: 1.6;
+  font-size: 14px;
 }
 
 pre code {
   background: none;
   padding: 0;
-  border: none;
+}
+
+/* ═══════════════════════════════════════════════════════════
+   TABLES - Clean Grid
+   ═══════════════════════════════════════════════════════════ */
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  border: 1px solid var(--border);
+}
+
+th, td {
+  border: 1px solid var(--border);
+  padding: 16px 20px;
+  text-align: left;
+}
+
+th {
+  background: var(--surface);
+  font-weight: 400;
+  font-size: 12px;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: var(--text-muted);
+}
+
+tr:hover {
+  background: var(--surface-raised);
 }
