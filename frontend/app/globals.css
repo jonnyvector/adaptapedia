@@ -2,36 +2,90 @@
 @tailwind components;
 @tailwind utilities;
 
+/* Light mode (default) - Paper Encyclopedia */
 :root {
-  --bg: #ffffff;
-  --text: #1a1a1a;
-  --muted: #6b7280;
-  --link: #2563eb;
-  --border: #e5e7eb;
-  --badge-accurate: #10b981;
-  --badge-needs-nuance: #f59e0b;
-  --badge-disagree: #ef4444;
+  /* Surfaces */
+  --bg: #F7F7F2;
+  --surface: #FFFFFF;
+  --surface2: #F1F3F5;
+
+  /* Text */
+  --text: #111827;
+  --muted: #4B5563;
+
+  /* Borders */
+  --border: #D1D5DB;
+
+  /* Links */
+  --link: #0B63CE;
+  --linkHover: #094EA6;
+
+  /* Retro accents (used sparingly) */
+  --cyan: #00B7C2;
+  --magenta: #D81B60;
+  --purple: #6D28D9;
+
+  /* Semantic colors */
+  --success: #15803D;
+  --warn: #B45309;
+  --danger: #B91C1C;
+  --info: #2563EB;
 }
 
-[data-theme="retro"] {
-  --bg: #faf8f3;
-  --text: #2d2d2d;
-  --muted: #6b6b6b;
-  --link: #0066cc;
-  --border: #d4d4d4;
+/* Dark mode - Blue-black "terminal" */
+[data-theme="dark"] {
+  /* Surfaces */
+  --bg: #0F1419;
+  --surface: #111827;
+  --surface2: #0F172A;
+
+  /* Text */
+  --text: #E5E7EB;
+  --muted: #9CA3AF;
+
+  /* Borders */
+  --border: #334155;
+
+  /* Links */
+  --link: #7DD3FC;
+  --linkHover: #38BDF8;
+
+  /* Retro accents (used sparingly) */
+  --cyan: #22D3EE;
+  --magenta: #FF4DA6;
+  --purple: #A78BFA;
+
+  /* Semantic colors */
+  --success: #34D399;
+  --warn: #FBBF24;
+  --danger: #F87171;
+  --info: #60A5FA;
 }
 
 body {
   color: var(--text);
   background: var(--bg);
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+  font-size: 16px;
+  overflow-x: hidden;
+  transition: background-color 0.2s ease, color 0.2s ease;
 }
 
 a {
   color: var(--link);
   text-decoration: none;
+  transition: color 0.2s ease;
 }
 
 a:hover {
+  color: var(--linkHover);
   text-decoration: underline;
+}
+
+/* Touch-friendly button styles - minimum touch targets */
+@media (hover: none) and (pointer: coarse) {
+  button, a {
+    min-height: 44px;
+    min-width: 44px;
+  }
 }

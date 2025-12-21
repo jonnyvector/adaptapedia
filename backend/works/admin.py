@@ -11,4 +11,18 @@ class WorkAdmin(admin.ModelAdmin):
     list_filter = ['year', 'language', 'created_at']
     search_fields = ['title', 'wikidata_qid', 'openlibrary_work_id']
     readonly_fields = ['slug', 'created_at', 'updated_at']
-    prepopulated_fields = {'slug': ('title',)}
+    fieldsets = [
+        ('Basic Information', {
+            'fields': ['title', 'slug', 'year', 'language', 'summary']
+        }),
+        ('Cover Image', {
+            'fields': ['cover_url']
+        }),
+        ('External IDs', {
+            'fields': ['wikidata_qid', 'openlibrary_work_id']
+        }),
+        ('Metadata', {
+            'fields': ['created_at', 'updated_at'],
+            'classes': ['collapse']
+        }),
+    ]

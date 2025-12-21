@@ -11,7 +11,21 @@ class ScreenWorkAdmin(admin.ModelAdmin):
     list_filter = ['type', 'year', 'created_at']
     search_fields = ['title', 'wikidata_qid', 'tmdb_id']
     readonly_fields = ['slug', 'created_at', 'updated_at']
-    prepopulated_fields = {'slug': ('title',)}
+    fieldsets = [
+        ('Basic Information', {
+            'fields': ['type', 'title', 'slug', 'year', 'summary']
+        }),
+        ('Poster Image', {
+            'fields': ['poster_url']
+        }),
+        ('External IDs', {
+            'fields': ['wikidata_qid', 'tmdb_id']
+        }),
+        ('Metadata', {
+            'fields': ['created_at', 'updated_at'],
+            'classes': ['collapse']
+        }),
+    ]
 
 
 @admin.register(AdaptationEdge)

@@ -22,6 +22,7 @@ INSTALLED_APPS = [
     # Third party
     'rest_framework',
     'rest_framework_simplejwt',
+    'rest_framework_simplejwt.token_blacklist',
     'corsheaders',
     'django_filters',
     'django_celery_beat',
@@ -135,6 +136,55 @@ CELERY_ACCEPT_CONTENT = ['json']
 CELERY_TASK_SERIALIZER = 'json'
 CELERY_RESULT_SERIALIZER = 'json'
 CELERY_TIMEZONE = TIME_ZONE
+CELERY_RESULT_EXPIRES = 3600  # Task results expire after 1 hour
+
+# Celery Beat Schedule
+from celery.schedules import crontab
+
+CELERY_BEAT_SCHEDULE = {
+    'daily-wikidata-ingestion': {
+        'task': 'ingestion.tasks.run_daily_wikidata_ingestion',
+        'schedule': crontab(hour=2, minute=0),  # 2:00 AM UTC daily
+        'options': {
+            'expires': 3600,  # Task expires if not run within 1 hour
+        }
+    },
+    'weekly-tmdb-refresh': {
+        'task': 'ingestion.tasks.refresh_tmdb_metadata',
+        'schedule': crontab(hour=3, minute=0, day_of_week='sunday'),  # 3:00 AM UTC every Sunday
+        'options': {
+            'expires': 7200,  # Task expires if not run within 2 hours
+        }
+    },
+    'daily-stats-update': {
+        'task': 'ingestion.tasks.update_site_statistics',
+        'schedule': crontab(hour=1, minute=0),  # 1:00 AM UTC daily
+        'options': {
+            'expires': 3600,
+        }
+    },
+    'daily-session-cleanup': {
+        'task': 'ingestion.tasks.cleanup_expired_sessions',
+        'schedule': crontab(hour=4, minute=0),  # 4:00 AM UTC daily
+        'options': {
+            'expires': 3600,
+        }
+    },
+    'weekly-jwt-cleanup': {
+        'task': 'ingestion.tasks.cleanup_expired_jwt_tokens',
+        'schedule': crontab(hour=5, minute=0, day_of_week='monday'),  # 5:00 AM UTC every Monday
+        'options': {
+            'expires': 3600,
+        }
+    },
+    'hourly-health-check': {
+        'task': 'ingestion.tasks.health_check',
+        'schedule': crontab(minute=0),  # Every hour on the hour
+        'options': {
+            'expires': 300,  # Expires after 5 minutes
+        }
+    },
+}
 
 # External APIs
 TMDB_API_KEY = os.environ.get('TMDB_API_KEY', '')
@@ -145,3 +195,23 @@ WIKIDATA_SPARQL_ENDPOINT = os.environ.get('WIKIDATA_SPARQL_ENDPOINT', 'https://q
 CORS_ALLOWED_ORIGINS = [
     'http://localhost:3000',
 ]
+
+# JWT Settings
+from datetime import timedelta
+
+SIMPLE_JWT = {
+    'ACCESS_TOKEN_LIFETIME': timedelta(hours=1),
+    'REFRESH_TOKEN_LIFETIME': timedelta(days=7),
+    'ROTATE_REFRESH_TOKENS': True,
+    'BLACKLIST_AFTER_ROTATION': True,
+    'UPDATE_LAST_LOGIN': True,
+    'ALGORITHM': 'HS256',
+    'SIGNING_KEY': SECRET_KEY,
+    'VERIFYING_KEY': None,
+    'AUTH_HEADER_TYPES': ('Bearer',),
+    'AUTH_HEADER_NAME': 'HTTP_AUTHORIZATION',
+    'USER_ID_FIELD': 'id',
+    'USER_ID_CLAIM': 'user_id',
+    'AUTH_TOKEN_CLASSES': ('rest_framework_simplejwt.tokens.AccessToken',),
+    'TOKEN_TYPE_CLAIM': 'token_type',
+}

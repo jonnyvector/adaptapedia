@@ -1,5 +1,8 @@
 import type { Metadata } from 'next';
 import './globals.css';
+import Header from '@/components/layout/Header';
+import Footer from '@/components/layout/Footer';
+import { AuthProvider } from '@/lib/auth-context';
 
 export const metadata: Metadata = {
   title: 'Adaptapedia',
@@ -13,7 +16,15 @@ export default function RootLayout({
 }): JSX.Element {
   return (
     <html lang="en">
-      <body>{children}</body>
+      <body className="flex flex-col min-h-screen">
+        <AuthProvider>
+          <Header />
+          <div className="flex-1">
+            {children}
+          </div>
+          <Footer />
+        </AuthProvider>
+      </body>
     </html>
   );
 }

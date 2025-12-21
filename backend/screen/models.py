@@ -20,6 +20,7 @@ class ScreenWork(models.Model):
     year = models.IntegerField(null=True, blank=True)
     wikidata_qid = models.CharField(max_length=20, unique=True, null=True, blank=True, db_index=True)
     tmdb_id = models.IntegerField(unique=True, null=True, blank=True, db_index=True)
+    tmdb_popularity = models.FloatField(default=0.0, db_index=True, help_text="TMDb popularity score for ranking")
     poster_url = models.URLField(blank=True)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
@@ -40,7 +41,20 @@ class ScreenWork(models.Model):
     def save(self, *args, **kwargs) -> None:
         """Override save to generate slug."""
         if not self.slug:
-            self.slug = slugify(self.title)
+            base_slug = slugify(self.title)
+            slug = base_slug
+
+            # Check for duplicates and append year if needed
+            counter = 1
+            while ScreenWork.objects.filter(slug=slug).exclude(pk=self.pk).exists():
+                if self.year:
+                    slug = f"{base_slug}-{self.year}"
+                    if not ScreenWork.objects.filter(slug=slug).exclude(pk=self.pk).exists():
+                        break
+                slug = f"{base_slug}-{counter}"
+                counter += 1
+
+            self.slug = slug
         super().save(*args, **kwargs)
 
 

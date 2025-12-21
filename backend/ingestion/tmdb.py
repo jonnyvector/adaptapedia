@@ -57,7 +57,8 @@ def enrich_screenwork_from_tmdb(screen_work_id: int) -> Dict[str, Any]:
                 screen_work.summary = tmdb_data['overview']
 
             if 'poster_path' in tmdb_data and tmdb_data['poster_path'] and not screen_work.poster_url:
-                screen_work.poster_url = f"https://image.tmdb.org/t/p/w500{tmdb_data['poster_path']}"
+                # Use w780 for higher quality (or 'original' for highest, but larger file size)
+                screen_work.poster_url = f"https://image.tmdb.org/t/p/w780{tmdb_data['poster_path']}"
 
             # Set year from release date
             if screen_work.type == 'MOVIE' and 'release_date' in tmdb_data and not screen_work.year:

@@ -1,6 +1,6 @@
 """Serializers for diffs app."""
 from rest_framework import serializers
-from .models import DiffItem, DiffVote, DiffComment
+from .models import DiffItem, DiffVote, DiffComment, ComparisonVote
 
 
 class DiffItemSerializer(serializers.ModelSerializer):
@@ -8,6 +8,11 @@ class DiffItemSerializer(serializers.ModelSerializer):
 
     vote_counts = serializers.ReadOnlyField()
     created_by_username = serializers.CharField(source='created_by.username', read_only=True)
+    work_title = serializers.CharField(source='work.title', read_only=True)
+    work_slug = serializers.CharField(source='work.slug', read_only=True)
+    screen_work_title = serializers.CharField(source='screen_work.title', read_only=True)
+    screen_work_slug = serializers.CharField(source='screen_work.slug', read_only=True)
+    user_vote = serializers.SerializerMethodField()
 
     class Meta:
         """Meta options for DiffItemSerializer."""
@@ -17,6 +22,10 @@ class DiffItemSerializer(serializers.ModelSerializer):
             'id',
             'work',
             'screen_work',
+            'work_title',
+            'work_slug',
+            'screen_work_title',
+            'screen_work_slug',
             'category',
             'claim',
             'detail',
@@ -25,10 +34,34 @@ class DiffItemSerializer(serializers.ModelSerializer):
             'created_by',
             'created_by_username',
             'vote_counts',
+            'user_vote',
             'created_at',
             'updated_at',
         ]
         read_only_fields = ['id', 'created_by', 'created_at', 'updated_at', 'status']
+
+    def get_user_vote(self, obj):
+        """Get the current user's vote on this diff, if any."""
+        request = self.context.get('request')
+        if request and request.user.is_authenticated:
+            vote = DiffVote.objects.filter(diff_item=obj, user=request.user).first()
+            if vote:
+                return vote.vote
+        return None
+
+    def validate_claim(self, value: str) -> str:
+        """Validate claim field."""
+        if len(value) < 10:
+            raise serializers.ValidationError('Claim must be at least 10 characters long.')
+        if len(value) > 200:
+            raise serializers.ValidationError('Claim must not exceed 200 characters.')
+        return value
+
+    def validate_detail(self, value: str) -> str:
+        """Validate detail field."""
+        if len(value) > 1000:
+            raise serializers.ValidationError('Detail must not exceed 1000 characters.')
+        return value
 
 
 class DiffVoteSerializer(serializers.ModelSerializer):
@@ -52,6 +85,11 @@ class DiffCommentSerializer(serializers.ModelSerializer):
     """Serializer for DiffComment model."""
 
     username = serializers.CharField(source='user.username', read_only=True)
+    diff_item_claim = serializers.CharField(source='diff_item.claim', read_only=True)
+    work_title = serializers.CharField(source='diff_item.work.title', read_only=True)
+    work_slug = serializers.CharField(source='diff_item.work.slug', read_only=True)
+    screen_work_title = serializers.CharField(source='diff_item.screen_work.title', read_only=True)
+    screen_work_slug = serializers.CharField(source='diff_item.screen_work.slug', read_only=True)
 
     class Meta:
         """Meta options for DiffCommentSerializer."""
@@ -66,5 +104,50 @@ class DiffCommentSerializer(serializers.ModelSerializer):
             'spoiler_scope',
             'status',
             'created_at',
+            'diff_item_claim',
+            'work_title',
+            'work_slug',
+            'screen_work_title',
+            'screen_work_slug',
         ]
         read_only_fields = ['id', 'user', 'created_at', 'status']
+
+
+class ComparisonVoteSerializer(serializers.ModelSerializer):
+    """Serializer for ComparisonVote model."""
+
+    class Meta:
+        """Meta options for ComparisonVoteSerializer."""
+
+        model = ComparisonVote
+        fields = [
+            'id',
+            'work',
+            'screen_work',
+            'user',
+            'has_read_book',
+            'has_watched_adaptation',
+            'preference',
+            'faithfulness_rating',
+            'created_at',
+            'updated_at',
+        ]
+        read_only_fields = ['id', 'user', 'created_at', 'updated_at']
+
+    def validate(self, data):
+        """Validate comparison vote data."""
+        # Require both consumption confirmations
+        if not data.get('has_read_book') or not data.get('has_watched_adaptation'):
+            raise serializers.ValidationError(
+                'You must confirm that you have read the book and watched the adaptation.'
+            )
+
+        # Faithfulness rating only valid if they finished both
+        if data.get('preference') != 'DIDNT_FINISH' and data.get('faithfulness_rating') is not None:
+            rating = data.get('faithfulness_rating')
+            if rating < 1 or rating > 5:
+                raise serializers.ValidationError(
+                    'Faithfulness rating must be between 1 and 5.'
+                )
+
+        return data

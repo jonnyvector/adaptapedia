@@ -35,6 +35,8 @@ class DiffStatus(models.TextChoices):
     HIDDEN = 'HIDDEN', 'Hidden'
     LOCKED = 'LOCKED', 'Locked'
     PENDING = 'PENDING', 'Pending'
+    REJECTED = 'REJECTED', 'Rejected'
+    FLAGGED = 'FLAGGED', 'Flagged'
 
 
 class DiffItem(models.Model):
@@ -112,6 +114,8 @@ class CommentStatus(models.TextChoices):
 
     LIVE = 'LIVE', 'Live'
     HIDDEN = 'HIDDEN', 'Hidden'
+    PENDING = 'PENDING', 'Pending'
+    DELETED = 'DELETED', 'Deleted'
 
 
 class DiffComment(models.Model):
@@ -132,3 +136,48 @@ class DiffComment(models.Model):
     def __str__(self) -> str:
         """String representation of DiffComment."""
         return f"Comment by {self.user.username} on {self.diff_item}"
+
+
+class PreferenceChoice(models.TextChoices):
+    """Preference choices for comparison votes."""
+
+    BOOK = 'BOOK', 'Book'
+    SCREEN = 'SCREEN', 'Screen Adaptation'
+    TIE = 'TIE', 'Tie / Depends'
+    DIDNT_FINISH = 'DIDNT_FINISH', "Didn't finish both"
+
+
+class ComparisonVote(models.Model):
+    """Vote comparing a book and its screen adaptation."""
+
+    work = models.ForeignKey('works.Work', on_delete=models.CASCADE, related_name='comparison_votes')
+    screen_work = models.ForeignKey('screen.ScreenWork', on_delete=models.CASCADE, related_name='comparison_votes')
+    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='comparison_votes')
+
+    # Consumption confirmation
+    has_read_book = models.BooleanField(default=False)
+    has_watched_adaptation = models.BooleanField(default=False)
+
+    # Two-axis voting
+    preference = models.CharField(max_length=20, choices=PreferenceChoice.choices)
+    faithfulness_rating = models.IntegerField(
+        null=True,
+        blank=True,
+        help_text="How faithful is the adaptation? (1=Completely different, 5=Very faithful)"
+    )
+
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
+    class Meta:
+        """Meta options for ComparisonVote model."""
+
+        unique_together = [['work', 'screen_work', 'user']]
+        indexes = [
+            models.Index(fields=['work', 'screen_work']),
+            models.Index(fields=['preference']),
+        ]
+
+    def __str__(self) -> str:
+        """String representation of ComparisonVote."""
+        return f"{self.user.username}: {self.get_preference_display()}"

@@ -1,5 +1,5 @@
 # Core Django
-Django==5.0.1
+Django==4.2.10
 djangorestframework==3.14.0
 django-cors-headers==4.3.1
 django-filter==24.1
@@ -13,7 +13,7 @@ djangorestframework-simplejwt==5.3.1
 # Celery & Redis
 celery==5.3.6
 redis==5.0.1
-django-celery-beat==2.5.0
+django-celery-beat==2.6.0
 
 # API clients for data ingestion
 requests==2.31.0

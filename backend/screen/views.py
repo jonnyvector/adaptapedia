@@ -12,7 +12,7 @@ class ScreenWorkViewSet(viewsets.ReadOnlyModelViewSet):
     serializer_class = ScreenWorkSerializer
     lookup_field = 'slug'
     filter_backends = [DjangoFilterBackend, filters.SearchFilter, filters.OrderingFilter]
-    filterset_fields = ['type']
+    filterset_fields = ['type', 'year']
     search_fields = ['title', 'summary']
     ordering_fields = ['title', 'year', 'created_at']
     ordering = ['-created_at']
