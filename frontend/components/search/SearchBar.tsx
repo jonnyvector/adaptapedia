@@ -79,7 +79,7 @@ export default function SearchBar({
           onChange={(e) => setQuery(e.target.value)}
           placeholder={placeholder}
           autoFocus={autoFocus}
-          className="w-full pl-12 pr-12 py-3 sm:py-3.5 text-base border border-border rounded-lg focus:outline-none focus:ring-2 focus:ring-link focus:border-transparent bg-surface text-foreground"
+          className="w-full pl-14 pr-12 py-3 sm:py-3.5 text-base border border-border rounded-lg focus:outline-none focus:ring-2 focus:ring-link focus:border-transparent bg-surface text-foreground"
           aria-label="Search"
         />
         {query && (
