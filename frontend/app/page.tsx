@@ -3,147 +3,158 @@ import SearchBar from '@/components/search/SearchBar';
 
 export default function Home(): JSX.Element {
   return (
-    <main className="min-h-screen py-12 px-4 sm:px-6">
+    <main className="min-h-screen py-12 px-4 sm:px-6 spotlight">
       <div className="max-w-5xl mx-auto">
 
-        {/* Header - Art Deco Title */}
+        {/* Header */}
         <div className="text-center mb-4">
           <h1>Adaptapedia</h1>
           <p className="mt-3 text-lg text-muted">
-            Comparing Literary Works with Their Screen Adaptations
+            The Case Files: Book vs. Screen
           </p>
         </div>
 
         <hr />
 
-        {/* Stats - Geometric Tiles */}
-        <div className="deco-stats">
-          <div className="deco-stat">
-            <div className="deco-stat-number">2,185</div>
-            <div className="deco-stat-label">Books</div>
+        {/* Stats - Evidence Tags */}
+        <div className="noir-stats">
+          <div className="noir-stat">
+            <div className="noir-stat-number">2,185</div>
+            <div className="noir-stat-label">Books</div>
           </div>
-          <div className="deco-stat">
-            <div className="deco-stat-number">3,417</div>
-            <div className="deco-stat-label">Adaptations</div>
+          <div className="noir-stat">
+            <div className="noir-stat-number">3,417</div>
+            <div className="noir-stat-label">Adaptations</div>
           </div>
-          <div className="deco-stat">
-            <div className="deco-stat-number">12,834</div>
-            <div className="deco-stat-label">Differences</div>
+          <div className="noir-stat">
+            <div className="noir-stat-number">12,834</div>
+            <div className="noir-stat-label">Differences</div>
           </div>
         </div>
 
         {/* Search */}
-        <div className="deco-card deco-corners mb-3">
-          <h2>Search the Archive</h2>
-          <SearchBar placeholder="Enter book or film title..." />
+        <div className="noir-card mb-3" style={{ position: 'relative', marginTop: '32px' }}>
+          <div className="case-tab">INVESTIGATION</div>
+          <h2>Search the Archives</h2>
+          <SearchBar placeholder="Enter title to investigate..." />
         </div>
 
         {/* Sample Comparisons */}
         <div className="mb-4">
-          <h2 className="text-center">Featured Comparisons</h2>
+          <h2 className="text-center">Active Cases</h2>
 
           {/* Jurassic Park */}
-          <div className="deco-card mb-3">
-            <h3 className="text-gold mb-2">Jurassic Park</h3>
-            <p className="text-muted mb-3">Michael Crichton's scientific thriller brought to life</p>
+          <div className="noir-card mb-3" style={{ position: 'relative', marginTop: '32px' }}>
+            <div className="case-tab">CASE #001</div>
 
-            <div className="deco-comparison">
-              <div>
-                <p className="uppercase text-muted mb-1" style={{ fontSize: '11px', letterSpacing: '0.15em' }}>
-                  Literary Work
+            <h3 className="mb-2">Jurassic Park</h3>
+            <p className="text-muted mb-3" style={{ fontSize: '14px', color: 'var(--noir-gray)' }}>
+              Subject: Michael Crichton's scientific thriller
+            </p>
+
+            <div className="noir-comparison mb-3">
+              <div className="noir-comparison-left" style={{ color: 'var(--noir-black)' }}>
+                <p className="mb-1" style={{ fontSize: '13px', marginTop: '16px' }}>
+                  <strong>Format:</strong> Novel
                 </p>
-                <h3 className="mb-1">Novel</h3>
-                <p className="text-muted">Published 1990</p>
-                <p className="text-muted">by Michael Crichton</p>
+                <p className="mb-1" style={{ fontSize: '13px' }}>
+                  <strong>Date:</strong> 1990
+                </p>
+                <p style={{ fontSize: '13px' }}>
+                  <strong>Author:</strong> Michael Crichton
+                </p>
               </div>
-
-              <div className="deco-comparison-divider"></div>
-
-              <div>
-                <p className="uppercase text-muted mb-1" style={{ fontSize: '11px', letterSpacing: '0.15em' }}>
-                  Screen Adaptation
+              <div className="noir-comparison-right" style={{ color: 'var(--noir-black)' }}>
+                <p className="mb-1" style={{ fontSize: '13px', marginTop: '16px' }}>
+                  <strong>Format:</strong> Film
                 </p>
-                <h3 className="mb-1">Film</h3>
-                <p className="text-muted">Released 1993</p>
-                <p className="text-muted">dir. Steven Spielberg</p>
+                <p className="mb-1" style={{ fontSize: '13px' }}>
+                  <strong>Date:</strong> 1993
+                </p>
+                <p style={{ fontSize: '13px' }}>
+                  <strong>Director:</strong> Steven Spielberg
+                </p>
               </div>
             </div>
 
-            <div className="mt-3 pt-3" style={{ borderTop: '2px solid var(--deco-gold)' }}>
-              <div className="text-center">
-                <p className="text-muted mb-2" style={{ fontSize: '14px' }}>
-                  <span className="text-gold" style={{ fontWeight: 600 }}>6 differences</span> documented
-                </p>
-                <Link href="/compare/jurassic-park/jurassic-park-1993" className="btn">
-                  View Comparison
-                </Link>
-              </div>
+            <div className="text-center pt-3" style={{ borderTop: '2px dashed var(--noir-red)' }}>
+              <p className="mb-2" style={{ fontSize: '14px', color: 'var(--noir-gray)' }}>
+                Status: <span className="text-red" style={{ fontWeight: 700 }}>6 DIFFERENCES DOCUMENTED</span>
+              </p>
+              <Link href="/compare/jurassic-park/jurassic-park-1993" className="btn">
+                Open Case File
+              </Link>
             </div>
           </div>
 
           {/* Sphere */}
-          <div className="deco-card">
-            <h3 className="text-teal mb-2">Sphere</h3>
-            <p className="text-muted mb-3">Deep-sea psychological thriller</p>
+          <div className="noir-card" style={{ position: 'relative', marginTop: '32px' }}>
+            <div className="case-tab">CASE #002</div>
 
-            <div className="deco-comparison">
-              <div>
-                <p className="uppercase text-muted mb-1" style={{ fontSize: '11px', letterSpacing: '0.15em' }}>
-                  Literary Work
+            <h3 className="mb-2">Sphere</h3>
+            <p className="text-muted mb-3" style={{ fontSize: '14px', color: 'var(--noir-gray)' }}>
+              Subject: Deep-sea psychological thriller
+            </p>
+
+            <div className="noir-comparison mb-3">
+              <div className="noir-comparison-left" style={{ color: 'var(--noir-black)' }}>
+                <p className="mb-1" style={{ fontSize: '13px', marginTop: '16px' }}>
+                  <strong>Format:</strong> Novel
                 </p>
-                <h3 className="mb-1">Novel</h3>
-                <p className="text-muted">Published 1987</p>
-                <p className="text-muted">by Michael Crichton</p>
+                <p className="mb-1" style={{ fontSize: '13px' }}>
+                  <strong>Date:</strong> 1987
+                </p>
+                <p style={{ fontSize: '13px' }}>
+                  <strong>Author:</strong> Michael Crichton
+                </p>
               </div>
-
-              <div className="deco-comparison-divider"></div>
-
-              <div>
-                <p className="uppercase text-muted mb-1" style={{ fontSize: '11px', letterSpacing: '0.15em' }}>
-                  Screen Adaptation
+              <div className="noir-comparison-right" style={{ color: 'var(--noir-black)' }}>
+                <p className="mb-1" style={{ fontSize: '13px', marginTop: '16px' }}>
+                  <strong>Format:</strong> Film
                 </p>
-                <h3 className="mb-1">Film</h3>
-                <p className="text-muted">Released 1998</p>
-                <p className="text-muted">dir. Barry Levinson</p>
+                <p className="mb-1" style={{ fontSize: '13px' }}>
+                  <strong>Date:</strong> 1998
+                </p>
+                <p style={{ fontSize: '13px' }}>
+                  <strong>Director:</strong> Barry Levinson
+                </p>
               </div>
             </div>
 
-            <div className="mt-3 pt-3" style={{ borderTop: '2px solid var(--deco-gold)' }}>
-              <div className="text-center">
-                <p className="text-muted mb-2" style={{ fontSize: '14px' }}>
-                  <span className="text-gold" style={{ fontWeight: 600 }}>5 differences</span> documented
-                </p>
-                <Link href="/compare/sphere-novel/sphere-1998" className="btn">
-                  View Comparison
-                </Link>
-              </div>
+            <div className="text-center pt-3" style={{ borderTop: '2px dashed var(--noir-red)' }}>
+              <p className="mb-2" style={{ fontSize: '14px', color: 'var(--noir-gray)' }}>
+                Status: <span className="text-red" style={{ fontWeight: 700 }}>5 DIFFERENCES DOCUMENTED</span>
+              </p>
+              <Link href="/compare/sphere-novel/sphere-1998" className="btn">
+                Open Case File
+              </Link>
             </div>
           </div>
         </div>
 
         {/* Features */}
         <div className="mb-4">
-          <h2 className="text-center">Features</h2>
+          <h2 className="text-center">Our Methods</h2>
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-            <div className="deco-card-gold">
-              <h3 className="mb-2">Structured Analysis</h3>
-              <p style={{ fontSize: '15px' }}>
-                Differences organized by category—plot, character, ending, setting, and theme.
+            <div className="noir-card-dark">
+              <h3 className="mb-2" style={{ fontSize: '18px' }}>Structured Analysis</h3>
+              <p style={{ fontSize: '14px', lineHeight: '1.6' }}>
+                Evidence categorized by: Plot, Character, Ending, Setting, Theme
               </p>
             </div>
 
-            <div className="deco-card-teal">
-              <h3 className="mb-2">Spoiler Control</h3>
-              <p style={{ fontSize: '15px' }}>
-                Adaptive system lets you choose exactly what spoilers you see based on your progress.
+            <div className="noir-card-dark">
+              <h3 className="mb-2" style={{ fontSize: '18px' }}>Spoiler Protection</h3>
+              <p style={{ fontSize: '14px', lineHeight: '1.6' }}>
+                Redacted information system—reveal only what you're ready to see
               </p>
             </div>
 
-            <div className="deco-card-navy">
-              <h3 className="mb-2">Community Voting</h3>
-              <p style={{ fontSize: '15px' }}>
-                Vote on accuracy to surface the most reliable information through consensus.
+            <div className="noir-card-dark">
+              <h3 className="mb-2" style={{ fontSize: '18px' }}>Witness Testimony</h3>
+              <p style={{ fontSize: '14px', lineHeight: '1.6' }}>
+                Community voting surfaces the most credible evidence
               </p>
             </div>
           </div>
@@ -152,40 +163,40 @@ export default function Home(): JSX.Element {
         <hr />
 
         {/* How It Works */}
-        <div className="deco-card mb-4">
-          <h2>How It Works</h2>
+        <div className="noir-card-spotlight mb-4">
+          <h2>Standard Operating Procedure</h2>
           <ol>
             <li>
-              Search for any book or screen adaptation in our comprehensive database
+              Search the archives for any book or screen adaptation
             </li>
             <li>
-              View structured differences with customizable spoiler controls
+              Review documented differences with spoiler controls
             </li>
             <li>
-              Contribute by adding differences and voting on accuracy
+              Submit new evidence and vote on existing testimony
             </li>
           </ol>
         </div>
 
         {/* CTA */}
         <div className="text-center mb-4">
-          <p className="text-muted mb-3" style={{ fontSize: '17px' }}>
-            Join the community documenting how stories transform from page to screen
+          <p className="text-muted mb-3" style={{ fontSize: '16px' }}>
+            Join the investigation. Document how stories change from page to screen.
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
             <Link href="/search" className="btn primary">
-              Start Exploring
+              Begin Investigation
             </Link>
             <Link href="/about" className="btn secondary">
-              Learn More
+              Case Background
             </Link>
           </div>
         </div>
 
         {/* Footer */}
         <div className="mt-4 text-center">
-          <p className="text-muted" style={{ fontSize: '13px', letterSpacing: '0.05em' }}>
-            ADAPTAPEDIA v1.0 · 2025
+          <p className="text-muted" style={{ fontSize: '11px', letterSpacing: '0.15em' }}>
+            ADAPTAPEDIA DETECTIVE AGENCY • EST. 2025
           </p>
         </div>
 
