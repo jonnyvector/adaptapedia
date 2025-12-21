@@ -12,9 +12,15 @@ export default function Header(): JSX.Element {
   const { isAuthenticated, user } = useAuth();
   const [searchQuery, setSearchQuery] = useState('');
   const [isSticky, setIsSticky] = useState(false);
+  const [mounted, setMounted] = useState(false);
   const isHomePage = pathname === '/';
   const isSearchPage = pathname === '/search';
   const isModerator = user && (user.role === 'MOD' || user.role === 'ADMIN');
+
+  // Prevent hydration mismatch by waiting for client-side mount
+  useEffect(() => {
+    setMounted(true);
+  }, []);
 
   const handleSearch = (e: React.FormEvent) => {
     e.preventDefault();
@@ -99,7 +105,9 @@ export default function Header(): JSX.Element {
             </div>
 
             {/* Auth Section */}
-            {isAuthenticated && user ? (
+            {!mounted ? (
+              <div className="w-16 h-10" />
+            ) : isAuthenticated && user ? (
               <>
                 <Link
                   href={`/u/${user.username}`}
