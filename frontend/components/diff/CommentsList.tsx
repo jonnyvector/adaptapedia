@@ -221,7 +221,7 @@ export default function CommentsList({
 
       {/* Loading state */}
       {loading && (
-        <div className="space-y-4" aria-live="polite" aria-busy="true">
+        <div className="space-y-4" role="status" aria-live="polite" aria-busy="true">
           <div className="py-3 border-b border-border">
             <div className="flex items-center gap-2 mb-2">
               <LoadingSkeleton width="w-24" height="h-4" />
