@@ -3,7 +3,7 @@ import SearchBar from '@/components/search/SearchBar';
 
 export default function Home(): JSX.Element {
   return (
-    <main className="min-h-screen bg-white">
+    <main className="min-h-screen">
       <div className="container py-12">
 
         {/* Header */}

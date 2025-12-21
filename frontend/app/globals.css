@@ -25,7 +25,7 @@
   --blue-600: #2563EB;
   --blue-700: #1D4ED8;
 
-  /* Semantic colors */
+  /* Semantic colors - Light Mode */
   --bg: #FFFFFF;
   --bg-subtle: var(--gray-50);
   --bg-muted: var(--gray-100);
@@ -40,6 +40,44 @@
   --primary: var(--blue-600);
   --primary-hover: var(--blue-700);
   --primary-light: var(--blue-50);
+}
+
+/* Dark Mode */
+@media (prefers-color-scheme: dark) {
+  :root {
+    --bg: #0A0A0A;
+    --bg-subtle: var(--gray-900);
+    --bg-muted: var(--gray-800);
+
+    --text: var(--gray-50);
+    --text-secondary: var(--gray-400);
+    --text-tertiary: var(--gray-500);
+
+    --border: var(--gray-800);
+    --border-strong: var(--gray-700);
+
+    --primary: var(--blue-500);
+    --primary-hover: var(--blue-600);
+    --primary-light: rgba(59, 130, 246, 0.1);
+  }
+}
+
+/* Manual dark mode toggle */
+[data-theme="dark"] {
+  --bg: #0A0A0A;
+  --bg-subtle: var(--gray-900);
+  --bg-muted: var(--gray-800);
+
+  --text: var(--gray-50);
+  --text-secondary: var(--gray-400);
+  --text-tertiary: var(--gray-500);
+
+  --border: var(--gray-800);
+  --border-strong: var(--gray-700);
+
+  --primary: var(--blue-500);
+  --primary-hover: var(--blue-600);
+  --primary-light: rgba(59, 130, 246, 0.1);
 }
 
 /* ═══════════════════════════════════════════════════════════
