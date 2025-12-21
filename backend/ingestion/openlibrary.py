@@ -53,6 +53,25 @@ def enrich_work_from_openlibrary(work_id: int) -> Dict[str, Any]:
                 cover_id = ol_data['covers'][0]
                 work.cover_url = f"https://covers.openlibrary.org/b/id/{cover_id}-L.jpg"
 
+            # Extract author information
+            if 'authors' in ol_data and ol_data['authors'] and not work.author:
+                author_keys = [a['author']['key'] if isinstance(a, dict) and 'author' in a else a.get('key') for a in ol_data['authors']]
+                if author_keys and author_keys[0]:
+                    # Fetch author details
+                    author_url = f"{settings.OPEN_LIBRARY_BASE_URL}{author_keys[0]}.json"
+                    try:
+                        author_response = requests.get(author_url, timeout=10)
+                        author_response.raise_for_status()
+                        author_data = author_response.json()
+                        if 'name' in author_data:
+                            work.author = author_data['name']
+                    except Exception:
+                        pass
+
+            # Extract genre from subjects (take first subject as primary genre)
+            if 'subjects' in ol_data and ol_data['subjects'] and not work.genre:
+                work.genre = ol_data['subjects'][0][:100] if isinstance(ol_data['subjects'][0], str) else ''
+
             work.save()
 
             return {'success': True, 'work_id': work_id}
