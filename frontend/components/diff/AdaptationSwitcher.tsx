@@ -100,7 +100,7 @@ export default function AdaptationSwitcher({
       {/* Current adaptation button */}
       <button
         onClick={() => setIsOpen(!isOpen)}
-        className="text-xl sm:text-2xl md:text-3xl font-bold text-left hover:text-link transition-colors flex items-center gap-2 group"
+        className="text-xl sm:text-2xl md:text-3xl font-bold text-left hover:text-link transition-colors flex items-center gap-2 group !border-0 !bg-transparent !p-0"
         aria-expanded={isOpen}
         aria-haspopup="true"
       >
