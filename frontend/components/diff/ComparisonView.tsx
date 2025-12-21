@@ -37,13 +37,13 @@ export default function ComparisonView({
   const router = useRouter();
   const { isAuthenticated } = useAuth();
 
-  // Initialize spoiler preference from localStorage
-  const [spoilerPreference, setSpoilerPreference] = useState<SpoilerPreference>(() => {
-    if (typeof window !== 'undefined') {
-      return loadSpoilerPreference();
-    }
-    return 'SAFE';
-  });
+  // Initialize spoiler preference - start with SAFE to avoid hydration mismatch
+  const [spoilerPreference, setSpoilerPreference] = useState<SpoilerPreference>('SAFE');
+
+  // Load preference from localStorage after mount
+  useEffect(() => {
+    setSpoilerPreference(loadSpoilerPreference());
+  }, []);
 
   const [ordering, setOrdering] = useState<string>('best');
   const [diffs, setDiffs] = useState<DiffItem[]>(initialDiffs);

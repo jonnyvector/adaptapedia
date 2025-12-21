@@ -87,19 +87,19 @@ describe('useVoting', () => {
       expect(result.current.userVote).toBe('DISAGREE')
     })
 
-    it('handles vote toggling by doing nothing when same vote is clicked', async () => {
-      const { result } = renderHook(() => useVoting(1, initialVoteCounts, 'ACCURATE'))
+    it('handles vote toggling by removing vote when same vote is clicked', async () => {
+      mockVote.mockResolvedValue({})
 
-      const initialCounts = { ...result.current.voteCounts }
+      const { result } = renderHook(() => useVoting(1, initialVoteCounts, 'ACCURATE'))
 
       await act(async () => {
         await result.current.submitVote('ACCURATE')
       })
 
-      // Counts and vote should remain unchanged
-      expect(result.current.voteCounts).toEqual(initialCounts)
-      expect(result.current.userVote).toBe('ACCURATE')
-      expect(mockVote).not.toHaveBeenCalled()
+      // Vote should be removed (toggled off)
+      expect(result.current.voteCounts.accurate).toBe(9) // 10 - 1
+      expect(result.current.userVote).toBeNull()
+      expect(mockVote).toHaveBeenCalledWith(1, 'ACCURATE')
     })
   })
 
