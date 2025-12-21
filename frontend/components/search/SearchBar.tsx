@@ -70,7 +70,7 @@ export default function SearchBar({
   return (
     <form onSubmit={handleSubmit} className="w-full max-w-2xl mx-auto">
       <div className="relative">
-        <div className="absolute left-3 sm:left-4 top-1/2 -translate-y-1/2 text-muted pointer-events-none">
+        <div className="absolute left-4 top-1/2 -translate-y-1/2 text-muted pointer-events-none">
           <SearchIcon className="w-5 h-5" />
         </div>
         <input
@@ -79,21 +79,21 @@ export default function SearchBar({
           onChange={(e) => setQuery(e.target.value)}
           placeholder={placeholder}
           autoFocus={autoFocus}
-          className="w-full pl-10 sm:pl-12 pr-12 sm:pr-14 py-3 sm:py-3.5 text-base border border-border rounded-lg focus:outline-none focus:ring-2 focus:ring-link focus:border-transparent bg-surface text-foreground"
+          className="w-full pl-12 pr-12 py-3 sm:py-3.5 text-base border border-border rounded-lg focus:outline-none focus:ring-2 focus:ring-link focus:border-transparent bg-surface text-foreground"
           aria-label="Search"
         />
         {query && (
           <button
             type="button"
             onClick={handleClear}
-            className="absolute right-3 sm:right-4 top-1/2 -translate-y-1/2 text-muted hover:text-foreground transition-colors p-2 -m-2"
+            className="absolute right-4 top-1/2 -translate-y-1/2 text-muted hover:text-foreground transition-colors p-2 -m-2"
             aria-label="Clear search"
           >
             <XIcon className="w-5 h-5" />
           </button>
         )}
         {isSearching && (
-          <div className="absolute right-12 sm:right-14 top-1/2 -translate-y-1/2">
+          <div className="absolute right-14 top-1/2 -translate-y-1/2">
             <div className="w-4 h-4 border-2 border-link border-t-transparent rounded-full animate-spin" />
           </div>
         )}
