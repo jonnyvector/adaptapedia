@@ -151,7 +151,7 @@ export default function AdaptationSwitcher({
                 <button
                   key={edge.id}
                   onClick={() => handleAdaptationChange(screen.slug)}
-                  className="w-full px-4 py-3 text-left hover:bg-muted/10 transition-colors border-b border-border/50 last:border-0 !bg-transparent"
+                  className="w-full px-4 py-3 text-left hover:bg-muted/10 transition-colors !bg-transparent !border-0 !border-b !border-solid !border-border/50 last:!border-b-0"
                   role="menuitem"
                 >
                   <div className="flex items-start justify-between gap-2">
@@ -173,7 +173,7 @@ export default function AdaptationSwitcher({
           {/* View all link */}
           <button
             onClick={handleViewAll}
-            className="w-full px-4 py-3 text-sm text-link hover:bg-muted/10 border-t-2 border-border font-medium transition-colors text-left !bg-transparent"
+            className="w-full px-4 py-3 text-sm text-link hover:bg-muted/10 font-medium transition-colors text-left !bg-transparent !border-0 !border-t-2 !border-solid !border-border"
             role="menuitem"
           >
             View all adaptations →
