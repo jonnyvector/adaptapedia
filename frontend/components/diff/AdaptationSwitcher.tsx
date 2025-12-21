@@ -61,15 +61,6 @@ export default function AdaptationSwitcher({
     return `${currentScreenWorkTitle}${yearText}`;
   }, [currentScreenWorkTitle, currentScreenWorkYear, currentScreenWorkType]);
 
-  // Don't render if loading or only one adaptation
-  if (loading || otherAdaptations.length === 0) {
-    return (
-      <div className="text-xl sm:text-2xl md:text-3xl font-bold">
-        {currentScreenWorkTitle}
-      </div>
-    );
-  }
-
   const handleAdaptationChange = (screenWorkSlug: string): void => {
     setIsOpen(false);
     router.push(`/compare/${workSlug}/${screenWorkSlug}`);
@@ -94,6 +85,15 @@ export default function AdaptationSwitcher({
     document.addEventListener('mousedown', handleClickOutside);
     return () => document.removeEventListener('mousedown', handleClickOutside);
   }, [isOpen]);
+
+  // Don't render switcher if loading or only one adaptation
+  if (loading || otherAdaptations.length === 0) {
+    return (
+      <div className="text-xl sm:text-2xl md:text-3xl font-bold">
+        {currentScreenWorkTitle}
+      </div>
+    );
+  }
 
   return (
     <div className="relative inline-block" data-adaptation-switcher>
