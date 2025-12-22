@@ -113,16 +113,39 @@ class Command(BaseCommand):
             cover_url = None
             source = None
 
-            # Try Google Books API first
+            # Try Google Books API to get metadata including ISBNs
             self.stdout.write(f'  → Searching Google Books...')
-            google_data = search_book(work.title)
+            google_data = search_book(work.title, work.author)
 
-            if google_data and google_data.get('cover_url'):
-                cover_url = google_data['cover_url']
-                source = 'Google Books'
-                stats['updated_google'] = stats.get('updated_google', 0) + 1
+            # Strategy: Try multiple cover sources in priority order
+            # 1. Try Open Library by ISBN (best quality for popular books)
+            # 2. Fall back to Google Books cover URL
+            # 3. Fall back to Open Library by title
 
-                # Also update other metadata if available
+            if google_data:
+                # Try Open Library ISBN-based cover first (often better than Google scans)
+                isbn_13 = google_data.get('isbn_13')
+                isbn_10 = google_data.get('isbn_10')
+
+                if isbn_13 or isbn_10:
+                    from works.utils.openlibrary_covers import get_cover_by_isbn
+
+                    self.stdout.write(f'  → Trying Open Library by ISBN...')
+                    isbn_to_try = isbn_13 or isbn_10
+                    ol_isbn_cover = get_cover_by_isbn(isbn_to_try)
+
+                    if ol_isbn_cover:
+                        cover_url = ol_isbn_cover
+                        source = 'Open Library (ISBN)'
+                        stats['updated_openlibrary'] = stats.get('updated_openlibrary', 0) + 1
+
+                # If no ISBN cover, use Google Books cover
+                if not cover_url and google_data.get('cover_url'):
+                    cover_url = google_data['cover_url']
+                    source = 'Google Books'
+                    stats['updated_google'] = stats.get('updated_google', 0) + 1
+
+                # Update other metadata if available
                 if not work.summary and google_data.get('description'):
                     if dry_run:
                         self.stdout.write(f'    Would also update summary')
@@ -147,14 +170,14 @@ class Command(BaseCommand):
                     else:
                         work.genre = google_data['genre']
 
-            # Fall back to Open Library if Google Books didn't find a cover
+            # Last resort: Open Library by title search
             if not cover_url:
-                self.stdout.write(f'  → Searching Open Library...')
-                ol_cover = get_cover_by_title(work.title)
+                self.stdout.write(f'  → Searching Open Library by title...')
+                ol_cover = get_cover_by_title(work.title, work.author)
 
                 if ol_cover:
                     cover_url = ol_cover
-                    source = 'Open Library'
+                    source = 'Open Library (title)'
                     stats['updated_openlibrary'] = stats.get('updated_openlibrary', 0) + 1
 
             # Update the work

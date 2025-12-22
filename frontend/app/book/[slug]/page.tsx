@@ -5,12 +5,14 @@ import type {
   AdaptationEdge,
   DiffItem,
   ApiResponse,
+  SimilarBook,
 } from '@/lib/types';
 import Link from 'next/link';
 import { notFound } from 'next/navigation';
 import WorkInfobox from '@/components/shared/WorkInfobox';
 import AdaptationsList from '@/components/shared/AdaptationsList';
 import DiffItemCard from '@/components/diff/DiffItemCard';
+import SimilarBooks from '@/components/shared/SimilarBooks';
 
 interface PageProps {
   params: {
@@ -23,6 +25,7 @@ interface WorkPageData {
   adaptations: Array<ScreenWork & { adaptationEdge: AdaptationEdge; diffs?: DiffItem[] }>;
   topDiffs: DiffItem[];
   totalDiffCount: number;
+  similarBooks: SimilarBook[];
 }
 
 async function getWorkData(slug: string): Promise<WorkPageData> {
@@ -85,16 +88,26 @@ async function getWorkData(slug: string): Promise<WorkPageData> {
     console.error('Failed to fetch top diffs:', error);
   }
 
+  // Get similar books
+  let similarBooks: SimilarBook[] = [];
+  try {
+    const similarBooksResponse = await api.works.similar(work.slug, 6);
+    similarBooks = similarBooksResponse.results;
+  } catch (error) {
+    console.error('Failed to fetch similar books:', error);
+  }
+
   return {
     work,
     adaptations: adaptationsWithDiffs,
     topDiffs,
     totalDiffCount,
+    similarBooks,
   };
 }
 
 export default async function WorkPage({ params }: PageProps): Promise<JSX.Element> {
-  const { work, adaptations, topDiffs, totalDiffCount } = await getWorkData(params.slug);
+  const { work, adaptations, topDiffs, totalDiffCount, similarBooks } = await getWorkData(params.slug);
 
   return (
     <main className="min-h-screen">
@@ -178,6 +191,9 @@ export default async function WorkPage({ params }: PageProps): Promise<JSX.Eleme
             <WorkInfobox work={work} />
           </div>
         </div>
+
+        {/* Similar Books Section */}
+        <SimilarBooks books={similarBooks} />
 
         {/* Back Link */}
         <div className="mt-8 pt-6 border-t border-border">

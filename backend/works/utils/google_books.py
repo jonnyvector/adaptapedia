@@ -24,9 +24,10 @@ def search_book(title: str, author: Optional[str] = None) -> Optional[Dict[str, 
 
     params = {
         'q': query,
-        'maxResults': 10,  # Get more results to filter through
+        'maxResults': 20,  # Get more results to filter through
         'printType': 'books',
-        'langRestrict': 'en'
+        'langRestrict': 'en',
+        'orderBy': 'relevance'
     }
 
     try:
@@ -44,29 +45,72 @@ def search_book(title: str, author: Optional[str] = None) -> Optional[Dict[str, 
             'bookrags', 'shmoop', 'litcharts', 'gradesaver'
         ]
 
+        # Rank results by quality indicators
+        scored_items = []
+
         for item in data['items']:
             vol_info = item.get('volumeInfo', {})
             item_title = vol_info.get('title', '').lower()
             item_subtitle = vol_info.get('subtitle', '').lower()
-            item_description = vol_info.get('description', '').lower()
 
-            # Skip if title contains exclusion keywords
+            # Skip study guides
             is_study_guide = any(keyword in item_title for keyword in exclude_keywords)
             is_study_subtitle = any(keyword in item_subtitle for keyword in exclude_keywords)
 
-            # Also check if it's labeled as a study guide in description
-            if not is_study_guide and not is_study_subtitle:
-                # Check if there are actual images available
-                if vol_info.get('imageLinks'):
-                    return parse_book_data(item)
+            if is_study_guide or is_study_subtitle:
+                continue
 
-        # If no good match found after filtering, return first result with images
+            # Score based on quality indicators
+            score = 0
+
+            # Has images (required)
+            image_links = vol_info.get('imageLinks', {})
+            if not image_links:
+                continue
+
+            # Prefer results with larger images (more likely to be actual covers)
+            if image_links.get('extraLarge'):
+                score += 10
+            elif image_links.get('large'):
+                score += 7
+            elif image_links.get('medium'):
+                score += 4
+
+            # Has ISBN (indicates published edition, not scan)
+            has_isbn = bool(vol_info.get('industryIdentifiers'))
+            if has_isbn:
+                score += 5
+
+            # Newer publications more likely to have digital covers
+            pub_date = vol_info.get('publishedDate', '')
+            if pub_date:
+                try:
+                    year = int(pub_date.split('-')[0])
+                    if year >= 2000:
+                        score += 3
+                    elif year >= 1990:
+                        score += 1
+                except (ValueError, IndexError):
+                    pass
+
+            # Has description (indicates complete metadata)
+            if vol_info.get('description'):
+                score += 2
+
+            scored_items.append((score, item))
+
+        # Return highest scoring result
+        if scored_items:
+            scored_items.sort(key=lambda x: x[0], reverse=True)
+            return parse_book_data(scored_items[0][1])
+
+        # Last resort - return first result with images
         for item in data['items']:
             if item.get('volumeInfo', {}).get('imageLinks'):
                 return parse_book_data(item)
 
-        # Last resort - return first result
-        return parse_book_data(data['items'][0])
+        # Final fallback
+        return parse_book_data(data['items'][0]) if data['items'] else None
 
     except requests.RequestException as e:
         print(f"Error fetching from Google Books API: {e}")

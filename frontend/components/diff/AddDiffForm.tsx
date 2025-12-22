@@ -5,6 +5,7 @@ import { useRouter } from 'next/navigation';
 import type { Work, ScreenWork, DiffCategory, SpoilerScope } from '@/lib/types';
 import { api, ApiError } from '@/lib/api';
 import LoadingSpinner from '@/components/ui/LoadingSpinner';
+import { CheckCircleIcon } from '@/components/ui/Icons';
 
 interface AddDiffFormProps {
   work: Work;
@@ -183,7 +184,9 @@ export default function AddDiffForm({ work, screenWork }: AddDiffFormProps): JSX
     return (
       <div className="max-w-2xl mx-auto p-4 sm:p-6">
         <div className="bg-success/10 border border-success rounded-lg p-6 text-center">
-          <div className="text-4xl mb-4">✓</div>
+          <div className="flex justify-center mb-4">
+            <CheckCircleIcon className="w-16 h-16 text-success" />
+          </div>
           <h2 className="text-lg sm:text-xl font-semibold text-success mb-2">
             Difference submitted successfully!
           </h2>

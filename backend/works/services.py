@@ -28,6 +28,105 @@ class WorkService:
         return work, created
 
 
+class SimilarBooksService:
+    """Service class for finding similar books."""
+
+    @staticmethod
+    def get_similar_books(work: Work, limit: int = 6) -> QuerySet:
+        """
+        Find similar books based on multiple criteria.
+
+        Ranking algorithm:
+        1. Genre match (highest priority) - 10 points
+        2. Same author - 5 points
+        3. Similar title words (optional) - up to 3 points per matching word
+        4. Adaptation count boost - up to 2 points
+
+        Args:
+            work: The Work instance to find similar books for
+            limit: Maximum number of similar books to return (default 6)
+
+        Returns:
+            QuerySet of Work objects ordered by similarity score
+        """
+        from django.db.models import Case, When, Value, IntegerField, Count
+        from django.contrib.postgres.search import TrigramSimilarity
+
+        # Exclude the current work from results
+        similar_works = Work.objects.exclude(id=work.id)
+
+        # Build scoring query
+        score_cases = []
+
+        # 1. Genre match (10 points) - highest priority
+        if work.genre:
+            score_cases.append(
+                When(genre__iexact=work.genre, then=Value(10))
+            )
+
+        # 2. Author match (5 points)
+        if work.author:
+            score_cases.append(
+                When(author__iexact=work.author, then=Value(5))
+            )
+
+        # Annotate with adaptation count for boost
+        similar_works = similar_works.annotate(
+            adaptation_count=Count('adaptations', distinct=True)
+        )
+
+        # Calculate base similarity score
+        if score_cases:
+            similar_works = similar_works.annotate(
+                base_score=Case(
+                    *score_cases,
+                    default=Value(0),
+                    output_field=IntegerField()
+                )
+            )
+        else:
+            similar_works = similar_works.annotate(
+                base_score=Value(0, output_field=IntegerField())
+            )
+
+        # 3. Title similarity using trigrams (if available)
+        if work.title:
+            similar_works = similar_works.annotate(
+                title_similarity=TrigramSimilarity('title', work.title)
+            )
+        else:
+            similar_works = similar_works.annotate(
+                title_similarity=Value(0.0, output_field=FloatField())
+            )
+
+        # 4. Calculate final score with all factors
+        # base_score + (title_similarity * 3) + min(adaptation_count, 2)
+        similar_works = similar_works.annotate(
+            similarity_score=ExpressionWrapper(
+                F('base_score') + (F('title_similarity') * 3.0) +
+                Case(
+                    When(adaptation_count__gte=2, then=Value(2.0)),
+                    default=F('adaptation_count') * 1.0,
+                    output_field=FloatField()
+                ),
+                output_field=FloatField()
+            )
+        )
+
+        # Filter to only include works with some similarity
+        # (genre match OR author match OR title similarity > 0.2)
+        filter_condition = Q(similarity_score__gt=0)
+        if work.title:
+            filter_condition |= Q(title_similarity__gte=0.2)
+
+        similar_works = similar_works.filter(filter_condition)
+
+        # Order by similarity score (highest first) and limit results
+        similar_works = similar_works.order_by('-similarity_score', '-adaptation_count', '-created_at')[:limit]
+
+        return similar_works
+
+
 class SearchService:
     """Service class for comparison-first search logic."""
 

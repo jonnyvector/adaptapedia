@@ -138,6 +138,16 @@ CELERY_RESULT_SERIALIZER = 'json'
 CELERY_TIMEZONE = TIME_ZONE
 CELERY_RESULT_EXPIRES = 3600  # Task results expire after 1 hour
 
+# Cache (using Redis for performance)
+CACHES = {
+    'default': {
+        'BACKEND': 'django.core.cache.backends.redis.RedisCache',
+        'LOCATION': os.environ.get('REDIS_URL', 'redis://localhost:6379/1'),  # Use DB 1 for cache
+        'KEY_PREFIX': 'adaptapedia',
+        'TIMEOUT': 300,  # Default timeout: 5 minutes
+    }
+}
+
 # Celery Beat Schedule
 from celery.schedules import crontab
 

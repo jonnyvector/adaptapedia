@@ -228,3 +228,83 @@ export interface SearchWithAdaptationsResponse {
   detected_year?: number;
   results: WorkWithAdaptations[] | ScreenWork[];
 }
+
+export interface Genre {
+  genre: string;
+  book_count: number;
+  slug: string;
+}
+
+export interface GenreListResponse {
+  results: Genre[];
+}
+
+export interface SimilarBook {
+  id: number;
+  title: string;
+  slug: string;
+  author?: string;
+  year?: number;
+  genre?: string;
+  cover_url?: string;
+  adaptation_count: number;
+  similarity_score: number;
+}
+
+export interface SimilarBooksResponse {
+  results: SimilarBook[];
+  count: number;
+}
+
+export interface Vote {
+  id: number;
+  diff_item: number;
+  user: number;
+  vote: VoteType;
+  created_at: string;
+  diff_item_claim?: string;
+  diff_item_category?: DiffCategory;
+  work_title?: string;
+  work_slug?: string;
+  screen_work_title?: string;
+  screen_work_slug?: string;
+  created_by_username?: string;
+}
+
+export interface TrendingComparison {
+  work_id: number;
+  work_title: string;
+  work_slug: string;
+  cover_url?: string;
+  screen_work_id: number;
+  screen_work_title: string;
+  screen_work_slug: string;
+  screen_work_type: string;
+  screen_work_year: number | null;
+  poster_url?: string;
+  total_diffs: number;
+  recent_diffs: number;
+  recent_votes: number;
+  activity_score: number;
+}
+
+export interface Bookmark {
+  id: number;
+  user: number;
+  work: number;
+  screen_work: number;
+  work_title: string;
+  work_slug: string;
+  work_author?: string;
+  work_cover_url?: string;
+  screen_work_title: string;
+  screen_work_slug: string;
+  screen_work_type: 'MOVIE' | 'TV';
+  screen_work_poster_url?: string;
+  created_at: string;
+}
+
+export interface BookmarkCheckResponse {
+  is_bookmarked: boolean;
+  bookmark_id: number | null;
+}

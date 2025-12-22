@@ -67,6 +67,14 @@ class DiffItemSerializer(serializers.ModelSerializer):
 class DiffVoteSerializer(serializers.ModelSerializer):
     """Serializer for DiffVote model."""
 
+    diff_item_claim = serializers.CharField(source='diff_item.claim', read_only=True)
+    diff_item_category = serializers.CharField(source='diff_item.category', read_only=True)
+    work_title = serializers.CharField(source='diff_item.work.title', read_only=True)
+    work_slug = serializers.CharField(source='diff_item.work.slug', read_only=True)
+    screen_work_title = serializers.CharField(source='diff_item.screen_work.title', read_only=True)
+    screen_work_slug = serializers.CharField(source='diff_item.screen_work.slug', read_only=True)
+    created_by_username = serializers.CharField(source='diff_item.created_by.username', read_only=True)
+
     class Meta:
         """Meta options for DiffVoteSerializer."""
 
@@ -77,6 +85,13 @@ class DiffVoteSerializer(serializers.ModelSerializer):
             'user',
             'vote',
             'created_at',
+            'diff_item_claim',
+            'diff_item_category',
+            'work_title',
+            'work_slug',
+            'screen_work_title',
+            'screen_work_slug',
+            'created_by_username',
         ]
         read_only_fields = ['id', 'user', 'created_at']
 

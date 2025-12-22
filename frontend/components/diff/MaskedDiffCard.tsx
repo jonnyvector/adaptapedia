@@ -3,6 +3,7 @@
 import { useState } from 'react';
 import type { DiffItem, SpoilerScope } from '@/lib/types';
 import DiffItemCard from './DiffItemCard';
+import { BookOpenIcon, FilmIcon, ExclamationTriangleIcon, LockClosedIcon } from '@/components/ui/Icons';
 
 interface MaskedDiffCardProps {
   diff: DiffItem;
@@ -28,16 +29,17 @@ export default function MaskedDiffCard({
     }
   };
 
-  const getSpoilerIcon = (scope: SpoilerScope): string => {
+  const getSpoilerIcon = (scope: SpoilerScope): JSX.Element => {
+    const iconClass = "w-8 h-8";
     switch (scope) {
       case 'BOOK_ONLY':
-        return '📖';
+        return <BookOpenIcon className={iconClass} />;
       case 'SCREEN_ONLY':
-        return '🎬';
+        return <FilmIcon className={iconClass} />;
       case 'FULL':
-        return '⚠️';
+        return <ExclamationTriangleIcon className={iconClass} />;
       default:
-        return '🔒';
+        return <LockClosedIcon className={iconClass} />;
     }
   };
 
@@ -74,8 +76,8 @@ export default function MaskedDiffCard({
       <div className="relative mb-4 rounded-md overflow-hidden">
         <div className="absolute inset-0 backdrop-blur-xl bg-surface/80 z-10 flex items-center justify-center">
           <div className="text-center px-4">
-            <div className="text-4xl mb-2" aria-hidden="true">
-              🔒
+            <div className="mb-2 flex justify-center" aria-hidden="true">
+              <LockClosedIcon className="w-12 h-12 text-muted" />
             </div>
             <p className="text-sm font-semibold text-muted">Content Hidden</p>
           </div>

@@ -20,6 +20,11 @@ export default function Footer(): JSX.Element {
             <h4 className="font-semibold text-sm sm:text-base mb-3 sm:mb-4">Resources</h4>
             <ul className="space-y-2 text-sm">
               <li>
+                <Link href="/browse" className="text-muted hover:text-link inline-block min-h-[28px] flex items-center">
+                  Browse by Genre
+                </Link>
+              </li>
+              <li>
                 <Link href="/about" className="text-muted hover:text-link inline-block min-h-[28px] flex items-center">
                   About Adaptapedia
                 </Link>

@@ -4,6 +4,7 @@ import { useState, useEffect } from 'react';
 import type { Work, ScreenWork, ComparisonVoteStats } from '@/lib/types';
 import { api } from '@/lib/api';
 import ComparisonVoting from './ComparisonVoting';
+import { BookOpenIcon, FilmIcon } from '@/components/ui/Icons';
 
 interface CompactVoteStripProps {
   work: Work;
@@ -74,11 +75,15 @@ export default function CompactVoteStrip({
         {totalVotes > 0 ? (
           <>
             <span className="font-medium text-foreground">Community:</span>
-            <span className="whitespace-nowrap">📖 Book {bookPct}%</span>
+            <span className="whitespace-nowrap flex items-center gap-1">
+              <BookOpenIcon className="w-4 h-4" /> Book {bookPct}%
+            </span>
             <span className="text-muted/50" aria-hidden="true">•</span>
-            <span className="whitespace-nowrap">🎬 Screen {screenPct}%</span>
+            <span className="whitespace-nowrap flex items-center gap-1">
+              <FilmIcon className="w-4 h-4" /> Screen {screenPct}%
+            </span>
             <span className="text-muted/50" aria-hidden="true">•</span>
-            <span className="whitespace-nowrap">🤝 Tie {tiePct}%</span>
+            <span className="whitespace-nowrap">Tie {tiePct}%</span>
             <span className="text-muted/50 hidden sm:inline" aria-hidden="true">•</span>
             <span className="text-xs hidden sm:inline whitespace-nowrap">
               (n={totalVotes})

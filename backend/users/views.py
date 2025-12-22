@@ -6,13 +6,14 @@ from rest_framework_simplejwt.tokens import RefreshToken
 from django.contrib.auth import authenticate
 from django.db import models
 from django.shortcuts import get_object_or_404
-from .models import User
+from .models import User, Bookmark
 from .serializers import (
     UserSerializer,
     UserProfileSerializer,
     SignupSerializer,
     LoginSerializer,
     UserDetailSerializer,
+    BookmarkSerializer,
 )
 
 
@@ -115,6 +116,49 @@ class UserViewSet(viewsets.ReadOnlyModelViewSet):
         serializer = DiffCommentSerializer(queryset, many=True)
         return response.Response(serializer.data)
 
+    @decorators.action(detail=True, methods=['get'], url_path='votes', permission_classes=[permissions.IsAuthenticated])
+    def votes(self, request, username=None):
+        """
+        Get votes cast by a specific user.
+
+        Only accessible to the user themselves (private data).
+
+        Query params:
+        - ordering: 'newest' (default)
+        - page: page number
+        - page_size: items per page (max 100)
+        """
+        from diffs.models import DiffVote
+        from diffs.serializers import DiffVoteSerializer
+
+        user = self.get_object()
+
+        # Only allow users to view their own votes
+        if request.user != user:
+            return response.Response(
+                {'error': 'You can only view your own voting history'},
+                status=status.HTTP_403_FORBIDDEN
+            )
+
+        # Get user's votes
+        queryset = DiffVote.objects.filter(
+            user=user
+        ).select_related('diff_item', 'diff_item__work', 'diff_item__screen_work', 'diff_item__created_by')
+
+        # Apply ordering (always newest for now)
+        queryset = queryset.order_by('-created_at')
+
+        # Paginate results
+        paginator = StandardResultsSetPagination()
+        page = paginator.paginate_queryset(queryset, request)
+
+        if page is not None:
+            serializer = DiffVoteSerializer(page, many=True)
+            return paginator.get_paginated_response(serializer.data)
+
+        serializer = DiffVoteSerializer(queryset, many=True)
+        return response.Response(serializer.data)
+
 
 class SignupView(APIView):
     """View for user registration."""
@@ -206,3 +250,87 @@ class CurrentUserView(APIView):
         """Return current user details."""
         serializer = UserDetailSerializer(request.user)
         return response.Response(serializer.data, status=status.HTTP_200_OK)
+
+
+class BookmarkViewSet(viewsets.ModelViewSet):
+    """ViewSet for managing user bookmarks."""
+
+    serializer_class = BookmarkSerializer
+    permission_classes = [permissions.IsAuthenticated]
+    pagination_class = StandardResultsSetPagination
+
+    def get_queryset(self):
+        """Return bookmarks for the current user."""
+        return Bookmark.objects.filter(user=self.request.user).select_related(
+            'work', 'screen_work'
+        )
+
+    def perform_create(self, serializer):
+        """Set the user to the current user when creating a bookmark."""
+        serializer.save(user=self.request.user)
+
+    @decorators.action(detail=False, methods=['post'], url_path='check')
+    def check(self, request):
+        """
+        Check if a comparison is bookmarked by the current user.
+
+        Expected POST data: {"work": <work_id>, "screen_work": <screen_work_id>}
+        Returns: {"is_bookmarked": true/false, "bookmark_id": <id> or null}
+        """
+        work_id = request.data.get('work')
+        screen_work_id = request.data.get('screen_work')
+
+        if not work_id or not screen_work_id:
+            return response.Response(
+                {'error': 'Both work and screen_work IDs are required'},
+                status=status.HTTP_400_BAD_REQUEST
+            )
+
+        try:
+            bookmark = Bookmark.objects.get(
+                user=request.user,
+                work_id=work_id,
+                screen_work_id=screen_work_id
+            )
+            return response.Response({
+                'is_bookmarked': True,
+                'bookmark_id': bookmark.id
+            }, status=status.HTTP_200_OK)
+        except Bookmark.DoesNotExist:
+            return response.Response({
+                'is_bookmarked': False,
+                'bookmark_id': None
+            }, status=status.HTTP_200_OK)
+
+    @decorators.action(detail=False, methods=['delete'], url_path='delete-by-comparison')
+    def delete_by_comparison(self, request):
+        """
+        Delete a bookmark by work and screen_work IDs.
+
+        Query params: work=<work_id>&screen_work=<screen_work_id>
+        """
+        work_id = request.query_params.get('work')
+        screen_work_id = request.query_params.get('screen_work')
+
+        if not work_id or not screen_work_id:
+            return response.Response(
+                {'error': 'Both work and screen_work query parameters are required'},
+                status=status.HTTP_400_BAD_REQUEST
+            )
+
+        try:
+            bookmark = Bookmark.objects.get(
+                user=request.user,
+                work_id=work_id,
+                screen_work_id=screen_work_id
+            )
+            bookmark.delete()
+            return response.Response(
+                {'message': 'Bookmark deleted successfully'},
+                status=status.HTTP_200_OK
+            )
+        except Bookmark.DoesNotExist:
+            return response.Response(
+                {'error': 'Bookmark not found'},
+                status=status.HTTP_404_NOT_FOUND
+            )

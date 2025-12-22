@@ -1,0 +1,98 @@
+'use client';
+
+import { useEffect, useState } from 'react';
+import { useAuth } from '@/lib/auth-context';
+import { api } from '@/lib/api';
+import type { Vote, ApiResponse } from '@/lib/types';
+import UserVotesList from './UserVotesList';
+import LoadingSkeleton from '@/components/ui/LoadingSkeleton';
+
+interface UserVotesSectionProps {
+  username: string;
+  votesCount: number;
+}
+
+export default function UserVotesSection({
+  username,
+  votesCount,
+}: UserVotesSectionProps): JSX.Element | null {
+  const { isAuthenticated, user } = useAuth();
+  const [votes, setVotes] = useState<Vote[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+  const [hasMore, setHasMore] = useState(false);
+
+  // Only show votes if viewing own profile
+  const isOwnProfile = isAuthenticated && user && user.username === username;
+
+  useEffect(() => {
+    if (!isOwnProfile) {
+      setLoading(false);
+      return;
+    }
+
+    const fetchVotes = async (): Promise<void> => {
+      try {
+        setLoading(true);
+        const response = (await api.users.getVotes(username, {
+          ordering: 'newest',
+          page_size: '20',
+        })) as ApiResponse<Vote>;
+
+        setVotes(response.results);
+        setHasMore(response.next !== null);
+      } catch (err) {
+        console.error('Failed to fetch votes:', err);
+        setError('Failed to load voting history');
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchVotes();
+  }, [username, isOwnProfile]);
+
+  // Don't render anything if not viewing own profile
+  if (!isOwnProfile) {
+    return null;
+  }
+
+  return (
+    <section>
+      <div className="flex items-center justify-between mb-3 sm:mb-4">
+        <h2 className="text-xl sm:text-2xl font-semibold">
+          Your Voting History
+          {votesCount > 0 && (
+            <span className="text-sm sm:text-base text-muted ml-2">
+              ({votesCount})
+            </span>
+          )}
+        </h2>
+      </div>
+
+      {loading && (
+        <div className="space-y-4">
+          <LoadingSkeleton width="w-full" height="h-32" />
+          <LoadingSkeleton width="w-full" height="h-32" />
+          <LoadingSkeleton width="w-full" height="h-32" />
+        </div>
+      )}
+
+      {error && !loading && (
+        <div className="border border-red-200 bg-red-50 rounded-lg p-6 text-center">
+          <p className="text-red-700">{error}</p>
+        </div>
+      )}
+
+      {!loading && !error && <UserVotesList votes={votes} />}
+
+      {hasMore && (
+        <div className="mt-4 text-center">
+          <p className="text-xs sm:text-sm text-muted">
+            Showing first 20 votes. Pagination coming soon.
+          </p>
+        </div>
+      )}
+    </section>
+  );
+}

@@ -65,3 +65,39 @@ class WorkWithAdaptationsSerializer(serializers.ModelSerializer):
         if hasattr(obj, 'ranked_adaptations'):
             return RankedAdaptationSerializer(obj.ranked_adaptations, many=True).data
         return []
+
+
+class SimilarBookSerializer(serializers.ModelSerializer):
+    """Serializer for similar books with adaptation count."""
+
+    adaptation_count = serializers.IntegerField(read_only=True)
+    similarity_score = serializers.FloatField(read_only=True)
+
+    class Meta:
+        """Meta options for SimilarBookSerializer."""
+
+        model = Work
+        fields = [
+            'id',
+            'title',
+            'slug',
+            'author',
+            'year',
+            'genre',
+            'cover_url',
+            'adaptation_count',
+            'similarity_score',
+        ]
+        read_only_fields = ['id', 'slug', 'adaptation_count', 'similarity_score']
+
+
+class GenreSerializer(serializers.Serializer):
+    """Serializer for genre aggregation."""
+
+    genre = serializers.CharField()
+    book_count = serializers.IntegerField()
+    slug = serializers.SerializerMethodField()
+
+    def get_slug(self, obj):
+        """Generate URL-friendly slug for genre."""
+        return obj['genre'].lower().replace(' ', '-')

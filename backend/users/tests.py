@@ -2,7 +2,9 @@
 from django.test import TestCase
 from rest_framework.test import APITestCase
 from rest_framework import status
-from .models import User, UserRole
+from .models import User, UserRole, Bookmark
+from works.models import Work
+from screen.models import ScreenWork, AdaptationEdge
 
 
 class UserModelTestCase(TestCase):
@@ -400,3 +402,330 @@ class UserAPITestCase(APITestCase):
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(len(response.data['results']), 20)  # Default page size
         self.assertIn('next', response.data)
+
+
+class BookmarkModelTestCase(TestCase):
+    """Test cases for Bookmark model."""
+
+    def setUp(self):
+        """Set up test data."""
+        self.user = User.objects.create_user(username='testuser', password='pass')
+        self.work = Work.objects.create(title='Test Book', slug='test-book')
+        self.screen_work = ScreenWork.objects.create(
+            type='MOVIE',
+            title='Test Movie',
+            slug='test-movie'
+        )
+        # Create adaptation edge
+        AdaptationEdge.objects.create(
+            work=self.work,
+            screen_work=self.screen_work,
+            relation_type='BASED_ON',
+            source='MANUAL',
+            confidence=1.0
+        )
+
+    def test_create_bookmark(self):
+        """Test creating a bookmark."""
+        bookmark = Bookmark.objects.create(
+            user=self.user,
+            work=self.work,
+            screen_work=self.screen_work
+        )
+        self.assertEqual(bookmark.user, self.user)
+        self.assertEqual(bookmark.work, self.work)
+        self.assertEqual(bookmark.screen_work, self.screen_work)
+        self.assertIsNotNone(bookmark.created_at)
+
+    def test_bookmark_unique_constraint(self):
+        """Test that a user can only bookmark a comparison once."""
+        Bookmark.objects.create(
+            user=self.user,
+            work=self.work,
+            screen_work=self.screen_work
+        )
+
+        # Attempt to create duplicate bookmark
+        with self.assertRaises(Exception):
+            Bookmark.objects.create(
+                user=self.user,
+                work=self.work,
+                screen_work=self.screen_work
+            )
+
+    def test_bookmark_str_representation(self):
+        """Test string representation of Bookmark."""
+        bookmark = Bookmark.objects.create(
+            user=self.user,
+            work=self.work,
+            screen_work=self.screen_work
+        )
+        expected = f"{self.user.username} bookmarked {self.work.title} / {self.screen_work.title}"
+        self.assertEqual(str(bookmark), expected)
+
+    def test_bookmark_ordering(self):
+        """Test that bookmarks are ordered by creation date (newest first)."""
+        bookmark1 = Bookmark.objects.create(
+            user=self.user,
+            work=self.work,
+            screen_work=self.screen_work
+        )
+
+        # Create another work/screen pair for second bookmark
+        work2 = Work.objects.create(title='Book 2', slug='book-2')
+        screen2 = ScreenWork.objects.create(type='TV', title='TV Show', slug='tv-show')
+        AdaptationEdge.objects.create(
+            work=work2,
+            screen_work=screen2,
+            relation_type='BASED_ON',
+            source='MANUAL',
+            confidence=1.0
+        )
+
+        bookmark2 = Bookmark.objects.create(
+            user=self.user,
+            work=work2,
+            screen_work=screen2
+        )
+
+        bookmarks = list(Bookmark.objects.all())
+        self.assertEqual(bookmarks[0], bookmark2)  # Newest first
+        self.assertEqual(bookmarks[1], bookmark1)
+
+
+class BookmarkAPITestCase(APITestCase):
+    """Test cases for Bookmark API."""
+
+    def setUp(self):
+        """Set up test data."""
+        self.user = User.objects.create_user(
+            username='testuser',
+            email='test@example.com',
+            password='testpass123'
+        )
+        self.work = Work.objects.create(title='Test Book', slug='test-book')
+        self.screen_work = ScreenWork.objects.create(
+            type='MOVIE',
+            title='Test Movie',
+            slug='test-movie'
+        )
+        # Create adaptation edge
+        self.adaptation = AdaptationEdge.objects.create(
+            work=self.work,
+            screen_work=self.screen_work,
+            relation_type='BASED_ON',
+            source='MANUAL',
+            confidence=1.0
+        )
+
+    def test_create_bookmark_unauthenticated(self):
+        """Test that unauthenticated users cannot create bookmarks."""
+        response = self.client.post('/api/users/bookmarks/', {
+            'work': self.work.id,
+            'screen_work': self.screen_work.id
+        })
+        self.assertEqual(response.status_code, status.HTTP_401_UNAUTHORIZED)
+
+    def test_create_bookmark_authenticated(self):
+        """Test creating a bookmark as authenticated user."""
+        self.client.force_authenticate(user=self.user)
+        response = self.client.post('/api/users/bookmarks/', {
+            'work': self.work.id,
+            'screen_work': self.screen_work.id
+        })
+        self.assertEqual(response.status_code, status.HTTP_201_CREATED)
+        self.assertEqual(response.data['work'], self.work.id)
+        self.assertEqual(response.data['screen_work'], self.screen_work.id)
+
+        # Verify bookmark was created
+        self.assertTrue(
+            Bookmark.objects.filter(
+                user=self.user,
+                work=self.work,
+                screen_work=self.screen_work
+            ).exists()
+        )
+
+    def test_create_duplicate_bookmark(self):
+        """Test that creating a duplicate bookmark returns an error."""
+        self.client.force_authenticate(user=self.user)
+
+        # Create first bookmark
+        self.client.post('/api/users/bookmarks/', {
+            'work': self.work.id,
+            'screen_work': self.screen_work.id
+        })
+
+        # Attempt to create duplicate
+        response = self.client.post('/api/users/bookmarks/', {
+            'work': self.work.id,
+            'screen_work': self.screen_work.id
+        })
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+
+    def test_create_bookmark_invalid_adaptation(self):
+        """Test that creating a bookmark for non-existent adaptation fails."""
+        self.client.force_authenticate(user=self.user)
+
+        # Create work and screen work without adaptation edge
+        work2 = Work.objects.create(title='Book 2', slug='book-2')
+        screen2 = ScreenWork.objects.create(type='TV', title='TV Show', slug='tv-show')
+
+        response = self.client.post('/api/users/bookmarks/', {
+            'work': work2.id,
+            'screen_work': screen2.id
+        })
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+
+    def test_list_bookmarks_unauthenticated(self):
+        """Test that unauthenticated users cannot list bookmarks."""
+        response = self.client.get('/api/users/bookmarks/')
+        self.assertEqual(response.status_code, status.HTTP_401_UNAUTHORIZED)
+
+    def test_list_bookmarks_authenticated(self):
+        """Test listing bookmarks for authenticated user."""
+        self.client.force_authenticate(user=self.user)
+
+        # Create bookmarks
+        Bookmark.objects.create(
+            user=self.user,
+            work=self.work,
+            screen_work=self.screen_work
+        )
+
+        response = self.client.get('/api/users/bookmarks/')
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(response.data['count'], 1)
+        self.assertEqual(len(response.data['results']), 1)
+
+    def test_list_bookmarks_only_shows_own(self):
+        """Test that users only see their own bookmarks."""
+        other_user = User.objects.create_user(username='other', password='pass')
+
+        # Create bookmark for main user
+        Bookmark.objects.create(
+            user=self.user,
+            work=self.work,
+            screen_work=self.screen_work
+        )
+
+        # Create bookmark for other user
+        work2 = Work.objects.create(title='Book 2', slug='book-2')
+        screen2 = ScreenWork.objects.create(type='TV', title='TV Show', slug='tv-show')
+        AdaptationEdge.objects.create(
+            work=work2,
+            screen_work=screen2,
+            relation_type='BASED_ON',
+            source='MANUAL',
+            confidence=1.0
+        )
+        Bookmark.objects.create(
+            user=other_user,
+            work=work2,
+            screen_work=screen2
+        )
+
+        # Authenticate as main user and list bookmarks
+        self.client.force_authenticate(user=self.user)
+        response = self.client.get('/api/users/bookmarks/')
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(response.data['count'], 1)
+
+    def test_delete_bookmark(self):
+        """Test deleting a bookmark."""
+        self.client.force_authenticate(user=self.user)
+
+        # Create bookmark
+        bookmark = Bookmark.objects.create(
+            user=self.user,
+            work=self.work,
+            screen_work=self.screen_work
+        )
+
+        # Delete bookmark
+        response = self.client.delete(f'/api/users/bookmarks/{bookmark.id}/')
+        self.assertEqual(response.status_code, status.HTTP_204_NO_CONTENT)
+
+        # Verify deletion
+        self.assertFalse(Bookmark.objects.filter(id=bookmark.id).exists())
+
+    def test_delete_bookmark_by_comparison(self):
+        """Test deleting a bookmark by work and screen_work IDs."""
+        self.client.force_authenticate(user=self.user)
+
+        # Create bookmark
+        Bookmark.objects.create(
+            user=self.user,
+            work=self.work,
+            screen_work=self.screen_work
+        )
+
+        # Delete by comparison
+        response = self.client.delete(
+            f'/api/users/bookmarks/delete-by-comparison/?work={self.work.id}&screen_work={self.screen_work.id}'
+        )
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+
+        # Verify deletion
+        self.assertFalse(
+            Bookmark.objects.filter(
+                user=self.user,
+                work=self.work,
+                screen_work=self.screen_work
+            ).exists()
+        )
+
+    def test_check_bookmark_exists(self):
+        """Test checking if a bookmark exists."""
+        self.client.force_authenticate(user=self.user)
+
+        # Create bookmark
+        bookmark = Bookmark.objects.create(
+            user=self.user,
+            work=self.work,
+            screen_work=self.screen_work
+        )
+
+        # Check if bookmarked
+        response = self.client.post('/api/users/bookmarks/check/', {
+            'work': self.work.id,
+            'screen_work': self.screen_work.id
+        })
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertTrue(response.data['is_bookmarked'])
+        self.assertEqual(response.data['bookmark_id'], bookmark.id)
+
+    def test_check_bookmark_not_exists(self):
+        """Test checking if a bookmark doesn't exist."""
+        self.client.force_authenticate(user=self.user)
+
+        # Check if bookmarked (should not be)
+        response = self.client.post('/api/users/bookmarks/check/', {
+            'work': self.work.id,
+            'screen_work': self.screen_work.id
+        })
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertFalse(response.data['is_bookmarked'])
+        self.assertIsNone(response.data['bookmark_id'])
+
+    def test_bookmark_serializer_includes_metadata(self):
+        """Test that bookmark serializer includes work and screen work metadata."""
+        self.client.force_authenticate(user=self.user)
+
+        # Create bookmark
+        Bookmark.objects.create(
+            user=self.user,
+            work=self.work,
+            screen_work=self.screen_work
+        )
+
+        # List bookmarks
+        response = self.client.get('/api/users/bookmarks/')
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+
+        bookmark_data = response.data['results'][0]
+        self.assertEqual(bookmark_data['work_title'], self.work.title)
+        self.assertEqual(bookmark_data['work_slug'], self.work.slug)
+        self.assertEqual(bookmark_data['screen_work_title'], self.screen_work.title)
+        self.assertEqual(bookmark_data['screen_work_slug'], self.screen_work.slug)
+        self.assertEqual(bookmark_data['screen_work_type'], self.screen_work.type)

@@ -1,9 +1,139 @@
 """Open Library ingestion tasks."""
 from typing import Optional, Dict, Any
+import re
 import requests
 from celery import shared_task
 from django.conf import settings
 from works.models import Work
+
+
+# Standard literary genres (whitelist)
+STANDARD_GENRES = {
+    'Fiction': ['fiction', 'novels', 'literature'],
+    'Science Fiction': ['science fiction', 'sci-fi', 'scifi', 'science-fiction'],
+    'Fantasy': ['fantasy', 'magic', 'sword and sorcery'],
+    'Mystery': ['mystery', 'detective', 'crime fiction', 'whodunit', 'thriller'],
+    'Thriller': ['thriller', 'suspense', 'psychological thriller'],
+    'Horror': ['horror', 'ghost stories', 'supernatural'],
+    'Romance': ['romance', 'love stories', 'romantic fiction'],
+    'Historical Fiction': ['historical fiction', 'historical novel'],
+    'Adventure': ['adventure', 'action and adventure'],
+    'Young Adult': ['young adult', 'ya', 'teen', 'juvenile fiction'],
+    'Children\'s Literature': ['children\'s fiction', 'juvenile literature', 'children\'s literature', 'children\'s books'],
+    'Drama': ['drama', 'plays', 'theatrical productions'],
+    'Comedy': ['comedy', 'humor', 'humorous stories'],
+    'Dystopian': ['dystopian', 'dystopia', 'post-apocalyptic'],
+    'Biography': ['biography', 'autobiography', 'memoir'],
+    'Non-Fiction': ['non-fiction', 'nonfiction'],
+    'Graphic Novel': ['graphic novels', 'comic books', 'comics', 'manga'],
+    'Poetry': ['poetry', 'poems', 'verse'],
+    'Short Stories': ['short stories', 'short fiction'],
+    'Classic Literature': ['classic', 'classics', 'literary fiction'],
+}
+
+# Subjects to ignore (not genres)
+IGNORE_SUBJECTS = {
+    'accessible book', 'protected daisy', 'in library', 'lending library',
+    'open library staff picks', 'new york times bestseller', 'award',
+    'series:', 'fiction, general', 'fiction, ', 'reading level-grade',
+    'internet archive wishlist', 'browsing:', 'subject:',
+}
+
+
+def extract_primary_genre(subjects: list) -> str:
+    """
+    Extract the most appropriate genre from Open Library subjects.
+
+    Algorithm:
+    1. Filter out non-genre subjects (metadata, series tags, etc.)
+    2. Map subjects to standard genres using keywords
+    3. Return the first matching standard genre
+    4. If no match, return cleaned first subject
+
+    Args:
+        subjects: List of subject strings from Open Library
+
+    Returns:
+        Standardized genre string (max 100 chars)
+    """
+    if not subjects:
+        return ''
+
+    # Normalize and filter subjects
+    cleaned_subjects = []
+    for subject in subjects:
+        if not isinstance(subject, str):
+            continue
+
+        subject_lower = subject.lower().strip()
+
+        # Skip metadata/non-genre subjects
+        if any(ignore in subject_lower for ignore in IGNORE_SUBJECTS):
+            continue
+
+        # Skip very specific topics (likely not genres)
+        # Heuristic: if it's a single word and not capitalized, might be too specific
+        words = subject.split()
+        if len(words) == 1 and subject_lower == subject and len(subject) > 15:
+            continue
+
+        cleaned_subjects.append(subject_lower)
+
+    if not cleaned_subjects:
+        return ''
+
+    # Try to match against standard genres
+    for standard_genre, keywords in STANDARD_GENRES.items():
+        for subject in cleaned_subjects:
+            for keyword in keywords:
+                if keyword in subject:
+                    return standard_genre
+
+    # If no match, return the first cleaned subject (capitalized)
+    # but limit to reasonable length and capitalize properly
+    first_subject = subjects[0][:100] if isinstance(subjects[0], str) else ''
+
+    # Skip if it's clearly not a genre (all lowercase single word)
+    if first_subject.islower() and ' ' not in first_subject:
+        return ''
+
+    return first_subject
+
+
+def fetch_title_from_wikidata(qid: str) -> Optional[str]:
+    """
+    Fetch the English title/label for a Wikidata entity.
+
+    Args:
+        qid: Wikidata QID (e.g., "Q10397313")
+
+    Returns:
+        English label or None if not found
+    """
+    try:
+        url = f"https://www.wikidata.org/wiki/Special:EntityData/{qid}.json"
+        headers = {
+            'User-Agent': 'Adaptapedia/1.0 (https://adaptapedia.org; contact@adaptapedia.org) Python/requests'
+        }
+        response = requests.get(url, headers=headers, timeout=10)
+        response.raise_for_status()
+
+        data = response.json()
+        entity_data = data.get('entities', {}).get(qid, {})
+        labels = entity_data.get('labels', {})
+
+        # Try English label first
+        if 'en' in labels:
+            return labels['en']['value']
+
+        # Fallback to any available label
+        if labels:
+            return next(iter(labels.values()))['value']
+
+    except Exception as e:
+        print(f"Error fetching Wikidata title for {qid}: {e}")
+
+    return None
 
 
 @shared_task
@@ -20,10 +150,22 @@ def enrich_work_from_openlibrary(work_id: int) -> Dict[str, Any]:
     try:
         work = Work.objects.get(id=work_id)
 
+        # Check if title is a Q-number (Wikidata QID)
+        search_title = work.title
+        if re.match(r'^Q\d+$', work.title) and work.wikidata_qid:
+            # Fetch real title from Wikidata
+            real_title = fetch_title_from_wikidata(work.wikidata_qid)
+            if real_title:
+                search_title = real_title
+                work.title = real_title  # Update the work with real title
+                work.save(update_fields=['title'])
+            else:
+                return {'success': False, 'error': 'Could not fetch title from Wikidata'}
+
         if not work.openlibrary_work_id:
             # Search for the work
             search_url = f"{settings.OPEN_LIBRARY_BASE_URL}/search.json"
-            params = {'title': work.title, 'limit': 1}
+            params = {'title': search_title, 'limit': 1}
             response = requests.get(search_url, params=params, timeout=10)
             response.raise_for_status()
 
@@ -68,9 +210,9 @@ def enrich_work_from_openlibrary(work_id: int) -> Dict[str, Any]:
                     except Exception:
                         pass
 
-            # Extract genre from subjects (take first subject as primary genre)
+            # Extract genre from subjects using intelligent mapping
             if 'subjects' in ol_data and ol_data['subjects'] and not work.genre:
-                work.genre = ol_data['subjects'][0][:100] if isinstance(ol_data['subjects'][0], str) else ''
+                work.genre = extract_primary_genre(ol_data['subjects'])
 
             work.save()
 

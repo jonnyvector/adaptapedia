@@ -19,6 +19,11 @@ const config: Config = {
           DEFAULT: 'var(--link)',
           hover: 'var(--linkHover)',
         },
+        primary: {
+          DEFAULT: 'var(--primary)',
+          hover: 'var(--primary-hover)',
+        },
+        secondary: 'var(--text-secondary)',
         cyan: 'var(--cyan)',
         magenta: 'var(--magenta)',
         purple: 'var(--purple)',

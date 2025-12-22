@@ -45,7 +45,7 @@ export default function Header(): JSX.Element {
         isSticky ? 'shadow-md' : ''
       }`}
     >
-      <div className="max-w-7xl mx-auto px-4 sm:px-6">
+      <div className="container">
         <div className="flex items-center justify-between py-3 sm:py-4 gap-3 sm:gap-4">
           {/* Logo/Home Link */}
           <Link
@@ -73,6 +73,12 @@ export default function Header(): JSX.Element {
           {/* Navigation & Actions */}
           <nav className="flex items-center gap-2 sm:gap-3">
             {/* Main Navigation Links */}
+            <Link
+              href="/browse"
+              className="hidden sm:inline text-sm px-3 py-2 text-muted hover:text-link transition-colors min-h-[40px] flex items-center"
+            >
+              Browse
+            </Link>
             <Link
               href="/search"
               className="hidden sm:inline text-sm px-3 py-2 text-muted hover:text-link transition-colors min-h-[40px] flex items-center"
@@ -109,6 +115,13 @@ export default function Header(): JSX.Element {
               <div className="w-16 h-10" />
             ) : isAuthenticated && user ? (
               <>
+                <Link
+                  href={`/u/${user.username}/bookmarks`}
+                  className="text-sm px-3 py-2 text-muted hover:text-link transition-colors hidden md:flex items-center min-h-[40px]"
+                  title="My Bookmarks"
+                >
+                  Bookmarks
+                </Link>
                 <Link
                   href={`/u/${user.username}`}
                   className="text-sm px-3 py-2 text-muted hover:text-link transition-colors hidden lg:flex items-center min-h-[40px]"

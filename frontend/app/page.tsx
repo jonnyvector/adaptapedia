@@ -1,16 +1,21 @@
 import Link from 'next/link';
 import SearchBar from '@/components/search/SearchBar';
+import RandomComparisonButton from '@/components/ui/RandomComparisonButton';
+import TrendingComparisons from '@/components/shared/TrendingComparisons';
+import PopularComparisons from '@/components/home/PopularComparisons';
 
 export default function Home(): JSX.Element {
   return (
     <main className="min-h-screen">
-      <div className="container py-12">
+      <div className="container py-8 md:py-12">
 
         {/* Header */}
-        <div className="mb-6">
-          <h1 className="mb-2">Adaptapedia</h1>
-          <p className="text-lg text-secondary">
+        <div className="mb-8 text-center pt-4">
+          <p className="text-2xl font-semibold text-foreground mb-2">
             Compare books with their screen adaptations
+          </p>
+          <p className="text-secondary">
+            Discover what changed from page to screen
           </p>
         </div>
 
@@ -36,71 +41,16 @@ export default function Home(): JSX.Element {
           <SearchBar placeholder="Search for books or adaptations..." />
         </div>
 
-        {/* Featured Comparisons */}
+        {/* Popular Comparisons */}
         <div className="mb-6">
-          <h2 className="mb-3">Featured Comparisons</h2>
+          <h2 className="mb-3">Popular Comparisons</h2>
+          <PopularComparisons />
+        </div>
 
-          <div className="grid grid-cols-1 gap-4">
-            {/* Jurassic Park */}
-            <div className="card">
-              <h3 className="mb-2">Jurassic Park</h3>
-              <p className="text-secondary mb-4">
-                Michael Crichton's science fiction thriller and its acclaimed film adaptation
-              </p>
-
-              <div className="comparison-grid mb-4">
-                <div className="comparison-side">
-                  <div className="comparison-label">Book</div>
-                  <p className="font-semibold mb-1">Novel (1990)</p>
-                  <p className="text-sm text-secondary">by Michael Crichton</p>
-                </div>
-                <div className="comparison-side">
-                  <div className="comparison-label">Screen</div>
-                  <p className="font-semibold mb-1">Film (1993)</p>
-                  <p className="text-sm text-secondary">dir. Steven Spielberg</p>
-                </div>
-              </div>
-
-              <div className="flex items-center justify-between pt-4" style={{ borderTop: '1px solid var(--border)' }}>
-                <span className="text-sm text-secondary">
-                  <span className="font-semibold text-primary">6 differences</span> documented
-                </span>
-                <Link href="/compare/jurassic-park/jurassic-park-1993" className="btn">
-                  View Comparison
-                </Link>
-              </div>
-            </div>
-
-            {/* Sphere */}
-            <div className="card">
-              <h3 className="mb-2">Sphere</h3>
-              <p className="text-secondary mb-4">
-                A deep-sea psychological thriller exploring the unknown
-              </p>
-
-              <div className="comparison-grid mb-4">
-                <div className="comparison-side">
-                  <div className="comparison-label">Book</div>
-                  <p className="font-semibold mb-1">Novel (1987)</p>
-                  <p className="text-sm text-secondary">by Michael Crichton</p>
-                </div>
-                <div className="comparison-side">
-                  <div className="comparison-label">Screen</div>
-                  <p className="font-semibold mb-1">Film (1998)</p>
-                  <p className="text-sm text-secondary">dir. Barry Levinson</p>
-                </div>
-              </div>
-
-              <div className="flex items-center justify-between pt-4" style={{ borderTop: '1px solid var(--border)' }}>
-                <span className="text-sm text-secondary">
-                  <span className="font-semibold text-primary">5 differences</span> documented
-                </span>
-                <Link href="/compare/sphere-novel/sphere-1998" className="btn">
-                  View Comparison
-                </Link>
-              </div>
-            </div>
-          </div>
+        {/* Trending Comparisons */}
+        <div className="mb-6">
+          <h2 className="mb-3">Trending Comparisons</h2>
+          <TrendingComparisons limit={6} />
         </div>
 
         {/* Features */}
@@ -154,6 +104,7 @@ export default function Home(): JSX.Element {
             <Link href="/search" className="btn primary">
               Start Exploring
             </Link>
+            <RandomComparisonButton />
             <Link href="/about" className="btn">
               Learn More
             </Link>

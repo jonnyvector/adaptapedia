@@ -4,6 +4,8 @@ from django.utils.text import slugify
 from rest_framework.test import APITestCase
 from rest_framework import status
 from .models import Work
+from .services import SimilarBooksService
+from screen.models import ScreenWork, AdaptationEdge
 
 
 class WorkModelTestCase(TestCase):
@@ -201,3 +203,233 @@ class WorkAPITestCase(APITestCase):
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         titles = [work['title'] for work in response.data['results']]
         self.assertEqual(titles, sorted(titles))
+
+
+class SimilarBooksServiceTestCase(TestCase):
+    """Test cases for SimilarBooksService."""
+
+    def setUp(self):
+        """Set up test data."""
+        # Create fantasy books by Tolkien
+        self.lotr = Work.objects.create(
+            title="The Lord of the Rings",
+            author="J.R.R. Tolkien",
+            genre="Fantasy",
+            year=1954
+        )
+        self.hobbit = Work.objects.create(
+            title="The Hobbit",
+            author="J.R.R. Tolkien",
+            genre="Fantasy",
+            year=1937
+        )
+        self.silmarillion = Work.objects.create(
+            title="The Silmarillion",
+            author="J.R.R. Tolkien",
+            genre="Fantasy",
+            year=1977
+        )
+
+        # Create other fantasy books
+        self.harry_potter = Work.objects.create(
+            title="Harry Potter and the Philosopher's Stone",
+            author="J.K. Rowling",
+            genre="Fantasy",
+            year=1997
+        )
+        self.narnia = Work.objects.create(
+            title="The Lion, the Witch and the Wardrobe",
+            author="C.S. Lewis",
+            genre="Fantasy",
+            year=1950
+        )
+
+        # Create non-fantasy book
+        self.pride_prejudice = Work.objects.create(
+            title="Pride and Prejudice",
+            author="Jane Austen",
+            genre="Romance",
+            year=1813
+        )
+
+        # Create screen adaptations for some books
+        screen1 = ScreenWork.objects.create(
+            type="MOVIE",
+            title="The Lord of the Rings: The Fellowship of the Ring",
+            year=2001
+        )
+        screen2 = ScreenWork.objects.create(
+            type="MOVIE",
+            title="The Hobbit: An Unexpected Journey",
+            year=2012
+        )
+        screen3 = ScreenWork.objects.create(
+            type="MOVIE",
+            title="Harry Potter and the Philosopher's Stone",
+            year=2001
+        )
+
+        # Create adaptation edges
+        AdaptationEdge.objects.create(work=self.lotr, screen_work=screen1)
+        AdaptationEdge.objects.create(work=self.hobbit, screen_work=screen2)
+        AdaptationEdge.objects.create(work=self.harry_potter, screen_work=screen3)
+
+    def test_similar_books_same_author(self):
+        """Test finding similar books by same author."""
+        similar = SimilarBooksService.get_similar_books(self.lotr, limit=6)
+        similar_ids = [book.id for book in similar]
+
+        # Should include other Tolkien books
+        self.assertIn(self.hobbit.id, similar_ids)
+        self.assertIn(self.silmarillion.id, similar_ids)
+
+    def test_similar_books_same_genre(self):
+        """Test finding similar books by same genre."""
+        similar = SimilarBooksService.get_similar_books(self.lotr, limit=6)
+        similar_ids = [book.id for book in similar]
+
+        # Should include other fantasy books
+        self.assertIn(self.harry_potter.id, similar_ids)
+        self.assertIn(self.narnia.id, similar_ids)
+
+    def test_similar_books_excludes_current(self):
+        """Test that similar books excludes the current book."""
+        similar = SimilarBooksService.get_similar_books(self.lotr, limit=6)
+        similar_ids = [book.id for book in similar]
+
+        # Should NOT include the current book
+        self.assertNotIn(self.lotr.id, similar_ids)
+
+    def test_similar_books_excludes_different_genre(self):
+        """Test that books with different genre get lower priority."""
+        similar = SimilarBooksService.get_similar_books(self.lotr, limit=6)
+        similar_ids = [book.id for book in similar]
+
+        # Romance book should not be in results (or be very low priority)
+        # This might be included if we have very few books, but should be last
+        if self.pride_prejudice.id in similar_ids:
+            # If included, should be last (lowest score)
+            self.assertEqual(similar[-1].id, self.pride_prejudice.id)
+
+    def test_similar_books_scoring_priority(self):
+        """Test that scoring prioritizes genre + author match."""
+        similar = list(SimilarBooksService.get_similar_books(self.lotr, limit=6))
+
+        # Tolkien fantasy books should rank higher than non-Tolkien fantasy
+        tolkien_books = [book for book in similar if book.author == "J.R.R. Tolkien"]
+        non_tolkien_fantasy = [book for book in similar if book.author != "J.R.R. Tolkien" and book.genre == "Fantasy"]
+
+        if tolkien_books and non_tolkien_fantasy:
+            # Tolkien books should have higher similarity scores
+            self.assertGreater(tolkien_books[0].similarity_score, non_tolkien_fantasy[0].similarity_score)
+
+    def test_similar_books_adaptation_count_annotation(self):
+        """Test that adaptation_count is properly annotated."""
+        similar = SimilarBooksService.get_similar_books(self.lotr, limit=6)
+
+        for book in similar:
+            # Check that adaptation_count attribute exists
+            self.assertTrue(hasattr(book, 'adaptation_count'))
+            # Verify specific counts
+            if book.id == self.hobbit.id:
+                self.assertEqual(book.adaptation_count, 1)
+            elif book.id == self.harry_potter.id:
+                self.assertEqual(book.adaptation_count, 1)
+            elif book.id == self.silmarillion.id:
+                self.assertEqual(book.adaptation_count, 0)
+
+    def test_similar_books_limit(self):
+        """Test that limit parameter is respected."""
+        similar = SimilarBooksService.get_similar_books(self.lotr, limit=2)
+        self.assertLessEqual(len(similar), 2)
+
+        similar = SimilarBooksService.get_similar_books(self.lotr, limit=10)
+        # Should not exceed available similar books (excluding current)
+        self.assertLessEqual(len(similar), Work.objects.count() - 1)
+
+    def test_similar_books_no_matches(self):
+        """Test similar books when there are no good matches."""
+        # Create a unique book with no similar attributes
+        unique_book = Work.objects.create(
+            title="Unique Scientific Paper",
+            author="Dr. Unique",
+            genre="Academic",
+            year=2020
+        )
+
+        similar = SimilarBooksService.get_similar_books(unique_book, limit=6)
+        # Should return empty or very few results with low scores
+        for book in similar:
+            self.assertLess(book.similarity_score, 5)  # Low score threshold
+
+
+class SimilarBooksAPITestCase(APITestCase):
+    """Test cases for Similar Books API endpoint."""
+
+    def setUp(self):
+        """Set up test data."""
+        self.work1 = Work.objects.create(
+            title="The Lord of the Rings",
+            slug="lotr",
+            author="J.R.R. Tolkien",
+            genre="Fantasy",
+            year=1954
+        )
+        self.work2 = Work.objects.create(
+            title="The Hobbit",
+            slug="the-hobbit",
+            author="J.R.R. Tolkien",
+            genre="Fantasy",
+            year=1937
+        )
+        self.work3 = Work.objects.create(
+            title="Harry Potter",
+            slug="harry-potter",
+            author="J.K. Rowling",
+            genre="Fantasy",
+            year=1997
+        )
+
+    def test_similar_books_endpoint(self):
+        """Test the similar books API endpoint."""
+        response = self.client.get(f'/api/works/{self.work1.slug}/similar/')
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertIn('results', response.data)
+        self.assertIn('count', response.data)
+
+    def test_similar_books_response_structure(self):
+        """Test that similar books response has correct structure."""
+        response = self.client.get(f'/api/works/{self.work1.slug}/similar/')
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+
+        results = response.data['results']
+        if len(results) > 0:
+            book = results[0]
+            # Check that all expected fields are present
+            self.assertIn('id', book)
+            self.assertIn('title', book)
+            self.assertIn('slug', book)
+            self.assertIn('author', book)
+            self.assertIn('year', book)
+            self.assertIn('genre', book)
+            self.assertIn('cover_url', book)
+            self.assertIn('adaptation_count', book)
+            self.assertIn('similarity_score', book)
+
+    def test_similar_books_limit_parameter(self):
+        """Test that limit parameter works."""
+        response = self.client.get(f'/api/works/{self.work1.slug}/similar/?limit=1')
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertLessEqual(len(response.data['results']), 1)
+
+    def test_similar_books_max_limit(self):
+        """Test that limit is capped at maximum."""
+        response = self.client.get(f'/api/works/{self.work1.slug}/similar/?limit=100')
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        # Should be capped at 20
+        self.assertLessEqual(len(response.data['results']), 20)
+
+    def test_similar_books_not_found(self):
+        """Test similar books for non-existent work."""
+        response = self.client.get('/api/works/nonexistent/similar/')
+        self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)

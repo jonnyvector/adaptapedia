@@ -4,8 +4,10 @@ from rest_framework.decorators import action
 from rest_framework.response import Response
 from django_filters.rest_framework import DjangoFilterBackend
 from django.db.models import Count, Avg, Q, F, ExpressionWrapper, IntegerField, Case, When
+from django.core.cache import cache
 from .models import DiffItem, DiffVote, DiffComment, SpoilerScope, ComparisonVote
 from .serializers import DiffItemSerializer, DiffVoteSerializer, DiffCommentSerializer, ComparisonVoteSerializer
+from .services import DiffService
 
 
 class DiffItemViewSet(viewsets.ModelViewSet):
@@ -119,6 +121,69 @@ class DiffItemViewSet(viewsets.ModelViewSet):
 
         serializer = DiffVoteSerializer(vote)
         return Response(serializer.data, status=status.HTTP_200_OK)
+
+    @action(detail=False, methods=['get'], url_path='random-comparison')
+    def random_comparison(self, request):
+        """Get a random comparison that has at least one diff."""
+        from works.models import Work
+        from screen.models import ScreenWork
+        from django.db.models import Count
+        import random
+
+        # Get all work-screen pairs that have at least one diff
+        comparisons = DiffItem.objects.filter(
+            status='LIVE'
+        ).values('work', 'screen_work').annotate(
+            diff_count=Count('id')
+        ).filter(diff_count__gt=0)
+
+        if not comparisons:
+            return Response(
+                {'error': 'No comparisons available'},
+                status=status.HTTP_404_NOT_FOUND
+            )
+
+        # Pick a random comparison
+        random_comparison = random.choice(list(comparisons))
+        work = Work.objects.get(id=random_comparison['work'])
+        screen_work = ScreenWork.objects.get(id=random_comparison['screen_work'])
+
+        return Response({
+            'work_slug': work.slug,
+            'screen_work_slug': screen_work.slug,
+            'diff_count': random_comparison['diff_count']
+        })
+
+    @action(detail=False, methods=['get'], url_path='trending')
+    def trending(self, request):
+        """
+        Get trending comparisons based on recent activity.
+
+        Query parameters:
+        - limit (int): Number of trending comparisons to return (default 8, max 20)
+        - days (int): Number of days to look back for activity (default 7)
+
+        Returns cached data (30-minute cache) for performance.
+        """
+        # Get query parameters with defaults
+        limit = min(int(request.query_params.get('limit', 8)), 20)  # Cap at 20
+        days = int(request.query_params.get('days', 7))
+
+        # Create cache key based on parameters
+        cache_key = f'trending_comparisons_limit_{limit}_days_{days}'
+
+        # Try to get from cache
+        cached_data = cache.get(cache_key)
+        if cached_data is not None:
+            return Response(cached_data)
+
+        # Calculate trending comparisons using service
+        trending_comparisons = DiffService.get_trending_comparisons(limit=limit, days=days)
+
+        # Cache for 30 minutes (1800 seconds)
+        cache.set(cache_key, trending_comparisons, 1800)
+
+        return Response(trending_comparisons)
 
 
 class DiffCommentViewSet(viewsets.ModelViewSet):

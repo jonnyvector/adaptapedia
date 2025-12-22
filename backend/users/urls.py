@@ -7,10 +7,16 @@ from .views import (
     LoginView,
     LogoutView,
     CurrentUserView,
+    BookmarkViewSet,
 )
 
-router = DefaultRouter()
-router.register(r'', UserViewSet, basename='user')
+# Router for users (at /api/users/<username>)
+user_router = DefaultRouter()
+user_router.register(r'', UserViewSet, basename='user')
+
+# Router for bookmarks (at /api/users/bookmarks/)
+bookmark_router = DefaultRouter()
+bookmark_router.register(r'bookmarks', BookmarkViewSet, basename='bookmark')
 
 urlpatterns = [
     # Authentication endpoints
@@ -18,6 +24,8 @@ urlpatterns = [
     path('login/', LoginView.as_view(), name='login'),
     path('logout/', LogoutView.as_view(), name='logout'),
     path('me/', CurrentUserView.as_view(), name='current-user'),
+    # Bookmark endpoints (must come before user router to avoid conflicts)
+    path('', include(bookmark_router.urls)),
     # User CRUD endpoints
-    path('', include(router.urls)),
+    path('', include(user_router.urls)),
 ]

@@ -2,7 +2,7 @@
 from rest_framework import serializers
 from django.contrib.auth.password_validation import validate_password
 from django.db.models import Count, Q
-from .models import User
+from .models import User, Bookmark
 
 
 class UserSerializer(serializers.ModelSerializer):
@@ -168,3 +168,61 @@ class UserDetailSerializer(serializers.ModelSerializer):
             'date_joined',
         ]
         read_only_fields = ['id', 'role', 'reputation_points', 'date_joined']
+
+
+class BookmarkSerializer(serializers.ModelSerializer):
+    """Serializer for Bookmark model."""
+
+    work_title = serializers.CharField(source='work.title', read_only=True)
+    work_slug = serializers.CharField(source='work.slug', read_only=True)
+    work_author = serializers.CharField(source='work.author', read_only=True)
+    work_cover_url = serializers.CharField(source='work.cover_url', read_only=True)
+    screen_work_title = serializers.CharField(source='screen_work.title', read_only=True)
+    screen_work_slug = serializers.CharField(source='screen_work.slug', read_only=True)
+    screen_work_type = serializers.CharField(source='screen_work.type', read_only=True)
+    screen_work_poster_url = serializers.CharField(source='screen_work.poster_url', read_only=True)
+
+    class Meta:
+        """Meta options for BookmarkSerializer."""
+
+        model = Bookmark
+        fields = [
+            'id',
+            'user',
+            'work',
+            'screen_work',
+            'work_title',
+            'work_slug',
+            'work_author',
+            'work_cover_url',
+            'screen_work_title',
+            'screen_work_slug',
+            'screen_work_type',
+            'screen_work_poster_url',
+            'created_at',
+        ]
+        read_only_fields = ['id', 'user', 'created_at']
+
+    def validate(self, attrs: dict) -> dict:
+        """Validate that the work and screen work have an adaptation relationship."""
+        from screen.models import AdaptationEdge
+
+        work = attrs.get('work')
+        screen_work = attrs.get('screen_work')
+
+        # Check if adaptation edge exists
+        if not AdaptationEdge.objects.filter(work=work, screen_work=screen_work).exists():
+            raise serializers.ValidationError(
+                "No adaptation relationship exists between this book and screen work."
+            )
+
+        # Check for duplicate bookmark (only during creation)
+        if not self.instance:
+            # Get user from context (will be set by perform_create)
+            user = self.context['request'].user if 'request' in self.context else None
+            if user and Bookmark.objects.filter(user=user, work=work, screen_work=screen_work).exists():
+                raise serializers.ValidationError(
+                    "You have already bookmarked this comparison."
+                )
+
+        return attrs

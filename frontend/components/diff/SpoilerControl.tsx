@@ -2,6 +2,7 @@
 
 import { useEffect } from 'react';
 import type { SpoilerScope } from '@/lib/types';
+import { LockClosedIcon, BookOpenIcon, FilmIcon, LockOpenIcon, CheckIcon } from '@/components/ui/Icons';
 
 export type SpoilerPreference = 'SAFE' | 'BOOK_ALLOWED' | 'SCREEN_ALLOWED' | 'FULL';
 
@@ -14,35 +15,35 @@ const preferences: {
   value: SpoilerPreference;
   label: string;
   description: string;
-  icon: string;
+  icon: React.ComponentType<{ className?: string }>;
   allowedScopes: SpoilerScope[];
 }[] = [
   {
     value: 'SAFE',
     label: 'Safe Only',
     description: 'No spoilers - high-level changes only',
-    icon: '🔒',
+    icon: LockClosedIcon,
     allowedScopes: ['NONE'],
   },
   {
     value: 'BOOK_ALLOWED',
     label: 'Book Spoilers',
     description: 'Safe + book plot details',
-    icon: '📖',
+    icon: BookOpenIcon,
     allowedScopes: ['NONE', 'BOOK_ONLY'],
   },
   {
     value: 'SCREEN_ALLOWED',
     label: 'Screen Spoilers',
     description: 'Safe + movie/TV plot details',
-    icon: '🎬',
+    icon: FilmIcon,
     allowedScopes: ['NONE', 'SCREEN_ONLY'],
   },
   {
     value: 'FULL',
     label: 'Full Spoilers',
     description: 'Show everything including endings',
-    icon: '🔓',
+    icon: LockOpenIcon,
     allowedScopes: ['NONE', 'BOOK_ONLY', 'SCREEN_ONLY', 'FULL'],
   },
 ];
@@ -70,8 +71,8 @@ export default function SpoilerControl({
         {/* Header with warning indicator */}
         <div className="flex items-center gap-2 mb-3">
           <div className="flex items-center gap-2 flex-1">
-            <span className="text-lg" aria-hidden="true">
-              {currentConfig.icon}
+            <span aria-hidden="true">
+              <currentConfig.icon className="w-5 h-5" />
             </span>
             <h2 className="text-sm sm:text-base font-bold text-foreground">
               Spoiler Control
@@ -104,13 +105,13 @@ export default function SpoilerControl({
                 aria-pressed={isActive}
                 aria-label={`${pref.label}: ${pref.description}`}
               >
-                <span className="text-xl mb-0.5" aria-hidden="true">
-                  {pref.icon}
+                <span className="mb-0.5" aria-hidden="true">
+                  <pref.icon className="w-6 h-6" />
                 </span>
                 <span className="text-center leading-tight">{pref.label}</span>
                 {isActive && (
                   <div className="absolute -top-1 -right-1 w-5 h-5 bg-success rounded-full flex items-center justify-center">
-                    <span className="text-white text-xs">✓</span>
+                    <CheckIcon className="w-3 h-3 text-white" />
                   </div>
                 )}
               </button>

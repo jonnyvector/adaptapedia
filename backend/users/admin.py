@@ -1,7 +1,7 @@
 """Admin configuration for users app."""
 from django.contrib import admin
 from django.contrib.auth.admin import UserAdmin as BaseUserAdmin
-from .models import User
+from .models import User, Bookmark
 
 
 @admin.register(User)
@@ -13,3 +13,14 @@ class UserAdmin(BaseUserAdmin):
     fieldsets = BaseUserAdmin.fieldsets + (
         ('Adaptapedia', {'fields': ('role', 'reputation_points', 'spoiler_preference')}),
     )
+
+
+@admin.register(Bookmark)
+class BookmarkAdmin(admin.ModelAdmin):
+    """Admin interface for Bookmark model."""
+
+    list_display = ['user', 'work', 'screen_work', 'created_at']
+    list_filter = ['created_at']
+    search_fields = ['user__username', 'work__title', 'screen_work__title']
+    readonly_fields = ['created_at']
+    date_hierarchy = 'created_at'

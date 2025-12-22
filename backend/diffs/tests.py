@@ -717,3 +717,327 @@ class DiffCommentAPITestCase(APITestCase):
         response = self.client.get(f'/api/diffs/comments/?diff_item={self.diff.id}')
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(response.data['count'], 1)
+
+
+class TrendingComparisonsAPITestCase(APITestCase):
+    """Test cases for trending comparisons endpoint."""
+
+    def setUp(self):
+        """Set up test data."""
+        self.user = User.objects.create_user(username='testuser', password='pass')
+
+        # Create multiple books and adaptations
+        self.work1 = Work.objects.create(title="Trending Book 1", slug="trending-book-1")
+        self.work2 = Work.objects.create(title="Trending Book 2", slug="trending-book-2")
+        self.work3 = Work.objects.create(title="Old Book", slug="old-book")
+
+        self.screen1 = ScreenWork.objects.create(
+            type=ScreenWorkType.MOVIE,
+            title="Trending Movie 1",
+            slug="trending-movie-1",
+            year=2023
+        )
+        self.screen2 = ScreenWork.objects.create(
+            type=ScreenWorkType.TV,
+            title="Trending TV Show",
+            slug="trending-tv-show",
+            year=2024
+        )
+        self.screen3 = ScreenWork.objects.create(
+            type=ScreenWorkType.MOVIE,
+            title="Old Movie",
+            slug="old-movie",
+            year=2020
+        )
+
+    def test_get_trending_comparisons_unauthenticated(self):
+        """Test that trending endpoint is accessible without authentication."""
+        response = self.client.get('/api/diffs/items/trending/')
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+
+    def test_trending_comparisons_empty_when_no_activity(self):
+        """Test that trending returns empty list when there's no recent activity."""
+        # Create old diff (older than 7 days)
+        from django.utils import timezone
+        from datetime import timedelta
+
+        diff = DiffItem.objects.create(
+            work=self.work3,
+            screen_work=self.screen3,
+            category=DiffCategory.PLOT,
+            claim="Old diff",
+            status=DiffStatus.LIVE,
+            created_by=self.user
+        )
+        # Manually set created_at to 10 days ago
+        diff.created_at = timezone.now() - timedelta(days=10)
+        diff.save()
+
+        response = self.client.get('/api/diffs/items/trending/')
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(len(response.data), 0)
+
+    def test_trending_comparisons_with_recent_diffs(self):
+        """Test that comparisons with recent diffs appear in trending."""
+        # Create recent diff (within last 7 days)
+        DiffItem.objects.create(
+            work=self.work1,
+            screen_work=self.screen1,
+            category=DiffCategory.PLOT,
+            claim="Recent diff 1",
+            status=DiffStatus.LIVE,
+            created_by=self.user
+        )
+        DiffItem.objects.create(
+            work=self.work1,
+            screen_work=self.screen1,
+            category=DiffCategory.CHARACTER,
+            claim="Recent diff 2",
+            status=DiffStatus.LIVE,
+            created_by=self.user
+        )
+
+        response = self.client.get('/api/diffs/items/trending/')
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertGreater(len(response.data), 0)
+
+        # Verify the comparison appears in results
+        comparison = response.data[0]
+        self.assertEqual(comparison['work_id'], self.work1.id)
+        self.assertEqual(comparison['screen_work_id'], self.screen1.id)
+        self.assertEqual(comparison['recent_diffs'], 2)
+        self.assertGreater(comparison['activity_score'], 0)
+
+    def test_trending_comparisons_with_recent_votes(self):
+        """Test that comparisons with recent votes appear in trending."""
+        # Create diff and votes
+        diff = DiffItem.objects.create(
+            work=self.work2,
+            screen_work=self.screen2,
+            category=DiffCategory.PLOT,
+            claim="Diff with votes",
+            status=DiffStatus.LIVE,
+            created_by=self.user
+        )
+
+        # Create multiple votes
+        user2 = User.objects.create_user(username='voter1', password='pass')
+        user3 = User.objects.create_user(username='voter2', password='pass')
+
+        DiffVote.objects.create(diff_item=diff, user=user2, vote=VoteType.ACCURATE)
+        DiffVote.objects.create(diff_item=diff, user=user3, vote=VoteType.NEEDS_NUANCE)
+
+        response = self.client.get('/api/diffs/items/trending/')
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertGreater(len(response.data), 0)
+
+        # Find the comparison in results
+        comparison = next(
+            (c for c in response.data if c['work_id'] == self.work2.id),
+            None
+        )
+        self.assertIsNotNone(comparison)
+        self.assertEqual(comparison['recent_votes'], 2)
+
+    def test_trending_comparisons_ordering(self):
+        """Test that trending comparisons are ordered by activity score."""
+        # Create comparison with high activity (3 recent diffs)
+        for i in range(3):
+            DiffItem.objects.create(
+                work=self.work1,
+                screen_work=self.screen1,
+                category=DiffCategory.PLOT,
+                claim=f"High activity diff {i}",
+                status=DiffStatus.LIVE,
+                created_by=self.user
+            )
+
+        # Create comparison with low activity (1 recent diff)
+        DiffItem.objects.create(
+            work=self.work2,
+            screen_work=self.screen2,
+            category=DiffCategory.PLOT,
+            claim="Low activity diff",
+            status=DiffStatus.LIVE,
+            created_by=self.user
+        )
+
+        response = self.client.get('/api/diffs/items/trending/')
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+
+        # First result should have higher activity score
+        if len(response.data) >= 2:
+            self.assertGreater(
+                response.data[0]['activity_score'],
+                response.data[1]['activity_score']
+            )
+
+    def test_trending_comparisons_limit_parameter(self):
+        """Test that limit parameter works correctly."""
+        # Create multiple comparisons
+        for i in range(5):
+            work = Work.objects.create(title=f"Book {i}", slug=f"book-{i}")
+            screen = ScreenWork.objects.create(
+                type=ScreenWorkType.MOVIE,
+                title=f"Movie {i}",
+                slug=f"movie-{i}"
+            )
+            DiffItem.objects.create(
+                work=work,
+                screen_work=screen,
+                category=DiffCategory.PLOT,
+                claim=f"Diff {i}",
+                status=DiffStatus.LIVE,
+                created_by=self.user
+            )
+
+        response = self.client.get('/api/diffs/items/trending/?limit=3')
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertLessEqual(len(response.data), 3)
+
+    def test_trending_comparisons_days_parameter(self):
+        """Test that days parameter filters activity correctly."""
+        from django.utils import timezone
+        from datetime import timedelta
+
+        # Create diff from 5 days ago
+        diff_recent = DiffItem.objects.create(
+            work=self.work1,
+            screen_work=self.screen1,
+            category=DiffCategory.PLOT,
+            claim="5 days ago",
+            status=DiffStatus.LIVE,
+            created_by=self.user
+        )
+        diff_recent.created_at = timezone.now() - timedelta(days=5)
+        diff_recent.save()
+
+        # Create diff from 15 days ago
+        diff_old = DiffItem.objects.create(
+            work=self.work2,
+            screen_work=self.screen2,
+            category=DiffCategory.PLOT,
+            claim="15 days ago",
+            status=DiffStatus.LIVE,
+            created_by=self.user
+        )
+        diff_old.created_at = timezone.now() - timedelta(days=15)
+        diff_old.save()
+
+        # Query with days=7 (default)
+        response = self.client.get('/api/diffs/items/trending/?days=7')
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+
+        # Should only include the recent diff
+        work_ids = [c['work_id'] for c in response.data]
+        self.assertIn(self.work1.id, work_ids)
+        self.assertNotIn(self.work2.id, work_ids)
+
+    def test_trending_comparisons_diversity(self):
+        """Test that trending promotes diversity (max 2 comparisons per book)."""
+        # Create 3 different adaptations of the same book
+        screen_a = ScreenWork.objects.create(
+            type=ScreenWorkType.MOVIE,
+            title="Adaptation A",
+            slug="adaptation-a"
+        )
+        screen_b = ScreenWork.objects.create(
+            type=ScreenWorkType.MOVIE,
+            title="Adaptation B",
+            slug="adaptation-b"
+        )
+        screen_c = ScreenWork.objects.create(
+            type=ScreenWorkType.TV,
+            title="Adaptation C",
+            slug="adaptation-c"
+        )
+
+        # Create 3 diffs for each adaptation
+        for screen in [screen_a, screen_b, screen_c]:
+            for i in range(3):
+                DiffItem.objects.create(
+                    work=self.work1,
+                    screen_work=screen,
+                    category=DiffCategory.PLOT,
+                    claim=f"Diff for {screen.slug} - {i}",
+                    status=DiffStatus.LIVE,
+                    created_by=self.user
+                )
+
+        response = self.client.get('/api/diffs/items/trending/')
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+
+        # Count how many comparisons are from work1
+        work1_comparisons = [c for c in response.data if c['work_id'] == self.work1.id]
+
+        # Should be at most 2 comparisons from the same book
+        self.assertLessEqual(len(work1_comparisons), 2)
+
+    def test_trending_comparisons_includes_metadata(self):
+        """Test that trending comparisons include all required metadata."""
+        diff = DiffItem.objects.create(
+            work=self.work1,
+            screen_work=self.screen1,
+            category=DiffCategory.PLOT,
+            claim="Test diff",
+            status=DiffStatus.LIVE,
+            created_by=self.user
+        )
+
+        response = self.client.get('/api/diffs/items/trending/')
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+
+        if len(response.data) > 0:
+            comparison = response.data[0]
+
+            # Verify all required fields are present
+            required_fields = [
+                'work_id', 'work_title', 'work_slug',
+                'screen_work_id', 'screen_work_title', 'screen_work_slug',
+                'screen_work_type', 'screen_work_year',
+                'total_diffs', 'recent_diffs', 'recent_votes', 'activity_score'
+            ]
+
+            for field in required_fields:
+                self.assertIn(field, comparison)
+
+    def test_trending_comparisons_only_includes_live_diffs(self):
+        """Test that only LIVE diffs are counted in trending."""
+        # Create LIVE diff
+        DiffItem.objects.create(
+            work=self.work1,
+            screen_work=self.screen1,
+            category=DiffCategory.PLOT,
+            claim="Live diff",
+            status=DiffStatus.LIVE,
+            created_by=self.user
+        )
+
+        # Create PENDING diff
+        DiffItem.objects.create(
+            work=self.work1,
+            screen_work=self.screen1,
+            category=DiffCategory.CHARACTER,
+            claim="Pending diff",
+            status=DiffStatus.PENDING,
+            created_by=self.user
+        )
+
+        # Create HIDDEN diff
+        DiffItem.objects.create(
+            work=self.work1,
+            screen_work=self.screen1,
+            category=DiffCategory.ENDING,
+            claim="Hidden diff",
+            status=DiffStatus.HIDDEN,
+            created_by=self.user
+        )
+
+        response = self.client.get('/api/diffs/items/trending/')
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+
+        if len(response.data) > 0:
+            comparison = response.data[0]
+            # Should only count the LIVE diff
+            self.assertEqual(comparison['total_diffs'], 1)
+            self.assertEqual(comparison['recent_diffs'], 1)

@@ -12,6 +12,7 @@ const nextConfig = {
       'images-na.ssl-images-amazon.com',
       'books.google.com',
       'books.googleusercontent.com',
+      'upload.wikimedia.org',
     ],
   },
 };

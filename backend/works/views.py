@@ -2,11 +2,21 @@
 from rest_framework import viewsets, filters, status
 from rest_framework.decorators import action
 from rest_framework.response import Response
+from rest_framework.pagination import PageNumberPagination
 from django_filters.rest_framework import DjangoFilterBackend
+from django.db.models import Count
 from .models import Work
-from .serializers import WorkSerializer, WorkWithAdaptationsSerializer
-from .services import SearchService
+from .serializers import WorkSerializer, WorkWithAdaptationsSerializer, GenreSerializer, SimilarBookSerializer
+from .services import SearchService, SimilarBooksService
 from screen.serializers import ScreenWorkSerializer
+
+
+class WorkPagination(PageNumberPagination):
+    """Pagination for work list endpoints."""
+
+    page_size = 20
+    page_size_query_param = 'page_size'
+    max_page_size = 100
 
 
 class WorkViewSet(viewsets.ReadOnlyModelViewSet):
@@ -17,9 +27,10 @@ class WorkViewSet(viewsets.ReadOnlyModelViewSet):
     lookup_field = 'slug'
     filter_backends = [DjangoFilterBackend, filters.SearchFilter, filters.OrderingFilter]
     search_fields = ['title', 'summary']
-    filterset_fields = ['year']
+    filterset_fields = ['year', 'genre']
     ordering_fields = ['title', 'year', 'created_at']
     ordering = ['-created_at']
+    pagination_class = WorkPagination
 
     @action(detail=False, methods=['get'], url_path='search-with-adaptations')
     def search_with_adaptations(self, request):
@@ -66,4 +77,89 @@ class WorkViewSet(viewsets.ReadOnlyModelViewSet):
             'search_type': 'book',
             'query': query,
             'results': WorkWithAdaptationsSerializer(works, many=True).data
+        })
+
+    @action(detail=False, methods=['get'], url_path='genres')
+    def genres(self, request):
+        """
+        List all available genres with book counts.
+
+        Returns genres sorted by book count (most popular first).
+        """
+        # Get all unique genres with book counts
+        genres = Work.objects.values('genre').annotate(
+            book_count=Count('id')
+        ).filter(
+            genre__isnull=False,
+            genre__gt=''
+        ).order_by('-book_count')
+
+        return Response({
+            'results': GenreSerializer(genres, many=True).data
+        })
+
+    @action(detail=False, methods=['get'], url_path='by-genre/(?P<genre>[^/.]+)')
+    def by_genre(self, request, genre=None):
+        """
+        Get works by genre with their adaptations.
+
+        Query params:
+        - page: page number (default 1)
+        - page_size: results per page (default 20, max 100)
+        """
+        if not genre:
+            return Response(
+                {'error': 'Genre parameter is required'},
+                status=status.HTTP_400_BAD_REQUEST
+            )
+
+        # URL decode and normalize genre
+        import urllib.parse
+        genre_decoded = urllib.parse.unquote(genre).replace('-', ' ')
+
+        # Get works for this genre
+        works = Work.objects.filter(
+            genre__iexact=genre_decoded
+        ).select_related().prefetch_related('adaptations')
+
+        # Apply pagination
+        paginator = self.pagination_class()
+        page = paginator.paginate_queryset(works, request)
+
+        # Attach ranked adaptations to each work
+        for work in page:
+            work.ranked_adaptations = list(SearchService.get_ranked_adaptations_for_work(work))
+
+        return paginator.get_paginated_response(
+            WorkWithAdaptationsSerializer(page, many=True).data
+        )
+
+    @action(detail=True, methods=['get'], url_path='similar')
+    def similar_books(self, request, slug=None):
+        """
+        Get similar books for a given work.
+
+        Uses multi-criteria similarity algorithm:
+        - Genre match (highest priority)
+        - Same author
+        - Similar title words (trigram matching)
+        - Adaptation count boost
+
+        Query params:
+        - limit: max similar books to return (default 6, max 20)
+
+        Returns up to 6 similar books with their adaptation counts.
+        """
+        work = self.get_object()
+
+        # Get limit from query params
+        limit = int(request.query_params.get('limit', 6))
+        limit = min(limit, 20)  # Cap at 20 max
+
+        # Get similar books using service
+        similar_books = SimilarBooksService.get_similar_books(work, limit=limit)
+
+        return Response({
+            'results': SimilarBookSerializer(similar_books, many=True).data,
+            'count': len(similar_books),
         })

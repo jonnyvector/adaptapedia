@@ -13,7 +13,9 @@ import ComparisonSummary from './ComparisonSummary';
 import DiffFilters from './DiffFilters';
 import DiffSort, { type SortOption } from './DiffSort';
 import DiffSearch from './DiffSearch';
+import { LockClosedIcon } from '@/components/ui/Icons';
 import AdaptationSwitcher from './AdaptationSwitcher';
+import BookmarkButton from './BookmarkButton';
 import SkeletonCard from '@/components/ui/SkeletonCard';
 import LoadingSkeleton from '@/components/ui/LoadingSkeleton';
 import {
@@ -315,6 +317,7 @@ export default function ComparisonView({
               />
             </div>
             <div className="flex gap-3">
+              <BookmarkButton workId={work.id} screenWorkId={screenWork.id} />
               <DiffSort value={sortOption} onChange={setSortOption} />
               <button
                 onClick={handleAddDiff}
@@ -412,7 +415,7 @@ export default function ComparisonView({
             <div className="border-t-2 border-warn pt-6 sm:pt-8">
               <div className="mb-4 p-3 sm:p-4 bg-warn/10 border border-warn/30 rounded-lg">
                 <h2 className="text-lg sm:text-xl font-bold text-warn mb-2 flex items-center gap-2">
-                  <span aria-hidden="true">🔒</span>
+                  <LockClosedIcon className="w-6 h-6" aria-hidden="true" />
                   {maskedDiffs.length} Hidden Difference{maskedDiffs.length !== 1 ? 's' : ''}
                 </h2>
                 <p className="text-sm text-foreground">

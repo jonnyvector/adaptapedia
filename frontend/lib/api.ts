@@ -7,11 +7,21 @@ import type {
   SignupData,
   LoginData,
   User,
+  UserProfile,
   CreateDiffData,
   DiffItem,
   CreateComparisonVoteData,
   ComparisonVoteStats,
-  SearchWithAdaptationsResponse
+  SearchWithAdaptationsResponse,
+  GenreListResponse,
+  ApiResponse,
+  WorkWithAdaptations,
+  SimilarBooksResponse,
+  TrendingComparison,
+  Vote,
+  Comment,
+  Bookmark,
+  BookmarkCheckResponse
 } from './types';
 
 // Use API_URL for server-side, NEXT_PUBLIC_API_URL for client-side
@@ -71,9 +81,9 @@ async function fetchApi<T>(
 ): Promise<T> {
   const url = `${API_BASE_URL}${endpoint}`;
 
-  const headers: HeadersInit = {
+  const headers: Record<string, string> = {
     'Content-Type': 'application/json',
-    ...options?.headers,
+    ...(options?.headers as Record<string, string>),
   };
 
   // Add authorization header if token exists
@@ -114,6 +124,20 @@ export const api = {
         params.set('limit', limit.toString());
       }
       return fetchApi<SearchWithAdaptationsResponse>(`/works/search-with-adaptations/?${params}`);
+    },
+    genres: async (): Promise<GenreListResponse> => {
+      return fetchApi<GenreListResponse>('/works/genres/');
+    },
+    byGenre: async (genre: string, page?: number, pageSize?: number): Promise<ApiResponse<WorkWithAdaptations>> => {
+      const params: Record<string, string> = {};
+      if (page) params.page = page.toString();
+      if (pageSize) params.page_size = pageSize.toString();
+      const query = Object.keys(params).length ? `?${new URLSearchParams(params)}` : '';
+      return fetchApi<ApiResponse<WorkWithAdaptations>>(`/works/by-genre/${encodeURIComponent(genre)}/${query}`);
+    },
+    similar: async (slug: string, limit?: number): Promise<SimilarBooksResponse> => {
+      const params = limit ? `?limit=${limit}` : '';
+      return fetchApi<SimilarBooksResponse>(`/works/${slug}/similar/${params}`);
     },
   },
 
@@ -163,6 +187,16 @@ export const api = {
         body: JSON.stringify({ vote: voteType }),
       });
     },
+    getRandomComparison: async (): Promise<{ work_slug: string; screen_work_slug: string; diff_count: number }> => {
+      return fetchApi('/diffs/items/random-comparison/');
+    },
+    getTrending: async (limit?: number, days?: number): Promise<TrendingComparison[]> => {
+      const params: Record<string, string> = {};
+      if (limit) params.limit = limit.toString();
+      if (days) params.days = days.toString();
+      const query = Object.keys(params).length ? `?${new URLSearchParams(params)}` : '';
+      return fetchApi<TrendingComparison[]>(`/diffs/items/trending/${query}`);
+    },
   },
 
   compare: {
@@ -199,16 +233,20 @@ export const api = {
   },
 
   users: {
-    getProfile: async (username: string) => {
-      return fetchApi(`/users/${username}/`);
+    getProfile: async (username: string): Promise<UserProfile> => {
+      return fetchApi<UserProfile>(`/users/${username}/`);
     },
-    getDiffs: async (username: string, params?: Record<string, string>) => {
+    getDiffs: async (username: string, params?: Record<string, string>): Promise<ApiResponse<DiffItem>> => {
       const query = params ? `?${new URLSearchParams(params)}` : '';
-      return fetchApi(`/users/${username}/diffs/${query}`);
+      return fetchApi<ApiResponse<DiffItem>>(`/users/${username}/diffs/${query}`);
     },
-    getComments: async (username: string, params?: Record<string, string>) => {
+    getComments: async (username: string, params?: Record<string, string>): Promise<ApiResponse<Comment>> => {
       const query = params ? `?${new URLSearchParams(params)}` : '';
-      return fetchApi(`/users/${username}/comments/${query}`);
+      return fetchApi<ApiResponse<Comment>>(`/users/${username}/comments/${query}`);
+    },
+    getVotes: async (username: string, params?: Record<string, string>): Promise<ApiResponse<Vote>> => {
+      const query = params ? `?${new URLSearchParams(params)}` : '';
+      return fetchApi<ApiResponse<Vote>>(`/users/${username}/votes/${query}`);
     },
   },
 
@@ -297,6 +335,44 @@ export const api = {
           method: 'POST',
         });
       },
+    },
+  },
+
+  bookmarks: {
+    list: async (params?: Record<string, string>): Promise<ApiResponse<Bookmark>> => {
+      const query = params ? `?${new URLSearchParams(params)}` : '';
+      return fetchApi<ApiResponse<Bookmark>>(`/users/bookmarks/${query}`);
+    },
+    create: async (workId: number, screenWorkId: number): Promise<Bookmark> => {
+      return fetchApi<Bookmark>('/users/bookmarks/', {
+        method: 'POST',
+        body: JSON.stringify({
+          work: workId,
+          screen_work: screenWorkId,
+        }),
+      });
+    },
+    delete: async (bookmarkId: number): Promise<{ message: string }> => {
+      return fetchApi<{ message: string }>(`/users/bookmarks/${bookmarkId}/`, {
+        method: 'DELETE',
+      });
+    },
+    deleteByComparison: async (workId: number, screenWorkId: number): Promise<{ message: string }> => {
+      return fetchApi<{ message: string }>(
+        `/users/bookmarks/delete-by-comparison/?work=${workId}&screen_work=${screenWorkId}`,
+        {
+          method: 'DELETE',
+        }
+      );
+    },
+    check: async (workId: number, screenWorkId: number): Promise<BookmarkCheckResponse> => {
+      return fetchApi<BookmarkCheckResponse>('/users/bookmarks/check/', {
+        method: 'POST',
+        body: JSON.stringify({
+          work: workId,
+          screen_work: screenWorkId,
+        }),
+      });
     },
   },
 };
