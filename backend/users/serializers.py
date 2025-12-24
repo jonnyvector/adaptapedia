@@ -24,6 +24,56 @@ class UserSerializer(serializers.ModelSerializer):
         read_only_fields = ['id', 'role', 'reputation_points', 'date_joined']
 
 
+class UserBadgeSerializer(serializers.ModelSerializer):
+    """Serializer for UserBadge model."""
+
+    badge_display = serializers.CharField(source='get_badge_type_display', read_only=True)
+
+    class Meta:
+        """Meta options for UserBadgeSerializer."""
+
+        model = UserBadge
+        fields = ['id', 'badge_type', 'badge_display', 'earned_at', 'metadata']
+        read_only_fields = ['id', 'earned_at']
+
+
+class ReputationEventSerializer(serializers.ModelSerializer):
+    """Serializer for ReputationEvent model."""
+
+    event_type_display = serializers.CharField(source='get_event_type_display', read_only=True)
+    diff_title = serializers.CharField(source='diff_item.claim', read_only=True, allow_null=True)
+
+    class Meta:
+        """Meta options for ReputationEventSerializer."""
+
+        model = ReputationEvent
+        fields = [
+            'id', 'event_type', 'event_type_display', 'amount',
+            'description', 'diff_title', 'created_at'
+        ]
+        read_only_fields = ['id', 'created_at']
+
+
+class NotificationSerializer(serializers.ModelSerializer):
+    """Serializer for Notification model."""
+
+    notification_type_display = serializers.CharField(
+        source='get_notification_type_display',
+        read_only=True
+    )
+
+    class Meta:
+        """Meta options for NotificationSerializer."""
+
+        model = Notification
+        fields = [
+            'id', 'notification_type', 'notification_type_display',
+            'title', 'message', 'is_read', 'action_url',
+            'metadata', 'created_at', 'read_at'
+        ]
+        read_only_fields = ['id', 'created_at', 'read_at']
+
+
 class UserProfileSerializer(serializers.ModelSerializer):
     """Serializer for User profile with activity stats, badges, and reputation."""
 
@@ -197,53 +247,3 @@ class BookmarkSerializer(serializers.ModelSerializer):
                 )
 
         return attrs
-
-
-class UserBadgeSerializer(serializers.ModelSerializer):
-    """Serializer for UserBadge model."""
-
-    badge_display = serializers.CharField(source='get_badge_type_display', read_only=True)
-
-    class Meta:
-        """Meta options for UserBadgeSerializer."""
-
-        model = UserBadge
-        fields = ['id', 'badge_type', 'badge_display', 'earned_at', 'metadata']
-        read_only_fields = ['id', 'earned_at']
-
-
-class ReputationEventSerializer(serializers.ModelSerializer):
-    """Serializer for ReputationEvent model."""
-
-    event_type_display = serializers.CharField(source='get_event_type_display', read_only=True)
-    diff_title = serializers.CharField(source='diff_item.claim', read_only=True, allow_null=True)
-
-    class Meta:
-        """Meta options for ReputationEventSerializer."""
-
-        model = ReputationEvent
-        fields = [
-            'id', 'event_type', 'event_type_display', 'amount',
-            'description', 'diff_title', 'created_at'
-        ]
-        read_only_fields = ['id', 'created_at']
-
-
-class NotificationSerializer(serializers.ModelSerializer):
-    """Serializer for Notification model."""
-
-    notification_type_display = serializers.CharField(
-        source='get_notification_type_display',
-        read_only=True
-    )
-
-    class Meta:
-        """Meta options for NotificationSerializer."""
-
-        model = Notification
-        fields = [
-            'id', 'notification_type', 'notification_type_display',
-            'title', 'message', 'is_read', 'action_url',
-            'metadata', 'created_at', 'read_at'
-        ]
-        read_only_fields = ['id', 'created_at', 'read_at']

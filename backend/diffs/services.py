@@ -1,9 +1,9 @@
 """Business logic services for diffs app."""
-from typing import Optional
+from typing import Optional, Dict, Any
 from datetime import timedelta
 from django.contrib.auth import get_user_model
 from django.utils import timezone
-from django.db.models import Count, Q, F, FloatField, ExpressionWrapper, Max
+from django.db.models import Count, Q, F, FloatField, ExpressionWrapper, Max, Case, When, IntegerField
 from .models import DiffItem, DiffVote, DiffComment
 
 User = get_user_model()
