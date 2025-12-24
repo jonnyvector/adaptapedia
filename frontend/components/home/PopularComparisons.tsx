@@ -29,7 +29,7 @@ const POPULAR_COMPARISONS: PopularComparison[] = [
       id: 3108,
       title: "Harry Potter and the Philosopher's Stone",
       author: 'J.K. Rowling',
-      cover_url: 'https://books.google.com/books/content?id=2_zzAAAACAAJ&printsec=frontcover&img=1&source=gbs_api&zoom=3',
+      cover_url: 'https://upload.wikimedia.org/wikipedia/en/thumb/6/6b/Harry_Potter_and_the_Philosopher%27s_Stone_Book_Cover.jpg/250px-Harry_Potter_and_the_Philosopher%27s_Stone_Book_Cover.jpg',
       slug: 'harry-potter-and-the-philosophers-stone',
     },
     screen: {
@@ -63,7 +63,7 @@ const POPULAR_COMPARISONS: PopularComparison[] = [
       id: 3194,
       title: 'The Fellowship of the Ring',
       author: 'J.R.R. Tolkien',
-      cover_url: undefined, // No cover available - will show fallback icon
+      cover_url: 'https://upload.wikimedia.org/wikipedia/en/8/8e/The_Fellowship_of_the_Ring_cover.gif',
       slug: 'the-fellowship-of-the-ring',
     },
     screen: {
@@ -137,24 +137,26 @@ export default function PopularComparisons() {
           href={comparison.comparison_url}
           className="group block"
         >
-          <div className="relative aspect-[2/3] rounded-lg overflow-hidden bg-gray-100 dark:bg-gray-800 mb-2 transition-transform group-hover:scale-105">
-            {/* Book Cover and Movie Poster side by side with gutter */}
-            <div className="flex h-full gap-1.5">
+          <div className="relative aspect-[2/3] rounded-lg overflow-hidden bg-gradient-to-r from-surface2/50 to-surface/50 mb-2 transition-transform group-hover:scale-105">
+            {/* Book Cover and Movie Poster side by side */}
+            <div className="flex h-full">
               {/* Book Cover - Left Half */}
-              <div className="w-1/2 relative rounded-l-lg overflow-hidden">
+              <div className="flex-1 relative overflow-hidden">
                 {comparison.book.cover_url ? (
                   <Image
                     src={comparison.book.cover_url}
                     alt={comparison.book.title}
                     fill
-                    className="object-cover"
+                    loading="lazy"
+                    className="object-cover group-hover:scale-105 transition-transform duration-300"
                     sizes="(max-width: 768px) 25vw, (max-width: 1024px) 16vw, 8vw"
                   />
                 ) : (
-                  <div className="w-full h-full flex items-center justify-center bg-gray-200 dark:bg-gray-700">
-                    <BookOpenIcon className="w-12 h-12 text-gray-400" />
+                  <div className="absolute inset-0 flex items-center justify-center bg-surface2 text-muted text-xs">
+                    No Cover
                   </div>
                 )}
+                <div className="absolute inset-0 bg-gradient-to-r from-transparent to-black/30" />
                 {/* Book label */}
                 <div className="absolute top-1 left-1">
                   <span className="text-[9px] font-mono font-semibold px-1.5 py-0.5 bg-black/60 text-white rounded backdrop-blur-sm">
@@ -163,21 +165,30 @@ export default function PopularComparisons() {
                 </div>
               </div>
 
+              {/* Arrow Divider */}
+              <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
+                <div className="bg-link text-white px-2 py-1 rounded-full shadow-lg font-bold text-xs">
+                  →
+                </div>
+              </div>
+
               {/* Movie Poster - Right Half */}
-              <div className="w-1/2 relative rounded-r-lg overflow-hidden">
+              <div className="flex-1 relative overflow-hidden">
                 {comparison.screen.poster_url ? (
                   <Image
                     src={comparison.screen.poster_url}
                     alt={comparison.screen.title}
                     fill
-                    className="object-cover"
+                    loading="lazy"
+                    className="object-cover group-hover:scale-105 transition-transform duration-300"
                     sizes="(max-width: 768px) 25vw, (max-width: 1024px) 16vw, 8vw"
                   />
                 ) : (
-                  <div className="w-full h-full flex items-center justify-center bg-gray-200 dark:bg-gray-700">
-                    <FilmIcon className="w-12 h-12 text-gray-400" />
+                  <div className="absolute inset-0 flex items-center justify-center bg-surface2 text-muted text-xs">
+                    No Poster
                   </div>
                 )}
+                <div className="absolute inset-0 bg-gradient-to-l from-transparent to-black/30" />
                 {/* Screen label */}
                 <div className="absolute top-1 right-1">
                   <span className="text-[9px] font-mono font-semibold px-1.5 py-0.5 bg-black/60 text-white rounded backdrop-blur-sm">
@@ -185,13 +196,6 @@ export default function PopularComparisons() {
                   </span>
                 </div>
               </div>
-            </div>
-
-            {/* Center VS chip */}
-            <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 pointer-events-none">
-              <span className="inline-block text-xs font-bold px-2 py-1 bg-primary text-white rounded-full shadow-lg">
-                VS
-              </span>
             </div>
 
             {/* Hover overlay */}
