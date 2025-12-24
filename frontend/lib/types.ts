@@ -44,6 +44,8 @@ export interface ScreenWork {
   tmdb_id?: number;
   tmdb_popularity?: number;
   poster_url?: string;
+  primary_genre?: string;
+  genres?: string[];
   created_at: string;
   updated_at: string;
 }
@@ -105,6 +107,7 @@ export interface Comment {
   spoiler_scope: SpoilerScope;
   status: string;
   created_at: string;
+  parent?: number | null;
   diff_item_claim?: string;
   work_title?: string;
   work_slug?: string;
@@ -226,6 +229,7 @@ export interface SearchWithAdaptationsResponse {
   search_type: 'book' | 'screen';
   query: string;
   detected_year?: number;
+  total_count?: number;
   results: WorkWithAdaptations[] | ScreenWork[];
 }
 
@@ -233,6 +237,41 @@ export interface Genre {
   genre: string;
   book_count: number;
   slug: string;
+}
+
+export interface ScreenGenre {
+  primary_genre: string;
+  comparison_count: number;
+  diff_count: number;
+  last_updated: string | null;
+}
+
+export interface BrowseComparison {
+  work_id: number;
+  work_title: string;
+  work_slug: string;
+  work_author?: string;
+  work_year?: number;
+  cover_url?: string;
+  screen_work_id: number;
+  screen_work_title: string;
+  screen_work_slug: string;
+  screen_work_type: string;
+  screen_work_year?: number;
+  poster_url?: string;
+  diff_count: number;
+  vote_count: number;
+  last_updated?: string;
+  activity_score?: number;
+  recent_diffs?: number;
+  recent_votes?: number;
+}
+
+export interface BrowseSections {
+  featured: BrowseComparison[];
+  recently_updated: BrowseComparison[];
+  most_documented: BrowseComparison[];
+  trending: BrowseComparison[];
 }
 
 export interface GenreListResponse {
@@ -307,4 +346,125 @@ export interface Bookmark {
 export interface BookmarkCheckResponse {
   is_bookmarked: boolean;
   bookmark_id: number | null;
+}
+
+// Reputation & Badge System
+
+export type BadgeType =
+  // Milestone badges
+  | 'FIRST_VOTE'
+  | 'FIRST_COMMENT'
+  | 'FIRST_DIFF'
+  | 'VOTER_10'
+  | 'VOTER_50'
+  | 'VOTER_100'
+  | 'COMMENTER_10'
+  | 'COMMENTER_50'
+  | 'DIFF_CREATOR_5'
+  | 'DIFF_CREATOR_25'
+  // Quality badges
+  | 'WELL_SOURCED'
+  | 'HIGH_ACCURACY'
+  | 'CONSENSUS_BUILDER'
+  | 'EDITOR'
+  | 'HELPFUL_COMMENTER'
+  // Community badges
+  | 'EARLY_ADOPTER'
+  | 'GENRE_SPECIALIST_HORROR'
+  | 'GENRE_SPECIALIST_SCIFI'
+  | 'GENRE_SPECIALIST_FANTASY'
+  | 'SERIES_SPECIALIST'
+  // Activity badges
+  | 'ACTIVE_CONTRIBUTOR'
+  | 'WEEKLY_CONTRIBUTOR';
+
+export interface UserBadge {
+  id: number;
+  badge_type: BadgeType;
+  badge_display: string;
+  earned_at: string;
+  metadata: Record<string, any>;
+}
+
+export type ReputationEventType =
+  | 'DIFF_CREATED'
+  | 'DIFF_ACCURATE'
+  | 'DIFF_CONSENSUS_HIGH'
+  | 'DIFF_CONSENSUS_MODERATE'
+  | 'DIFF_REJECTED'
+  | 'DIFF_SOURCE_ADDED'
+  | 'COMMENT_CREATED'
+  | 'COMMENT_HELPFUL'
+  | 'VOTE_CAST'
+  | 'CONTRIBUTION_REPORTED'
+  | 'CONTRIBUTION_REMOVED';
+
+export interface ReputationEvent {
+  id: number;
+  event_type: ReputationEventType;
+  event_type_display: string;
+  amount: number;
+  description: string;
+  diff_title?: string | null;
+  created_at: string;
+}
+
+export type NotificationType =
+  | 'BADGE_EARNED'
+  | 'REPUTATION_MILESTONE'
+  | 'DIFF_CONSENSUS'
+  | 'COMMENT_REPLY'
+  | 'COMMENT_HELPFUL'
+  | 'DIFF_VALIDATED';
+
+export interface Notification {
+  id: number;
+  notification_type: NotificationType;
+  notification_type_display: string;
+  title: string;
+  message: string;
+  is_read: boolean;
+  action_url: string;
+  metadata: Record<string, any>;
+  created_at: string;
+  read_at: string | null;
+}
+
+export interface UserStats {
+  reputation: number;
+  total_diffs: number;
+  total_votes: number;
+  total_comments: number;
+  accuracy_rate: number | null;
+  diffs_evaluated: number;
+  recent_events: ReputationEvent[];
+}
+
+export interface EnhancedUserProfile {
+  id: number;
+  username: string;
+  date_joined: string;
+  role: string;
+  reputation_points: number;
+  badges: UserBadge[];
+  stats: UserStats;
+  recent_reputation_events: ReputationEvent[];
+}
+
+export interface VoteResponse {
+  id: number;
+  diff_item: number;
+  user: number;
+  vote: VoteType;
+  created_at: string;
+  consensus?: {
+    total_votes: number;
+    accurate_percentage: number;
+  };
+}
+
+export interface NeedsHelpResponse {
+  needs_differences: BrowseComparison[];
+  most_disputed: DiffItem[];
+  no_comments: DiffItem[];
 }

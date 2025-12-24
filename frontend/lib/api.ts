@@ -21,7 +21,10 @@ import type {
   Vote,
   Comment,
   Bookmark,
-  BookmarkCheckResponse
+  BookmarkCheckResponse,
+  Notification,
+  VoteResponse,
+  NeedsHelpResponse
 } from './types';
 
 // Use API_URL for server-side, NEXT_PUBLIC_API_URL for client-side
@@ -149,6 +152,18 @@ export const api = {
     get: async (slug: string) => {
       return fetchApi(`/screen/works/${slug}/`);
     },
+    genres: async (type?: 'MOVIE' | 'TV') => {
+      const params = type ? `?type=${type}` : '';
+      return fetchApi(`/screen/works/genres/${params}`);
+    },
+    byGenre: async (genre: string, type?: 'MOVIE' | 'TV', page?: number, pageSize?: number) => {
+      const params: Record<string, string> = {};
+      if (type) params.type = type;
+      if (page) params.page = page.toString();
+      if (pageSize) params.page_size = pageSize.toString();
+      const query = Object.keys(params).length ? `?${new URLSearchParams(params)}` : '';
+      return fetchApi(`/screen/works/by-genre/${encodeURIComponent(genre)}/${query}`);
+    },
   },
 
   adaptations: {
@@ -181,14 +196,21 @@ export const api = {
       const query = `?screen_work=${screenWorkId}&ordering=-vote_counts__accurate&limit=${limit}`;
       return fetchApi(`/diffs/items/${query}`);
     },
-    vote: async (diffId: number, voteType: 'ACCURATE' | 'NEEDS_NUANCE' | 'DISAGREE') => {
-      return fetchApi(`/diffs/items/${diffId}/vote/`, {
+    vote: async (diffId: number, voteType: 'ACCURATE' | 'NEEDS_NUANCE' | 'DISAGREE'): Promise<VoteResponse> => {
+      return fetchApi<VoteResponse>(`/diffs/items/${diffId}/vote/`, {
         method: 'POST',
         body: JSON.stringify({ vote: voteType }),
       });
     },
+    getNeedsHelp: async (limit?: number): Promise<NeedsHelpResponse> => {
+      const params = limit ? `?limit=${limit}` : '';
+      return fetchApi<NeedsHelpResponse>(`/diffs/items/needs-help/${params}`);
+    },
     getRandomComparison: async (): Promise<{ work_slug: string; screen_work_slug: string; diff_count: number }> => {
       return fetchApi('/diffs/items/random-comparison/');
+    },
+    browse: async () => {
+      return fetchApi('/diffs/items/browse/');
     },
     getTrending: async (limit?: number, days?: number): Promise<TrendingComparison[]> => {
       const params: Record<string, string> = {};
@@ -220,14 +242,18 @@ export const api = {
     list: async (diffItemId: number) => {
       return fetchApi(`/diffs/comments/?diff_item=${diffItemId}`);
     },
-    create: async (diffItemId: number, body: string, spoilerScope: string) => {
+    create: async (diffItemId: number, body: string, spoilerScope: string, parentId?: number) => {
+      const payload: Record<string, unknown> = {
+        diff_item: diffItemId,
+        body,
+        spoiler_scope: spoilerScope,
+      };
+      if (parentId) {
+        payload.parent = parentId;
+      }
       return fetchApi('/diffs/comments/', {
         method: 'POST',
-        body: JSON.stringify({
-          diff_item: diffItemId,
-          body,
-          spoiler_scope: spoilerScope,
-        }),
+        body: JSON.stringify(payload),
       });
     },
   },
@@ -372,6 +398,26 @@ export const api = {
           work: workId,
           screen_work: screenWorkId,
         }),
+      });
+    },
+  },
+
+  notifications: {
+    list: async (params?: Record<string, string>): Promise<ApiResponse<Notification>> => {
+      const query = params ? `?${new URLSearchParams(params)}` : '';
+      return fetchApi<ApiResponse<Notification>>(`/users/notifications/${query}`);
+    },
+    getUnreadCount: async (): Promise<{ count: number }> => {
+      return fetchApi<{ count: number }>('/users/notifications/unread-count/');
+    },
+    markAsRead: async (notificationId: number): Promise<{ message: string }> => {
+      return fetchApi<{ message: string }>(`/users/notifications/${notificationId}/mark-read/`, {
+        method: 'POST',
+      });
+    },
+    markAllAsRead: async (): Promise<{ message: string; count: number }> => {
+      return fetchApi<{ message: string; count: number }>('/users/notifications/mark-all-read/', {
+        method: 'POST',
       });
     },
   },
