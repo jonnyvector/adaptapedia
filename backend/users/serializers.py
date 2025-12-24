@@ -2,7 +2,7 @@
 from rest_framework import serializers
 from django.contrib.auth.password_validation import validate_password
 from django.db.models import Count, Q
-from .models import User, Bookmark
+from .models import User, Bookmark, UserBadge, ReputationEvent, Notification
 
 
 class UserSerializer(serializers.ModelSerializer):
@@ -25,12 +25,11 @@ class UserSerializer(serializers.ModelSerializer):
 
 
 class UserProfileSerializer(serializers.ModelSerializer):
-    """Serializer for User profile with activity stats."""
+    """Serializer for User profile with activity stats, badges, and reputation."""
 
-    diffs_count = serializers.SerializerMethodField()
-    votes_count = serializers.SerializerMethodField()
-    comments_count = serializers.SerializerMethodField()
-    reputation_score = serializers.SerializerMethodField()
+    badges = UserBadgeSerializer(many=True, read_only=True)
+    recent_reputation_events = serializers.SerializerMethodField()
+    stats = serializers.SerializerMethodField()
 
     class Meta:
         """Meta options for UserProfileSerializer."""
@@ -41,50 +40,22 @@ class UserProfileSerializer(serializers.ModelSerializer):
             'username',
             'date_joined',
             'role',
-            'diffs_count',
-            'votes_count',
-            'comments_count',
-            'reputation_score',
+            'reputation_points',
+            'badges',
+            'stats',
+            'recent_reputation_events',
         ]
         read_only_fields = fields
 
-    def get_diffs_count(self, obj: User) -> int:
-        """Get count of diffs created by user."""
-        return obj.created_diffs.filter(status='LIVE').count()
+    def get_recent_reputation_events(self, obj: User):
+        """Get recent reputation events."""
+        events = obj.reputation_events.all()[:10]
+        return ReputationEventSerializer(events, many=True).data
 
-    def get_votes_count(self, obj: User) -> int:
-        """Get count of votes cast by user."""
-        return obj.diff_votes.count()
-
-    def get_comments_count(self, obj: User) -> int:
-        """Get count of comments posted by user."""
-        return obj.diff_comments.filter(status='LIVE').count()
-
-    def get_reputation_score(self, obj: User) -> int:
-        """
-        Calculate reputation score based on votes received on user's diffs.
-
-        Formula: (accurate_votes * 2) + (needs_nuance_votes * 1) - (disagree_votes * 1)
-        """
-        from diffs.models import DiffVote
-
-        # Get all votes on this user's diffs
-        votes = DiffVote.objects.filter(
-            diff_item__created_by=obj,
-            diff_item__status='LIVE'
-        ).aggregate(
-            accurate=Count('id', filter=Q(vote='ACCURATE')),
-            needs_nuance=Count('id', filter=Q(vote='NEEDS_NUANCE')),
-            disagree=Count('id', filter=Q(vote='DISAGREE'))
-        )
-
-        score = (
-            (votes['accurate'] or 0) * 2 +
-            (votes['needs_nuance'] or 0) * 1 -
-            (votes['disagree'] or 0) * 1
-        )
-
-        return max(0, score)  # Never go below 0
+    def get_stats(self, obj: User):
+        """Get comprehensive user statistics."""
+        from users.services import ReputationService
+        return ReputationService.get_user_stats(obj)
 
 
 class SignupSerializer(serializers.ModelSerializer):
@@ -226,3 +197,53 @@ class BookmarkSerializer(serializers.ModelSerializer):
                 )
 
         return attrs
+
+
+class UserBadgeSerializer(serializers.ModelSerializer):
+    """Serializer for UserBadge model."""
+
+    badge_display = serializers.CharField(source='get_badge_type_display', read_only=True)
+
+    class Meta:
+        """Meta options for UserBadgeSerializer."""
+
+        model = UserBadge
+        fields = ['id', 'badge_type', 'badge_display', 'earned_at', 'metadata']
+        read_only_fields = ['id', 'earned_at']
+
+
+class ReputationEventSerializer(serializers.ModelSerializer):
+    """Serializer for ReputationEvent model."""
+
+    event_type_display = serializers.CharField(source='get_event_type_display', read_only=True)
+    diff_title = serializers.CharField(source='diff_item.claim', read_only=True, allow_null=True)
+
+    class Meta:
+        """Meta options for ReputationEventSerializer."""
+
+        model = ReputationEvent
+        fields = [
+            'id', 'event_type', 'event_type_display', 'amount',
+            'description', 'diff_title', 'created_at'
+        ]
+        read_only_fields = ['id', 'created_at']
+
+
+class NotificationSerializer(serializers.ModelSerializer):
+    """Serializer for Notification model."""
+
+    notification_type_display = serializers.CharField(
+        source='get_notification_type_display',
+        read_only=True
+    )
+
+    class Meta:
+        """Meta options for NotificationSerializer."""
+
+        model = Notification
+        fields = [
+            'id', 'notification_type', 'notification_type_display',
+            'title', 'message', 'is_read', 'action_url',
+            'metadata', 'created_at', 'read_at'
+        ]
+        read_only_fields = ['id', 'created_at', 'read_at']

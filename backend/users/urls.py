@@ -8,6 +8,7 @@ from .views import (
     LogoutView,
     CurrentUserView,
     BookmarkViewSet,
+    NotificationViewSet,
 )
 
 # Router for users (at /api/users/<username>)
@@ -18,12 +19,18 @@ user_router.register(r'', UserViewSet, basename='user')
 bookmark_router = DefaultRouter()
 bookmark_router.register(r'bookmarks', BookmarkViewSet, basename='bookmark')
 
+# Router for notifications (at /api/users/notifications/)
+notification_router = DefaultRouter()
+notification_router.register(r'notifications', NotificationViewSet, basename='notification')
+
 urlpatterns = [
     # Authentication endpoints
     path('signup/', SignupView.as_view(), name='signup'),
     path('login/', LoginView.as_view(), name='login'),
     path('logout/', LogoutView.as_view(), name='logout'),
     path('me/', CurrentUserView.as_view(), name='current-user'),
+    # Notification endpoints
+    path('', include(notification_router.urls)),
     # Bookmark endpoints (must come before user router to avoid conflicts)
     path('', include(bookmark_router.urls)),
     # User CRUD endpoints

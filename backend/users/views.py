@@ -6,7 +6,7 @@ from rest_framework_simplejwt.tokens import RefreshToken
 from django.contrib.auth import authenticate
 from django.db import models
 from django.shortcuts import get_object_or_404
-from .models import User, Bookmark
+from .models import User, Bookmark, Notification
 from .serializers import (
     UserSerializer,
     UserProfileSerializer,
@@ -14,6 +14,7 @@ from .serializers import (
     LoginSerializer,
     UserDetailSerializer,
     BookmarkSerializer,
+    NotificationSerializer,
 )
 
 
@@ -334,3 +335,50 @@ class BookmarkViewSet(viewsets.ModelViewSet):
                 {'error': 'Bookmark not found'},
                 status=status.HTTP_404_NOT_FOUND
             )
+
+
+class NotificationViewSet(viewsets.ReadOnlyModelViewSet):
+    """ViewSet for user notifications."""
+
+    serializer_class = NotificationSerializer
+    permission_classes = [permissions.IsAuthenticated]
+    pagination_class = StandardResultsSetPagination
+
+    def get_queryset(self):
+        """Return notifications for the current user."""
+        return Notification.objects.filter(user=self.request.user)
+
+    @decorators.action(detail=False, methods=['get'], url_path='unread-count')
+    def unread_count(self, request):
+        """Get count of unread notifications."""
+        from users.services import NotificationService
+        count = NotificationService.get_unread_count(request.user)
+        return response.Response({'count': count}, status=status.HTTP_200_OK)
+
+    @decorators.action(detail=True, methods=['post'], url_path='mark-read')
+    def mark_read(self, request, pk=None):
+        """Mark a notification as read."""
+        from users.services import NotificationService
+        notification = self.get_object()
+
+        # Ensure user owns this notification
+        if notification.user != request.user:
+            return response.Response(
+                {'error': 'Not your notification'},
+                status=status.HTTP_403_FORBIDDEN
+            )
+
+        success = NotificationService.mark_as_read(notification.id)
+        if success:
+            return response.Response({'message': 'Notification marked as read'}, status=status.HTTP_200_OK)
+        return response.Response({'error': 'Failed to mark as read'}, status=status.HTTP_400_BAD_REQUEST)
+
+    @decorators.action(detail=False, methods=['post'], url_path='mark-all-read')
+    def mark_all_read(self, request):
+        """Mark all notifications for the current user as read."""
+        from users.services import NotificationService
+        count = NotificationService.mark_all_read(request.user)
+        return response.Response(
+            {'message': f'{count} notifications marked as read', 'count': count},
+            status=status.HTTP_200_OK
+        )

@@ -12,6 +12,74 @@ class UserRole(models.TextChoices):
     ADMIN = 'ADMIN', 'Admin'
 
 
+class BadgeType(models.TextChoices):
+    """Badge type choices."""
+
+    # Milestone badges
+    FIRST_VOTE = 'FIRST_VOTE', 'First Vote'
+    FIRST_COMMENT = 'FIRST_COMMENT', 'First Comment'
+    FIRST_DIFF = 'FIRST_DIFF', 'First Difference'
+    VOTER_10 = 'VOTER_10', '10 Votes'
+    VOTER_50 = 'VOTER_50', '50 Votes'
+    VOTER_100 = 'VOTER_100', '100 Votes'
+    COMMENTER_10 = 'COMMENTER_10', '10 Comments'
+    COMMENTER_50 = 'COMMENTER_50', '50 Comments'
+    DIFF_CREATOR_5 = 'DIFF_CREATOR_5', '5 Differences'
+    DIFF_CREATOR_25 = 'DIFF_CREATOR_25', '25 Differences'
+
+    # Quality badges
+    WELL_SOURCED = 'WELL_SOURCED', 'Well-Sourced'
+    HIGH_ACCURACY = 'HIGH_ACCURACY', 'High Accuracy'
+    CONSENSUS_BUILDER = 'CONSENSUS_BUILDER', 'Consensus Builder'
+    EDITOR = 'EDITOR', 'Editor'
+    HELPFUL_COMMENTER = 'HELPFUL_COMMENTER', 'Helpful Commenter'
+
+    # Community badges
+    EARLY_ADOPTER = 'EARLY_ADOPTER', 'Early Adopter'
+    GENRE_SPECIALIST_HORROR = 'GENRE_SPECIALIST_HORROR', 'Horror Specialist'
+    GENRE_SPECIALIST_SCIFI = 'GENRE_SPECIALIST_SCIFI', 'Sci-Fi Specialist'
+    GENRE_SPECIALIST_FANTASY = 'GENRE_SPECIALIST_FANTASY', 'Fantasy Specialist'
+    SERIES_SPECIALIST = 'SERIES_SPECIALIST', 'Series Specialist'
+
+    # Activity badges
+    ACTIVE_CONTRIBUTOR = 'ACTIVE_CONTRIBUTOR', 'Active Contributor'
+    WEEKLY_CONTRIBUTOR = 'WEEKLY_CONTRIBUTOR', 'Weekly Contributor'
+
+
+class ReputationEventType(models.TextChoices):
+    """Reputation event types."""
+
+    # Diff-related
+    DIFF_CREATED = 'DIFF_CREATED', 'Difference Created'
+    DIFF_ACCURATE = 'DIFF_ACCURATE', 'Difference Marked Accurate'
+    DIFF_CONSENSUS_HIGH = 'DIFF_CONSENSUS_HIGH', 'High Consensus Achieved'
+    DIFF_CONSENSUS_MODERATE = 'DIFF_CONSENSUS_MODERATE', 'Moderate Consensus Achieved'
+    DIFF_REJECTED = 'DIFF_REJECTED', 'Difference Rejected'
+    DIFF_SOURCE_ADDED = 'DIFF_SOURCE_ADDED', 'Source Added to Difference'
+
+    # Comment-related
+    COMMENT_CREATED = 'COMMENT_CREATED', 'Comment Created'
+    COMMENT_HELPFUL = 'COMMENT_HELPFUL', 'Comment Marked Helpful'
+
+    # Vote-related
+    VOTE_CAST = 'VOTE_CAST', 'Vote Cast'
+
+    # Moderation
+    CONTRIBUTION_REPORTED = 'CONTRIBUTION_REPORTED', 'Contribution Reported'
+    CONTRIBUTION_REMOVED = 'CONTRIBUTION_REMOVED', 'Contribution Removed'
+
+
+class NotificationType(models.TextChoices):
+    """Notification types."""
+
+    BADGE_EARNED = 'BADGE_EARNED', 'Badge Earned'
+    REPUTATION_MILESTONE = 'REPUTATION_MILESTONE', 'Reputation Milestone'
+    DIFF_CONSENSUS = 'DIFF_CONSENSUS', 'Difference Reached Consensus'
+    COMMENT_REPLY = 'COMMENT_REPLY', 'Comment Reply'
+    COMMENT_HELPFUL = 'COMMENT_HELPFUL', 'Comment Marked Helpful'
+    DIFF_VALIDATED = 'DIFF_VALIDATED', 'Difference Validated'
+
+
 class User(AbstractUser):
     """Extended user model."""
 
@@ -49,3 +117,89 @@ class Bookmark(models.Model):
     def __str__(self) -> str:
         """String representation of Bookmark."""
         return f"{self.user.username} bookmarked {self.work.title} / {self.screen_work.title}"
+
+
+class UserBadge(models.Model):
+    """Badges earned by users."""
+
+    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='badges')
+    badge_type = models.CharField(max_length=50, choices=BadgeType.choices)
+    earned_at = models.DateTimeField(auto_now_add=True)
+    metadata = models.JSONField(default=dict, blank=True)  # Store extra info like count, genre, etc.
+
+    class Meta:
+        """Meta options for UserBadge model."""
+
+        unique_together = [['user', 'badge_type']]
+        ordering = ['-earned_at']
+        indexes = [
+            models.Index(fields=['user', '-earned_at']),
+            models.Index(fields=['badge_type']),
+        ]
+
+    def __str__(self) -> str:
+        """String representation of UserBadge."""
+        return f"{self.user.username} earned {self.get_badge_type_display()}"
+
+
+class ReputationEvent(models.Model):
+    """Audit log for reputation changes."""
+
+    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='reputation_events')
+    event_type = models.CharField(max_length=50, choices=ReputationEventType.choices)
+    amount = models.IntegerField()  # Can be positive or negative
+    description = models.TextField(blank=True)
+
+    # Related objects (nullable for flexibility)
+    diff_item = models.ForeignKey('diffs.DiffItem', on_delete=models.SET_NULL, null=True, blank=True)
+    comment = models.ForeignKey('diffs.DiffComment', on_delete=models.SET_NULL, null=True, blank=True)
+    vote = models.ForeignKey('diffs.DiffVote', on_delete=models.SET_NULL, null=True, blank=True)
+
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        """Meta options for ReputationEvent model."""
+
+        ordering = ['-created_at']
+        indexes = [
+            models.Index(fields=['user', '-created_at']),
+            models.Index(fields=['event_type']),
+        ]
+
+    def __str__(self) -> str:
+        """String representation of ReputationEvent."""
+        return f"{self.user.username} {'+' if self.amount >= 0 else ''}{self.amount} rep: {self.get_event_type_display()}"
+
+
+class Notification(models.Model):
+    """User notifications."""
+
+    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='notifications')
+    notification_type = models.CharField(max_length=50, choices=NotificationType.choices)
+    title = models.CharField(max_length=200)
+    message = models.TextField()
+    is_read = models.BooleanField(default=False)
+    action_url = models.CharField(max_length=500, blank=True)  # URL to navigate to when clicked
+
+    # Related objects (nullable for flexibility)
+    badge = models.ForeignKey(UserBadge, on_delete=models.SET_NULL, null=True, blank=True)
+    diff_item = models.ForeignKey('diffs.DiffItem', on_delete=models.SET_NULL, null=True, blank=True)
+    comment = models.ForeignKey('diffs.DiffComment', on_delete=models.SET_NULL, null=True, blank=True)
+
+    metadata = models.JSONField(default=dict, blank=True)  # Extra data (rep amount, etc.)
+
+    created_at = models.DateTimeField(auto_now_add=True)
+    read_at = models.DateTimeField(null=True, blank=True)
+
+    class Meta:
+        """Meta options for Notification model."""
+
+        ordering = ['-created_at']
+        indexes = [
+            models.Index(fields=['user', 'is_read', '-created_at']),
+            models.Index(fields=['notification_type']),
+        ]
+
+    def __str__(self) -> str:
+        """String representation of Notification."""
+        return f"Notification for {self.user.username}: {self.title}"

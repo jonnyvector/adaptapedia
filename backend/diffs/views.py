@@ -84,11 +84,19 @@ class DiffItemViewSet(viewsets.ModelViewSet):
 
     def perform_create(self, serializer):
         """Set the created_by field to the current user and status to LIVE."""
-        serializer.save(created_by=self.request.user, status='LIVE')
+        from users.services import BadgeService
+
+        diff_item = serializer.save(created_by=self.request.user, status='LIVE')
+
+        # Award milestone badges for diff creation
+        BadgeService.check_milestone_badges(self.request.user)
 
     @action(detail=True, methods=['post'], permission_classes=[permissions.IsAuthenticated])
     def vote(self, request, pk=None):
         """Vote on a diff item. If voting the same value, remove the vote (toggle)."""
+        from users.services import BadgeService, ReputationService, NotificationService
+        from users.models import ReputationEventType
+
         diff_item = self.get_object()
         vote_value = request.data.get('vote')
 
@@ -119,8 +127,60 @@ class DiffItemViewSet(viewsets.ModelViewSet):
             defaults={'vote': vote_value}
         )
 
+        # Award milestone badges for first vote
+        if created:
+            BadgeService.check_milestone_badges(request.user)
+
+        # Refresh diff_item to get updated vote counts
+        diff_item.refresh_from_db()
+        diff_item = DiffItem.objects.annotate(
+            accurate_count=Count(
+                Case(When(votes__vote='ACCURATE', then=1)),
+                distinct=True
+            ),
+            disagree_count=Count(
+                Case(When(votes__vote='DISAGREE', then=1)),
+                distinct=True
+            ),
+            nuance_count=Count(
+                Case(When(votes__vote='NEEDS_NUANCE', then=1)),
+                distinct=True
+            ),
+            total_votes=F('accurate_count') + F('disagree_count') + F('nuance_count'),
+        ).get(pk=diff_item.pk)
+
+        # Check if diff reached consensus threshold (10+ votes)
+        if diff_item.total_votes >= 10:
+            # Calculate consensus and award reputation to diff creator
+            consensus_event_type = ReputationService.calculate_diff_consensus_rep(diff_item)
+            if consensus_event_type:
+                # Award reputation to the diff creator
+                ReputationService.award_reputation(
+                    user=diff_item.created_by,
+                    event_type=consensus_event_type,
+                    description=f"Diff reached consensus: {diff_item.claim}",
+                    diff_item=diff_item
+                )
+
+                # Notify diff creator about consensus
+                NotificationService.notify_diff_consensus(diff_item, diff_item.created_by)
+
+                # Check for quality badges
+                BadgeService.check_quality_badges(diff_item.created_by)
+
         serializer = DiffVoteSerializer(vote)
-        return Response(serializer.data, status=status.HTTP_200_OK)
+
+        # Calculate consensus percentage for response
+        accurate_ratio = diff_item.accurate_count / diff_item.total_votes if diff_item.total_votes > 0 else 0
+        consensus_percentage = round(accurate_ratio * 100)
+
+        return Response({
+            **serializer.data,
+            'consensus': {
+                'total_votes': diff_item.total_votes,
+                'accurate_percentage': consensus_percentage
+            }
+        }, status=status.HTTP_200_OK)
 
     @action(detail=False, methods=['get'], url_path='random-comparison')
     def random_comparison(self, request):
@@ -185,19 +245,89 @@ class DiffItemViewSet(viewsets.ModelViewSet):
 
         return Response(trending_comparisons)
 
+    @action(detail=False, methods=['get'], url_path='browse')
+    def browse(self, request):
+        """
+        Get curated browse sections: featured, recently updated, most documented, trending.
+
+        Returns all sections in one response for the browse page.
+        Comparisons can appear in multiple sections (e.g., both Featured and Trending).
+        Cached for performance.
+        """
+        cache_key = 'browse_page_sections'
+
+        # Try to get from cache
+        cached_data = cache.get(cache_key)
+        if cached_data is not None:
+            return Response(cached_data)
+
+        # Get all sections (queries already deduplicate within each section via GROUP BY)
+        data = {
+            'featured': DiffService.get_featured_comparisons(limit=12),
+            'recently_updated': DiffService.get_recently_updated(limit=12),
+            'most_documented': DiffService.get_most_documented(limit=12),
+            'trending': DiffService.get_trending_comparisons(limit=12, days=7),
+        }
+
+        # Cache for 15 minutes (900 seconds)
+        cache.set(cache_key, data, 900)
+
+        return Response(data)
+
+    @action(detail=False, methods=['get'], url_path='needs-help')
+    def needs_help(self, request):
+        """
+        Get comparisons and diffs that need community help.
+
+        Returns:
+        - needs_differences: Comparisons with fewer than 3 diffs
+        - most_disputed: Diffs with controversial voting patterns
+        - no_comments: Diffs with votes but no discussion
+
+        Query parameters:
+        - limit (int): Number of items per section (default 20, max 50)
+
+        Cached for performance (15-minute cache).
+        """
+        limit = min(int(request.query_params.get('limit', 20)), 50)
+
+        cache_key = f'needs_help_limit_{limit}'
+
+        # Try to get from cache
+        cached_data = cache.get(cache_key)
+        if cached_data is not None:
+            return Response(cached_data)
+
+        # Get needs help data
+        data = DiffService.get_needs_help(limit=limit)
+
+        # Cache for 15 minutes (900 seconds)
+        cache.set(cache_key, data, 900)
+
+        return Response(data)
+
 
 class DiffCommentViewSet(viewsets.ModelViewSet):
     """ViewSet for DiffComment model."""
 
-    queryset = DiffComment.objects.filter(status='LIVE').select_related('user', 'diff_item')
+    queryset = DiffComment.objects.filter(status='LIVE').select_related('user', 'diff_item', 'parent')
     serializer_class = DiffCommentSerializer
     permission_classes = [permissions.IsAuthenticatedOrReadOnly]
     filter_backends = [DjangoFilterBackend]
     filterset_fields = ['diff_item']
 
     def perform_create(self, serializer):
-        """Set the user field to the current user."""
-        serializer.save(user=self.request.user)
+        """Set the user field to the current user and handle notifications."""
+        from users.services import BadgeService, NotificationService
+
+        comment = serializer.save(user=self.request.user)
+
+        # Award milestone badges for first comment
+        BadgeService.check_milestone_badges(self.request.user)
+
+        # Notify parent comment author if this is a reply
+        if comment.parent:
+            NotificationService.notify_comment_reply(comment, comment.parent)
 
 
 class ComparisonVoteViewSet(viewsets.ModelViewSet):

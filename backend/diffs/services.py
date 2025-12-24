@@ -3,7 +3,7 @@ from typing import Optional
 from datetime import timedelta
 from django.contrib.auth import get_user_model
 from django.utils import timezone
-from django.db.models import Count, Q, F, FloatField, ExpressionWrapper
+from django.db.models import Count, Q, F, FloatField, ExpressionWrapper, Max
 from .models import DiffItem, DiffVote, DiffComment
 
 User = get_user_model()
@@ -206,3 +206,272 @@ class DiffService:
             })
 
         return results
+
+    @staticmethod
+    def get_featured_comparisons(limit: int = 12) -> list[dict]:
+        """
+        Get featured comparisons with highest overall engagement.
+
+        Featured algorithm:
+        - Total diffs (weighted 2x)
+        - Total votes
+        - Recent activity boost
+
+        Returns list of comparison dicts with metadata.
+        """
+        from works.models import Work
+        from screen.models import ScreenWork
+
+        comparisons = DiffItem.objects.filter(
+            status='LIVE'
+        ).values(
+            'work_id', 'screen_work_id'
+        ).annotate(
+            total_diffs=Count('id', distinct=True),
+            total_votes=Count('votes', distinct=True),
+            last_updated=Max('updated_at'),
+        ).annotate(
+            # Engagement score
+            engagement_score=ExpressionWrapper(
+                (F('total_diffs') * 2.0) + (F('total_votes') * 1.0),
+                output_field=FloatField()
+            )
+        ).filter(
+            total_diffs__gt=0
+        ).order_by(
+            '-engagement_score', '-last_updated'
+        )[:limit]
+
+        # Bulk fetch works and screen works
+        work_ids = [c['work_id'] for c in comparisons]
+        screen_work_ids = [c['screen_work_id'] for c in comparisons]
+        works = {w.id: w for w in Work.objects.filter(id__in=work_ids)}
+        screen_works = {s.id: s for s in ScreenWork.objects.filter(id__in=screen_work_ids)}
+
+        results = []
+        for comparison in comparisons:
+            work = works[comparison['work_id']]
+            screen_work = screen_works[comparison['screen_work_id']]
+
+            results.append({
+                'work_id': work.id,
+                'work_title': work.title,
+                'work_slug': work.slug,
+                'work_author': work.author,
+                'work_year': work.year,
+                'cover_url': work.cover_url,
+                'screen_work_id': screen_work.id,
+                'screen_work_title': screen_work.title,
+                'screen_work_slug': screen_work.slug,
+                'screen_work_type': screen_work.get_type_display(),
+                'screen_work_year': screen_work.year,
+                'poster_url': screen_work.poster_url,
+                'diff_count': comparison['total_diffs'],
+                'vote_count': comparison['total_votes'],
+            })
+
+        return results
+
+    @staticmethod
+    def get_recently_updated(limit: int = 12) -> list[dict]:
+        """
+        Get comparisons with recent activity (last 48 hours).
+        """
+        from works.models import Work
+        from screen.models import ScreenWork
+
+        cutoff = timezone.now() - timedelta(hours=48)
+
+        comparisons = DiffItem.objects.filter(
+            status='LIVE',
+            updated_at__gte=cutoff
+        ).values(
+            'work_id', 'screen_work_id'
+        ).annotate(
+            total_diffs=Count('id', distinct=True),
+            total_votes=Count('votes', distinct=True),
+            last_updated=Max('updated_at'),
+        ).order_by('-last_updated')[:limit]
+
+        # Bulk fetch
+        work_ids = [c['work_id'] for c in comparisons]
+        screen_work_ids = [c['screen_work_id'] for c in comparisons]
+        works = {w.id: w for w in Work.objects.filter(id__in=work_ids)}
+        screen_works = {s.id: s for s in ScreenWork.objects.filter(id__in=screen_work_ids)}
+
+        results = []
+        for comparison in comparisons:
+            work = works[comparison['work_id']]
+            screen_work = screen_works[comparison['screen_work_id']]
+
+            results.append({
+                'work_id': work.id,
+                'work_title': work.title,
+                'work_slug': work.slug,
+                'work_author': work.author,
+                'work_year': work.year,
+                'cover_url': work.cover_url,
+                'screen_work_id': screen_work.id,
+                'screen_work_title': screen_work.title,
+                'screen_work_slug': screen_work.slug,
+                'screen_work_type': screen_work.get_type_display(),
+                'screen_work_year': screen_work.year,
+                'poster_url': screen_work.poster_url,
+                'diff_count': comparison['total_diffs'],
+                'vote_count': comparison['total_votes'],
+                'last_updated': comparison['last_updated'],
+            })
+
+        return results
+
+    @staticmethod
+    def get_most_documented(limit: int = 12) -> list[dict]:
+        """
+        Get comparisons with the most diffs documented.
+        """
+        from works.models import Work
+        from screen.models import ScreenWork
+
+        comparisons = DiffItem.objects.filter(
+            status='LIVE'
+        ).values(
+            'work_id', 'screen_work_id'
+        ).annotate(
+            total_diffs=Count('id', distinct=True),
+            total_votes=Count('votes', distinct=True),
+        ).filter(
+            total_diffs__gt=0
+        ).order_by('-total_diffs', '-total_votes')[:limit]
+
+        # Bulk fetch
+        work_ids = [c['work_id'] for c in comparisons]
+        screen_work_ids = [c['screen_work_id'] for c in comparisons]
+        works = {w.id: w for w in Work.objects.filter(id__in=work_ids)}
+        screen_works = {s.id: s for s in ScreenWork.objects.filter(id__in=screen_work_ids)}
+
+        results = []
+        for comparison in comparisons:
+            work = works[comparison['work_id']]
+            screen_work = screen_works[comparison['screen_work_id']]
+
+            results.append({
+                'work_id': work.id,
+                'work_title': work.title,
+                'work_slug': work.slug,
+                'work_author': work.author,
+                'work_year': work.year,
+                'cover_url': work.cover_url,
+                'screen_work_id': screen_work.id,
+                'screen_work_title': screen_work.title,
+                'screen_work_slug': screen_work.slug,
+                'screen_work_type': screen_work.get_type_display(),
+                'screen_work_year': screen_work.year,
+                'poster_url': screen_work.poster_url,
+                'diff_count': comparison['total_diffs'],
+                'vote_count': comparison['total_votes'],
+            })
+
+        return results
+
+    @staticmethod
+    def get_needs_help(limit: int = 20) -> Dict[str, Any]:
+        """
+        Get comparisons and diffs that need community help.
+
+        Returns:
+            dict with sections:
+            - needs_differences: Comparisons with <3 diffs
+            - most_disputed: Diffs with controversial voting (high total, split votes)
+            - no_comments: Diffs with votes but no comments yet
+        """
+        from works.models import Work
+        from screen.models import ScreenWork
+
+        # 1. Comparisons that need differences (<3 diffs)
+        needs_diffs_comparisons = DiffItem.objects.filter(
+            status='LIVE'
+        ).values(
+            'work_id', 'screen_work_id'
+        ).annotate(
+            total_diffs=Count('id', distinct=True)
+        ).filter(
+            total_diffs__lt=3
+        ).order_by('total_diffs', '-created_at')[:limit]
+
+        # Fetch related data
+        work_ids = set([c['work_id'] for c in needs_diffs_comparisons])
+        screen_work_ids = set([c['screen_work_id'] for c in needs_diffs_comparisons])
+        works_dict = {w.id: w for w in Work.objects.filter(id__in=work_ids)}
+        screens_dict = {s.id: s for s in ScreenWork.objects.filter(id__in=screen_work_ids)}
+
+        needs_differences = []
+        for comparison in needs_diffs_comparisons:
+            work = works_dict.get(comparison['work_id'])
+            screen = screens_dict.get(comparison['screen_work_id'])
+            if work and screen:
+                needs_differences.append({
+                    'work_id': work.id,
+                    'work_title': work.title,
+                    'work_slug': work.slug,
+                    'work_author': work.author,
+                    'cover_url': work.cover_url,
+                    'screen_work_id': screen.id,
+                    'screen_work_title': screen.title,
+                    'screen_work_slug': screen.slug,
+                    'screen_work_type': screen.get_type_display(),
+                    'screen_work_year': screen.year,
+                    'poster_url': screen.poster_url,
+                    'total_diffs': comparison['total_diffs'],
+                })
+
+        # 2. Most disputed diffs (high controversy score)
+        disputed_diffs = DiffItem.objects.filter(
+            status='LIVE'
+        ).select_related('work', 'screen_work', 'created_by').annotate(
+            accurate_count=Count(
+                Case(When(votes__vote='ACCURATE', then=1)),
+                distinct=True
+            ),
+            disagree_count=Count(
+                Case(When(votes__vote='DISAGREE', then=1)),
+                distinct=True
+            ),
+            nuance_count=Count(
+                Case(When(votes__vote='NEEDS_NUANCE', then=1)),
+                distinct=True
+            ),
+            total_votes=F('accurate_count') + F('disagree_count') + F('nuance_count'),
+            controversy_score=ExpressionWrapper(
+                F('total_votes') * Case(
+                    When(total_votes__gt=0, then=(
+                        1.0 - (F('accurate_count') - F('disagree_count')) *
+                        (F('accurate_count') - F('disagree_count')) /
+                        (F('total_votes') * F('total_votes'))
+                    )),
+                    default=0.0,
+                    output_field=FloatField()
+                ),
+                output_field=FloatField()
+            )
+        ).filter(
+            total_votes__gte=5  # Minimum votes to be considered disputed
+        ).order_by('-controversy_score')[:limit]
+
+        # 3. Diffs with no comments yet (but have votes)
+        no_comments_diffs = DiffItem.objects.filter(
+            status='LIVE'
+        ).select_related('work', 'screen_work', 'created_by').annotate(
+            comment_count=Count('comments', filter=Q(comments__status='LIVE')),
+            vote_count=Count('votes')
+        ).filter(
+            comment_count=0,
+            vote_count__gte=3  # Has votes but no discussion
+        ).order_by('-vote_count', '-created_at')[:limit]
+
+        from .serializers import DiffItemSerializer
+
+        return {
+            'needs_differences': needs_differences,
+            'most_disputed': DiffItemSerializer(disputed_diffs, many=True).data,
+            'no_comments': DiffItemSerializer(no_comments_diffs, many=True).data,
+        }
