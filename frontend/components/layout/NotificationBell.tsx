@@ -132,12 +132,12 @@ export default function NotificationBell() {
       {/* Bell Button */}
       <button
         onClick={toggleDropdown}
-        className="relative p-2 hover:bg-surface2 rounded-lg transition-colors"
+        className="relative p-2 text-muted hover:text-foreground transition-colors min-h-[40px] min-w-[40px] border-0 bg-transparent hover:bg-transparent"
         aria-label="Notifications"
       >
-        <BellIcon className="w-6 h-6 text-foreground" />
+        <BellIcon className="w-5 h-5" />
         {unreadCount > 0 && (
-          <span className="absolute top-0 right-0 flex items-center justify-center w-5 h-5 text-xs font-bold text-white bg-primary rounded-full">
+          <span className="absolute top-1 right-1 flex items-center justify-center w-4 h-4 text-xs font-bold text-white bg-red-500 rounded-full">
             {unreadCount > 9 ? '9+' : unreadCount}
           </span>
         )}

@@ -8,6 +8,8 @@ from .models import User, Bookmark, UserBadge, ReputationEvent, Notification
 class UserSerializer(serializers.ModelSerializer):
     """Serializer for User model."""
 
+    permissions = serializers.SerializerMethodField()
+
     class Meta:
         """Meta options for UserSerializer."""
 
@@ -20,8 +22,34 @@ class UserSerializer(serializers.ModelSerializer):
             'reputation_points',
             'spoiler_preference',
             'date_joined',
+            'permissions',
         ]
         read_only_fields = ['id', 'role', 'reputation_points', 'date_joined']
+
+    def get_permissions(self, obj: User):
+        """Calculate unlocked permissions based on reputation."""
+        rep = obj.reputation_points
+        is_mod = obj.role in ['MOD', 'ADMIN'] or obj.is_staff
+
+        return {
+            'can_edit_diffs': is_mod or rep >= 50,
+            'can_merge_diffs': is_mod or rep >= 100,
+            'can_moderate': is_mod or rep >= 500,
+            'next_unlock': self._get_next_unlock(rep, is_mod),
+        }
+
+    def _get_next_unlock(self, rep: int, is_mod: bool):
+        """Get the next permission unlock for the user."""
+        if is_mod:
+            return None  # Moderators have all permissions
+
+        if rep < 50:
+            return {'level': 50, 'permission': 'Edit diffs', 'points_needed': 50 - rep}
+        elif rep < 100:
+            return {'level': 100, 'permission': 'Merge duplicate diffs', 'points_needed': 100 - rep}
+        elif rep < 500:
+            return {'level': 500, 'permission': 'Moderate content', 'points_needed': 500 - rep}
+        return None  # All permissions unlocked
 
 
 class UserBadgeSerializer(serializers.ModelSerializer):

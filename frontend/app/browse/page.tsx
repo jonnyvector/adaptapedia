@@ -1,63 +1,133 @@
 import { Metadata } from 'next';
-import Link from 'next/link';
 import { api } from '@/lib/api';
-import type { GenreListResponse } from '@/lib/types';
+import type { BrowseSections } from '@/lib/types';
+import ComparisonCard from '@/components/browse/ComparisonCard';
 
 export const metadata: Metadata = {
-  title: 'Browse by Genre - Adaptapedia',
-  description: 'Browse books and their screen adaptations by genre',
+  title: 'Browse Comparisons - Adaptapedia',
+  description: 'Explore book-to-screen comparisons with documented differences',
 };
 
 export default async function BrowsePage(): Promise<JSX.Element> {
-  let genres: GenreListResponse;
+  let sections: BrowseSections;
 
   try {
-    genres = await api.works.genres();
+    sections = await api.diffs.browse() as BrowseSections;
   } catch (error) {
-    console.error('Error fetching genres:', error);
-    genres = { results: [] };
+    console.error('Error fetching browse sections:', error);
+    sections = {
+      featured: [],
+      recently_updated: [],
+      most_documented: [],
+      trending: [],
+    };
   }
+
+  const hasAnyContent =
+    sections.featured.length > 0 ||
+    sections.recently_updated.length > 0 ||
+    sections.most_documented.length > 0 ||
+    sections.trending.length > 0;
 
   return (
     <main className="min-h-screen">
-      <div className="container py-12">
-        <div className="mb-6">
-          <h1 className="mb-2">Browse by Genre</h1>
-          <p className="text-lg text-secondary">
-            Explore books and their screen adaptations organized by genre
+      <div className="container py-8 sm:py-12">
+        {/* Header */}
+        <div className="mb-8 sm:mb-12">
+          <h1 className="mb-3 text-3xl sm:text-4xl font-bold">
+            Browse Comparisons
+          </h1>
+          <p className="text-base sm:text-lg text-muted max-w-2xl">
+            Explore book-to-screen adaptations with community-documented differences.
+            Click any comparison to see what changed.
           </p>
         </div>
 
-        {genres.results.length === 0 ? (
-          <div className="card text-center">
-            <p className="text-secondary">No genres available yet.</p>
+        {!hasAnyContent ? (
+          <div className="border border-border rounded-lg p-12 text-center">
+            <p className="text-muted mb-4">
+              No comparisons available yet. Be the first to document differences!
+            </p>
+            <a href="/" className="text-link hover:underline">
+              ← Back to Home
+            </a>
           </div>
         ) : (
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-            {genres.results.map((genre) => (
-              <Link
-                key={genre.slug}
-                href={`/browse/${genre.slug}`}
-                className="card hover:shadow-lg transition-shadow"
-              >
-                <div className="flex items-center justify-between mb-2">
-                  <h3 className="text-xl font-semibold">{genre.genre}</h3>
-                  <span className="text-sm text-secondary px-3 py-1 bg-muted rounded-full">
-                    {genre.book_count} {genre.book_count === 1 ? 'book' : 'books'}
-                  </span>
+          <div className="space-y-12 sm:space-y-16">
+            {/* Featured Section */}
+            {sections.featured.length > 0 && (
+              <section>
+                <div className="mb-6">
+                  <h2 className="text-2xl font-bold mb-2">Featured</h2>
+                  <p className="text-muted">
+                    Top comparisons with the most engagement
+                  </p>
                 </div>
-                <p className="text-sm text-muted">
-                  View all {genre.genre.toLowerCase()} books and adaptations
-                </p>
-              </Link>
-            ))}
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 sm:gap-6">
+                  {sections.featured.map((comparison) => (
+                    <ComparisonCard key={`${comparison.work_id}-${comparison.screen_work_id}`} comparison={comparison} />
+                  ))}
+                </div>
+              </section>
+            )}
+
+            {/* Recently Updated */}
+            {sections.recently_updated.length > 0 && (
+              <section>
+                <div className="mb-6">
+                  <h2 className="text-2xl font-bold mb-2">Recently Updated</h2>
+                  <p className="text-muted">
+                    Fresh activity in the last 48 hours
+                  </p>
+                </div>
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 sm:gap-6">
+                  {sections.recently_updated.map((comparison) => (
+                    <ComparisonCard key={`${comparison.work_id}-${comparison.screen_work_id}`} comparison={comparison} />
+                  ))}
+                </div>
+              </section>
+            )}
+
+            {/* Most Documented */}
+            {sections.most_documented.length > 0 && (
+              <section>
+                <div className="mb-6">
+                  <h2 className="text-2xl font-bold mb-2">Most Documented</h2>
+                  <p className="text-muted">
+                    Comprehensive coverage with the most differences
+                  </p>
+                </div>
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 sm:gap-6">
+                  {sections.most_documented.map((comparison) => (
+                    <ComparisonCard key={`${comparison.work_id}-${comparison.screen_work_id}`} comparison={comparison} />
+                  ))}
+                </div>
+              </section>
+            )}
+
+            {/* Trending */}
+            {sections.trending.length > 0 && (
+              <section>
+                <div className="mb-6">
+                  <h2 className="text-2xl font-bold mb-2">Trending This Week</h2>
+                  <p className="text-muted">
+                    Most active comparisons in the last 7 days
+                  </p>
+                </div>
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 sm:gap-6">
+                  {sections.trending.map((comparison) => (
+                    <ComparisonCard key={`${comparison.work_id}-${comparison.screen_work_id}`} comparison={comparison} />
+                  ))}
+                </div>
+              </section>
+            )}
           </div>
         )}
 
-        <div className="mt-8">
-          <Link href="/" className="btn">
-            Back to Home
-          </Link>
+        <div className="mt-12 text-center">
+          <a href="/" className="text-link hover:underline">
+            ← Back to Home
+          </a>
         </div>
       </div>
     </main>

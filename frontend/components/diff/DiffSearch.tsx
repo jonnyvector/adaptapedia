@@ -15,7 +15,7 @@ export default function DiffSearch({ value, onChange, resultsCount }: DiffSearch
           value={value}
           onChange={(e) => onChange(e.target.value)}
           placeholder="Search diffs..."
-          className="w-full px-4 py-2 pr-10 text-sm bg-surface text-foreground border border-border rounded-md focus:outline-none focus:ring-2 focus:ring-link placeholder:text-muted min-h-[40px]"
+          className="w-full px-4 pr-10 text-sm bg-surface text-foreground border border-border rounded-md focus:outline-none focus:ring-2 focus:ring-link placeholder:text-muted h-[40px]"
           aria-label="Search diffs"
         />
         {value && (

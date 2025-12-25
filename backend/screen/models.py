@@ -22,6 +22,8 @@ class ScreenWork(models.Model):
     tmdb_id = models.IntegerField(unique=True, null=True, blank=True, db_index=True)
     tmdb_popularity = models.FloatField(default=0.0, db_index=True, help_text="TMDb popularity score for ranking")
     poster_url = models.URLField(blank=True)
+    primary_genre = models.CharField(max_length=100, blank=True, db_index=True, help_text="Primary genre from TMDb (first in list)")
+    genres = models.JSONField(default=list, blank=True, help_text="Full list of genres from TMDb")
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 

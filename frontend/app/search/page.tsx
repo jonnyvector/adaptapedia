@@ -49,7 +49,7 @@ export default async function SearchPage({ searchParams }: SearchPageProps): Pro
           <h1 className="text-2xl sm:text-3xl font-bold mb-4 sm:mb-6">Search Adaptapedia</h1>
 
           {/* Search Bar */}
-          <SearchBar defaultValue={query} autoFocus={!query} />
+          <SearchBar defaultValue={query} autoFocus={true} />
         </div>
 
         {/* Results */}

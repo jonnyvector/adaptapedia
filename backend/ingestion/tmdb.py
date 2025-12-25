@@ -40,28 +40,29 @@ TMDB_GENRE_MAPPING = {
 }
 
 
-def extract_genres_from_tmdb(tmdb_data: dict) -> str:
+def extract_genres_from_tmdb(tmdb_data: dict) -> tuple[str, list[str]]:
     """
-    Extract primary genre from TMDb data.
+    Extract genres from TMDb data.
 
     Args:
         tmdb_data: TMDb API response with 'genres' array
 
     Returns:
-        Primary genre string (first mapped genre from list)
+        Tuple of (primary_genre, all_genres)
+        - primary_genre: First genre name from TMDb
+        - all_genres: List of all genre names
     """
     genres = tmdb_data.get('genres', [])
     if not genres:
-        return ''
+        return '', []
 
-    # Try to map first genre to our standard genres
-    for genre in genres:
-        genre_id = genre.get('id')
-        if genre_id in TMDB_GENRE_MAPPING:
-            return TMDB_GENRE_MAPPING[genre_id]
+    # Extract all genre names
+    genre_names = [genre.get('name', '') for genre in genres if genre.get('name')]
 
-    # Fallback to genre name if no mapping found
-    return genres[0].get('name', '')[:100]
+    # Primary genre is the first one
+    primary = genre_names[0] if genre_names else ''
+
+    return primary, genre_names
 
 
 @shared_task
@@ -132,13 +133,20 @@ def enrich_screenwork_from_tmdb(screen_work_id: int) -> Dict[str, Any]:
             if 'popularity' in tmdb_data:
                 screen_work.tmdb_popularity = tmdb_data['popularity']
 
+            # Extract and store genres
+            primary_genre, all_genres = extract_genres_from_tmdb(tmdb_data)
+            if primary_genre:
+                screen_work.primary_genre = primary_genre
+                screen_work.genres = all_genres
+
             screen_work.save()
 
             # Return genre info for potential book sync
             return {
                 'success': True,
                 'screen_work_id': screen_work_id,
-                'genre': extract_genres_from_tmdb(tmdb_data)
+                'primary_genre': primary_genre,
+                'genres': all_genres
             }
 
     except ScreenWork.DoesNotExist:

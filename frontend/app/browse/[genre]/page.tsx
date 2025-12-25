@@ -2,40 +2,41 @@ import { Metadata } from 'next';
 import Link from 'next/link';
 import { notFound } from 'next/navigation';
 import { api } from '@/lib/api';
-import type { WorkWithAdaptations } from '@/lib/types';
+import type { WorkWithAdaptations, ApiResponse } from '@/lib/types';
 
 interface GenrePageProps {
-  params: {
+  params: Promise<{
     genre: string;
-  };
-  searchParams: {
+  }>;
+  searchParams: Promise<{
     page?: string;
-  };
+    type?: 'MOVIE' | 'TV';
+  }>;
 }
 
 export async function generateMetadata({ params }: GenrePageProps): Promise<Metadata> {
-  const genreName = decodeURIComponent(params.genre).replace(/-/g, ' ');
-  const title = genreName
-    .split(' ')
-    .map(word => word.charAt(0).toUpperCase() + word.slice(1))
-    .join(' ');
+  const { genre } = await params;
+  const genreName = decodeURIComponent(genre);
 
   return {
-    title: `${title} Books - Browse by Genre - Adaptapedia`,
-    description: `Browse ${title.toLowerCase()} books and their screen adaptations`,
+    title: `${genreName} Adaptations - Browse by Genre - Adaptapedia`,
+    description: `Browse ${genreName.toLowerCase()} book-to-screen comparisons`,
   };
 }
 
 export default async function GenrePage({ params, searchParams }: GenrePageProps): Promise<JSX.Element> {
-  const genreSlug = params.genre;
-  const currentPage = parseInt(searchParams.page || '1', 10);
+  const { genre } = await params;
+  const { page, type } = await searchParams;
 
-  let data: { results: WorkWithAdaptations[]; count: number; next: string | null; previous: string | null };
+  const genreName = decodeURIComponent(genre);
+  const currentPage = parseInt(page || '1', 10);
+
+  let data: ApiResponse<WorkWithAdaptations>;
 
   try {
-    data = await api.works.byGenre(genreSlug, currentPage);
+    data = await api.screen.byGenre(genreName, type, currentPage) as ApiResponse<WorkWithAdaptations>;
   } catch (error) {
-    console.error('Error fetching genre works:', error);
+    console.error('Error fetching genre comparisons:', error);
     notFound();
   }
 
@@ -43,29 +44,66 @@ export default async function GenrePage({ params, searchParams }: GenrePageProps
     notFound();
   }
 
-  const genreName = data.results[0].genre || decodeURIComponent(genreSlug).replace(/-/g, ' ');
   const totalPages = Math.ceil(data.count / 20);
 
   return (
     <main className="min-h-screen">
-      <div className="container py-12">
+      <div className="container py-8 sm:py-12">
         {/* Header */}
-        <div className="mb-6">
+        <div className="mb-6 sm:mb-8">
           <div className="mb-4">
             <Link href="/browse" className="text-link hover:underline text-sm">
               &larr; All Genres
             </Link>
           </div>
-          <h1 className="mb-2">{genreName}</h1>
-          <p className="text-lg text-secondary">
-            {data.count} {data.count === 1 ? 'book' : 'books'} with screen adaptations
+          <h1 className="mb-2 text-3xl sm:text-4xl font-bold">{genreName}</h1>
+          <p className="text-base sm:text-lg text-muted">
+            {data.count} {data.count === 1 ? 'comparison' : 'comparisons'}
+            {type && ` · ${type === 'MOVIE' ? 'Movies' : 'TV Series'} only`}
           </p>
+          <p className="text-sm text-muted mt-1">
+            <em>Genre based on screen adaptation</em>
+          </p>
+        </div>
+
+        {/* Type Filter */}
+        <div className="flex gap-2 mb-6">
+          <Link
+            href={`/browse/${encodeURIComponent(genreName)}`}
+            className={`px-4 py-2 rounded-lg font-medium transition-colors ${
+              !type
+                ? 'bg-link text-white'
+                : 'bg-surface2 text-foreground hover:bg-muted/30'
+            }`}
+          >
+            All
+          </Link>
+          <Link
+            href={`/browse/${encodeURIComponent(genreName)}?type=MOVIE`}
+            className={`px-4 py-2 rounded-lg font-medium transition-colors ${
+              type === 'MOVIE'
+                ? 'bg-link text-white'
+                : 'bg-surface2 text-foreground hover:bg-muted/30'
+            }`}
+          >
+            Movies
+          </Link>
+          <Link
+            href={`/browse/${encodeURIComponent(genreName)}?type=TV`}
+            className={`px-4 py-2 rounded-lg font-medium transition-colors ${
+              type === 'TV'
+                ? 'bg-link text-white'
+                : 'bg-surface2 text-foreground hover:bg-muted/30'
+            }`}
+          >
+            TV Series
+          </Link>
         </div>
 
         {/* Books Grid */}
         <div className="grid grid-cols-1 gap-6">
           {data.results.map((work: WorkWithAdaptations) => (
-            <div key={work.id} className="card">
+            <div key={work.id} className="border border-border rounded-lg p-6 bg-card">
               <div className="flex flex-col md:flex-row gap-4">
                 {/* Book Cover */}
                 {work.cover_url && (
@@ -86,13 +124,13 @@ export default async function GenrePage({ params, searchParams }: GenrePageProps
                     </h3>
                   </Link>
                   {work.author && (
-                    <p className="text-secondary mb-2">by {work.author}</p>
+                    <p className="text-muted mb-2">by {work.author}</p>
                   )}
                   {work.year && (
                     <p className="text-sm text-muted mb-2">{work.year}</p>
                   )}
                   {work.summary && (
-                    <p className="text-sm text-secondary line-clamp-2 mb-4">
+                    <p className="text-sm text-muted line-clamp-2 mb-4">
                       {work.summary}
                     </p>
                   )}
@@ -101,19 +139,19 @@ export default async function GenrePage({ params, searchParams }: GenrePageProps
                   {work.adaptations && work.adaptations.length > 0 && (
                     <div>
                       <h4 className="text-sm font-semibold text-muted mb-2">
-                        Adaptations ({work.adaptations.length}):
+                        {genreName} Adaptations ({work.adaptations.length}):
                       </h4>
                       <div className="flex flex-wrap gap-2">
                         {work.adaptations.map((adaptation) => (
                           <Link
                             key={adaptation.id}
                             href={`/compare/${work.slug}/${adaptation.slug}`}
-                            className="btn btn-sm"
+                            className="px-4 py-2 bg-link text-white rounded-lg hover:bg-link/90 transition-colors text-sm font-medium inline-flex items-center gap-2"
                           >
                             {adaptation.title} ({adaptation.year})
                             {adaptation.diff_count > 0 && (
-                              <span className="ml-2 text-xs bg-primary text-white px-2 py-0.5 rounded">
-                                {adaptation.diff_count} diffs
+                              <span className="text-xs bg-white/20 px-2 py-0.5 rounded">
+                                {adaptation.diff_count} {adaptation.diff_count === 1 ? 'diff' : 'diffs'}
                               </span>
                             )}
                           </Link>
@@ -123,7 +161,7 @@ export default async function GenrePage({ params, searchParams }: GenrePageProps
                   )}
 
                   {work.adaptations && work.adaptations.length === 0 && (
-                    <p className="text-sm text-muted italic">No adaptations documented yet</p>
+                    <p className="text-sm text-muted italic">No {genreName.toLowerCase()} adaptations documented yet</p>
                   )}
                 </div>
               </div>
@@ -136,19 +174,19 @@ export default async function GenrePage({ params, searchParams }: GenrePageProps
           <div className="mt-8 flex justify-center gap-2">
             {currentPage > 1 && (
               <Link
-                href={`/browse/${genreSlug}?page=${currentPage - 1}`}
-                className="btn"
+                href={`/browse/${encodeURIComponent(genreName)}?page=${currentPage - 1}${type ? `&type=${type}` : ''}`}
+                className="px-4 py-2 bg-link text-white rounded-lg hover:bg-link/90 transition-colors"
               >
                 Previous
               </Link>
             )}
-            <span className="btn btn-disabled">
+            <span className="px-4 py-2 bg-surface2 text-foreground rounded-lg">
               Page {currentPage} of {totalPages}
             </span>
             {currentPage < totalPages && (
               <Link
-                href={`/browse/${genreSlug}?page=${currentPage + 1}`}
-                className="btn"
+                href={`/browse/${encodeURIComponent(genreName)}?page=${currentPage + 1}${type ? `&type=${type}` : ''}`}
+                className="px-4 py-2 bg-link text-white rounded-lg hover:bg-link/90 transition-colors"
               >
                 Next
               </Link>
@@ -157,8 +195,8 @@ export default async function GenrePage({ params, searchParams }: GenrePageProps
         )}
 
         <div className="mt-8">
-          <Link href="/browse" className="btn">
-            Back to All Genres
+          <Link href="/browse" className="text-link hover:underline">
+            ← Back to All Genres
           </Link>
         </div>
       </div>

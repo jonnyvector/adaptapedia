@@ -1,6 +1,7 @@
 import { useState, useCallback } from 'react';
 import { api } from '@/lib/api';
 import type { VoteType } from '@/lib/types';
+import { useToast } from '@/lib/toast-context';
 
 interface VoteCounts {
   accurate: number;
@@ -25,6 +26,7 @@ export function useVoting(
   const [userVote, setUserVote] = useState<VoteType | null>(initialUserVote);
   const [isVoting, setIsVoting] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const { showToast } = useToast();
 
   const submitVote = useCallback(
     async (voteType: VoteType) => {
@@ -50,9 +52,10 @@ export function useVoting(
       // Optimistic update
       const newVoteCounts = { ...voteCounts };
       let newUserVote: VoteType | null = voteType;
+      const wasToggleOff = userVote === voteType;
 
       // If clicking the same vote, toggle it off (remove vote)
-      if (userVote === voteType) {
+      if (wasToggleOff) {
         const key = voteTypeToKey(voteType);
         newVoteCounts[key] = Math.max(0, newVoteCounts[key] - 1);
         newUserVote = null;
@@ -72,7 +75,29 @@ export function useVoting(
       setUserVote(newUserVote);
 
       try {
-        await api.diffs.vote(diffId, voteType);
+        const response = await api.diffs.vote(diffId, voteType);
+
+        // Show actionable toast with consensus data
+        if (wasToggleOff) {
+          showToast({
+            message: 'Vote removed',
+            type: 'info',
+            duration: 3000,
+          });
+        } else if (response.consensus) {
+          const { total_votes, accurate_percentage } = response.consensus;
+          showToast({
+            message: `Vote recorded. This diff is now ${accurate_percentage}% accurate (${total_votes} ${total_votes === 1 ? 'vote' : 'votes'})`,
+            type: 'success',
+            duration: 5000,
+          });
+        } else {
+          showToast({
+            message: 'Vote recorded',
+            type: 'success',
+            duration: 3000,
+          });
+        }
       } catch (err) {
         // Rollback on error
         setVoteCounts(previousVoteCounts);
@@ -83,11 +108,17 @@ export function useVoting(
         } else {
           setError('Failed to submit vote. Please try again.');
         }
+
+        showToast({
+          message: 'Failed to submit vote. Please try again.',
+          type: 'error',
+          duration: 4000,
+        });
       } finally {
         setIsVoting(false);
       }
     },
-    [diffId, voteCounts, userVote]
+    [diffId, voteCounts, userVote, showToast]
   );
 
   return {

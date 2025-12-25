@@ -25,7 +25,7 @@ export default function AddDiffPage({ params }: PageProps): JSX.Element {
   useEffect(() => {
     // Redirect to login if not authenticated
     if (!isLoading && !isAuthenticated) {
-      router.push(`/login?returnUrl=/compare/${params.book}/${params.screen}/add`);
+      router.push(`/auth/login?returnUrl=/compare/${params.book}/${params.screen}/add`);
       return;
     }
 

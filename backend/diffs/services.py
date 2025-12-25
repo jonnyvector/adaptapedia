@@ -393,10 +393,10 @@ class DiffService:
         ).values(
             'work_id', 'screen_work_id'
         ).annotate(
-            total_diffs=Count('id', distinct=True)
+            total_diffs=Count('id')
         ).filter(
             total_diffs__lt=3
-        ).order_by('total_diffs', '-created_at')[:limit]
+        ).order_by('total_diffs', 'work_id', 'screen_work_id')
 
         # Fetch related data
         work_ids = set([c['work_id'] for c in needs_diffs_comparisons])
@@ -405,10 +405,15 @@ class DiffService:
         screens_dict = {s.id: s for s in ScreenWork.objects.filter(id__in=screen_work_ids)}
 
         needs_differences = []
+        seen_pairs = set()  # Track (work_id, screen_work_id) to prevent duplicates
         for comparison in needs_diffs_comparisons:
+            if len(needs_differences) >= limit:
+                break
             work = works_dict.get(comparison['work_id'])
             screen = screens_dict.get(comparison['screen_work_id'])
-            if work and screen:
+            pair_key = (comparison['work_id'], comparison['screen_work_id'])
+            if work and screen and pair_key not in seen_pairs:
+                seen_pairs.add(pair_key)
                 needs_differences.append({
                     'work_id': work.id,
                     'work_title': work.title,

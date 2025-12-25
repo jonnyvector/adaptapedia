@@ -1,7 +1,10 @@
-import { Metadata } from 'next';
-import { notFound } from 'next/navigation';
+'use client';
+
+import { useState, useEffect } from 'react';
+import { useAuth } from '@/lib/auth-context';
 import { api } from '@/lib/api';
 import Link from 'next/link';
+import { useRouter } from 'next/navigation';
 import type { Bookmark, ApiResponse } from '@/lib/types';
 
 interface BookmarksPageProps {
@@ -10,32 +13,79 @@ interface BookmarksPageProps {
   };
 }
 
-export async function generateMetadata({ params }: BookmarksPageProps): Promise<Metadata> {
+export default function BookmarksPage({ params }: BookmarksPageProps): JSX.Element {
   const { username } = params;
+  const { user, isAuthenticated, isLoading } = useAuth();
+  const router = useRouter();
+  const [bookmarks, setBookmarks] = useState<Bookmark[]>([]);
+  const [isLoadingBookmarks, setIsLoadingBookmarks] = useState(true);
 
-  return {
-    title: `${username}'s Bookmarks - Adaptapedia`,
-    description: `View ${username}'s bookmarked comparisons on Adaptapedia`,
-  };
-}
+  // Fetch bookmarks
+  useEffect(() => {
+    async function fetchBookmarks() {
+      if (!isAuthenticated || !user) {
+        setIsLoadingBookmarks(false);
+        return;
+      }
 
-async function getBookmarks(username: string): Promise<Bookmark[]> {
-  try {
-    const response = await api.bookmarks.list() as ApiResponse<Bookmark>;
-    return response.results;
-  } catch (error) {
-    console.error('Failed to fetch bookmarks:', error);
-    return [];
+      try {
+        const response = await api.bookmarks.list() as ApiResponse<Bookmark>;
+        setBookmarks(response.results);
+      } catch (error) {
+        console.error('Failed to fetch bookmarks:', error);
+        setBookmarks([]);
+      } finally {
+        setIsLoadingBookmarks(false);
+      }
+    }
+
+    if (!isLoading) {
+      fetchBookmarks();
+    }
+  }, [isAuthenticated, user, isLoading]);
+
+  // Redirect if not the current user's bookmarks
+  useEffect(() => {
+    if (!isLoading && isAuthenticated && user && user.username !== username) {
+      router.push(`/u/${user.username}/bookmarks`);
+    }
+  }, [isLoading, isAuthenticated, user, username, router]);
+
+  // Show loading state
+  if (isLoading || isLoadingBookmarks) {
+    return (
+      <main className="min-h-screen">
+        <div className="container py-6">
+          <div className="text-center py-12">
+            <p className="text-muted">Loading bookmarks...</p>
+          </div>
+        </div>
+      </main>
+    );
   }
-}
 
-export default async function BookmarksPage({ params }: BookmarksPageProps): Promise<JSX.Element> {
-  const { username } = params;
-  const bookmarks = await getBookmarks(username);
+  // Show login prompt if not authenticated
+  if (!isAuthenticated || !user) {
+    return (
+      <main className="min-h-screen">
+        <div className="container py-6">
+          <div className="text-center py-12 bg-surface rounded-lg border border-border">
+            <p className="text-lg text-muted mb-4">Please log in to view bookmarks</p>
+            <Link
+              href="/auth/login"
+              className="inline-block px-6 py-3 bg-link text-white rounded-lg hover:opacity-90 transition-opacity font-semibold"
+            >
+              Log In
+            </Link>
+          </div>
+        </div>
+      </main>
+    );
+  }
 
   return (
     <main className="min-h-screen">
-      <div className="max-w-6xl mx-auto p-6">
+      <div className="container py-6">
         {/* Header */}
         <div className="mb-8">
           <div className="flex items-center gap-2 mb-4">
@@ -110,9 +160,6 @@ export default async function BookmarksPage({ params }: BookmarksPageProps): Pro
                       <h3 className="text-xl font-bold text-foreground mb-1">
                         {bookmark.screen_work_title}
                       </h3>
-                      {bookmark.screen_work_year && (
-                        <p className="text-sm text-muted">({bookmark.screen_work_year})</p>
-                      )}
                     </div>
                   </div>
                 </div>

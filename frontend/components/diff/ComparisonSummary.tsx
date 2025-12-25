@@ -105,81 +105,64 @@ export default function ComparisonSummary({
   const canIncrease = currentPreference !== 'FULL' && maskedCount > 0;
 
   return (
-    <div className="border-t border-b border-border bg-surface2/30 py-3 px-4 mb-6">
+    <div className="border-t border-b border-border bg-surface2/30 py-2.5 px-4 mb-6">
       <div className="max-w-6xl mx-auto">
-        <div className="flex flex-col sm:flex-row sm:items-center gap-3 sm:gap-6 text-xs sm:text-sm text-muted font-mono">
-          {/* Visible/Hidden counts */}
+        <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2 text-xs text-muted font-mono">
+          {/* Left: Top categories */}
           <div className="flex items-center gap-2 flex-wrap">
-            <span className="font-semibold text-foreground">
-              Visible diffs: {visibleCount}
-            </span>
-            {maskedCount > 0 && (
+            {topCategories.length > 0 && (
               <>
-                <span aria-hidden="true">•</span>
-                <span className="font-semibold text-warn">Hidden: {maskedCount}</span>
-                {canIncrease && (
-                  <>
-                    <span className="hidden sm:inline">(</span>
-                    <button
-                      onClick={onSpoilerLevelIncrease}
-                      className="text-link hover:text-linkHover underline transition-colors"
-                      aria-label={`Increase spoiler level to ${nextPreference.toLowerCase().replace('_', ' ')}`}
-                    >
-                      increase spoiler level
-                    </button>
-                    <span className="hidden sm:inline">to see)</span>
-                  </>
-                )}
-              </>
-            )}
-          </div>
-
-          {/* Top categories */}
-          {topCategories.length > 0 && (
-            <>
-              <span aria-hidden="true" className="hidden sm:inline">
-                •
-              </span>
-              <div className="flex items-center gap-2 flex-wrap">
-                <span>Most common:</span>
+                <span className="text-muted/70">Top:</span>
                 {topCategories.map(([category, count], index) => (
                   <span key={category} className="inline-flex items-center gap-1">
-                    {index > 0 && <span aria-hidden="true">,</span>}
+                    {index > 0 && <span className="text-muted/50">·</span>}
                     <button
                       onClick={() => onCategoryClick(category as DiffCategory)}
-                      className="text-link hover:text-linkHover transition-colors hover:underline"
+                      className="text-link hover:text-linkHover transition-colors hover:underline font-medium"
                       aria-label={`Filter by ${CATEGORY_LABELS[category as DiffCategory]}`}
                     >
                       {CATEGORY_LABELS[category as DiffCategory]}
                     </button>
-                    <span className="text-muted">({count})</span>
+                    <span className="text-muted/70">({count})</span>
                   </span>
                 ))}
-              </div>
-            </>
-          )}
+              </>
+            )}
+          </div>
 
-          {/* Consensus stats */}
-          {allDiffs.length > 0 && (
-            <>
-              <span aria-hidden="true" className="hidden sm:inline">
-                •
-              </span>
-              <div className="flex items-center gap-2 flex-wrap">
-                <span>
-                  Consensus: {averageAccuracy > 0 ? Math.round(averageAccuracy) : 0}% accurate
+          {/* Right: Consensus & Hidden warning */}
+          <div className="flex items-center gap-3 flex-wrap">
+            {/* Consensus */}
+            {allDiffs.length > 0 && (
+              <div className="flex items-center gap-2">
+                <span className="text-muted/70">
+                  {averageAccuracy > 0 ? Math.round(averageAccuracy) : 0}% accurate
                 </span>
                 {disputedCount > 0 && (
                   <>
-                    <span aria-hidden="true">•</span>
+                    <span className="text-muted/50">·</span>
                     <span className="text-warn font-semibold">
                       {disputedCount} disputed
                     </span>
                   </>
                 )}
               </div>
-            </>
-          )}
+            )}
+
+            {/* Hidden diffs warning */}
+            {maskedCount > 0 && canIncrease && (
+              <>
+                <span className="text-muted/50 hidden sm:inline">·</span>
+                <button
+                  onClick={onSpoilerLevelIncrease}
+                  className="text-warn hover:text-warn/80 underline transition-colors font-medium"
+                  aria-label={`Increase spoiler level to ${nextPreference.toLowerCase().replace('_', ' ')}`}
+                >
+                  +{maskedCount} hidden
+                </button>
+              </>
+            )}
+          </div>
         </div>
       </div>
     </div>

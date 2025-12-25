@@ -1,8 +1,11 @@
 'use client';
 
-import { useState, useEffect, useCallback, FormEvent } from 'react';
-import { useRouter, useSearchParams } from 'next/navigation';
+import { useState, useEffect, useCallback, FormEvent, useRef } from 'react';
+import { useRouter, useSearchParams, usePathname } from 'next/navigation';
 import { SearchIcon, XIcon } from './icons';
+import SearchDropdown from './SearchDropdown';
+import { api } from '@/lib/api';
+import type { SearchWithAdaptationsResponse } from '@/lib/types';
 
 interface SearchBarProps {
   defaultValue?: string;
@@ -17,20 +20,73 @@ export default function SearchBar({
 }: SearchBarProps): JSX.Element {
   const router = useRouter();
   const searchParams = useSearchParams();
+  const pathname = usePathname();
   const [query, setQuery] = useState(defaultValue);
   const [isSearching, setIsSearching] = useState(false);
+  const [searchResults, setSearchResults] = useState<SearchWithAdaptationsResponse | null>(null);
+  const [showDropdown, setShowDropdown] = useState(false);
+  const inputRef = useRef<HTMLInputElement>(null);
+  const containerRef = useRef<HTMLDivElement>(null);
 
   // Sync state when defaultValue changes (e.g., navigating via link)
   useEffect(() => {
     setQuery(defaultValue);
   }, [defaultValue]);
 
-  // Debounced search handler
-  const performSearch = useCallback((searchQuery: string) => {
-    if (searchQuery.length >= 2) {
-      setIsSearching(true);
+  // Move cursor to end when autofocus is enabled and there's a defaultValue
+  useEffect(() => {
+    if (autoFocus && inputRef.current && defaultValue) {
+      const length = defaultValue.length;
+      inputRef.current.setSelectionRange(length, length);
+    }
+  }, [autoFocus, defaultValue]);
+
+  // Fetch search results for dropdown (debounced)
+  useEffect(() => {
+    const timer = setTimeout(async () => {
+      if (query.length >= 2) {
+        setIsSearching(true);
+        try {
+          const results = await api.works.searchWithAdaptations(query, 5);
+          setSearchResults(results);
+          setShowDropdown(true);
+        } catch (error) {
+          console.error('Search error:', error);
+          setSearchResults(null);
+        } finally {
+          setIsSearching(false);
+        }
+      } else {
+        setSearchResults(null);
+        setShowDropdown(false);
+      }
+    }, 300);
+
+    return () => clearTimeout(timer);
+  }, [query]);
+
+  // Close dropdown on click outside
+  useEffect(() => {
+    const handleClickOutside = (e: MouseEvent) => {
+      if (containerRef.current && !containerRef.current.contains(e.target as Node)) {
+        setShowDropdown(false);
+      }
+    };
+
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => document.removeEventListener('mousedown', handleClickOutside);
+  }, []);
+
+  // Close dropdown when pathname changes (navigation occurred)
+  useEffect(() => {
+    setShowDropdown(false);
+  }, [pathname]);
+
+  const handleSubmit = (e: FormEvent<HTMLFormElement>): void => {
+    e.preventDefault();
+    if (query.trim().length >= 2) {
       const params = new URLSearchParams();
-      params.set('q', searchQuery);
+      params.set('q', query.trim());
 
       // Preserve type filter if it exists
       const currentType = searchParams.get('type');
@@ -39,44 +95,32 @@ export default function SearchBar({
       }
 
       router.push(`/search?${params.toString()}`);
-      setIsSearching(false);
-    } else if (searchQuery.length === 0) {
-      // Clear search when input is empty
-      router.push('/');
+      setShowDropdown(false);
     }
-  }, [router, searchParams]);
-
-  // Debounce effect
-  useEffect(() => {
-    const timer = setTimeout(() => {
-      if (query !== defaultValue) {
-        performSearch(query);
-      }
-    }, 300);
-
-    return () => clearTimeout(timer);
-  }, [query, defaultValue, performSearch]);
-
-  const handleSubmit = (e: FormEvent<HTMLFormElement>): void => {
-    e.preventDefault();
-    performSearch(query);
   };
 
   const handleClear = (): void => {
     setQuery('');
-    router.push('/');
+    setSearchResults(null);
+    setShowDropdown(false);
+  };
+
+  const handleResultClick = (): void => {
+    setShowDropdown(false);
   };
 
   return (
     <form onSubmit={handleSubmit} className="w-full max-w-2xl mx-auto">
-      <div className="relative">
+      <div className="relative" ref={containerRef}>
         <div className="absolute left-4 top-1/2 -translate-y-1/2 text-muted pointer-events-none">
           <SearchIcon className="w-5 h-5" />
         </div>
         <input
+          ref={inputRef}
           type="text"
           value={query}
           onChange={(e) => setQuery(e.target.value)}
+          onFocus={() => query.length >= 2 && setShowDropdown(true)}
           placeholder={placeholder}
           autoFocus={autoFocus}
           className="w-full !pl-14 !pr-12 !py-3 sm:!py-3.5 text-base border border-border rounded-lg focus:outline-none focus:ring-2 focus:ring-link focus:border-transparent bg-surface text-foreground"
@@ -97,6 +141,16 @@ export default function SearchBar({
           <div className="absolute right-14 top-1/2 -translate-y-1/2">
             <div className="w-4 h-4 border-2 border-link border-t-transparent rounded-full animate-spin" />
           </div>
+        )}
+
+        {/* Dropdown results */}
+        {showDropdown && (
+          <SearchDropdown
+            results={searchResults}
+            isLoading={isSearching}
+            query={query}
+            onResultClick={handleResultClick}
+          />
         )}
       </div>
     </form>

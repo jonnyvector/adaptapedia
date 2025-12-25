@@ -2,7 +2,9 @@ import type { Metadata } from 'next';
 import './globals.css';
 import Header from '@/components/layout/Header';
 import Footer from '@/components/layout/Footer';
+import HomePageGradient from '@/components/layout/HomePageGradient';
 import { AuthProvider } from '@/lib/auth-context';
+import { ToastProvider } from '@/lib/toast-context';
 
 export const metadata: Metadata = {
   title: 'Adaptapedia',
@@ -32,13 +34,16 @@ export default function RootLayout({
         />
       </head>
       <body className="flex flex-col min-h-screen" suppressHydrationWarning>
-        <AuthProvider>
-          <Header />
-          <div className="flex-1">
-            {children}
-          </div>
-          <Footer />
-        </AuthProvider>
+        <ToastProvider>
+          <AuthProvider>
+            <HomePageGradient />
+            <Header />
+            <div className="flex-1">
+              {children}
+            </div>
+            <Footer />
+          </AuthProvider>
+        </ToastProvider>
       </body>
     </html>
   );

@@ -14,7 +14,10 @@ const config: Config = {
         surface: 'var(--surface)',
         surface2: 'var(--surface2)',
         muted: 'var(--muted)',
-        border: 'var(--border)',
+        border: {
+          DEFAULT: 'var(--border)',
+          strong: 'var(--border-strong)',
+        },
         link: {
           DEFAULT: 'var(--link)',
           hover: 'var(--linkHover)',
@@ -22,15 +25,25 @@ const config: Config = {
         primary: {
           DEFAULT: 'var(--primary)',
           hover: 'var(--primary-hover)',
+          light: 'var(--primary-light)',
         },
         secondary: 'var(--text-secondary)',
-        cyan: 'var(--cyan)',
-        magenta: 'var(--magenta)',
-        purple: 'var(--purple)',
-        success: 'var(--success)',
-        warn: 'var(--warn)',
-        danger: 'var(--danger)',
-        info: 'var(--info)',
+        // Accent colors for semantic use
+        'accent-blue': {
+          DEFAULT: 'var(--accent-blue)',
+          hover: 'var(--accent-blue-hover)',
+          light: 'var(--accent-blue-light)',
+        },
+        'accent-violet': 'var(--accent-violet)',
+        'accent-emerald': 'var(--accent-emerald)',
+        'accent-amber': 'var(--accent-amber)',
+        'accent-rose': 'var(--accent-rose)',
+      },
+      spacing: {
+        '18': '4.5rem',
+      },
+      transitionDuration: {
+        '200': '200ms',
       },
     },
   },

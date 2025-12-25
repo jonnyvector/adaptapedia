@@ -98,8 +98,10 @@ export default function Header(): JSX.Element {
 
   return (
     <header
-      className={`sticky top-0 z-50 border-b border-border bg-surface/80 backdrop-blur-md transition-shadow duration-200 ${
+      className={`sticky top-0 z-50 border-b border-border backdrop-blur-md transition-shadow duration-200 ${
         isSticky ? 'shadow-md' : ''
+      } ${
+        isHomePage ? 'bg-transparent' : 'bg-surface/80'
       }`}
     >
       <div className="container">
@@ -156,6 +158,14 @@ export default function Header(): JSX.Element {
               className="hidden sm:inline text-sm px-2 py-2 text-muted hover:text-foreground transition-colors min-h-[40px] flex items-center"
             >
               Contribute
+            </Link>
+
+            {/* Needs Help Link */}
+            <Link
+              href="/needs-help"
+              className="hidden sm:inline text-sm px-2 py-2 text-muted hover:text-foreground transition-colors min-h-[40px] flex items-center"
+            >
+              Needs Help
             </Link>
 
             {/* Moderator Queue Link */}

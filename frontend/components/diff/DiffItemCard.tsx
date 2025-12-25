@@ -1,9 +1,10 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import type { DiffItem, VoteType, SpoilerScope, Comment } from '@/lib/types';
+import type { SpoilerPreference } from './SpoilerControl';
 import { useVoting } from '@/hooks/useVoting';
 import CommentsList from './CommentsList';
 import { api } from '@/lib/api';
@@ -13,12 +14,20 @@ interface DiffItemCardProps {
   diff: DiffItem;
   userSpoilerScope?: SpoilerScope;
   defaultExpanded?: boolean;
+  onSpoilerPreferenceChange?: (pref: SpoilerPreference) => void;
+  currentSpoilerPreference?: SpoilerPreference;
+  commentsExpanded?: boolean;
+  onCommentsExpandedChange?: (expanded: boolean) => void;
 }
 
 export default function DiffItemCard({
   diff,
   userSpoilerScope = 'NONE',
-  defaultExpanded = false
+  defaultExpanded = false,
+  onSpoilerPreferenceChange,
+  currentSpoilerPreference,
+  commentsExpanded: externalCommentsExpanded,
+  onCommentsExpandedChange
 }: DiffItemCardProps): JSX.Element {
   const { isAuthenticated, user } = useAuth();
   const router = useRouter();
@@ -29,9 +38,29 @@ export default function DiffItemCard({
   );
   const [showError, setShowError] = useState(false);
   const [detailExpanded, setDetailExpanded] = useState(defaultExpanded);
-  const [commentsExpanded, setCommentsExpanded] = useState(false);
+  const [localCommentsExpanded, setLocalCommentsExpanded] = useState(false);
   const [commentCount, setCommentCount] = useState(0);
   const [loadingCommentCount, setLoadingCommentCount] = useState(true);
+  const [isTextClamped, setIsTextClamped] = useState(false);
+  const detailRef = useRef<HTMLParagraphElement>(null);
+
+  // Use external state if provided, otherwise use local state
+  const commentsExpanded = externalCommentsExpanded ?? localCommentsExpanded;
+  const setCommentsExpanded = (expanded: boolean) => {
+    if (onCommentsExpandedChange) {
+      onCommentsExpandedChange(expanded);
+    } else {
+      setLocalCommentsExpanded(expanded);
+    }
+  };
+
+  // Check if text is actually clamped
+  useEffect(() => {
+    if (detailRef.current && !detailExpanded) {
+      const isClamped = detailRef.current.scrollHeight > detailRef.current.clientHeight;
+      setIsTextClamped(isClamped);
+    }
+  }, [diff.detail, detailExpanded]);
 
   const totalVotes =
     voteCounts.accurate +
@@ -168,29 +197,28 @@ export default function DiffItemCard({
   };
 
   const hasDetail = diff.detail && diff.detail.trim().length > 0;
-  const isDetailLong = hasDetail && diff.detail.length > 200;
 
   return (
-    <div className="border border-border rounded bg-surface hover:shadow-sm transition-all duration-200 overflow-hidden">
+    <div id={`diff-${diff.id}`} className="border border-border rounded bg-surface hover:shadow-sm transition-all duration-200 overflow-hidden">
       {/* Compact header row - always visible */}
       <div className="p-3 sm:p-4">
-        {/* Title row with claim */}
-        <div className="flex items-start gap-2 mb-2">
-          <h3 className="text-base font-semibold flex-1 text-foreground leading-tight line-clamp-1">
+        {/* Title row with claim - clickable header */}
+        <button
+          onClick={() => hasDetail && setDetailExpanded(!detailExpanded)}
+          className={`flex items-start gap-2 mb-2 w-full text-left ${hasDetail ? 'cursor-pointer group' : 'cursor-default'}`}
+          disabled={!hasDetail}
+          aria-label={hasDetail ? (detailExpanded ? 'Collapse details' : 'Expand details') : undefined}
+        >
+          <h3 className="text-base font-semibold flex-1 text-foreground leading-tight">
             {diff.claim}
           </h3>
-          {/* Expand/collapse button for detail */}
+          {/* Chevron indicator */}
           {hasDetail && (
-            <button
-              onClick={() => setDetailExpanded(!detailExpanded)}
-              className="text-muted hover:text-foreground transition-colors px-2 py-1 -mt-1"
-              aria-label={detailExpanded ? 'Collapse details' : 'Expand details'}
-              title={detailExpanded ? 'Collapse' : 'Expand'}
-            >
-              <span className="text-sm">{detailExpanded ? '−' : '+'}</span>
-            </button>
+            <span className="text-muted group-hover:text-foreground transition-colors text-lg leading-none mt-0.5">
+              {detailExpanded ? '▾' : '▸'}
+            </span>
           )}
-        </div>
+        </button>
 
         {/* Badges row */}
         <div className="flex flex-wrap items-center gap-2 mb-2">
@@ -209,10 +237,10 @@ export default function DiffItemCard({
         {/* Detail preview/full (when not expanded, show 2 lines max) */}
         {hasDetail && !detailExpanded && (
           <div className="mb-3">
-            <p className="text-sm text-muted leading-relaxed line-clamp-2">
+            <p ref={detailRef} className="text-sm text-muted leading-relaxed line-clamp-2">
               {diff.detail}
             </p>
-            {isDetailLong && (
+            {isTextClamped && (
               <button
                 onClick={() => setDetailExpanded(true)}
                 className="text-xs text-link hover:underline mt-1"
@@ -232,73 +260,14 @@ export default function DiffItemCard({
           </div>
         )}
 
-        {/* Consensus bar with label */}
-        {totalVotes > 0 && (
-          <div className="mb-3">
-            {/* Visual vote bar */}
-            <div className="flex h-2 rounded-full overflow-hidden bg-surface2 mb-1.5">
-              {voteCounts.accurate > 0 && (
-                <div
-                  className="bg-success transition-all duration-300 ease-out"
-                  style={{ width: `${getVotePercentage(voteCounts.accurate)}%` }}
-                  title={`${getVotePercentage(voteCounts.accurate)}% Accurate (${voteCounts.accurate} votes)`}
-                />
-              )}
-              {voteCounts.needs_nuance > 0 && (
-                <div
-                  className="bg-yellow-500 transition-all duration-300 ease-out"
-                  style={{
-                    width: `${getVotePercentage(voteCounts.needs_nuance)}%`,
-                  }}
-                  title={`${getVotePercentage(voteCounts.needs_nuance)}% Needs Nuance (${voteCounts.needs_nuance} votes)`}
-                />
-              )}
-              {voteCounts.disagree > 0 && (
-                <div
-                  className="bg-danger transition-all duration-300 ease-out"
-                  style={{ width: `${getVotePercentage(voteCounts.disagree)}%` }}
-                  title={`${getVotePercentage(voteCounts.disagree)}% Disagree (${voteCounts.disagree} votes)`}
-                />
-              )}
-            </div>
-            {/* Consensus label */}
-            <div className="flex items-center justify-between text-xs">
-              <span className="text-muted font-medium">{getConsensusLabel()}</span>
-              <span className="text-muted">
-                {totalVotes} {totalVotes === 1 ? 'vote' : 'votes'}
-              </span>
-            </div>
-          </div>
-        )}
-
-        {/* Meta row - compact */}
-        <div className="flex flex-wrap items-center gap-x-3 gap-y-1 text-xs text-muted">
-          <span>
-            Added by{' '}
-            <Link
-              href={`/u/${diff.created_by_username}`}
-              className="text-link hover:underline font-medium"
-            >
-              @{diff.created_by_username}
-            </Link>
-          </span>
-          <span>•</span>
-          <span>{getTimeSince(diff.created_at)}</span>
-          {!loadingCommentCount && commentCount > 0 && (
-            <>
-              <span>•</span>
-              <button
-                onClick={() => setCommentsExpanded(!commentsExpanded)}
-                className="text-link hover:underline"
-              >
-                {commentCount} {commentCount === 1 ? 'comment' : 'comments'}
-              </button>
-            </>
-          )}
-        </div>
-
         {/* Voting buttons - compact horizontal layout */}
-        <div className="mt-3 flex flex-col sm:flex-row gap-2">
+        <div className="flex flex-col sm:flex-row gap-2">
+          {/* Total votes indicator */}
+          {totalVotes > 0 && (
+            <div className="text-xs text-muted self-start sm:self-center whitespace-nowrap">
+              {totalVotes} {totalVotes === 1 ? 'vote' : 'votes'}
+            </div>
+          )}
           {/* Error message */}
           {showError && error && (
             <div className="text-xs text-danger bg-danger/10 px-3 py-2 rounded border border-danger/30">
@@ -313,15 +282,15 @@ export default function DiffItemCard({
                 disabled={isVoting}
                 className={`flex items-center justify-center gap-1.5 px-3 py-2 rounded border transition-all duration-200 flex-1 sm:flex-none ${
                   userVote === 'ACCURATE'
-                    ? 'bg-success/10 border-success text-success font-medium'
-                    : 'bg-surface border-border text-foreground hover:border-success hover:bg-success/5'
+                    ? 'bg-green-500/10 border-green-500 text-green-600 dark:text-green-500 font-medium'
+                    : 'bg-surface border-border text-foreground hover:border-green-500 hover:bg-green-500/5'
                 } ${isVoting ? 'cursor-wait opacity-50' : 'cursor-pointer'}`}
                 title="This diff is accurate - well-stated and correct"
                 aria-label="Vote accurate"
               >
                 <span className="text-sm leading-none">↑</span>
                 <span className="text-xs font-medium">Accurate</span>
-                <span className={`text-xs font-semibold ${userVote === 'ACCURATE' ? 'text-success' : 'text-muted'}`}>
+                <span className="text-xs font-semibold text-green-600 dark:text-green-500">
                   {voteCounts.accurate}
                 </span>
               </button>
@@ -339,7 +308,7 @@ export default function DiffItemCard({
               >
                 <span className="text-sm leading-none">~</span>
                 <span className="text-xs font-medium">Nuance</span>
-                <span className={`text-xs font-semibold ${userVote === 'NEEDS_NUANCE' ? 'text-yellow-600' : 'text-muted'}`}>
+                <span className="text-xs font-semibold text-yellow-600 dark:text-yellow-500">
                   {voteCounts.needs_nuance}
                 </span>
               </button>
@@ -349,19 +318,45 @@ export default function DiffItemCard({
                 disabled={isVoting}
                 className={`flex items-center justify-center gap-1.5 px-3 py-2 rounded border transition-all duration-200 flex-1 sm:flex-none ${
                   userVote === 'DISAGREE'
-                    ? 'bg-danger/10 border-danger text-danger font-medium'
-                    : 'bg-surface border-border text-foreground hover:border-danger hover:bg-danger/5'
+                    ? 'bg-red-500/10 border-red-500 text-red-600 dark:text-red-500 font-medium'
+                    : 'bg-surface border-border text-foreground hover:border-red-500 hover:bg-red-500/5'
                 } ${isVoting ? 'cursor-wait opacity-50' : 'cursor-pointer'}`}
                 title="This diff is inaccurate or misleading"
                 aria-label="Vote disagree"
               >
                 <span className="text-sm leading-none">↓</span>
                 <span className="text-xs font-medium">Disagree</span>
-                <span className={`text-xs font-semibold ${userVote === 'DISAGREE' ? 'text-danger' : 'text-muted'}`}>
+                <span className="text-xs font-semibold text-red-600 dark:text-red-500">
                   {voteCounts.disagree}
                 </span>
               </button>
             </div>
+          )}
+        </div>
+
+        {/* Meta row - moved to bottom for quieter hierarchy */}
+        <div className="mt-3 pt-3 border-t border-border/50 flex flex-wrap items-center gap-x-3 gap-y-1 text-xs text-muted">
+          <span>
+            Added by{' '}
+            <Link
+              href={`/u/${diff.created_by_username}`}
+              className="text-link hover:underline font-medium"
+            >
+              @{diff.created_by_username}
+            </Link>
+          </span>
+          <span className="text-muted/50">·</span>
+          <span>{getTimeSince(diff.created_at)}</span>
+          {!loadingCommentCount && commentCount > 0 && (
+            <>
+              <span className="text-muted/50">·</span>
+              <button
+                onClick={() => setCommentsExpanded(!commentsExpanded)}
+                className="text-link hover:underline"
+              >
+                {commentCount} {commentCount === 1 ? 'comment' : 'comments'}
+              </button>
+            </>
           )}
         </div>
       </div>
@@ -373,6 +368,8 @@ export default function DiffItemCard({
             diffItemId={diff.id}
             userSpoilerScope={userSpoilerScope}
             onCommentCountChange={(count) => setCommentCount(count)}
+            onSpoilerPreferenceChange={onSpoilerPreferenceChange}
+            currentSpoilerPreference={currentSpoilerPreference}
           />
         </div>
       )}
@@ -382,9 +379,9 @@ export default function DiffItemCard({
         <div className="border-t border-border">
           <button
             onClick={() => setCommentsExpanded(true)}
-            className="text-xs text-muted hover:text-foreground transition-colors w-full py-2 px-3 sm:px-4 text-left"
+            className="text-xs text-link hover:text-linkHover transition-colors w-full py-2 px-3 sm:px-4 text-left font-medium"
           >
-            No comments yet - be the first to comment
+            No comments yet — Add comment
           </button>
         </div>
       )}

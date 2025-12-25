@@ -71,11 +71,12 @@ class WorkViewSet(viewsets.ReadOnlyModelViewSet):
             })
 
         # Default: book-first search with adaptations
-        works = SearchService.search_works_with_adaptations(query, limit=limit)
+        works, total_count = SearchService.search_works_with_adaptations(query, limit=limit)
 
         return Response({
             'search_type': 'book',
             'query': query,
+            'total_count': total_count,
             'results': WorkWithAdaptationsSerializer(works, many=True).data
         })
 

@@ -6,6 +6,7 @@ import LoadingSpinner from '@/components/ui/LoadingSpinner';
 
 interface AddCommentFormProps {
   diffItemId: number;
+  parentId?: number;
   onCommentAdded?: () => void;
   onCancel?: () => void;
 }
@@ -38,6 +39,7 @@ const spoilerScopes: { value: SpoilerScope; label: string; description: string }
 
 export default function AddCommentForm({
   diffItemId,
+  parentId,
   onCommentAdded,
   onCancel,
 }: AddCommentFormProps): JSX.Element {
@@ -75,7 +77,7 @@ export default function AddCommentForm({
       // Import api dynamically to avoid circular dependencies
       const { api } = await import('@/lib/api');
 
-      await api.comments.create(diffItemId, body, spoilerScope);
+      await api.comments.create(diffItemId, body, spoilerScope, parentId);
 
       // Show success state
       setSuccess(true);
@@ -107,20 +109,20 @@ export default function AddCommentForm({
       {/* Textarea */}
       <div>
         <label htmlFor="comment-body" className="block text-sm font-medium mb-2">
-          Add your comment
+          {parentId ? 'Add a reply' : 'Add your comment'}
         </label>
         <textarea
           ref={textareaRef}
           id="comment-body"
           value={body}
           onChange={(e) => setBody(e.target.value)}
-          placeholder="Share your thoughts on this difference..."
+          placeholder={parentId ? 'Write your reply...' : 'Share your thoughts on this difference...'}
           className={`w-full px-3 py-2 border rounded-lg resize-none bg-surface text-foreground focus:outline-none focus:ring-2 focus:ring-link/50 transition-colors ${
             isOverLimit
               ? 'border-danger focus:border-danger focus:ring-danger/50'
               : 'border-border'
           }`}
-          rows={3}
+          rows={parentId ? 2 : 3}
           disabled={isSubmitting}
           aria-describedby="char-count comment-error"
           aria-invalid={isOverLimit || isTooShort}

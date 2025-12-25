@@ -5,6 +5,7 @@ import { useAuth } from '@/lib/auth-context';
 import { api } from '@/lib/api';
 import type { UserProfile, DiffItem, Vote, Comment, ApiResponse } from '@/lib/types';
 import Link from 'next/link';
+import ReputationProgress from './ReputationProgress';
 
 interface UserProfileClientProps {
   profile: UserProfile;
@@ -77,8 +78,34 @@ export default function UserProfileClient({ profile }: UserProfileClientProps): 
     return role.replace(/_/g, ' ').toLowerCase().replace(/\b\w/g, l => l.toUpperCase());
   };
 
+  const getBadgeIcon = (badgeType: string): string => {
+    const iconMap: Record<string, string> = {
+      // Milestone badges
+      'FIRST_VOTE': '🗳️',
+      'FIRST_COMMENT': '💬',
+      'FIRST_DIFF': '✍️',
+      'VOTER_10': '🎯',
+      'VOTER_50': '🏆',
+      'VOTER_100': '👑',
+      'COMMENTER_10': '💭',
+      'COMMENTER_50': '🗨️',
+      'COMMENTER_100': '📣',
+      'CONTRIBUTOR_10': '📝',
+      'CONTRIBUTOR_50': '📚',
+      'CONTRIBUTOR_100': '🏅',
+      // Quality badges
+      'WELL_SOURCED': '📖',
+      'HIGH_ACCURACY': '✓',
+      'CONSENSUS_BUILDER': '🤝',
+      // Special badges
+      'EARLY_ADOPTER': '🌟',
+      'WEEKLY_STREAK_7': '🔥',
+    };
+    return iconMap[badgeType] || '🏆';
+  };
+
   return (
-    <div className="max-w-5xl mx-auto px-4 py-8">
+    <div className="container py-8">
       {/* Profile Header */}
       <div className="bg-surface border border-border rounded-lg p-6 mb-6">
         <div className="flex items-start justify-between mb-4">
@@ -95,6 +122,27 @@ export default function UserProfileClient({ profile }: UserProfileClientProps): 
           </div>
         </div>
 
+        {/* Badges Section */}
+        {profile.badges && profile.badges.length > 0 && (
+          <div className="mt-6">
+            <h2 className="text-lg font-semibold text-foreground mb-3">Badges</h2>
+            <div className="flex flex-wrap gap-2">
+              {profile.badges.map((badge) => (
+                <div
+                  key={badge.id}
+                  className="bg-gradient-to-br from-yellow-50 to-yellow-100 dark:from-yellow-900/30 dark:to-yellow-800/30 border border-yellow-300 dark:border-yellow-700 rounded-lg px-3 py-2 flex items-center gap-2"
+                  title={`Earned ${formatDate(badge.earned_at)}`}
+                >
+                  <span className="text-xl">{getBadgeIcon(badge.badge_type)}</span>
+                  <span className="text-sm font-medium text-foreground">
+                    {badge.badge_display}
+                  </span>
+                </div>
+              ))}
+            </div>
+          </div>
+        )}
+
         {/* Stats Grid */}
         <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mt-6">
           <div className="bg-surface2 p-4 rounded-lg">
@@ -110,11 +158,48 @@ export default function UserProfileClient({ profile }: UserProfileClientProps): 
             <div className="text-sm text-muted">Comments</div>
           </div>
           <div className="bg-surface2 p-4 rounded-lg">
-            <div className="text-2xl font-bold text-foreground">{profile.reputation_score}</div>
+            <div className="text-2xl font-bold text-link">{profile.reputation_score}</div>
             <div className="text-sm text-muted">Reputation</div>
           </div>
         </div>
+
+        {/* Additional Stats */}
+        {profile.stats && (
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mt-4">
+            {profile.stats.accuracy_rate !== undefined && (
+              <div className="bg-surface2 p-4 rounded-lg">
+                <div className="text-xl font-bold text-green-600 dark:text-green-400">
+                  {profile.stats.accuracy_rate}%
+                </div>
+                <div className="text-sm text-muted">Accuracy Rate</div>
+              </div>
+            )}
+            {profile.stats.helpful_comments_count !== undefined && (
+              <div className="bg-surface2 p-4 rounded-lg">
+                <div className="text-xl font-bold text-foreground">
+                  {profile.stats.helpful_comments_count}
+                </div>
+                <div className="text-sm text-muted">Helpful Comments</div>
+              </div>
+            )}
+            {profile.stats.sources_added_count !== undefined && (
+              <div className="bg-surface2 p-4 rounded-lg">
+                <div className="text-xl font-bold text-foreground">
+                  {profile.stats.sources_added_count}
+                </div>
+                <div className="text-sm text-muted">Sources Added</div>
+              </div>
+            )}
+          </div>
+        )}
       </div>
+
+      {/* Reputation Progress - Only for own profile */}
+      {isOwnProfile && currentUser && (
+        <div className="mb-6">
+          <ReputationProgress user={currentUser} />
+        </div>
+      )}
 
       {/* Activity Tabs */}
       <div className="bg-surface border border-border rounded-lg">

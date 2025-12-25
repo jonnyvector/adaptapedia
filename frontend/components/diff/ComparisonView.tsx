@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect, useMemo } from 'react';
+import { useState, useEffect, useMemo, useRef } from 'react';
 import { useRouter } from 'next/navigation';
 import type { Work, ScreenWork, DiffItem, SpoilerScope, DiffCategory } from '@/lib/types';
 import { api } from '@/lib/api';
@@ -9,7 +9,6 @@ import DiffItemCard from './DiffItemCard';
 import MaskedDiffCard from './MaskedDiffCard';
 import SpoilerControl, { type SpoilerPreference } from './SpoilerControl';
 import CompactVoteStrip from './CompactVoteStrip';
-import ComparisonSummary from './ComparisonSummary';
 import DiffFilters from './DiffFilters';
 import DiffSort, { type SortOption } from './DiffSort';
 import DiffSearch from './DiffSearch';
@@ -41,6 +40,7 @@ export default function ComparisonView({
 
   // Initialize spoiler preference - start with SAFE to avoid hydration mismatch
   const [spoilerPreference, setSpoilerPreference] = useState<SpoilerPreference>('SAFE');
+  const scrollToDiffIdRef = useRef<number | null>(null);
 
   // Load preference from localStorage after mount
   useEffect(() => {
@@ -51,6 +51,9 @@ export default function ComparisonView({
   const [diffs, setDiffs] = useState<DiffItem[]>(initialDiffs);
   const [loading, setLoading] = useState(false);
 
+  // Track which diffs have expanded comments (persists across spoiler changes)
+  const [expandedComments, setExpandedComments] = useState<Set<number>>(new Set());
+
   // Filter and sort state
   const [selectedCategories, setSelectedCategories] = useState<Set<DiffCategory>>(new Set());
   const [sortOption, setSortOption] = useState<SortOption>('top');
@@ -58,7 +61,7 @@ export default function ComparisonView({
 
   const handleAddDiff = (): void => {
     if (!isAuthenticated) {
-      router.push(`/login?returnUrl=/compare/${work.slug}/${screenWork.slug}/add`);
+      router.push(`/auth/login?returnUrl=/compare/${work.slug}/${screenWork.slug}/add`);
       return;
     }
     router.push(`/compare/${work.slug}/${screenWork.slug}/add`);
@@ -92,6 +95,21 @@ export default function ComparisonView({
   const currentSpoilerScope = useMemo(() => {
     return getMaxScopeForAPI(spoilerPreference);
   }, [spoilerPreference]);
+
+  // Scroll to a specific diff after spoiler preference change
+  useEffect(() => {
+    if (scrollToDiffIdRef.current !== null) {
+      const diffId = scrollToDiffIdRef.current;
+      const element = document.getElementById(`diff-${diffId}`);
+      if (element) {
+        // Small delay to ensure render is complete
+        setTimeout(() => {
+          element.scrollIntoView({ behavior: 'smooth', block: 'center' });
+          scrollToDiffIdRef.current = null;
+        }, 100);
+      }
+    }
+  }, [spoilerPreference, visibleDiffs.length]);
 
   // Filter, sort visible diffs by category, search, and sort option
   const { filteredDiffs, visibleDiffsByCategory, categoryCounts } = useMemo(() => {
@@ -173,6 +191,51 @@ export default function ComparisonView({
       return acc;
     }, {} as Record<string, DiffItem[]>);
   }, [maskedDiffs]);
+
+  // Calculate consensus accuracy
+  const consensusAccuracy = useMemo(() => {
+    if (visibleDiffs.length === 0) return 0;
+
+    let totalAccuracyPercentage = 0;
+    let diffsWithVotes = 0;
+
+    visibleDiffs.forEach((diff) => {
+      const { accurate, needs_nuance, disagree } = diff.vote_counts;
+      const totalVotes = accurate + needs_nuance + disagree;
+
+      if (totalVotes > 0) {
+        const accuracyPercent = (accurate / totalVotes) * 100;
+        totalAccuracyPercentage += accuracyPercent;
+        diffsWithVotes++;
+      }
+    });
+
+    return diffsWithVotes > 0 ? totalAccuracyPercentage / diffsWithVotes : 0;
+  }, [visibleDiffs]);
+
+  // Get top 3 categories
+  const topCategories = useMemo(() => {
+    const CATEGORY_LABELS: Record<DiffCategory, string> = {
+      PLOT: 'Plot',
+      CHARACTER: 'Characters',
+      ENDING: 'Ending',
+      SETTING: 'Setting',
+      THEME: 'Theme',
+      TONE: 'Tone',
+      TIMELINE: 'Timeline',
+      WORLDBUILDING: 'Worldbuilding',
+      OTHER: 'Other',
+    };
+
+    return Object.entries(categoryCounts)
+      .sort(([, a], [, b]) => b - a)
+      .slice(0, 3)
+      .filter(([, count]) => count > 0)
+      .map(([category, count]) => ({
+        category: CATEGORY_LABELS[category as DiffCategory],
+        count,
+      }));
+  }, [categoryCounts]);
 
   // All available categories
   const allCategories: DiffCategory[] = [
@@ -280,8 +343,9 @@ export default function ComparisonView({
         </div>
       </div>
 
-      {/* Compact Voting Strip */}
-      <div className="mb-4 sm:mb-6">
+      {/* Summary Container - unified design */}
+      <div className="mb-6 rounded-lg border border-border bg-surface2/20 overflow-hidden">
+        {/* Community Preference */}
         <CompactVoteStrip work={work} screenWork={screenWork} />
       </div>
 
@@ -289,23 +353,14 @@ export default function ComparisonView({
       <SpoilerControl
         currentPreference={spoilerPreference}
         onPreferenceChange={setSpoilerPreference}
+        visibleCount={visibleDiffs.length}
+        hiddenCount={maskedDiffs.length}
+        consensusAccuracy={consensusAccuracy}
+        topCategories={topCategories}
       />
 
-      {/* Comparison Summary Strip */}
-      {!loading && diffs.length > 0 && (
-        <ComparisonSummary
-          visibleCount={visibleDiffs.length}
-          maskedCount={maskedDiffs.length}
-          categoryCounts={categoryCounts}
-          allDiffs={diffs}
-          currentPreference={spoilerPreference}
-          onSpoilerLevelIncrease={handleIncreaseSpoilerLevel}
-          onCategoryClick={handleToggleCategory}
-        />
-      )}
-
       {/* Filter Bar */}
-      <div className="border-t border-b border-border py-4 sm:py-5 mb-6 sm:mb-8 mt-6 bg-surface2/30">
+      <div className="mb-8">
         <div className="space-y-4">
           {/* Search and Sort row */}
           <div className="flex flex-col sm:flex-row gap-3 sm:gap-4">
@@ -321,7 +376,7 @@ export default function ComparisonView({
               <DiffSort value={sortOption} onChange={setSortOption} />
               <button
                 onClick={handleAddDiff}
-                className="px-4 py-2 bg-link text-white rounded-md hover:bg-link/90 transition-colors font-medium whitespace-nowrap min-h-[40px]"
+                className="px-4 bg-link text-white rounded-md hover:bg-link/90 transition-colors font-medium whitespace-nowrap h-[40px] flex items-center justify-center"
               >
                 Add Difference
               </button>
@@ -404,7 +459,28 @@ export default function ComparisonView({
               </h2>
               <div className="space-y-3 sm:space-y-4">
                 {categoryDiffs.map((diff) => (
-                  <DiffItemCard key={diff.id} diff={diff} userSpoilerScope={currentSpoilerScope} />
+                  <DiffItemCard
+                    key={diff.id}
+                    diff={diff}
+                    userSpoilerScope={currentSpoilerScope}
+                    onSpoilerPreferenceChange={(pref) => {
+                      scrollToDiffIdRef.current = diff.id;
+                      setSpoilerPreference(pref);
+                    }}
+                    currentSpoilerPreference={spoilerPreference}
+                    commentsExpanded={expandedComments.has(diff.id)}
+                    onCommentsExpandedChange={(expanded) => {
+                      setExpandedComments(prev => {
+                        const next = new Set(prev);
+                        if (expanded) {
+                          next.add(diff.id);
+                        } else {
+                          next.delete(diff.id);
+                        }
+                        return next;
+                      });
+                    }}
+                  />
                 ))}
               </div>
             </div>

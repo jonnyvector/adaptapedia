@@ -123,6 +123,7 @@ class DiffComment(models.Model):
 
     diff_item = models.ForeignKey(DiffItem, on_delete=models.CASCADE, related_name='comments')
     user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='diff_comments')
+    parent = models.ForeignKey('self', on_delete=models.CASCADE, null=True, blank=True, related_name='replies')
     body = models.TextField()
     spoiler_scope = models.CharField(max_length=15, choices=SpoilerScope.choices, default=SpoilerScope.NONE)
     status = models.CharField(max_length=10, choices=CommentStatus.choices, default=CommentStatus.LIVE)

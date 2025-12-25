@@ -79,27 +79,30 @@ export default function BookmarkButton({
       <button
         onClick={handleToggleBookmark}
         disabled={isLoading}
-        className={`inline-flex items-center gap-2 px-4 py-2 rounded-md border transition-colors min-h-[40px] ${
+        className={`inline-flex items-center justify-center rounded-md border transition-colors h-[40px] w-[40px] ${
           isBookmarked
             ? 'bg-link/10 border-link text-link hover:bg-link/20'
-            : 'bg-surface border-border text-foreground hover:bg-surface2'
+            : 'bg-surface border-border text-muted hover:text-foreground hover:bg-surface2'
         } ${isLoading ? 'opacity-50 cursor-not-allowed' : ''}`}
         title={isBookmarked ? 'Remove from bookmarks' : 'Add to bookmarks'}
         aria-label={isBookmarked ? 'Remove from bookmarks' : 'Add to bookmarks'}
       >
         <svg
+          width="20"
+          height="20"
+          viewBox="0 0 24 24"
+          style={{ minWidth: '20px', minHeight: '20px', flexShrink: 0 }}
           xmlns="http://www.w3.org/2000/svg"
-          className="h-5 w-5"
-          viewBox="0 0 20 20"
-          fill={isBookmarked ? 'currentColor' : 'none'}
+          fill="none"
+          strokeWidth="1.5"
           stroke="currentColor"
-          strokeWidth={isBookmarked ? 0 : 2}
         >
-          <path d="M5 4a2 2 0 012-2h6a2 2 0 012 2v14l-5-2.5L5 18V4z" />
+          <path
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            d="M17.593 3.322c1.1.128 1.907 1.077 1.907 2.185V21L12 17.25 4.5 21V5.507c0-1.108.806-2.057 1.907-2.185a48.507 48.507 0 0111.186 0z"
+          />
         </svg>
-        <span className="text-sm font-medium hidden sm:inline">
-          {isLoading ? 'Saving...' : isBookmarked ? 'Bookmarked' : 'Bookmark'}
-        </span>
       </button>
       {error && (
         <p className="text-xs text-warn mt-1" role="alert">

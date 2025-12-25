@@ -9,6 +9,10 @@ export type SpoilerPreference = 'SAFE' | 'BOOK_ALLOWED' | 'SCREEN_ALLOWED' | 'FU
 interface SpoilerControlProps {
   currentPreference: SpoilerPreference;
   onPreferenceChange: (preference: SpoilerPreference) => void;
+  visibleCount?: number;
+  hiddenCount?: number;
+  consensusAccuracy?: number;
+  topCategories?: Array<{ category: string; count: number }>;
 }
 
 const preferences: {
@@ -20,28 +24,28 @@ const preferences: {
 }[] = [
   {
     value: 'SAFE',
-    label: 'Safe Only',
+    label: 'Safe',
     description: 'No spoilers - high-level changes only',
     icon: LockClosedIcon,
     allowedScopes: ['NONE'],
   },
   {
     value: 'BOOK_ALLOWED',
-    label: 'Book Spoilers',
+    label: 'Book',
     description: 'Safe + book plot details',
     icon: BookOpenIcon,
     allowedScopes: ['NONE', 'BOOK_ONLY'],
   },
   {
     value: 'SCREEN_ALLOWED',
-    label: 'Screen Spoilers',
+    label: 'Screen',
     description: 'Safe + movie/TV plot details',
     icon: FilmIcon,
     allowedScopes: ['NONE', 'SCREEN_ONLY'],
   },
   {
     value: 'FULL',
-    label: 'Full Spoilers',
+    label: 'All',
     description: 'Show everything including endings',
     icon: LockOpenIcon,
     allowedScopes: ['NONE', 'BOOK_ONLY', 'SCREEN_ONLY', 'FULL'],
@@ -55,6 +59,10 @@ export function getPreferenceConfig(preference: SpoilerPreference) {
 export default function SpoilerControl({
   currentPreference,
   onPreferenceChange,
+  visibleCount,
+  hiddenCount,
+  consensusAccuracy,
+  topCategories = [],
 }: SpoilerControlProps): JSX.Element {
   // Persist preference to localStorage
   useEffect(() => {
@@ -66,69 +74,83 @@ export default function SpoilerControl({
   const currentConfig = getPreferenceConfig(currentPreference);
 
   return (
-    <div className="sticky top-0 z-10 bg-background border-b-2 border-warn shadow-md">
-      <div className="max-w-6xl mx-auto px-4 py-3 sm:py-4">
-        {/* Header with warning indicator */}
-        <div className="flex items-center gap-2 mb-3">
-          <div className="flex items-center gap-2 flex-1">
-            <span aria-hidden="true">
-              <currentConfig.icon className="w-5 h-5" />
+    <div className="sticky top-0 z-10 bg-background/95 backdrop-blur-sm border-b border-border shadow-sm mb-6">
+      <div className="max-w-6xl mx-auto px-4 py-3">
+        {/* Segmented Control */}
+        <div className="flex flex-col sm:flex-row sm:items-center gap-3 mb-2">
+          {/* Label */}
+          <div className="flex items-center gap-2">
+            <span className="text-xs font-mono uppercase tracking-wider text-muted">
+              Spoiler Level
             </span>
-            <h2 className="text-sm sm:text-base font-bold text-foreground">
-              Spoiler Control
-            </h2>
           </div>
-          <div className="text-xs text-muted hidden sm:block">
-            Your safety setting
+
+          {/* Segmented Control Pills */}
+          <div className="inline-flex items-center bg-surface2/50 rounded-full p-1 border border-border shadow-inner">
+            {preferences.map((pref) => {
+              const isActive = currentPreference === pref.value;
+              const Icon = pref.icon;
+              return (
+                <button
+                  key={pref.value}
+                  onClick={() => onPreferenceChange(pref.value)}
+                  className={`
+                    relative px-3 sm:px-4 py-1.5 rounded-full text-xs font-medium
+                    transition-all duration-200 ease-in-out
+                    flex items-center gap-1.5 whitespace-nowrap
+                    ${
+                      isActive
+                        ? 'bg-background text-foreground shadow-md border border-border/50'
+                        : 'text-muted hover:text-foreground hover:bg-surface2/30'
+                    }
+                  `}
+                  title={pref.description}
+                  aria-pressed={isActive}
+                  aria-label={`${pref.label}: ${pref.description}`}
+                >
+                  <Icon className="w-3.5 h-3.5" aria-hidden="true" />
+                  <span className="font-mono">{pref.label}</span>
+                </button>
+              );
+            })}
           </div>
+
+          {/* Status Badge - Hidden count feedback */}
+          {visibleCount !== undefined && hiddenCount !== undefined && (
+            <div className="text-xs text-muted font-mono">
+              <span className="hidden sm:inline">·</span>{' '}
+              <span className="font-semibold text-foreground">{visibleCount}</span> shown
+              {hiddenCount > 0 && (
+                <>
+                  {' · '}
+                  <span className="font-semibold text-warn">{hiddenCount}</span> hidden
+                </>
+              )}
+            </div>
+          )}
         </div>
 
-        {/* Preference Buttons */}
-        <div className="grid grid-cols-2 sm:grid-cols-4 gap-2">
-          {preferences.map((pref) => {
-            const isActive = currentPreference === pref.value;
-            return (
-              <button
-                key={pref.value}
-                onClick={() => onPreferenceChange(pref.value)}
-                className={`
-                  relative px-3 py-2.5 sm:py-3 rounded-lg text-xs sm:text-sm font-semibold
-                  transition-all duration-200 min-h-[60px] sm:min-h-[72px]
-                  flex flex-col items-center justify-center gap-1
-                  ${
-                    isActive
-                      ? 'bg-link text-white shadow-lg ring-2 ring-link/50'
-                      : 'bg-surface2 text-foreground hover:bg-surface2/80 border border-border'
-                  }
-                `}
-                title={pref.description}
-                aria-pressed={isActive}
-                aria-label={`${pref.label}: ${pref.description}`}
-              >
-                <span className="mb-0.5" aria-hidden="true">
-                  <pref.icon className="w-6 h-6" />
-                </span>
-                <span className="text-center leading-tight">{pref.label}</span>
-                {isActive && (
-                  <div className="absolute -top-1 -right-1 w-5 h-5 bg-success rounded-full flex items-center justify-center">
-                    <CheckIcon className="w-3 h-3 text-white" />
-                  </div>
+        {/* Compact stats line */}
+        {(consensusAccuracy !== undefined || topCategories.length > 0) && (
+          <div className="text-xs text-muted/70 font-mono flex items-center leading-none">
+            {consensusAccuracy !== undefined && consensusAccuracy > 0 && (
+              <>
+                <span className="text-muted">{Math.round(consensusAccuracy)}% accurate</span>
+              </>
+            )}
+            {topCategories.length > 0 && (
+              <>
+                {consensusAccuracy !== undefined && consensusAccuracy > 0 && (
+                  <span className="mx-1.5">·</span>
                 )}
-              </button>
-            );
-          })}
-        </div>
-
-        {/* Description */}
-        <p className="text-xs sm:text-sm text-muted mt-3 text-center sm:text-left">
-          <span className="font-semibold">Current setting:</span> {currentConfig.description}
-        </p>
-
-        {/* Warning for Safe Mode */}
-        {currentPreference === 'SAFE' && (
-          <div className="mt-2 px-3 py-2 bg-info/10 border border-info/30 rounded-md text-xs text-info">
-            <span className="font-semibold">Safe mode:</span> Many differences will be hidden.
-            Increase spoiler level to see more.
+                <span className="text-muted/70">Top:</span>
+                {topCategories.map((cat, index) => (
+                  <span key={cat.category}>
+                    {index > 0 && <span className="text-muted/50">,</span>} {cat.category} ({cat.count})
+                  </span>
+                ))}
+              </>
+            )}
           </div>
         )}
       </div>

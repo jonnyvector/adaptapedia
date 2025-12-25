@@ -120,7 +120,7 @@ export default function ComparisonVoting({ work, screenWork }: ComparisonVotingP
             <div className="h-8 flex rounded-lg overflow-hidden border border-border">
               {/* Book Side */}
               <div
-                className="bg-amber-500 flex items-center justify-center text-white font-semibold transition-all duration-300"
+                className="bg-orange-500 dark:bg-orange-600 flex items-center justify-center text-white font-semibold transition-all duration-300"
                 style={{ width: `${getPreferencePercentage('BOOK')}%` }}
               >
                 {getPreferencePercentage('BOOK') > 15 && (
@@ -130,8 +130,8 @@ export default function ComparisonVoting({ work, screenWork }: ComparisonVotingP
 
               {/* Screen Side */}
               <div
-                className="bg-cyan flex items-center justify-center text-white font-semibold transition-all duration-300"
-                style={{ width: `${getPreferencePercentage('SCREEN')}%` }}
+                className="flex items-center justify-center text-white font-semibold transition-all duration-300"
+                style={{ width: `${getPreferencePercentage('SCREEN')}%`, backgroundColor: '#a855f7' }}
               >
                 {getPreferencePercentage('SCREEN') > 15 && (
                   <span className="text-sm">{getPreferencePercentage('SCREEN')}%</span>
@@ -141,7 +141,7 @@ export default function ComparisonVoting({ work, screenWork }: ComparisonVotingP
               {/* Tie Section */}
               {getPreferencePercentage('TIE') > 0 && (
                 <div
-                  className="bg-purple flex items-center justify-center text-white font-semibold transition-all duration-300"
+                  className="bg-gray-400 dark:bg-gray-600 flex items-center justify-center text-white font-semibold transition-all duration-300"
                   style={{ width: `${getPreferencePercentage('TIE')}%` }}
                 >
                   {getPreferencePercentage('TIE') > 10 && (
@@ -154,16 +154,16 @@ export default function ComparisonVoting({ work, screenWork }: ComparisonVotingP
             {/* Labels */}
             <div className="flex items-center justify-between mt-1.5 text-xs text-muted">
               <span className="flex items-center gap-1">
-                <span className="w-2.5 h-2.5 bg-amber-500 rounded"></span>
+                <span style={{ width: '10px', height: '10px', backgroundColor: '#f97316', borderRadius: '2px', flexShrink: 0 }}></span>
                 Book
               </span>
               <span className="flex items-center gap-1">
-                <span className="w-2.5 h-2.5 bg-cyan rounded"></span>
+                <span style={{ width: '10px', height: '10px', backgroundColor: '#a855f7', borderRadius: '2px', flexShrink: 0 }}></span>
                 Screen
               </span>
               {getPreferencePercentage('TIE') > 0 && (
                 <span className="flex items-center gap-1">
-                  <span className="w-2.5 h-2.5 bg-purple rounded"></span>
+                  <span className="w-2.5 h-2.5 bg-gray-400 dark:bg-gray-600 rounded"></span>
                   Tie
                 </span>
               )}
@@ -227,7 +227,7 @@ export default function ComparisonVoting({ work, screenWork }: ComparisonVotingP
               disabled={!hasReadBook || !hasWatchedAdaptation}
               className={`px-3 py-2 rounded-lg border text-sm font-medium transition-colors ${
                 preference === 'BOOK'
-                  ? 'bg-link/10 border-link text-link'
+                  ? 'bg-orange-500/10 border-orange-500 text-orange-600 dark:text-orange-400'
                   : 'bg-surface border-border hover:bg-surface2 disabled:opacity-50'
               }`}
             >
@@ -239,7 +239,7 @@ export default function ComparisonVoting({ work, screenWork }: ComparisonVotingP
               disabled={!hasReadBook || !hasWatchedAdaptation}
               className={`px-3 py-2 rounded-lg border text-sm font-medium transition-colors ${
                 preference === 'SCREEN'
-                  ? 'bg-cyan/10 border-cyan text-cyan'
+                  ? 'bg-purple-500/10 border-purple-500 text-purple-600 dark:text-purple-400'
                   : 'bg-surface border-border hover:bg-surface2 disabled:opacity-50'
               }`}
             >
@@ -251,7 +251,7 @@ export default function ComparisonVoting({ work, screenWork }: ComparisonVotingP
               disabled={!hasReadBook || !hasWatchedAdaptation}
               className={`px-3 py-2 rounded-lg border text-sm font-medium transition-colors ${
                 preference === 'TIE'
-                  ? 'bg-purple/10 border-purple text-purple'
+                  ? 'bg-gray-400/10 border-gray-400 text-gray-600 dark:text-gray-400'
                   : 'bg-surface border-border hover:bg-surface2 disabled:opacity-50'
               }`}
             >

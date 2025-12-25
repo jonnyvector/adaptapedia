@@ -105,6 +105,47 @@ class DiffCommentSerializer(serializers.ModelSerializer):
     work_slug = serializers.CharField(source='diff_item.work.slug', read_only=True)
     screen_work_title = serializers.CharField(source='diff_item.screen_work.title', read_only=True)
     screen_work_slug = serializers.CharField(source='diff_item.screen_work.slug', read_only=True)
+    top_badge = serializers.SerializerMethodField()
+
+    def get_top_badge(self, obj):
+        """Get the user's most prestigious badge to display next to their name."""
+        from users.models import UserBadge, BadgeType
+
+        # Badge priority order (higher = more prestigious)
+        badge_priority = {
+            # Quality badges (highest priority)
+            BadgeType.HIGH_ACCURACY: 100,
+            BadgeType.WELL_SOURCED: 99,
+            BadgeType.CONSENSUS_BUILDER: 98,
+            # High milestone badges
+            BadgeType.VOTER_100: 49,
+            # Medium milestone badges
+            BadgeType.VOTER_50: 29,
+            BadgeType.COMMENTER_50: 28,
+            BadgeType.DIFF_CREATOR_25: 27,
+            # Low milestone badges
+            BadgeType.VOTER_10: 14,
+            BadgeType.COMMENTER_10: 13,
+            BadgeType.DIFF_CREATOR_5: 12,
+            # Special badges
+            BadgeType.EARLY_ADOPTER: 80,
+            BadgeType.WEEKLY_CONTRIBUTOR: 35,
+            # First badges (lowest priority)
+            BadgeType.FIRST_DIFF: 5,
+            BadgeType.FIRST_VOTE: 4,
+            BadgeType.FIRST_COMMENT: 3,
+        }
+
+        badges = UserBadge.objects.filter(user=obj.user).select_related('user')
+        if not badges.exists():
+            return None
+
+        # Find the most prestigious badge
+        top_badge = max(badges, key=lambda b: badge_priority.get(b.badge_type, 0))
+        return {
+            'badge_type': top_badge.badge_type,
+            'badge_display': top_badge.get_badge_type_display(),
+        }
 
     class Meta:
         """Meta options for DiffCommentSerializer."""
@@ -115,6 +156,8 @@ class DiffCommentSerializer(serializers.ModelSerializer):
             'diff_item',
             'user',
             'username',
+            'top_badge',
+            'parent',
             'body',
             'spoiler_scope',
             'status',

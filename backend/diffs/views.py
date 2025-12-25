@@ -8,6 +8,7 @@ from django.core.cache import cache
 from .models import DiffItem, DiffVote, DiffComment, SpoilerScope, ComparisonVote
 from .serializers import DiffItemSerializer, DiffVoteSerializer, DiffCommentSerializer, ComparisonVoteSerializer
 from .services import DiffService
+from .permissions import CanEditDiff, CanMergeDiff
 
 
 class DiffItemViewSet(viewsets.ModelViewSet):
@@ -20,6 +21,12 @@ class DiffItemViewSet(viewsets.ModelViewSet):
     permission_classes = [permissions.IsAuthenticatedOrReadOnly]
     filter_backends = [DjangoFilterBackend]
     filterset_fields = ['work', 'screen_work', 'category', 'spoiler_scope']
+
+    def get_permissions(self):
+        """Use different permissions based on action."""
+        if self.action in ['update', 'partial_update']:
+            return [CanEditDiff()]
+        return super().get_permissions()
 
     def get_queryset(self):
         """Filter queryset based on spoiler scope and apply ordering."""

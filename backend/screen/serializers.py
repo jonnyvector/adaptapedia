@@ -22,6 +22,8 @@ class ScreenWorkSerializer(serializers.ModelSerializer):
             'tmdb_id',
             'tmdb_popularity',
             'poster_url',
+            'primary_genre',
+            'genres',
             'created_at',
             'updated_at',
         ]
@@ -51,6 +53,8 @@ class RankedAdaptationSerializer(serializers.ModelSerializer):
             'tmdb_id',
             'tmdb_popularity',
             'poster_url',
+            'primary_genre',
+            'genres',
             'engagement_score',
             'rank_score',
             'diff_count',

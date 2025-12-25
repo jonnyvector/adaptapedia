@@ -245,13 +245,14 @@ a:hover {
   border: 1px solid var(--border-strong);
   border-radius: 12px;
   padding: 24px;
-  transition: all 0.15s ease;
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
   position: relative;
 }
 
 .card:hover {
   border-color: var(--border-accent);
-  box-shadow: var(--shadow-md);
+  box-shadow: var(--shadow-lg);
+  transform: translateY(-2px);
 }
 
 /* Bold accent bar on hover */
@@ -265,7 +266,7 @@ a:hover {
   background: var(--accent-blue);
   border-radius: 12px 0 0 12px;
   opacity: 0;
-  transition: opacity 0.15s ease;
+  transition: opacity 0.2s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 .card:hover::before {
@@ -279,7 +280,7 @@ a:hover {
 }
 
 [data-theme="dark"] .card:hover {
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.4);
 }
 
 .card-subtle {
@@ -290,50 +291,316 @@ a:hover {
 }
 
 /* ═══════════════════════════════════════════════════════════
-   BUTTONS - Clear Actions
+   BUTTON DESIGN SYSTEM
+   Consistent, reusable button variants
    ═══════════════════════════════════════════════════════════ */
 
+/* Base Button Styles */
 button, .btn {
   font-family: inherit;
-  font-size: 15px;
   font-weight: 600;
-  padding: 11px 22px;
-  border-radius: 8px;
-  border: none;
   cursor: pointer;
-  transition: all 0.15s ease;
+  transition: all 200ms cubic-bezier(0.4, 0, 0.2, 1);
   text-decoration: none;
-  display: inline-block;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
   line-height: 1.4;
   letter-spacing: -0.01em;
+  white-space: nowrap;
+  user-select: none;
+  outline: none;
 }
 
-button, .btn {
-  background: var(--surface);
-  color: var(--text);
-  border: 1px solid var(--border-strong);
+/* Button Sizes */
+.btn-sm {
+  font-size: 13px;
+  padding: 6px 12px;
+  border-radius: 6px;
 }
 
-button:hover, .btn:hover {
-  background: var(--bg-subtle);
-  border-color: var(--text-secondary);
-  text-decoration: none;
+.btn-md, button, .btn {
+  font-size: 15px;
+  padding: 10px 20px;
+  border-radius: 8px;
 }
 
-button.primary, .btn.primary {
+.btn-lg {
+  font-size: 16px;
+  padding: 12px 24px;
+  border-radius: 10px;
+}
+
+/* Button Variants */
+
+/* Primary - Main CTA */
+.btn-primary {
   background: var(--accent-blue);
   color: white;
   border: none;
-  font-weight: 600;
+  box-shadow: 0 2px 4px rgba(30, 64, 175, 0.1);
 }
 
-button.primary:hover, .btn.primary:hover {
+.btn-primary:hover {
   background: var(--accent-blue-hover);
+  box-shadow: 0 4px 8px rgba(30, 64, 175, 0.2);
+  transform: translateY(-1px);
 }
 
-button:disabled {
+.btn-primary:active {
+  transform: translateY(0);
+  box-shadow: 0 2px 4px rgba(30, 64, 175, 0.1);
+}
+
+/* Secondary - Alternative action */
+.btn-secondary {
+  background: transparent;
+  color: var(--text);
+  border: 2px solid var(--border-strong);
+}
+
+.btn-secondary:hover {
+  background: var(--surface);
+  border-color: var(--accent-blue);
+  color: var(--accent-blue);
+}
+
+/* Ghost - Subtle action */
+.btn-ghost {
+  background: transparent;
+  color: var(--accent-blue);
+  border: none;
+}
+
+.btn-ghost:hover {
+  background: var(--accent-blue-light);
+}
+
+/* Outline - Outlined variant */
+.btn-outline {
+  background: transparent;
+  color: var(--accent-blue);
+  border: 2px solid var(--accent-blue);
+}
+
+.btn-outline:hover {
+  background: var(--accent-blue);
+  color: white;
+}
+
+/* Success - Positive actions */
+.btn-success {
+  background: var(--accent-emerald);
+  color: white;
+  border: none;
+  box-shadow: 0 2px 4px rgba(16, 185, 129, 0.1);
+}
+
+.btn-success:hover {
+  background: #0ea373;
+  box-shadow: 0 4px 8px rgba(16, 185, 129, 0.2);
+  transform: translateY(-1px);
+}
+
+/* Danger - Destructive actions */
+.btn-danger {
+  background: var(--accent-rose);
+  color: white;
+  border: none;
+  box-shadow: 0 2px 4px rgba(244, 63, 94, 0.1);
+}
+
+.btn-danger:hover {
+  background: #e11d48;
+  box-shadow: 0 4px 8px rgba(244, 63, 94, 0.2);
+  transform: translateY(-1px);
+}
+
+/* Warning - Attention actions */
+.btn-warning {
+  background: var(--accent-amber);
+  color: white;
+  border: none;
+  box-shadow: 0 2px 4px rgba(245, 158, 11, 0.1);
+}
+
+.btn-warning:hover {
+  background: #d97706;
+  box-shadow: 0 4px 8px rgba(245, 158, 11, 0.2);
+  transform: translateY(-1px);
+}
+
+/* Disabled State */
+button:disabled,
+.btn:disabled,
+.btn-primary:disabled,
+.btn-secondary:disabled,
+.btn-ghost:disabled,
+.btn-outline:disabled,
+.btn-success:disabled,
+.btn-danger:disabled {
   opacity: 0.4;
   cursor: not-allowed;
+  transform: none;
+  box-shadow: none;
+}
+
+button:disabled:hover,
+.btn:disabled:hover {
+  background: var(--surface);
+  border-color: var(--border-strong);
+}
+
+.btn-primary:disabled:hover {
+  background: var(--accent-blue);
+}
+
+/* Button with icon helpers */
+.btn-icon-only {
+  padding: 10px;
+  aspect-ratio: 1;
+}
+
+.btn-icon-only.btn-sm {
+  padding: 6px;
+}
+
+.btn-icon-only.btn-lg {
+  padding: 12px;
+}
+
+/* ═══════════════════════════════════════════════════════════
+   ICON DESIGN SYSTEM
+   Standardized icon sizes and interactive states
+   ═══════════════════════════════════════════════════════════ */
+
+/* Icon Sizes */
+.icon-xs {
+  width: 12px;
+  height: 12px;
+}
+
+.icon-sm {
+  width: 16px;
+  height: 16px;
+}
+
+.icon-md, .icon {
+  width: 20px;
+  height: 20px;
+}
+
+.icon-lg {
+  width: 24px;
+  height: 24px;
+}
+
+.icon-xl {
+  width: 32px;
+  height: 32px;
+}
+
+.icon-2xl {
+  width: 48px;
+  height: 48px;
+}
+
+/* Interactive Icon Buttons */
+.icon-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 8px;
+  border-radius: 6px;
+  color: var(--text-secondary);
+  transition: all 200ms cubic-bezier(0.4, 0, 0.2, 1);
+  cursor: pointer;
+  background: transparent;
+  border: none;
+}
+
+.icon-btn:hover {
+  background: var(--bg-subtle);
+  color: var(--text);
+}
+
+.icon-btn:active {
+  transform: scale(0.95);
+}
+
+.icon-btn-primary {
+  color: var(--accent-blue);
+}
+
+.icon-btn-primary:hover {
+  background: var(--accent-blue-light);
+  color: var(--accent-blue-hover);
+}
+
+/* Standalone clickable icons */
+.icon-interactive {
+  transition: transform 200ms cubic-bezier(0.4, 0, 0.2, 1);
+  cursor: pointer;
+}
+
+.icon-interactive:hover {
+  transform: scale(1.1);
+}
+
+.icon-interactive:active {
+  transform: scale(0.95);
+}
+
+/* ═══════════════════════════════════════════════════════════
+   HOVER EFFECT SYSTEM
+   Consistent interactions across components
+   ═══════════════════════════════════════════════════════════ */
+
+/* Card Hover Effects */
+.card-interactive {
+  transition: all 200ms cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.card-interactive:hover {
+  box-shadow: var(--shadow-lg);
+  transform: translateY(-2px);
+  border-color: var(--accent-blue);
+}
+
+.card-interactive:active {
+  transform: translateY(0);
+}
+
+/* Link Hover Effects */
+.link-primary {
+  color: var(--accent-blue);
+  transition: color 200ms cubic-bezier(0.4, 0, 0.2, 1);
+  text-decoration: none;
+}
+
+.link-primary:hover {
+  color: var(--accent-blue-hover);
+  text-decoration: underline;
+}
+
+.link-subtle {
+  color: var(--text-secondary);
+  transition: color 200ms cubic-bezier(0.4, 0, 0.2, 1);
+  text-decoration: none;
+}
+
+.link-subtle:hover {
+  color: var(--text);
+}
+
+/* Image Hover Effects */
+.img-zoom {
+  transition: transform 300ms cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.img-zoom:hover {
+  transform: scale(1.05);
 }
 
 /* ═══════════════════════════════════════════════════════════
@@ -685,6 +952,121 @@ pre code {
   background-size: 200% 200%;
   animation: gradient 3s ease infinite;
 }
+
+/* Linear-style animations - disabled for now */
+/*
+@keyframes textReveal {
+  0% {
+    opacity: 0;
+    transform: translateY(20px);
+    filter: blur(10px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+    filter: blur(0px);
+  }
+}
+
+@keyframes textRevealMask {
+  0% {
+    clip-path: inset(0 100% 0 0);
+  }
+  100% {
+    clip-path: inset(0 0 0 0);
+  }
+}
+
+@keyframes gradientReveal {
+  0% {
+    background-position: -200% center;
+    opacity: 0;
+  }
+  50% {
+    opacity: 1;
+  }
+  100% {
+    background-position: 200% center;
+    opacity: 1;
+  }
+}
+
+.animate-text-reveal {
+  animation: textReveal 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+.animate-gradient-reveal {
+  background: linear-gradient(90deg,
+    transparent 0%,
+    var(--text) 30%,
+    var(--text) 70%,
+    transparent 100%);
+  background-size: 200% 100%;
+  background-clip: text;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  animation: gradientReveal 1.2s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+@keyframes fadeUp {
+  from {
+    opacity: 0;
+    transform: translateY(24px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.animate-fade-up {
+  animation: fadeUp 0.6s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+@keyframes scaleIn {
+  from {
+    opacity: 0;
+    transform: scale(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+.animate-scale-in {
+  animation: scaleIn 0.5s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+.stagger-1 {
+  animation-delay: 0.15s;
+}
+
+.stagger-2 {
+  animation-delay: 0.3s;
+}
+
+.stagger-3 {
+  animation-delay: 0.45s;
+}
+
+.stagger-4 {
+  animation-delay: 0.6s;
+}
+
+.stagger-5 {
+  animation-delay: 0.75s;
+}
+
+.stagger-6 {
+  animation-delay: 0.9s;
+}
+
+.will-animate {
+  opacity: 0;
+  transform: translateY(24px);
+}
+*/
 
 /* ═══════════════════════════════════════════════════════════
    REDDIT-STYLE COMMENT THREADING

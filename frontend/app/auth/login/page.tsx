@@ -11,7 +11,8 @@ function LoginPageContent(): JSX.Element {
   const searchParams = useSearchParams();
   const { isAuthenticated } = useAuth();
   const router = useRouter();
-  const redirectTo = searchParams.get('redirect') || '/';
+  // Check both 'redirect' and 'returnUrl' for backward compatibility
+  const redirectTo = searchParams.get('redirect') || searchParams.get('returnUrl') || '/';
 
   useEffect(() => {
     if (isAuthenticated) {

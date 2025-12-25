@@ -103,6 +103,10 @@ export interface Comment {
   diff_item: number;
   user: number;
   username: string;
+  top_badge?: {
+    badge_type: BadgeType;
+    badge_display: string;
+  } | null;
   body: string;
   spoiler_scope: SpoilerScope;
   status: string;
@@ -123,6 +127,16 @@ export interface User {
   reputation_points: number;
   spoiler_preference: string;
   date_joined: string;
+  permissions?: {
+    can_edit_diffs: boolean;
+    can_merge_diffs: boolean;
+    can_moderate: boolean;
+    next_unlock?: {
+      level: number;
+      permission: string;
+      points_needed: number;
+    } | null;
+  };
 }
 
 export interface UserProfile {

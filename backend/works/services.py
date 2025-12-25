@@ -197,11 +197,11 @@ class SearchService:
         return screen_works
 
     @staticmethod
-    def search_works_with_adaptations(query: str, limit: int = 20) -> QuerySet:
+    def search_works_with_adaptations(query: str, limit: int = 20) -> tuple[QuerySet, int]:
         """
         Search for works with their ranked adaptations.
 
-        Returns Work queryset with ranked_adaptations attribute attached.
+        Returns tuple of (Work queryset with ranked_adaptations, total_count).
         Uses fuzzy matching with PostgreSQL trigrams for typo tolerance.
         """
         from django.contrib.postgres.search import TrigramSimilarity
@@ -222,10 +222,11 @@ class SearchService:
 
         # If we have good exact matches, return those
         if exact_matches.count() >= 3:
+            total_count = exact_matches.count()
             works = exact_matches.order_by('-relevance_rank', '-created_at')[:limit]
         else:
             # Use fuzzy matching with trigrams
-            works = Work.objects.annotate(
+            fuzzy_matches = Work.objects.annotate(
                 title_similarity=TrigramSimilarity('title', query),
                 author_similarity=TrigramSimilarity('author', query),
                 # Calculate max similarity across fields
@@ -238,13 +239,16 @@ class SearchService:
                 ),
             ).filter(
                 Q(title_similarity__gte=0.2) | Q(author_similarity__gte=0.2)
-            ).order_by('-max_similarity', '-created_at')[:limit]
+            ).order_by('-max_similarity', '-created_at')
+
+            total_count = fuzzy_matches.count()
+            works = fuzzy_matches[:limit]
 
         # Attach ranked adaptations to each work
         for work in works:
             work.ranked_adaptations = list(SearchService.get_ranked_adaptations_for_work(work))
 
-        return works
+        return works, total_count
 
     @staticmethod
     def search_screen_works(query: str, year: Optional[int] = None, limit: int = 20) -> QuerySet:
