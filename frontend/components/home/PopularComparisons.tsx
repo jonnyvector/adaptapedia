@@ -141,7 +141,7 @@ export default function PopularComparisons() {
             {/* Book Cover and Movie Poster side by side */}
             <div className="flex h-full">
               {/* Book Cover - Left Half */}
-              <div className="flex-1 relative overflow-hidden">
+              <div className="flex-1 relative overflow-hidden border-r-2 border-white/30">
                 {comparison.book.cover_url ? (
                   <Image
                     src={comparison.book.cover_url}
@@ -156,7 +156,6 @@ export default function PopularComparisons() {
                     No Cover
                   </div>
                 )}
-                <div className="absolute inset-0 bg-gradient-to-r from-transparent to-black/30" />
                 {/* Book label */}
                 <div className="absolute top-1 left-1">
                   <span className="text-[9px] font-mono font-semibold px-1.5 py-0.5 bg-black/60 text-white rounded backdrop-blur-sm">
@@ -165,10 +164,10 @@ export default function PopularComparisons() {
                 </div>
               </div>
 
-              {/* Arrow Divider */}
-              <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
-                <div className="bg-link text-white px-2 py-1 rounded-full shadow-lg font-bold text-xs">
-                  →
+              {/* VS Divider */}
+              <div className="absolute inset-0 flex items-center justify-center pointer-events-none z-20">
+                <div className="bg-link text-white px-2.5 py-1 rounded-full shadow-lg font-bold text-xs">
+                  VS
                 </div>
               </div>
 
@@ -188,7 +187,6 @@ export default function PopularComparisons() {
                     No Poster
                   </div>
                 )}
-                <div className="absolute inset-0 bg-gradient-to-l from-transparent to-black/30" />
                 {/* Screen label */}
                 <div className="absolute top-1 right-1">
                   <span className="text-[9px] font-mono font-semibold px-1.5 py-0.5 bg-black/60 text-white rounded backdrop-blur-sm">
