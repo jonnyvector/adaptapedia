@@ -3,7 +3,6 @@ import { Sora, Space_Grotesk, JetBrains_Mono } from 'next/font/google';
 import './globals.css';
 import Header from '@/components/layout/Header';
 import Footer from '@/components/layout/Footer';
-import HomePageGradient from '@/components/layout/HomePageGradient';
 import { AuthProvider } from '@/lib/auth-context';
 import { ToastProvider } from '@/lib/toast-context';
 
@@ -26,8 +25,8 @@ const jetbrainsMono = JetBrains_Mono({
 });
 
 export const metadata: Metadata = {
-  title: 'Adaptapedia',
-  description: 'Compare books and their screen adaptations',
+  title: 'Book vs. Movie',
+  description: 'Compare books and their movie adaptations - community-powered database of differences',
 };
 
 export default function RootLayout({
@@ -52,10 +51,9 @@ export default function RootLayout({
           }}
         />
       </head>
-      <body className={`flex flex-col min-h-screen ${sora.variable} ${spaceGrotesk.variable} ${jetbrainsMono.variable}`} suppressHydrationWarning>
+      <body className={`flex flex-col min-h-screen home-page-gradient ${sora.variable} ${spaceGrotesk.variable} ${jetbrainsMono.variable}`} suppressHydrationWarning>
         <ToastProvider>
           <AuthProvider>
-            <HomePageGradient />
             <Header />
             <div className="flex-1">
               {children}

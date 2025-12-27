@@ -5,6 +5,7 @@ import type { Work, ScreenWork, ComparisonVoteStats } from '@/lib/types';
 import { api } from '@/lib/api';
 import ComparisonVoting from './ComparisonVoting';
 import { BookOpenIcon, FilmIcon } from '@/components/ui/Icons';
+import { calculateVotePercentage } from '@/lib/vote-utils';
 
 interface CompactVoteStripProps {
   work: Work;
@@ -19,29 +20,38 @@ export default function CompactVoteStrip({
   const [stats, setStats] = useState<ComparisonVoteStats | null>(null);
   const [loading, setLoading] = useState(true);
 
+  // Auto-expand if there's a pending comparison vote
   useEffect(() => {
-    const fetchStats = async () => {
-      try {
-        const data = await api.comparisonVotes.getStats(work.id, screenWork.id);
-        setStats(data);
-      } catch (err) {
-        console.error('Failed to fetch voting stats:', err);
-      } finally {
-        setLoading(false);
+    if (typeof window !== 'undefined') {
+      const pendingVoteKey = `pendingComparisonVote_${work.id}_${screenWork.id}`;
+      if (sessionStorage.getItem(pendingVoteKey)) {
+        setIsExpanded(true);
       }
-    };
+    }
+  }, [work.id, screenWork.id]);
 
+  const fetchStats = async () => {
+    try {
+      const data = await api.comparisonVotes.getStats(work.id, screenWork.id);
+      setStats(data);
+    } catch (err) {
+      console.error('Failed to fetch voting stats:', err);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
     fetchStats();
   }, [work.id, screenWork.id]);
 
-  const getPercentage = (count: number): number => {
-    if (!stats || stats.total_votes === 0) return 0;
-    return Math.round((count / stats.total_votes) * 100);
+  const handleVoteSubmitted = () => {
+    fetchStats();
   };
 
-  const bookPct = stats ? getPercentage(stats.preference_breakdown.BOOK) : 0;
-  const screenPct = stats ? getPercentage(stats.preference_breakdown.SCREEN) : 0;
-  const tiePct = stats ? getPercentage(stats.preference_breakdown.TIE) : 0;
+  const bookPct = stats ? calculateVotePercentage(stats.preference_breakdown.BOOK, stats.total_votes) : 0;
+  const screenPct = stats ? calculateVotePercentage(stats.preference_breakdown.SCREEN, stats.total_votes) : 0;
+  const tiePct = stats ? calculateVotePercentage(stats.preference_breakdown.TIE, stats.total_votes) : 0;
   const totalVotes = stats?.total_votes || 0;
 
   if (loading) {
@@ -74,7 +84,7 @@ export default function CompactVoteStrip({
             </button>
           </div>
           <div style={{ animation: 'fadeIn 0.4s ease-out 0.1s backwards' }}>
-            <ComparisonVoting work={work} screenWork={screenWork} />
+            <ComparisonVoting work={work} screenWork={screenWork} onVoteSubmitted={handleVoteSubmitted} />
           </div>
         </div>
       ) : (
@@ -87,7 +97,7 @@ export default function CompactVoteStrip({
       {totalVotes > 0 ? (
         <>
           {/* Header Row */}
-          <div className="flex items-center justify-between mb-2">
+          <div className="flex items-center justify-between mb-3">
             <div className="flex items-center gap-2">
               <span className="text-xs font-semibold text-muted uppercase tracking-wide">Which version did people prefer?</span>
               {hasLowSampleSize && (
@@ -106,24 +116,24 @@ export default function CompactVoteStrip({
             </button>
           </div>
 
-          {/* Full-width Bar */}
-          <div className="relative h-10 bg-gray-200 dark:bg-gray-800 rounded-lg overflow-hidden mb-2 shadow-inner">
-            {/* Book segment */}
+          {/* Blue-tinted Meter Bar */}
+          <div className="relative h-12 bg-gray-200 dark:bg-gray-800 rounded-lg overflow-hidden mb-2.5 shadow-inner">
+            {/* Book segment - darker blue */}
             <div
-              className="absolute left-0 top-0 h-full bg-orange-500 dark:bg-orange-600 transition-all duration-500"
+              className="absolute left-0 top-0 h-full bg-blue-600 dark:bg-blue-500 transition-all duration-500"
               style={{ width: `${bookPct}%` }}
               aria-label={`Book preference: ${bookPct}%`}
             />
-            {/* Screen segment */}
+            {/* Screen segment - lighter blue */}
             <div
-              className="absolute right-0 top-0 h-full transition-all duration-500"
-              style={{ width: `${screenPct}%`, backgroundColor: '#a855f7' }}
+              className="absolute right-0 top-0 h-full bg-blue-400 dark:bg-blue-300 transition-all duration-500"
+              style={{ width: `${screenPct}%` }}
               aria-label={`Screen preference: ${screenPct}%`}
             />
-            {/* Tie segment (if any) */}
+            {/* Tie segment (if any) - neutral blue */}
             {tiePct > 0 && (
               <div
-                className="absolute top-0 h-full bg-gray-400 dark:bg-gray-600 transition-all duration-500"
+                className="absolute top-0 h-full bg-blue-300 dark:bg-blue-400 transition-all duration-500"
                 style={{
                   left: `${bookPct}%`,
                   width: `${tiePct}%`
@@ -132,48 +142,44 @@ export default function CompactVoteStrip({
               />
             )}
 
-            {/* Labels on bar */}
-            <div className="absolute inset-0 flex items-center justify-between px-3 text-sm font-bold">
-              <span className={`flex items-center gap-1.5 ${bookPct > 15 ? 'text-white' : 'text-transparent'}`}>
-                <BookOpenIcon className="w-4 h-4" />
-                Book
-              </span>
-              <span className={`flex items-center gap-1.5 ${screenPct > 15 ? 'text-white' : 'text-transparent'}`}>
-                Screen
-                <FilmIcon className="w-4 h-4" />
-              </span>
+            {/* Percentages inside segments */}
+            <div className="absolute inset-0 flex items-center justify-between px-4 text-sm font-bold">
+              <div className={`flex items-center gap-2 ${bookPct > 12 ? 'opacity-100' : 'opacity-0'}`}>
+                <BookOpenIcon className="w-4 h-4 text-white" />
+                <span className="text-white">Book {bookPct}%</span>
+              </div>
+              <div className={`flex items-center gap-2 ${screenPct > 12 ? 'opacity-100' : 'opacity-0'}`}>
+                <span className="text-white">Screen {screenPct}%</span>
+                <FilmIcon className="w-4 h-4 text-white" />
+              </div>
             </div>
           </div>
 
-          {/* Stats Row */}
-          <div className="flex items-center justify-between text-xs">
+          {/* Stats Row - Compact */}
+          <div className="flex items-center justify-between text-xs text-muted">
             <div className="flex items-center gap-3">
-              <span className="flex items-center gap-1.5">
-                <span style={{ width: '10px', height: '10px', borderRadius: '50%', backgroundColor: '#f97316', flexShrink: 0 }}></span>
-                <span className="font-semibold text-orange-600 dark:text-orange-400">Book {bookPct}%</span>
-              </span>
-              <span className="flex items-center gap-1.5">
-                <span style={{ width: '10px', height: '10px', borderRadius: '50%', backgroundColor: '#a855f7', flexShrink: 0 }}></span>
-                <span className="font-semibold text-purple-600 dark:text-purple-400">Screen {screenPct}%</span>
-              </span>
-            </div>
-            <div className="flex items-center gap-3">
-              {stats?.faithfulness.average !== null && (
-                <div className="flex items-center gap-2">
-                  <span className="text-muted">Faithfulness:</span>
-                  <span className="text-2xl font-black text-link">{stats.faithfulness.average.toFixed(1)}</span>
-                  <span className="text-sm text-muted">/5</span>
+              {stats && stats.faithfulness.average !== null && (
+                <div className="flex items-center gap-1.5">
+                  <span>Faithfulness:</span>
+                  <span className="text-lg font-black text-link">{stats.faithfulness.average.toFixed(1)}</span>
+                  <span>/5</span>
                 </div>
               )}
-              <span className="text-muted">
-                {totalVotes} {totalVotes === 1 ? 'vote' : 'votes'}
-              </span>
             </div>
+            <span>
+              {totalVotes} {totalVotes === 1 ? 'vote' : 'votes'}
+            </span>
           </div>
         </>
       ) : (
         <div className="text-center py-6">
           <p className="text-sm text-muted mb-3">No community votes yet. Be the first!</p>
+          <button
+            onClick={() => setIsExpanded(true)}
+            className="btn-primary btn-sm"
+          >
+            Cast your vote
+          </button>
         </div>
       )}
         </div>

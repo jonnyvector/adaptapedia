@@ -17,6 +17,7 @@ interface FormData {
   claim: string;
   detail: string;
   spoiler_scope: SpoilerScope;
+  image: File | null;
 }
 
 const DIFF_CATEGORIES: { value: DiffCategory; label: string }[] = [
@@ -45,7 +46,9 @@ export default function AddDiffForm({ work, screenWork }: AddDiffFormProps): JSX
     claim: '',
     detail: '',
     spoiler_scope: 'NONE',
+    image: null,
   });
+  const [imagePreview, setImagePreview] = useState<string | null>(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [isDirty, setIsDirty] = useState(false);
@@ -97,6 +100,41 @@ export default function AddDiffForm({ work, screenWork }: AddDiffFormProps): JSX
     setError(null);
   };
 
+  const handleFileChange = (e: ChangeEvent<HTMLInputElement>): void => {
+    const file = e.target.files?.[0];
+    if (!file) {
+      setFormData((prev) => ({ ...prev, image: null }));
+      setImagePreview(null);
+      return;
+    }
+
+    // Validate file size (max 5MB)
+    if (file.size > 5 * 1024 * 1024) {
+      setError('Image size must be less than 5MB.');
+      e.target.value = '';
+      return;
+    }
+
+    // Validate file type
+    const allowedTypes = ['image/jpeg', 'image/jpg', 'image/png', 'image/webp'];
+    if (!allowedTypes.includes(file.type)) {
+      setError('Only JPEG, PNG, and WebP images are allowed.');
+      e.target.value = '';
+      return;
+    }
+
+    setFormData((prev) => ({ ...prev, image: file }));
+    setIsDirty(true);
+    setError(null);
+
+    // Create preview URL
+    const reader = new FileReader();
+    reader.onloadend = () => {
+      setImagePreview(reader.result as string);
+    };
+    reader.readAsDataURL(file);
+  };
+
   const validateForm = (): string | null => {
     if (!formData.category) {
       return 'Please select a category.';
@@ -126,14 +164,20 @@ export default function AddDiffForm({ work, screenWork }: AddDiffFormProps): JSX
     setError(null);
 
     try {
-      await api.diffs.create({
-        work: work.id,
-        screen_work: screenWork.id,
-        category: formData.category,
-        claim: formData.claim,
-        detail: formData.detail,
-        spoiler_scope: formData.spoiler_scope,
-      });
+      // Use FormData for multipart upload
+      const submitData = new FormData();
+      submitData.append('work', work.id.toString());
+      submitData.append('screen_work', screenWork.id.toString());
+      submitData.append('category', formData.category as string);
+      submitData.append('claim', formData.claim);
+      submitData.append('detail', formData.detail);
+      submitData.append('spoiler_scope', formData.spoiler_scope);
+
+      if (formData.image) {
+        submitData.append('image', formData.image);
+      }
+
+      await api.diffs.createWithImage(submitData);
 
       // Clear draft from localStorage
       const draftKey = `diff-draft-${work.id}-${screenWork.id}`;
@@ -170,7 +214,9 @@ export default function AddDiffForm({ work, screenWork }: AddDiffFormProps): JSX
         claim: '',
         detail: '',
         spoiler_scope: 'NONE',
+        image: null,
       });
+      setImagePreview(null);
       setIsDirty(false);
       const draftKey = `diff-draft-${work.id}-${screenWork.id}`;
       localStorage.removeItem(draftKey);
@@ -298,6 +344,46 @@ export default function AddDiffForm({ work, screenWork }: AddDiffFormProps): JSX
               {detailCharCount}/1000
             </span>
           </div>
+        </div>
+
+        {/* Image Upload */}
+        <div>
+          <label htmlFor="image" className="block text-sm font-medium mb-2">
+            Image (Optional)
+          </label>
+          <input
+            type="file"
+            id="image"
+            name="image"
+            accept="image/jpeg,image/jpg,image/png,image/webp"
+            onChange={handleFileChange}
+            className="w-full px-3 py-3 text-base bg-surface text-foreground border border-border rounded-md focus:outline-none focus:ring-2 focus:ring-link file:mr-4 file:py-2 file:px-4 file:rounded-md file:border-0 file:text-sm file:font-semibold file:bg-link/10 file:text-link hover:file:bg-link/20 min-h-[44px]"
+          />
+          <p className="mt-1 text-xs sm:text-sm text-muted">
+            Optional: Add an image to illustrate the difference (max 5MB, JPEG/PNG/WebP).
+          </p>
+          {imagePreview && (
+            <div className="mt-3 relative inline-block">
+              <img
+                src={imagePreview}
+                alt="Preview"
+                className="max-w-full max-h-64 rounded-md border border-border"
+              />
+              <button
+                type="button"
+                onClick={() => {
+                  setFormData((prev) => ({ ...prev, image: null }));
+                  setImagePreview(null);
+                  const fileInput = document.getElementById('image') as HTMLInputElement;
+                  if (fileInput) fileInput.value = '';
+                }}
+                className="absolute top-2 right-2 bg-danger text-white rounded-full w-8 h-8 flex items-center justify-center hover:bg-danger/90 transition-colors"
+                aria-label="Remove image"
+              >
+                ×
+              </button>
+            </div>
+          )}
         </div>
 
         {/* Spoiler Scope */}

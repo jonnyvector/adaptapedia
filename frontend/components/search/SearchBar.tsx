@@ -27,6 +27,7 @@ export default function SearchBar({
   const [showDropdown, setShowDropdown] = useState(false);
   const inputRef = useRef<HTMLInputElement>(null);
   const containerRef = useRef<HTMLDivElement>(null);
+  const justSubmittedRef = useRef(false);
 
   // Sync state when defaultValue changes (e.g., navigating via link)
   useEffect(() => {
@@ -94,8 +95,17 @@ export default function SearchBar({
         params.set('type', currentType);
       }
 
-      router.push(`/search?${params.toString()}`);
+      // Close dropdown and blur input
       setShowDropdown(false);
+      inputRef.current?.blur();
+      justSubmittedRef.current = true;
+
+      // Reset the flag after a short delay to allow normal focus behavior later
+      setTimeout(() => {
+        justSubmittedRef.current = false;
+      }, 500);
+
+      router.push(`/search?${params.toString()}`);
     }
   };
 
@@ -120,7 +130,12 @@ export default function SearchBar({
           type="text"
           value={query}
           onChange={(e) => setQuery(e.target.value)}
-          onFocus={() => query.length >= 2 && setShowDropdown(true)}
+          onFocus={() => {
+            // Don't show dropdown immediately after submitting search
+            if (!justSubmittedRef.current && query.length >= 2) {
+              setShowDropdown(true);
+            }
+          }}
           placeholder={placeholder}
           autoFocus={autoFocus}
           className="w-full !pl-14 !pr-12 !py-3 sm:!py-3.5 text-base border border-border rounded-lg focus:outline-none focus:ring-2 focus:ring-link focus:border-transparent bg-surface text-foreground"

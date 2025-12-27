@@ -191,8 +191,8 @@ body.home-page-gradient::before {
   position: absolute;
   inset: 0;
   background-image:
-    linear-gradient(rgba(59, 130, 246, 0.03) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(59, 130, 246, 0.03) 1px, transparent 1px);
+    linear-gradient(rgba(59, 130, 246, 0.015) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(59, 130, 246, 0.015) 1px, transparent 1px);
   background-size: 50px 50px;
   pointer-events: none;
   z-index: 0;
@@ -208,8 +208,8 @@ body.home-page-gradient::before {
 
 [data-theme="dark"] body.home-page-gradient::before {
   background-image:
-    linear-gradient(rgba(96, 165, 250, 0.05) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(96, 165, 250, 0.05) 1px, transparent 1px);
+    linear-gradient(rgba(96, 165, 250, 0.025) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(96, 165, 250, 0.025) 1px, transparent 1px);
   background-size: 50px 50px;
 }
 
@@ -223,8 +223,8 @@ body.home-page-gradient::before {
 
   :root:not([data-theme]) body.home-page-gradient::before {
     background-image:
-      linear-gradient(rgba(96, 165, 250, 0.05) 1px, transparent 1px),
-      linear-gradient(90deg, rgba(96, 165, 250, 0.05) 1px, transparent 1px);
+      linear-gradient(rgba(96, 165, 250, 0.025) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(96, 165, 250, 0.025) 1px, transparent 1px);
     background-size: 50px 50px;
   }
 }

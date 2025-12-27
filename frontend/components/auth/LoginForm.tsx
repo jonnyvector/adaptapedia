@@ -28,7 +28,9 @@ export default function LoginForm({ redirectTo = '/' }: LoginFormProps): JSX.Ele
 
     try {
       await login(formData);
-      router.push(redirectTo);
+
+      // Use window.location.href for full page reload to ensure proper hydration
+      window.location.href = redirectTo;
     } catch (err) {
       if (err instanceof ApiError) {
         if (err.status === 401) {

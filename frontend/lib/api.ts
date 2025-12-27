@@ -188,6 +188,34 @@ export const api = {
         body: JSON.stringify(data),
       });
     },
+    createWithImage: async (formData: FormData): Promise<DiffItem> => {
+      const url = `${API_BASE_URL}/diffs/items/`;
+
+      const headers: Record<string, string> = {};
+
+      // Add authorization header if token exists
+      const token = tokenManager.getToken();
+      if (token) {
+        headers['Authorization'] = `Bearer ${token}`;
+      }
+
+      const response = await fetch(url, {
+        method: 'POST',
+        headers,
+        body: formData,
+      });
+
+      if (!response.ok) {
+        const error = await response.json().catch(() => ({ error: 'Unknown error' }));
+        throw new ApiError(
+          error.error || 'Request failed',
+          response.status,
+          error.detail
+        );
+      }
+
+      return response.json();
+    },
     topByWork: async (workId: number, limit: number = 10) => {
       const query = `?work=${workId}&ordering=-votes&limit=${limit}`;
       return fetchApi(`/diffs/items/${query}`);

@@ -18,8 +18,8 @@ export async function generateMetadata(
   const query = params.q || '';
 
   return {
-    title: query ? `Search: ${query} - Adaptapedia` : 'Search - Adaptapedia',
-    description: 'Search for books and screen adaptations in the Adaptapedia database',
+    title: query ? `Search: ${query} - Book vs. Movie` : 'Search - Book vs. Movie',
+    description: 'Search for books and movie adaptations in the Book vs. Movie database',
   };
 }
 
@@ -42,11 +42,11 @@ export default async function SearchPage({ searchParams }: SearchPageProps): Pro
     <main className="min-h-screen p-4 sm:p-6 md:p-8">
       <div className="max-w-4xl mx-auto">
         {/* Header */}
-        <div className="mb-6 sm:mb-8">
-          <Link href="/" className="text-link hover:underline text-sm mb-3 sm:mb-4 inline-block">
+        <div className="mb-8 md:mb-12">
+          <Link href="/" className="text-link hover:underline text-sm mb-4 inline-block">
             ← Back to home
           </Link>
-          <h1 className="text-2xl sm:text-3xl font-bold mb-4 sm:mb-6">Search Adaptapedia</h1>
+          <h1 className="text-4xl md:text-5xl font-bold mb-6">Search Adaptapedia</h1>
 
           {/* Search Bar */}
           <SearchBar defaultValue={query} autoFocus={true} />

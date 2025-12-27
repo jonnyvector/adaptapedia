@@ -2,8 +2,8 @@ import Link from 'next/link';
 import type { Metadata } from 'next';
 
 export const metadata: Metadata = {
-  title: 'Data Sources & Attribution - Adaptapedia',
-  description: 'Learn about the open data sources that power Adaptapedia, including TMDb, Wikidata, and Open Library',
+  title: 'Data Sources & Attribution - Book vs. Movie',
+  description: 'Learn about the open data sources that power Book vs. Movie, including TMDb, Wikidata, and Open Library',
 };
 
 export default function DataSourcesPage(): JSX.Element {
@@ -12,7 +12,7 @@ export default function DataSourcesPage(): JSX.Element {
       <div className="max-w-4xl mx-auto">
         {/* Header */}
         <div className="mb-12">
-          <h1 className="text-4xl font-bold mb-4">Data Sources & Attribution</h1>
+          <h1 className="text-4xl md:text-5xl font-bold mb-4">Data Sources & Attribution</h1>
           <p className="text-xl text-muted">
             Adaptapedia aggregates data from multiple open sources to provide comprehensive
             information about book adaptations.

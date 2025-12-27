@@ -32,7 +32,7 @@ export default function ComparisonCard({ comparison, showTrendingBadge = false }
   return (
     <Link
       href={comparisonUrl}
-      className="group block border border-border rounded-lg overflow-hidden hover:border-link/50 hover:shadow-lg transition-all bg-card"
+      className="group block border border-border rounded-lg overflow-hidden hover:border-link/50 hover:shadow-lg hover:-translate-y-0.5 transition-all duration-200 bg-card"
     >
       {/* Visual: Book Cover ↔ Movie Poster */}
       <div className="relative flex h-48 bg-gradient-to-r from-surface2/50 to-surface/50">
@@ -50,38 +50,45 @@ export default function ComparisonCard({ comparison, showTrendingBadge = false }
             </div>
           )}
           <div className="absolute inset-0 bg-gradient-to-r from-transparent to-black/30" />
+          {/* Book label */}
+          <div className="absolute top-2 left-2 z-10">
+            <span className="px-1.5 py-0.5 text-[9px] font-bold uppercase tracking-wider rounded bg-black/70 text-white/90 backdrop-blur-sm">
+              Book
+            </span>
+          </div>
+          {work_year && (
+            <div className="absolute bottom-2 left-2 z-10">
+              <span className="px-1.5 py-0.5 text-[10px] font-semibold rounded bg-black/60 text-white backdrop-blur-sm">
+                {work_year}
+              </span>
+            </div>
+          )}
         </div>
 
-        {/* Arrow */}
+        {/* Subtle seam divider */}
+        <div className="absolute top-0 bottom-0 left-1/2 -translate-x-1/2 w-0.5 bg-white/40 dark:bg-black/40 z-10 group-hover:bg-link/60 transition-colors" />
+
+        {/* VS Chip on seam */}
         <div className="absolute inset-0 flex items-center justify-center pointer-events-none z-20">
-          <div className="bg-link text-white px-3 py-2 rounded-full shadow-lg font-bold text-sm">
-            →
+          <div className="bg-white dark:bg-gray-900 text-foreground px-2 py-0.5 rounded-md shadow-lg font-bold text-xs border border-border group-hover:border-link group-hover:text-link transition-colors">
+            VS
           </div>
         </div>
 
-        {/* Trending Badge */}
+        {/* Trending Badge - moved below BOOK label */}
         {showTrendingBadge && (
-          <div className="absolute top-3.5 left-3.5 z-10">
-            <span className="inline-flex items-center gap-1 px-2 py-1 text-xs font-semibold rounded bg-primary text-white shadow-lg">
-              <svg className="w-3 h-3" fill="currentColor" viewBox="0 0 20 20">
+          <div className="absolute top-9 left-2 z-10 flex flex-col gap-1">
+            <span className="inline-flex items-center gap-1 px-1.5 py-0.5 text-[10px] font-semibold rounded bg-link text-white backdrop-blur-md shadow-md">
+              <svg className="w-2.5 h-2.5" fill="currentColor" viewBox="0 0 20 20">
                 <path fillRule="evenodd" d="M12.395 2.553a1 1 0 00-1.45-.385c-.345.23-.614.558-.822.88-.214.33-.403.713-.57 1.116-.334.804-.614 1.768-.84 2.734a31.365 31.365 0 00-.613 3.58 2.64 2.64 0 01-.945-1.067c-.328-.68-.398-1.534-.398-2.654A1 1 0 005.05 6.05 6.981 6.981 0 003 11a7 7 0 1011.95-4.95c-.592-.591-.98-.985-1.348-1.467-.363-.476-.724-1.063-1.207-2.03zM12.12 15.12A3 3 0 017 13s.879.5 2.5.5c0-1 .5-4 1.25-4.5.5 1 .786 1.293 1.371 1.879A2.99 2.99 0 0113 13a2.99 2.99 0 01-.879 2.121z" clipRule="evenodd" />
               </svg>
               Trending
             </span>
             {diff_count < 3 && (
-              <span className="inline-flex items-center gap-1 px-2 py-1 text-xs font-semibold rounded bg-amber-500 text-white shadow-lg mt-1.5 block">
-                Needs differences
+              <span className="inline-flex items-center gap-1 px-1.5 py-0.5 text-[10px] font-semibold rounded bg-amber-500 text-white backdrop-blur-md shadow-md">
+                Needs diffs
               </span>
             )}
-          </div>
-        )}
-
-        {/* Year Badge */}
-        {screen_work_year && (
-          <div className="absolute top-3.5 right-3.5 z-10">
-            <span className="px-2 py-1 text-xs font-semibold rounded bg-black/60 text-white backdrop-blur-sm">
-              {screen_work_year}
-            </span>
           </div>
         )}
 
@@ -99,6 +106,19 @@ export default function ComparisonCard({ comparison, showTrendingBadge = false }
             </div>
           )}
           <div className="absolute inset-0 bg-gradient-to-l from-transparent to-black/30" />
+          {/* Screen type label */}
+          <div className="absolute top-2 right-2 z-10">
+            <span className="px-1.5 py-0.5 text-[9px] font-bold uppercase tracking-wider rounded bg-black/70 text-white/90 backdrop-blur-sm">
+              {screen_work_type}
+            </span>
+          </div>
+          {screen_work_year && (
+            <div className="absolute bottom-2 right-2 z-10">
+              <span className="px-1.5 py-0.5 text-[10px] font-semibold rounded bg-black/60 text-white backdrop-blur-sm">
+                {screen_work_year}
+              </span>
+            </div>
+          )}
         </div>
       </div>
 
@@ -109,51 +129,54 @@ export default function ComparisonCard({ comparison, showTrendingBadge = false }
           {work_title}
         </h3>
 
-        {/* Author & Year */}
-        <div className="text-sm text-muted mb-3">
-          {work_author && <span>{work_author}</span>}
-          {work_author && work_year && <span> · </span>}
-          {work_year && <span>{work_year}</span>}
-        </div>
-
-        {/* Adaptation Info */}
-        <div className="text-xs text-muted mb-3">
-          {screen_work_type} • {screen_work_year}
-        </div>
-
-        {/* Engagement Metrics */}
-        <div className="flex items-center gap-3 text-xs text-muted">
-          <div className="flex items-center gap-1">
-            <span className="font-semibold text-link">{diff_count}</span>
-            <span>{diff_count === 1 ? 'difference' : 'differences'}</span>
+        {/* Author */}
+        {work_author && (
+          <div className="text-sm text-muted mb-2">
+            {work_author}
           </div>
-          {vote_count > 0 && (
-            <>
-              <span>•</span>
-              <div className="flex items-center gap-1">
-                <span className="font-semibold">{vote_count}</span>
-                <span>{vote_count === 1 ? 'vote' : 'votes'}</span>
-              </div>
-            </>
+        )}
+
+        {/* Adaptation Info - Book vs Screen */}
+        <div className="text-xs text-muted mb-3">
+          {work_year && screen_work_year ? (
+            <>Book ({work_year}) vs {screen_work_type} ({screen_work_year})</>
+          ) : (
+            <>Book vs {screen_work_type}</>
           )}
-          {last_updated && (
-            <>
-              <span>•</span>
-              <span className="text-tertiary">
-                Updated {new Date(last_updated).toLocaleDateString()}
-              </span>
-            </>
+        </div>
+
+        {/* Engagement Metrics - Stat Chips */}
+        <div className="flex flex-wrap items-center gap-2">
+          <span className="inline-flex items-center gap-1 px-2 py-1 text-xs font-medium rounded-md bg-muted/10 text-foreground border border-border">
+            <svg className="w-3 h-3 text-muted" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+            </svg>
+            <span className="font-semibold">{diff_count}</span>
+            <span>{diff_count === 1 ? 'diff' : 'diffs'}</span>
+          </span>
+          {showTrendingBadge && (recent_diffs && recent_diffs > 0 || recent_votes && recent_votes > 0) && (
+            <span className="inline-flex items-center gap-1 px-1.5 py-1 text-xs font-medium rounded-md bg-link/10 text-link border border-link/20">
+              <svg className="w-3 h-3" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6" />
+              </svg>
+              <span>This week:</span>
+              {recent_diffs && recent_diffs > 0 && (
+                <span className="font-semibold">+{recent_diffs}</span>
+              )}
+              {recent_diffs && recent_diffs > 0 && recent_votes && recent_votes > 0 && <span>·</span>}
+              {recent_votes && recent_votes > 0 && (
+                <span className="font-semibold">{recent_votes} {recent_votes === 1 ? 'vote' : 'votes'}</span>
+              )}
+            </span>
           )}
-          {showTrendingBadge && (recent_diffs > 0 || recent_votes > 0) && (
-            <>
-              <span>•</span>
-              <span className="text-tertiary">
-                {recent_diffs > 0 && `${recent_diffs} new ${recent_diffs === 1 ? 'diff' : 'diffs'}`}
-                {recent_diffs > 0 && recent_votes > 0 && ' · '}
-                {recent_votes > 0 && `${recent_votes} ${recent_votes === 1 ? 'vote' : 'votes'}`}
-                {' this week'}
-              </span>
-            </>
+          {!showTrendingBadge && vote_count > 0 && (
+            <span className="inline-flex items-center gap-1 px-2 py-1 text-xs font-medium rounded-md bg-muted/10 text-foreground border border-border">
+              <svg className="w-3 h-3 text-muted" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M7 11l5-5m0 0l5 5m-5-5v12" />
+              </svg>
+              <span className="font-semibold">{vote_count}</span>
+              <span>{vote_count === 1 ? 'vote' : 'votes'}</span>
+            </span>
           )}
         </div>
       </div>

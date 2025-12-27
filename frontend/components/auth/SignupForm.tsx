@@ -59,7 +59,14 @@ export default function SignupForm({ redirectTo = '/' }: SignupFormProps): JSX.E
 
     try {
       await signup(formData);
-      router.push(redirectTo);
+
+      // Handle hash fragments in redirect URL
+      // Use window.location for hash fragments to ensure proper scrolling
+      if (redirectTo.includes('#')) {
+        window.location.href = redirectTo;
+      } else {
+        router.push(redirectTo);
+      }
     } catch (err) {
       if (err instanceof ApiError) {
         if (err.detail && typeof err.detail === 'object') {

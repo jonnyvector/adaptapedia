@@ -24,6 +24,7 @@ export default function Header(): JSX.Element {
   const [showDropdown, setShowDropdown] = useState(false);
   const desktopSearchRef = useRef<HTMLDivElement>(null);
   const mobileSearchRef = useRef<HTMLDivElement>(null);
+  const justSubmittedRef = useRef(false);
   const isHomePage = pathname === '/';
   const isSearchPage = pathname === '/search';
   const isModerator = user && (user.role === 'MOD' || user.role === 'ADMIN');
@@ -73,11 +74,23 @@ export default function Header(): JSX.Element {
     return () => document.removeEventListener('mousedown', handleClickOutside);
   }, []);
 
+  // Close dropdown when pathname changes (navigation occurred)
+  useEffect(() => {
+    setShowDropdown(false);
+  }, [pathname]);
+
   const handleSearch = (e: React.FormEvent) => {
     e.preventDefault();
     if (searchQuery.trim().length >= 2) {
-      router.push(`/search?q=${encodeURIComponent(searchQuery.trim())}`);
       setShowDropdown(false);
+      justSubmittedRef.current = true;
+
+      // Reset the flag after a short delay
+      setTimeout(() => {
+        justSubmittedRef.current = false;
+      }, 500);
+
+      router.push(`/search?q=${encodeURIComponent(searchQuery.trim())}`);
     }
   };
 
@@ -110,9 +123,9 @@ export default function Header(): JSX.Element {
           <Link
             href="/"
             className="text-xl sm:text-2xl font-bold text-foreground hover:text-link transition-colors flex-shrink-0"
-            aria-label="Adaptapedia Home"
+            aria-label="Book vs. Movie Home"
           >
-            Adaptapedia
+            Book vs. Movie
           </Link>
 
           {/* Search Bar - Hidden on home and search pages */}
@@ -123,7 +136,11 @@ export default function Header(): JSX.Element {
                   type="search"
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
-                  onFocus={() => searchQuery.length >= 2 && setShowDropdown(true)}
+                  onFocus={() => {
+                    if (!justSubmittedRef.current && searchQuery.length >= 2) {
+                      setShowDropdown(true);
+                    }
+                  }}
                   placeholder="Search books and adaptations..."
                   className="w-full px-3 py-2 text-sm bg-surface text-foreground border border-border rounded-md focus:outline-none focus:ring-2 focus:ring-link min-h-[40px]"
                   aria-label="Search"

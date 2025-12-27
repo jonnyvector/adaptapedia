@@ -2,8 +2,8 @@ import Link from 'next/link';
 import type { Metadata } from 'next';
 
 export const metadata: Metadata = {
-  title: 'Community Guidelines - Adaptapedia',
-  description: 'Guidelines for contributing to Adaptapedia',
+  title: 'Community Guidelines - Book vs. Movie',
+  description: 'Guidelines for contributing to Book vs. Movie',
 };
 
 export default function GuidelinesPage(): JSX.Element {
@@ -12,7 +12,7 @@ export default function GuidelinesPage(): JSX.Element {
       <div className="max-w-4xl mx-auto">
         {/* Header */}
         <div className="mb-12">
-          <h1 className="text-4xl font-bold mb-4">Community Guidelines</h1>
+          <h1 className="text-4xl md:text-5xl font-bold mb-4">Community Guidelines</h1>
           <p className="text-xl text-muted">
             Guidelines for contributing to Adaptapedia
           </p>

@@ -109,10 +109,11 @@ interface CommentItemInternalProps extends CommentItemProps {
 }
 
 function CommentItem({ comment, depth = 0, isLast = false, onReplyAdded }: CommentItemInternalProps): JSX.Element {
-  const { isAuthenticated } = useAuth();
+  const { isAuthenticated, isLoading } = useAuth();
   const router = useRouter();
   const [isExpanded, setIsExpanded] = useState(false);
   const [showReplyForm, setShowReplyForm] = useState(false);
+
   const shouldTruncate = comment.body.length > 300;
   const displayBody = shouldTruncate && !isExpanded
     ? comment.body.slice(0, 300) + '...'
@@ -121,9 +122,28 @@ function CommentItem({ comment, depth = 0, isLast = false, onReplyAdded }: Comme
   const avatarColor = depth > 0 ? AVATAR_COLORS[(depth - 1) % AVATAR_COLORS.length] : 'bg-blue-500';
   const hasReplies = comment.children && comment.children.length > 0;
 
+  // Handle pending reply after login - only open form if authenticated
+  useEffect(() => {
+    if (isLoading) {
+      return; // Wait for auth to finish loading
+    }
+
+    const pendingReplyId = sessionStorage.getItem('pendingReply');
+
+    if (pendingReplyId === comment.id.toString() && isAuthenticated) {
+      setShowReplyForm(true);
+      // DON'T remove pendingReply here - let CommentsList handle scrolling
+    }
+    // DON'T clear pendingReply if not authenticated - auth state might not be updated yet after redirect
+  }, [isAuthenticated, isLoading, comment.id]);
+
   const handleReplyClick = () => {
     if (!isAuthenticated) {
-      router.push('/auth/login?redirect=' + encodeURIComponent(window.location.pathname));
+      // Store the intent in sessionStorage to survive page reload
+      sessionStorage.setItem('pendingReply', comment.id.toString());
+      // CommentsList will handle scrolling via useEffect
+      const redirectUrl = window.location.pathname;
+      router.push('/auth/login?redirect=' + encodeURIComponent(redirectUrl));
       return;
     }
     setShowReplyForm(!showReplyForm);
@@ -135,7 +155,7 @@ function CommentItem({ comment, depth = 0, isLast = false, onReplyAdded }: Comme
   };
 
   return (
-    <li className="comment-item">
+    <li className="comment-item" id={`comment-${comment.id}`}>
       <div className="comment-row">
         {/* Avatar */}
         <Link
@@ -262,7 +282,7 @@ export default function CommentsList({
   onSpoilerPreferenceChange,
   currentSpoilerPreference,
 }: CommentsListProps): JSX.Element {
-  const { isAuthenticated } = useAuth();
+  const { isAuthenticated, isLoading: authLoading } = useAuth();
   const router = useRouter();
   const [comments, setComments] = useState<Comment[]>([]);
   const [loading, setLoading] = useState(true);
@@ -296,9 +316,52 @@ export default function CommentsList({
     fetchComments();
   }, [diffItemId]);
 
+  // Auto-scroll to comments section if there's a pending action
+  useEffect(() => {
+    if (typeof window !== 'undefined' && !authLoading && !loading && isAuthenticated) {
+      const pendingReply = sessionStorage.getItem('pendingReply');
+      const pendingAddComment = sessionStorage.getItem('pendingAddComment');
+
+      if (pendingReply) {
+        // Scroll to the specific comment - give it extra time for layout to stabilize
+        setTimeout(() => {
+          const commentElement = document.getElementById(`comment-${pendingReply}`);
+          if (commentElement) {
+            commentElement.scrollIntoView({ behavior: 'smooth', block: 'center' });
+            sessionStorage.removeItem('pendingReply');
+          }
+        }, 500);
+      } else if (pendingAddComment) {
+        setTimeout(() => {
+          const commentsSection = document.getElementById('comments');
+          if (commentsSection) {
+            commentsSection.scrollIntoView({ behavior: 'smooth', block: 'center' });
+            sessionStorage.removeItem('pendingAddComment');
+          }
+        }, 500);
+      }
+    }
+  }, [authLoading, loading, isAuthenticated]);
+
+  // Auto-open add comment form if user was redirected to comments section
+  useEffect(() => {
+    // Wait for auth to finish loading before checking
+    if (typeof window !== 'undefined' && !authLoading && isAuthenticated) {
+      const pendingAddComment = sessionStorage.getItem('pendingAddComment');
+
+      if (pendingAddComment === 'true') {
+        setShowAddForm(true);
+        // DON'T remove pendingAddComment here - let scroll effect handle it
+      }
+    }
+  }, [isAuthenticated, authLoading]);
+
   const handleAddCommentClick = () => {
     if (!isAuthenticated) {
-      router.push('/auth/login?redirect=' + encodeURIComponent(window.location.pathname));
+      // Store the intent in sessionStorage to survive page reload
+      sessionStorage.setItem('pendingAddComment', 'true');
+      const redirectUrl = window.location.pathname;
+      router.push('/auth/login?redirect=' + encodeURIComponent(redirectUrl));
       return;
     }
     setShowAddForm(true);
@@ -323,7 +386,7 @@ export default function CommentsList({
   const commentTree = buildCommentTree(visibleComments);
 
   return (
-    <div className="space-y-4">
+    <div className="space-y-4" id="comments">
       {/* Spoiler filter notice */}
       {hiddenCount > 0 && (
         <div className="bg-yellow-50 dark:bg-yellow-900/20 border border-yellow-200 dark:border-yellow-800 rounded-lg p-3 transition-all duration-300">

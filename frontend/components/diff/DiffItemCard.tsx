@@ -9,6 +9,10 @@ import { useVoting } from '@/hooks/useVoting';
 import CommentsList from './CommentsList';
 import { api } from '@/lib/api';
 import { useAuth } from '@/lib/auth-context';
+import ImageLightbox from '@/components/ui/ImageLightbox';
+import { calculateVotePercentage, getConsensusLabel } from '@/lib/vote-utils';
+import { getTimeSince } from '@/lib/date-utils';
+import { getSpoilerBadgeColor, getSpoilerLabel, getCategoryBadgeColor, getCategoryLabel } from '@/lib/badge-utils';
 
 interface DiffItemCardProps {
   diff: DiffItem;
@@ -42,6 +46,7 @@ export default function DiffItemCard({
   const [commentCount, setCommentCount] = useState(0);
   const [loadingCommentCount, setLoadingCommentCount] = useState(true);
   const [isTextClamped, setIsTextClamped] = useState(false);
+  const [lightboxOpen, setLightboxOpen] = useState(false);
   const detailRef = useRef<HTMLParagraphElement>(null);
 
   // Use external state if provided, otherwise use local state
@@ -67,6 +72,30 @@ export default function DiffItemCard({
     voteCounts.needs_nuance +
     voteCounts.disagree;
 
+  // Auto-expand comments if there's a pending action
+  useEffect(() => {
+    if (typeof window !== 'undefined') {
+      const pendingReply = sessionStorage.getItem('pendingReply');
+      const pendingAddComment = sessionStorage.getItem('pendingAddComment');
+
+      if (pendingReply || pendingAddComment) {
+        setCommentsExpanded(true);
+      }
+    }
+  }, []);
+
+  // Auto-vote after login if pending
+  useEffect(() => {
+    if (typeof window !== 'undefined' && isAuthenticated && !isVoting) {
+      const pendingVote = sessionStorage.getItem(`pendingVote_${diff.id}`);
+
+      if (pendingVote) {
+        sessionStorage.removeItem(`pendingVote_${diff.id}`);
+        submitVote(pendingVote as VoteType);
+      }
+    }
+  }, [isAuthenticated, isVoting, diff.id, submitVote]);
+
   // Fetch comment count on mount
   useEffect(() => {
     const fetchCommentCount = async (): Promise<void> => {
@@ -86,6 +115,8 @@ export default function DiffItemCard({
 
   const handleVote = async (voteType: VoteType) => {
     if (!isAuthenticated) {
+      // Store the vote intent in sessionStorage
+      sessionStorage.setItem(`pendingVote_${diff.id}`, voteType);
       router.push('/auth/login?redirect=' + encodeURIComponent(window.location.pathname));
       return;
     }
@@ -104,134 +135,56 @@ export default function DiffItemCard({
   }, [error]);
 
   const getVotePercentage = (count: number): number => {
-    if (totalVotes === 0) return 0;
-    return Math.round((count / totalVotes) * 100);
+    return calculateVotePercentage(count, totalVotes);
   };
 
-  const getSpoilerBadgeColor = (scope: string): string => {
-    switch (scope) {
-      case 'NONE':
-        return 'bg-success/10 text-success border border-success/30';
-      case 'BOOK_ONLY':
-        return 'bg-cyan/10 text-cyan border border-cyan/30';
-      case 'SCREEN_ONLY':
-        return 'bg-purple/10 text-purple border border-purple/30';
-      case 'FULL':
-        return 'bg-magenta/10 text-magenta border border-magenta/30';
-      default:
-        return 'bg-surface border border-border';
-    }
-  };
-
-  const getSpoilerLabel = (scope: string): string => {
-    switch (scope) {
-      case 'NONE':
-        return 'Safe';
-      case 'BOOK_ONLY':
-        return 'Book Spoilers';
-      case 'SCREEN_ONLY':
-        return 'Screen Spoilers';
-      case 'FULL':
-        return 'Full Spoilers';
-      default:
-        return scope;
-    }
-  };
-
-  const getCategoryBadgeColor = (category: string): string => {
-    switch (category) {
-      case 'PLOT':
-        return 'bg-info/10 text-info border border-info/30';
-      case 'CHARACTER':
-        return 'bg-purple/10 text-purple border border-purple/30';
-      case 'ENDING':
-        return 'bg-danger/10 text-danger border border-danger/30';
-      case 'SETTING':
-        return 'bg-cyan/10 text-cyan border border-cyan/30';
-      case 'THEME':
-        return 'bg-magenta/10 text-magenta border border-magenta/30';
-      case 'TONE':
-        return 'bg-warn/10 text-warn border border-warn/30';
-      case 'TIMELINE':
-        return 'bg-success/10 text-success border border-success/30';
-      case 'WORLDBUILDING':
-        return 'bg-purple/10 text-purple border border-purple/30';
-      default:
-        return 'bg-muted/10 text-muted border border-muted/30';
-    }
-  };
-
-  const getCategoryLabel = (category: string): string => {
-    return category.charAt(0) + category.slice(1).toLowerCase().replace('_', ' ');
-  };
-
-  const getConsensusLabel = (): string => {
-    if (totalVotes === 0) return 'No votes yet';
-
-    const accuratePct = getVotePercentage(voteCounts.accurate);
-    const disagreePct = getVotePercentage(voteCounts.disagree);
-    const nuancePct = getVotePercentage(voteCounts.needs_nuance);
-
-    if (accuratePct >= 70) {
-      return `Consensus: ${accuratePct}% Accurate`;
-    } else if (disagreePct >= 50) {
-      return `Disputed: ${disagreePct}% Disagree`;
-    } else if (nuancePct >= 40) {
-      return `Debated: ${nuancePct}% Need Nuance`;
-    } else {
-      return `Mixed: ${accuratePct}% Accurate, ${disagreePct}% Disagree`;
-    }
-  };
-
-  const getTimeSince = (dateString: string): string => {
-    const date = new Date(dateString);
-    const now = new Date();
-    const seconds = Math.floor((now.getTime() - date.getTime()) / 1000);
-
-    if (seconds < 60) return 'just now';
-    if (seconds < 3600) return `${Math.floor(seconds / 60)}m ago`;
-    if (seconds < 86400) return `${Math.floor(seconds / 3600)}h ago`;
-    if (seconds < 604800) return `${Math.floor(seconds / 86400)}d ago`;
-    if (seconds < 2592000) return `${Math.floor(seconds / 604800)}w ago`;
-    return date.toLocaleDateString();
-  };
+  const consensusLabel = getConsensusLabel(
+    voteCounts.accurate,
+    voteCounts.disagree,
+    voteCounts.needs_nuance,
+    totalVotes
+  );
 
   const hasDetail = diff.detail && diff.detail.trim().length > 0;
 
   return (
-    <div id={`diff-${diff.id}`} className="border border-border rounded bg-surface hover:shadow-sm transition-all duration-200 overflow-hidden">
+    <div id={`diff-${diff.id}`} className="border border-border rounded bg-surface hover:shadow-md hover:border-border-strong transition-all duration-200 overflow-hidden">
       {/* Compact header row - always visible */}
       <div className="p-3 sm:p-4">
         {/* Title row with claim - clickable header */}
         <button
-          onClick={() => hasDetail && setDetailExpanded(!detailExpanded)}
-          className={`flex items-start gap-2 mb-2 w-full text-left ${hasDetail ? 'cursor-pointer group' : 'cursor-default'}`}
-          disabled={!hasDetail}
-          aria-label={hasDetail ? (detailExpanded ? 'Collapse details' : 'Expand details') : undefined}
+          onClick={() => hasDetail && (isTextClamped || detailExpanded) && setDetailExpanded(!detailExpanded)}
+          className={`flex items-start gap-2 mb-2 w-full text-left ${hasDetail && (isTextClamped || detailExpanded) ? 'cursor-pointer group' : 'cursor-default'}`}
+          disabled={!hasDetail || (!isTextClamped && !detailExpanded)}
+          aria-label={hasDetail && (isTextClamped || detailExpanded) ? (detailExpanded ? 'Collapse details' : 'Expand details') : undefined}
+          title={hasDetail && isTextClamped && !detailExpanded ? 'Expand for details' : undefined}
         >
-          <h3 className="text-base font-semibold flex-1 text-foreground leading-tight">
+          <h3 className="text-base font-semibold flex-1 text-foreground leading-tight group-hover:text-link group-hover:underline decoration-link/30 underline-offset-2 transition-all">
             {diff.claim}
           </h3>
-          {/* Chevron indicator */}
-          {hasDetail && (
-            <span className="text-muted group-hover:text-foreground transition-colors text-lg leading-none mt-0.5">
-              {detailExpanded ? '▾' : '▸'}
+          {/* Chevron indicator - only show if text is clamped or already expanded */}
+          {hasDetail && (isTextClamped || detailExpanded) && (
+            <span className={`text-muted group-hover:text-link transition-all duration-200 text-xl leading-none mt-0.5 font-semibold ${detailExpanded ? 'rotate-90' : ''}`} style={{ display: 'inline-block', transform: detailExpanded ? 'rotate(90deg)' : 'rotate(0deg)' }}>
+              ›
             </span>
           )}
         </button>
 
-        {/* Badges row */}
+        {/* Badges row - smaller, tag-like */}
         <div className="flex flex-wrap items-center gap-2 mb-2">
           <span
-            className={`px-2 py-0.5 text-xs font-medium rounded ${getCategoryBadgeColor(diff.category)}`}
+            className={`px-1.5 py-0.5 text-xs font-medium rounded ${getCategoryBadgeColor(diff.category)}`}
           >
             {getCategoryLabel(diff.category)}
           </span>
-          <span
-            className={`px-2 py-0.5 text-xs font-mono rounded ${getSpoilerBadgeColor(diff.spoiler_scope)}`}
-          >
-            {getSpoilerLabel(diff.spoiler_scope)}
-          </span>
+          {/* Only show spoiler badge if NOT safe */}
+          {diff.spoiler_scope !== 'NONE' && (
+            <span
+              className={`px-1.5 py-0.5 text-xs font-mono rounded ${getSpoilerBadgeColor(diff.spoiler_scope)}`}
+            >
+              {getSpoilerLabel(diff.spoiler_scope)}
+            </span>
+          )}
         </div>
 
         {/* Detail preview/full (when not expanded, show 2 lines max) */}
@@ -260,103 +213,169 @@ export default function DiffItemCard({
           </div>
         )}
 
-        {/* Voting buttons - compact horizontal layout */}
-        <div className="flex flex-col sm:flex-row gap-2">
-          {/* Total votes indicator */}
-          {totalVotes > 0 && (
-            <div className="text-xs text-muted self-start sm:self-center whitespace-nowrap">
-              {totalVotes} {totalVotes === 1 ? 'vote' : 'votes'}
-            </div>
-          )}
-          {/* Error message */}
-          {showError && error && (
-            <div className="text-xs text-danger bg-danger/10 px-3 py-2 rounded border border-danger/30">
-              {error}
-            </div>
-          )}
+        {/* Image display */}
+        {diff.image && (
+          <div className="mb-3">
+            <img
+              src={diff.image}
+              alt="Difference illustration"
+              className="max-w-full rounded-md border border-border cursor-pointer hover:opacity-90 transition-opacity"
+              style={{ maxHeight: '400px' }}
+              onClick={() => setLightboxOpen(true)}
+            />
+          </div>
+        )}
 
-          {!showError && (
-            <div className="flex gap-2 flex-1">
-              <button
-                onClick={() => handleVote('ACCURATE')}
-                disabled={isVoting}
-                className={`flex items-center justify-center gap-1.5 px-3 py-2 rounded border transition-all duration-200 flex-1 sm:flex-none ${
-                  userVote === 'ACCURATE'
-                    ? 'bg-green-500/10 border-green-500 text-green-600 dark:text-green-500 font-medium'
-                    : 'bg-surface border-border text-foreground hover:border-green-500 hover:bg-green-500/5'
-                } ${isVoting ? 'cursor-wait opacity-50' : 'cursor-pointer'}`}
-                title="This diff is accurate - well-stated and correct"
-                aria-label="Vote accurate"
-              >
-                <span className="text-sm leading-none">↑</span>
-                <span className="text-xs font-medium">Accurate</span>
-                <span className="text-xs font-semibold text-green-600 dark:text-green-500">
-                  {voteCounts.accurate}
-                </span>
-              </button>
-
-              <button
-                onClick={() => handleVote('NEEDS_NUANCE')}
-                disabled={isVoting}
-                className={`flex items-center justify-center gap-1.5 px-3 py-2 rounded border transition-all duration-200 flex-1 sm:flex-none ${
-                  userVote === 'NEEDS_NUANCE'
-                    ? 'bg-yellow-500/10 border-yellow-500 text-yellow-600 font-medium'
-                    : 'bg-surface border-border text-foreground hover:border-yellow-500 hover:bg-yellow-500/5'
-                } ${isVoting ? 'cursor-wait opacity-50' : 'cursor-pointer'}`}
-                title="Mostly correct but needs more context or clarification"
-                aria-label="Vote needs nuance"
-              >
-                <span className="text-sm leading-none">~</span>
-                <span className="text-xs font-medium">Nuance</span>
-                <span className="text-xs font-semibold text-yellow-600 dark:text-yellow-500">
-                  {voteCounts.needs_nuance}
-                </span>
-              </button>
-
-              <button
-                onClick={() => handleVote('DISAGREE')}
-                disabled={isVoting}
-                className={`flex items-center justify-center gap-1.5 px-3 py-2 rounded border transition-all duration-200 flex-1 sm:flex-none ${
-                  userVote === 'DISAGREE'
-                    ? 'bg-red-500/10 border-red-500 text-red-600 dark:text-red-500 font-medium'
-                    : 'bg-surface border-border text-foreground hover:border-red-500 hover:bg-red-500/5'
-                } ${isVoting ? 'cursor-wait opacity-50' : 'cursor-pointer'}`}
-                title="This diff is inaccurate or misleading"
-                aria-label="Vote disagree"
-              >
-                <span className="text-sm leading-none">↓</span>
-                <span className="text-xs font-medium">Disagree</span>
-                <span className="text-xs font-semibold text-red-600 dark:text-red-500">
-                  {voteCounts.disagree}
-                </span>
-              </button>
+        {/* Consensus bar - show vote distribution */}
+        {totalVotes > 0 && (
+          <div className="mb-2.5 max-w-xl">
+            <div className="flex items-center gap-2 mb-1.5 flex-wrap">
+              <span className="text-xs font-medium text-muted">Consensus:</span>
+              <span className="text-xs font-semibold text-foreground">
+                {consensusLabel}
+              </span>
+              <span className="text-xs text-muted">
+                ({totalVotes} {totalVotes === 1 ? 'vote' : 'votes'})
+              </span>
+              {(consensusLabel === 'Mixed' || consensusLabel === 'Disputed') && (
+                <button
+                  onClick={() => setCommentsExpanded(true)}
+                  className="px-1.5 py-0.5 text-xs font-medium rounded bg-amber-500/10 text-amber-700 dark:text-amber-400 border border-amber-500/20 hover:bg-amber-500/20 transition-colors cursor-pointer"
+                  title={commentCount > 0 ? "High disagreement — view discussion" : "High disagreement — be first to comment"}
+                >
+                  {commentCount > 0 ? 'Needs discussion' : 'Needs discussion — be first'}
+                </button>
+              )}
             </div>
-          )}
-        </div>
+            {/* Compact stacked bar */}
+            <div className="h-1.5 bg-gray-200 dark:bg-gray-800 rounded-full overflow-hidden flex">
+              {voteCounts.accurate > 0 && (
+                <div
+                  className="bg-green-500 dark:bg-green-400"
+                  style={{ width: `${getVotePercentage(voteCounts.accurate)}%` }}
+                  title={`${voteCounts.accurate} Accurate (${getVotePercentage(voteCounts.accurate)}%)`}
+                />
+              )}
+              {voteCounts.needs_nuance > 0 && (
+                <div
+                  className="bg-yellow-500 dark:bg-yellow-400"
+                  style={{ width: `${getVotePercentage(voteCounts.needs_nuance)}%` }}
+                  title={`${voteCounts.needs_nuance} Needs Nuance (${getVotePercentage(voteCounts.needs_nuance)}%)`}
+                />
+              )}
+              {voteCounts.disagree > 0 && (
+                <div
+                  className="bg-red-500 dark:bg-red-400"
+                  style={{ width: `${getVotePercentage(voteCounts.disagree)}%` }}
+                  title={`${voteCounts.disagree} Disagree (${getVotePercentage(voteCounts.disagree)}%)`}
+                />
+              )}
+            </div>
+          </div>
+        )}
+
+        {/* Voting buttons - segmented control */}
+        {showError && error && (
+          <div className="text-xs text-danger bg-danger/10 px-3 py-1.5 rounded border border-danger/30 mb-3">
+            {error}
+          </div>
+        )}
+
+        {!showError && (
+          <div
+            className="inline-flex items-stretch rounded-md border border-border/20 overflow-hidden bg-surface2/30"
+            role="group"
+            aria-label="Vote on this difference"
+            title="Choose one: Accurate / Nuance / Disagree"
+          >
+            <button
+              onClick={() => handleVote('ACCURATE')}
+              disabled={isVoting}
+              className={`inline-flex items-center justify-center gap-1.5 px-2.5 py-1 text-xs font-medium transition-all duration-200 ${
+                userVote === 'ACCURATE'
+                  ? 'bg-link/90 text-white shadow-sm rounded-l-md'
+                  : 'text-muted hover:text-foreground hover:bg-surface/80'
+              } ${isVoting ? 'cursor-wait opacity-50' : 'cursor-pointer focus:outline-none focus:ring-2 focus:ring-link/50 focus:z-10'}`}
+              title="This diff is accurate - well-stated and correct"
+              aria-label="Vote accurate"
+              aria-pressed={userVote === 'ACCURATE'}
+            >
+              <span className={`leading-none transition-opacity ${userVote === 'ACCURATE' ? 'opacity-100' : 'opacity-50'}`}>↑</span>
+              <span>Accurate</span>
+              <span className="font-semibold">({voteCounts.accurate})</span>
+            </button>
+
+            <div className="w-px bg-border/40 flex-shrink-0"></div>
+
+            <button
+              onClick={() => handleVote('NEEDS_NUANCE')}
+              disabled={isVoting}
+              className={`inline-flex items-center justify-center gap-1.5 px-2.5 py-1 text-xs font-medium transition-all duration-200 ${
+                userVote === 'NEEDS_NUANCE'
+                  ? 'bg-link/90 text-white shadow-sm'
+                  : 'text-muted hover:text-foreground hover:bg-surface/80'
+              } ${isVoting ? 'cursor-wait opacity-50' : 'cursor-pointer focus:outline-none focus:ring-2 focus:ring-link/50 focus:z-10'}`}
+              title="Mostly correct but needs more context or clarification"
+              aria-label="Vote needs nuance"
+              aria-pressed={userVote === 'NEEDS_NUANCE'}
+            >
+              <span className={`leading-none transition-opacity ${userVote === 'NEEDS_NUANCE' ? 'opacity-100' : 'opacity-50'}`}>~</span>
+              <span>Nuance</span>
+              <span className="font-semibold">({voteCounts.needs_nuance})</span>
+            </button>
+
+            <div className="w-px bg-border/40 flex-shrink-0"></div>
+
+            <button
+              onClick={() => handleVote('DISAGREE')}
+              disabled={isVoting}
+              className={`inline-flex items-center justify-center gap-1.5 px-2.5 py-1 text-xs font-medium transition-all duration-200 ${
+                userVote === 'DISAGREE'
+                  ? 'bg-link/90 text-white shadow-sm rounded-r-md'
+                  : 'text-muted hover:text-foreground hover:bg-surface/80'
+              } ${isVoting ? 'cursor-wait opacity-50' : 'cursor-pointer focus:outline-none focus:ring-2 focus:ring-link/50 focus:z-10'}`}
+              title="This diff is inaccurate or misleading"
+              aria-label="Vote disagree"
+              aria-pressed={userVote === 'DISAGREE'}
+            >
+              <span className={`leading-none transition-opacity ${userVote === 'DISAGREE' ? 'opacity-100' : 'opacity-50'}`}>↓</span>
+              <span>Disagree</span>
+              <span className="font-semibold">({voteCounts.disagree})</span>
+            </button>
+          </div>
+        )}
 
         {/* Meta row - moved to bottom for quieter hierarchy */}
-        <div className="mt-3 pt-3 border-t border-border/50 flex flex-wrap items-center gap-x-3 gap-y-1 text-xs text-muted">
-          <span>
-            Added by{' '}
-            <Link
-              href={`/u/${diff.created_by_username}`}
-              className="text-link hover:underline font-medium"
-            >
-              @{diff.created_by_username}
-            </Link>
-          </span>
-          <span className="text-muted/50">·</span>
-          <span>{getTimeSince(diff.created_at)}</span>
-          {!loadingCommentCount && commentCount > 0 && (
-            <>
-              <span className="text-muted/50">·</span>
-              <button
-                onClick={() => setCommentsExpanded(!commentsExpanded)}
-                className="text-link hover:underline"
+        <div className="mt-4 pt-3 border-t border-border/[0.02] flex flex-wrap items-center justify-between gap-2 text-xs">
+          <div className="flex flex-wrap items-center gap-x-3 gap-y-1 text-muted">
+            <span>
+              Added by{' '}
+              <Link
+                href={`/u/${diff.created_by_username}`}
+                className="text-link hover:underline font-medium"
               >
-                {commentCount} {commentCount === 1 ? 'comment' : 'comments'}
-              </button>
-            </>
+                @{diff.created_by_username}
+              </Link>
+            </span>
+            <span className="text-muted/50">·</span>
+            <span>{getTimeSince(diff.created_at)}</span>
+          </div>
+          {/* Comment CTA - styled as button with icon */}
+          {!loadingCommentCount && (
+            <button
+              onClick={() => setCommentsExpanded(!commentsExpanded)}
+              className="flex items-center gap-1.5 text-link hover:text-link-hover font-medium transition-colors"
+            >
+              <svg className="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z" />
+              </svg>
+              <span>
+                {commentCount > 0
+                  ? `${commentCount} ${commentCount === 1 ? 'comment' : 'comments'}`
+                  : 'Add comment'
+                }
+              </span>
+            </button>
           )}
         </div>
       </div>
@@ -374,16 +393,14 @@ export default function DiffItemCard({
         </div>
       )}
 
-      {/* Comments toggle when count is 0 or not expanded */}
-      {!loadingCommentCount && commentCount === 0 && !commentsExpanded && (
-        <div className="border-t border-border">
-          <button
-            onClick={() => setCommentsExpanded(true)}
-            className="text-xs text-link hover:text-linkHover transition-colors w-full py-2 px-3 sm:px-4 text-left font-medium"
-          >
-            No comments yet — Add comment
-          </button>
-        </div>
+
+      {/* Image Lightbox Modal */}
+      {lightboxOpen && diff.image && (
+        <ImageLightbox
+          src={diff.image}
+          alt="Difference illustration"
+          onClose={() => setLightboxOpen(false)}
+        />
       )}
     </div>
   );

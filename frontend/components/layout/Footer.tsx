@@ -9,9 +9,9 @@ export default function Footer(): JSX.Element {
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6 sm:gap-8">
           {/* About Section */}
           <div>
-            <h3 className="font-semibold text-base sm:text-lg mb-3 sm:mb-4">Adaptapedia</h3>
+            <h3 className="font-semibold text-base sm:text-lg mb-3 sm:mb-4">Book vs. Movie</h3>
             <p className="text-muted text-sm mb-4">
-              A community-driven wiki for comparing books and their screen adaptations.
+              A community-driven database for comparing books and their film adaptations.
             </p>
           </div>
 
@@ -26,7 +26,7 @@ export default function Footer(): JSX.Element {
               </li>
               <li>
                 <Link href="/about" className="text-muted hover:text-link inline-block min-h-[28px] flex items-center">
-                  About Adaptapedia
+                  About
                 </Link>
               </li>
               <li>
@@ -57,7 +57,7 @@ export default function Footer(): JSX.Element {
                 </a>
               </li>
               <li className="text-xs pt-4">
-                &copy; {currentYear} Adaptapedia
+                &copy; {currentYear} Book vs. Movie
               </li>
             </ul>
           </div>

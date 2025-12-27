@@ -5,13 +5,15 @@ import { useRouter } from 'next/navigation';
 import type { Work, ScreenWork, PreferenceChoice, ComparisonVoteStats } from '@/lib/types';
 import { api } from '@/lib/api';
 import { useAuth } from '@/lib/auth-context';
+import { calculateVotePercentage } from '@/lib/vote-utils';
 
 interface ComparisonVotingProps {
   work: Work;
   screenWork: ScreenWork;
+  onVoteSubmitted?: () => void;
 }
 
-export default function ComparisonVoting({ work, screenWork }: ComparisonVotingProps): JSX.Element {
+export default function ComparisonVoting({ work, screenWork, onVoteSubmitted }: ComparisonVotingProps): JSX.Element {
   const router = useRouter();
   const { isAuthenticated } = useAuth();
 
@@ -49,10 +51,57 @@ export default function ComparisonVoting({ work, screenWork }: ComparisonVotingP
     fetchStats();
   }, [work.id, screenWork.id]);
 
+  // Auto-submit vote after login if pending
+  useEffect(() => {
+    const submitPendingVote = async () => {
+      if (typeof window !== 'undefined' && isAuthenticated && !submitting) {
+        const pendingVoteKey = `pendingComparisonVote_${work.id}_${screenWork.id}`;
+        const pendingVoteData = sessionStorage.getItem(pendingVoteKey);
+
+        if (pendingVoteData) {
+          const voteData = JSON.parse(pendingVoteData);
+          sessionStorage.removeItem(pendingVoteKey);
+
+          // Restore form state
+          setHasReadBook(voteData.has_read_book);
+          setHasWatchedAdaptation(voteData.has_watched_adaptation);
+          setPreference(voteData.preference);
+          setFaithfulnessRating(voteData.faithfulness_rating);
+
+          // Auto-submit
+          setSubmitting(true);
+          setError(null);
+
+          try {
+            await api.comparisonVotes.submit(voteData);
+            await fetchStats();
+            onVoteSubmitted?.();
+          } catch (err) {
+            setError(err instanceof Error ? err.message : 'Failed to submit vote');
+          } finally {
+            setSubmitting(false);
+          }
+        }
+      }
+    };
+
+    submitPendingVote();
+  }, [isAuthenticated, submitting, work.id, screenWork.id]);
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
     if (!isAuthenticated) {
+      // Store the vote data in sessionStorage
+      const voteData = {
+        work: work.id,
+        screen_work: screenWork.id,
+        has_read_book: hasReadBook,
+        has_watched_adaptation: hasWatchedAdaptation,
+        preference,
+        faithfulness_rating: faithfulnessRating,
+      };
+      sessionStorage.setItem(`pendingComparisonVote_${work.id}_${screenWork.id}`, JSON.stringify(voteData));
       router.push('/auth/login?redirect=' + encodeURIComponent(window.location.pathname));
       return;
     }
@@ -82,6 +131,7 @@ export default function ComparisonVoting({ work, screenWork }: ComparisonVotingP
 
       // Refresh stats
       await fetchStats();
+      onVoteSubmitted?.();
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Failed to submit vote');
     } finally {
@@ -90,8 +140,8 @@ export default function ComparisonVoting({ work, screenWork }: ComparisonVotingP
   };
 
   const getPreferencePercentage = (pref: PreferenceChoice): number => {
-    if (!stats || stats.total_votes === 0) return 0;
-    return Math.round((stats.preference_breakdown[pref] / stats.total_votes) * 100);
+    if (!stats) return 0;
+    return calculateVotePercentage(stats.preference_breakdown[pref], stats.total_votes);
   };
 
   if (loading) {
