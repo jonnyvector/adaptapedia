@@ -103,7 +103,7 @@ export default function AdaptationSwitcher({
       <button
         onClick={() => setIsOpen(!isOpen)}
         className="text-xl sm:text-2xl md:text-3xl font-bold text-left hover:text-link transition-colors group !border-0 !bg-transparent !p-0"
-        style={{ wordBreak: 'break-word', overflowWrap: 'break-word', whiteSpace: 'normal', display: 'block', maxWidth: '100%' }}
+        style={{ wordBreak: 'break-word', overflowWrap: 'break-word', whiteSpace: 'normal', maxWidth: '100%' }}
         aria-expanded={isOpen}
         aria-haspopup="true"
       >
