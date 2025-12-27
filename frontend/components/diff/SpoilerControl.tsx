@@ -21,6 +21,9 @@ const preferences: {
   description: string;
   icon: React.ComponentType<{ className?: string }>;
   allowedScopes: SpoilerScope[];
+  color: string;
+  activeClass: string;
+  hoverClass: string;
 }[] = [
   {
     value: 'SAFE',
@@ -28,6 +31,9 @@ const preferences: {
     description: 'No spoilers - high-level changes only',
     icon: LockClosedIcon,
     allowedScopes: ['NONE'],
+    color: 'emerald',
+    activeClass: 'bg-accent-emerald/10 text-accent-emerald border-accent-emerald/30',
+    hoverClass: 'hover:bg-accent-emerald/5 hover:text-accent-emerald',
   },
   {
     value: 'BOOK_ALLOWED',
@@ -35,6 +41,9 @@ const preferences: {
     description: 'Safe + book plot details',
     icon: BookOpenIcon,
     allowedScopes: ['NONE', 'BOOK_ONLY'],
+    color: 'amber',
+    activeClass: 'bg-accent-amber/10 text-accent-amber border-accent-amber/30',
+    hoverClass: 'hover:bg-accent-amber/5 hover:text-accent-amber',
   },
   {
     value: 'SCREEN_ALLOWED',
@@ -42,6 +51,9 @@ const preferences: {
     description: 'Safe + movie/TV plot details',
     icon: FilmIcon,
     allowedScopes: ['NONE', 'SCREEN_ONLY'],
+    color: 'amber',
+    activeClass: 'bg-accent-amber/10 text-accent-amber border-accent-amber/30',
+    hoverClass: 'hover:bg-accent-amber/5 hover:text-accent-amber',
   },
   {
     value: 'FULL',
@@ -49,6 +61,9 @@ const preferences: {
     description: 'Show everything including endings',
     icon: LockOpenIcon,
     allowedScopes: ['NONE', 'BOOK_ONLY', 'SCREEN_ONLY', 'FULL'],
+    color: 'rose',
+    activeClass: 'bg-accent-rose/10 text-accent-rose border-accent-rose/30',
+    hoverClass: 'hover:bg-accent-rose/5 hover:text-accent-rose',
   },
 ];
 
@@ -97,11 +112,11 @@ export default function SpoilerControl({
                   className={`
                     relative px-3 sm:px-4 py-1.5 rounded-full text-xs font-medium
                     transition-all duration-200 ease-in-out
-                    flex items-center gap-1.5 whitespace-nowrap
+                    flex items-center gap-1.5 whitespace-nowrap border
                     ${
                       isActive
-                        ? 'bg-background text-foreground shadow-md border border-border/50'
-                        : 'text-muted hover:text-foreground hover:bg-surface2/30'
+                        ? `${pref.activeClass} shadow-md`
+                        : `text-muted ${pref.hoverClass}`
                     }
                   `}
                   title={pref.description}

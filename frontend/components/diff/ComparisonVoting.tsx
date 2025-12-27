@@ -110,10 +110,28 @@ export default function ComparisonVoting({ work, screenWork }: ComparisonVotingP
           {/* Main Preference Visualization */}
           <div>
             <div className="flex items-center justify-between mb-1.5">
-              <span className="text-sm font-medium">Community Preference</span>
-              <span className="text-xs text-muted">
-                {stats.total_votes} {stats.total_votes === 1 ? 'vote' : 'votes'}
-              </span>
+              <div className="flex items-center gap-2">
+                <span className="text-sm font-medium">Community Preference</span>
+                {stats.total_votes < 10 && (
+                  <span className="px-2 py-0.5 bg-accent-amber/10 text-accent-amber text-xs font-medium rounded-full">
+                    Early votes
+                  </span>
+                )}
+              </div>
+              <div className="flex items-center gap-3">
+                {stats.faithfulness.average !== null && (
+                  <div className="flex items-center gap-1.5">
+                    <span className="text-xs text-muted">Faithfulness</span>
+                    <span className="text-sm font-bold text-link">
+                      {stats.faithfulness.average.toFixed(1)}
+                    </span>
+                    <span className="text-xs text-muted">/5</span>
+                  </div>
+                )}
+                <span className="text-xs text-muted">
+                  n={stats.total_votes} {stats.total_votes === 1 ? 'vote' : 'votes'}
+                </span>
+              </div>
             </div>
 
             {/* Split Bar Visualization */}

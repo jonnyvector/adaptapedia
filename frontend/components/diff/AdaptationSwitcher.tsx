@@ -12,6 +12,7 @@ interface AdaptationSwitcherProps {
   currentScreenWorkTitle: string;
   currentScreenWorkYear?: number;
   currentScreenWorkType: 'MOVIE' | 'TV';
+  currentScreenWorkPosterUrl?: string;
 }
 
 export default function AdaptationSwitcher({
@@ -21,6 +22,7 @@ export default function AdaptationSwitcher({
   currentScreenWorkTitle,
   currentScreenWorkYear,
   currentScreenWorkType,
+  currentScreenWorkPosterUrl,
 }: AdaptationSwitcherProps): JSX.Element {
   const router = useRouter();
   const [adaptations, setAdaptations] = useState<AdaptationEdge[]>([]);
@@ -89,24 +91,25 @@ export default function AdaptationSwitcher({
   // Don't render switcher if loading or only one adaptation
   if (loading || otherAdaptations.length === 0) {
     return (
-      <div className="text-xl sm:text-2xl md:text-3xl font-bold">
+      <div className="text-xl sm:text-2xl md:text-3xl font-bold" style={{ wordBreak: 'break-word', overflowWrap: 'break-word' }}>
         {currentScreenWorkTitle}
       </div>
     );
   }
 
   return (
-    <div className="relative inline-block" data-adaptation-switcher>
+    <div className="relative inline-block max-w-full" data-adaptation-switcher>
       {/* Current adaptation button */}
       <button
         onClick={() => setIsOpen(!isOpen)}
-        className="text-xl sm:text-2xl md:text-3xl font-bold text-left hover:text-link transition-colors flex items-center gap-2 group !border-0 !bg-transparent !p-0"
+        className="text-xl sm:text-2xl md:text-3xl font-bold text-left hover:text-link transition-colors group !border-0 !bg-transparent !p-0"
+        style={{ wordBreak: 'break-word', overflowWrap: 'break-word', whiteSpace: 'normal', display: 'block', maxWidth: '100%' }}
         aria-expanded={isOpen}
         aria-haspopup="true"
       >
-        <span>{currentScreenWorkTitle}</span>
+        {currentScreenWorkTitle}
         <span
-          className="text-base sm:text-lg text-muted group-hover:text-link transition-colors"
+          className="text-base sm:text-lg text-muted group-hover:text-link transition-colors ml-2"
           aria-hidden="true"
         >
           {isOpen ? '▴' : '▾'}
@@ -116,31 +119,36 @@ export default function AdaptationSwitcher({
       {/* Dropdown menu */}
       {isOpen && (
         <div
-          className="absolute top-full left-0 mt-2 w-80 max-w-[calc(100vw-2rem)] bg-background border-2 border-border rounded-lg shadow-xl z-50 overflow-hidden"
+          className="absolute top-full right-0 md:right-0 left-auto mt-2 w-80 max-w-[calc(100vw-2rem)] bg-background border border-border rounded-lg shadow-xl z-50 overflow-hidden"
           role="menu"
         >
           {/* Current adaptation (highlighted) */}
           <div
-            className="px-4 py-3 bg-link/10 border-b border-border"
+            className="px-4 py-3 bg-link/10 border-b border-border flex items-start gap-3"
             role="menuitem"
           >
-            <div className="flex items-start justify-between gap-2">
-              <div className="flex-1 min-w-0">
-                <div className="text-sm font-semibold text-foreground truncate">
-                  {currentScreenWorkTitle}
-                </div>
-                <div className="text-xs text-muted mt-1">
-                  {currentScreenWorkType === 'MOVIE' ? 'Movie' : 'TV Series'}
-                  {currentScreenWorkYear && ` • ${currentScreenWorkYear}`}
-                </div>
+            {currentScreenWorkPosterUrl && (
+              <img
+                src={currentScreenWorkPosterUrl}
+                alt={currentScreenWorkTitle}
+                className="w-12 h-18 object-cover rounded flex-shrink-0"
+              />
+            )}
+            <div className="flex-1 min-w-0 py-1 text-left">
+              <div className="text-sm font-semibold text-foreground">
+                {currentScreenWorkTitle}
               </div>
-              <span
-                className="text-xs px-2 py-1 bg-link/20 text-link rounded font-medium whitespace-nowrap"
-                aria-label="Currently viewing"
-              >
-                Current
-              </span>
+              <div className="text-xs text-muted mt-1">
+                {currentScreenWorkType === 'MOVIE' ? 'Movie' : 'TV Series'}
+                {currentScreenWorkYear && ` • ${currentScreenWorkYear}`}
+              </div>
             </div>
+            <span
+              className="text-xs px-2 py-1 bg-link/20 text-link rounded font-medium whitespace-nowrap flex-shrink-0 self-start"
+              aria-label="Currently viewing"
+            >
+              Current
+            </span>
           </div>
 
           {/* Other adaptations */}
@@ -151,18 +159,23 @@ export default function AdaptationSwitcher({
                 <button
                   key={edge.id}
                   onClick={() => handleAdaptationChange(screen.slug)}
-                  className="w-full px-4 py-3 text-left hover:bg-muted/10 transition-colors !bg-transparent !border-0 !border-b !border-solid !border-border/50 last:!border-b-0 !rounded-none"
+                  className="w-full px-4 py-3 border-b border-border last:border-b-0 hover:bg-muted/10 transition-colors flex items-start gap-3 text-left"
                   role="menuitem"
                 >
-                  <div className="flex items-start justify-between gap-2">
-                    <div className="flex-1 min-w-0">
-                      <div className="text-sm font-medium text-foreground truncate">
-                        {screen.title}
-                      </div>
-                      <div className="text-xs text-muted mt-1">
-                        {screen.type === 'MOVIE' ? 'Movie' : 'TV Series'}
-                        {screen.year && ` • ${screen.year}`}
-                      </div>
+                  {screen.poster_url && (
+                    <img
+                      src={screen.poster_url}
+                      alt={screen.title}
+                      className="w-12 h-18 object-cover rounded flex-shrink-0"
+                    />
+                  )}
+                  <div className="flex-1 min-w-0 py-1">
+                    <div className="text-sm font-medium text-foreground">
+                      {screen.title}
+                    </div>
+                    <div className="text-xs text-muted mt-1">
+                      {screen.type === 'MOVIE' ? 'Movie' : 'TV Series'}
+                      {screen.year && ` • ${screen.year}`}
                     </div>
                   </div>
                 </button>
@@ -171,13 +184,15 @@ export default function AdaptationSwitcher({
           </div>
 
           {/* View all link */}
-          <button
-            onClick={handleViewAll}
-            className="w-full px-4 py-3 text-sm text-link hover:bg-muted/10 font-medium transition-colors text-left !bg-transparent !border-0 !border-t-2 !border-solid !border-border !rounded-none"
-            role="menuitem"
-          >
-            View all adaptations →
-          </button>
+          <div className="border-t border-border">
+            <button
+              onClick={handleViewAll}
+              className="w-full px-4 py-3 text-sm text-link hover:bg-muted/10 font-medium transition-colors text-left"
+              role="menuitem"
+            >
+              View all adaptations →
+            </button>
+          </div>
         </div>
       )}
     </div>

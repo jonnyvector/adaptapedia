@@ -103,6 +103,7 @@ class DiffService:
                 'work_id': int,
                 'work_title': str,
                 'work_slug': str,
+                'work_year': int,
                 'screen_work_id': int,
                 'screen_work_title': str,
                 'screen_work_slug': str,
@@ -192,6 +193,7 @@ class DiffService:
                 'work_id': work.id,
                 'work_title': work.title,
                 'work_slug': work.slug,
+                'work_year': work.year,
                 'cover_url': work.cover_url,
                 'screen_work_id': screen_work.id,
                 'screen_work_title': screen_work.title,
@@ -213,6 +215,7 @@ class DiffService:
         Get featured comparisons with highest overall engagement.
 
         Featured algorithm:
+        - Curated work IDs get priority
         - Total diffs (weighted 2x)
         - Total votes
         - Recent activity boost
@@ -222,8 +225,12 @@ class DiffService:
         from works.models import Work
         from screen.models import ScreenWork
 
+        # Curated work IDs - only these will appear in featured
+        CURATED_WORK_IDS = [3115, 3105, 3108, 3121, 4486, 3141, 3194, 2192]
+
         comparisons = DiffItem.objects.filter(
-            status='LIVE'
+            status='LIVE',
+            work_id__in=CURATED_WORK_IDS  # Only show curated works
         ).values(
             'work_id', 'screen_work_id'
         ).annotate(
@@ -376,13 +383,15 @@ class DiffService:
     @staticmethod
     def get_needs_help(limit: int = 20) -> Dict[str, Any]:
         """
-        Get comparisons and diffs that need community help.
+        Get comparisons that need community help (grouped by comparison, not individual diffs).
 
         Returns:
             dict with sections:
             - needs_differences: Comparisons with <3 diffs
-            - most_disputed: Diffs with controversial voting (high total, split votes)
-            - no_comments: Diffs with votes but no comments yet
+            - most_disputed: Comparisons with controversial diffs that need discussion
+            - no_comments: Comparisons with diffs that have votes but no comments yet
+
+        Each item includes counts of how many diffs need help.
         """
         from works.models import Work
         from screen.models import ScreenWork
@@ -398,22 +407,106 @@ class DiffService:
             total_diffs__lt=3
         ).order_by('total_diffs', 'work_id', 'screen_work_id')
 
-        # Fetch related data
-        work_ids = set([c['work_id'] for c in needs_diffs_comparisons])
-        screen_work_ids = set([c['screen_work_id'] for c in needs_diffs_comparisons])
-        works_dict = {w.id: w for w in Work.objects.filter(id__in=work_ids)}
-        screens_dict = {s.id: s for s in ScreenWork.objects.filter(id__in=screen_work_ids)}
+        # 2. Group disputed diffs by comparison
+        disputed_by_comparison = {}
+        disputed_diffs = DiffItem.objects.filter(
+            status='LIVE'
+        ).select_related('work', 'screen_work').annotate(
+            accurate_count=Count('votes', filter=Q(votes__vote='ACCURATE'), distinct=True),
+            disagree_count=Count('votes', filter=Q(votes__vote='DISAGREE'), distinct=True),
+            nuance_count=Count('votes', filter=Q(votes__vote='NEEDS_NUANCE'), distinct=True),
+        ).annotate(
+            total_votes=F('accurate_count') + F('disagree_count') + F('nuance_count')
+        ).filter(
+            total_votes__gte=5  # Minimum votes to be considered disputed
+        )
 
-        needs_differences = []
-        seen_pairs = set()  # Track (work_id, screen_work_id) to prevent duplicates
+        for diff in disputed_diffs:
+            key = (diff.work_id, diff.screen_work_id)
+            if key not in disputed_by_comparison:
+                disputed_by_comparison[key] = {
+                    'work': diff.work,
+                    'screen_work': diff.screen_work,
+                    'disputed_count': 0,
+                    'total_votes': 0,
+                }
+            # Calculate controversy: more controversial when votes are split
+            accurate = diff.accurate_count
+            disagree = diff.disagree_count
+            nuance = diff.nuance_count
+            total = accurate + disagree + nuance
+            if total > 0:
+                # High controversy when accurate% is between 30-70%
+                accurate_pct = accurate / total
+                is_controversial = 0.3 <= accurate_pct <= 0.7
+                if is_controversial:
+                    disputed_by_comparison[key]['disputed_count'] += 1
+                    disputed_by_comparison[key]['total_votes'] += total
+
+        # Sort by number of disputed diffs
+        most_disputed_comparisons = sorted(
+            disputed_by_comparison.items(),
+            key=lambda x: (x[1]['disputed_count'], x[1]['total_votes']),
+            reverse=True
+        )[:limit]
+
+        # 3. Group no-comment diffs by comparison
+        no_comments_by_comparison = {}
+        no_comments_diffs = DiffItem.objects.filter(
+            status='LIVE'
+        ).select_related('work', 'screen_work').annotate(
+            comment_count=Count('comments', filter=Q(comments__status='LIVE'), distinct=True),
+            vote_count=Count('votes', distinct=True)
+        ).filter(
+            comment_count=0,
+            vote_count__gte=1  # Has at least one vote but no discussion
+        )
+
+        for diff in no_comments_diffs:
+            key = (diff.work_id, diff.screen_work_id)
+            if key not in no_comments_by_comparison:
+                no_comments_by_comparison[key] = {
+                    'work': diff.work,
+                    'screen_work': diff.screen_work,
+                    'no_comment_count': 0,
+                    'total_votes': 0,
+                }
+            no_comments_by_comparison[key]['no_comment_count'] += 1
+            no_comments_by_comparison[key]['total_votes'] += diff.vote_count
+
+        # Sort by number of no-comment diffs
+        no_comments_comparisons = sorted(
+            no_comments_by_comparison.items(),
+            key=lambda x: (x[1]['no_comment_count'], x[1]['total_votes']),
+            reverse=True
+        )[:limit]
+
+        # Collect all works and screen works we need
+        all_work_ids = set()
+        all_screen_work_ids = set()
+
         for comparison in needs_diffs_comparisons:
-            if len(needs_differences) >= limit:
-                break
+            all_work_ids.add(comparison['work_id'])
+            all_screen_work_ids.add(comparison['screen_work_id'])
+
+        for (work_id, screen_id), _ in most_disputed_comparisons:
+            all_work_ids.add(work_id)
+            all_screen_work_ids.add(screen_id)
+
+        for (work_id, screen_id), _ in no_comments_comparisons:
+            all_work_ids.add(work_id)
+            all_screen_work_ids.add(screen_id)
+
+        # Bulk fetch
+        works_dict = {w.id: w for w in Work.objects.filter(id__in=all_work_ids)}
+        screens_dict = {s.id: s for s in ScreenWork.objects.filter(id__in=all_screen_work_ids)}
+
+        # Build results
+        needs_differences = []
+        for comparison in needs_diffs_comparisons[:limit]:
             work = works_dict.get(comparison['work_id'])
             screen = screens_dict.get(comparison['screen_work_id'])
-            pair_key = (comparison['work_id'], comparison['screen_work_id'])
-            if work and screen and pair_key not in seen_pairs:
-                seen_pairs.add(pair_key)
+            if work and screen:
                 needs_differences.append({
                     'work_id': work.id,
                     'work_title': work.title,
@@ -426,57 +519,97 @@ class DiffService:
                     'screen_work_type': screen.get_type_display(),
                     'screen_work_year': screen.year,
                     'poster_url': screen.poster_url,
-                    'total_diffs': comparison['total_diffs'],
+                    'diff_count': comparison['total_diffs'],
                 })
 
-        # 2. Most disputed diffs (high controversy score)
-        disputed_diffs = DiffItem.objects.filter(
-            status='LIVE'
-        ).select_related('work', 'screen_work', 'created_by').annotate(
-            accurate_count=Count(
-                Case(When(votes__vote='ACCURATE', then=1)),
-                distinct=True
-            ),
-            disagree_count=Count(
-                Case(When(votes__vote='DISAGREE', then=1)),
-                distinct=True
-            ),
-            nuance_count=Count(
-                Case(When(votes__vote='NEEDS_NUANCE', then=1)),
-                distinct=True
-            ),
-            total_votes=F('accurate_count') + F('disagree_count') + F('nuance_count'),
-            controversy_score=ExpressionWrapper(
-                F('total_votes') * Case(
-                    When(total_votes__gt=0, then=(
-                        1.0 - (F('accurate_count') - F('disagree_count')) *
-                        (F('accurate_count') - F('disagree_count')) /
-                        (F('total_votes') * F('total_votes'))
-                    )),
-                    default=0.0,
-                    output_field=FloatField()
-                ),
-                output_field=FloatField()
-            )
-        ).filter(
-            total_votes__gte=5  # Minimum votes to be considered disputed
-        ).order_by('-controversy_score')[:limit]
+        most_disputed = []
+        for (work_id, screen_id), data in most_disputed_comparisons:
+            most_disputed.append({
+                'work_id': data['work'].id,
+                'work_title': data['work'].title,
+                'work_slug': data['work'].slug,
+                'work_author': data['work'].author,
+                'cover_url': data['work'].cover_url,
+                'screen_work_id': data['screen_work'].id,
+                'screen_work_title': data['screen_work'].title,
+                'screen_work_slug': data['screen_work'].slug,
+                'screen_work_type': data['screen_work'].get_type_display(),
+                'screen_work_year': data['screen_work'].year,
+                'poster_url': data['screen_work'].poster_url,
+                'disputed_diff_count': data['disputed_count'],
+                'total_votes': data['total_votes'],
+            })
 
-        # 3. Diffs with no comments yet (but have votes)
-        no_comments_diffs = DiffItem.objects.filter(
-            status='LIVE'
-        ).select_related('work', 'screen_work', 'created_by').annotate(
-            comment_count=Count('comments', filter=Q(comments__status='LIVE')),
-            vote_count=Count('votes')
-        ).filter(
-            comment_count=0,
-            vote_count__gte=3  # Has votes but no discussion
-        ).order_by('-vote_count', '-created_at')[:limit]
-
-        from .serializers import DiffItemSerializer
+        no_comments = []
+        for (work_id, screen_id), data in no_comments_comparisons:
+            no_comments.append({
+                'work_id': data['work'].id,
+                'work_title': data['work'].title,
+                'work_slug': data['work'].slug,
+                'work_author': data['work'].author,
+                'cover_url': data['work'].cover_url,
+                'screen_work_id': data['screen_work'].id,
+                'screen_work_title': data['screen_work'].title,
+                'screen_work_slug': data['screen_work'].slug,
+                'screen_work_type': data['screen_work'].get_type_display(),
+                'screen_work_year': data['screen_work'].year,
+                'poster_url': data['screen_work'].poster_url,
+                'no_comment_diff_count': data['no_comment_count'],
+                'total_votes': data['total_votes'],
+            })
 
         return {
             'needs_differences': needs_differences,
-            'most_disputed': DiffItemSerializer(disputed_diffs, many=True).data,
-            'no_comments': DiffItemSerializer(no_comments_diffs, many=True).data,
+            'most_disputed': most_disputed,
+            'no_comments': no_comments,
         }
+
+    @staticmethod
+    def get_all_comparisons(limit: int = 50) -> list[dict]:
+        """
+        Get all available book-to-screen comparisons from AdaptationEdge.
+
+        Returns comparisons sorted by TMDb popularity, showing diff count for each.
+        """
+        from works.models import Work
+        from screen.models import ScreenWork, AdaptationEdge
+
+        # Get all adaptation edges with related data
+        edges = AdaptationEdge.objects.select_related(
+            'work', 'screen_work'
+        ).order_by('-screen_work__tmdb_popularity', 'work__title')[:limit]
+
+        # Get diff counts for all comparisons
+        diff_counts = {}
+        diff_data = DiffItem.objects.filter(
+            status='LIVE'
+        ).values('work_id', 'screen_work_id').annotate(
+            total_diffs=Count('id', distinct=True)
+        )
+
+        for item in diff_data:
+            key = (item['work_id'], item['screen_work_id'])
+            diff_counts[key] = item['total_diffs']
+
+        results = []
+        for edge in edges:
+            key = (edge.work.id, edge.screen_work.id)
+            diff_count = diff_counts.get(key, 0)
+
+            results.append({
+                'work_id': edge.work.id,
+                'work_title': edge.work.title,
+                'work_slug': edge.work.slug,
+                'work_author': edge.work.author,
+                'work_year': edge.work.year,
+                'cover_url': edge.work.cover_url,
+                'screen_work_id': edge.screen_work.id,
+                'screen_work_title': edge.screen_work.title,
+                'screen_work_slug': edge.screen_work.slug,
+                'screen_work_type': edge.screen_work.get_type_display(),
+                'screen_work_year': edge.screen_work.year,
+                'poster_url': edge.screen_work.poster_url,
+                'diff_count': diff_count,
+            })
+
+        return results

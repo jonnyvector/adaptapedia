@@ -17,6 +17,7 @@ import AdaptationSwitcher from './AdaptationSwitcher';
 import BookmarkButton from './BookmarkButton';
 import SkeletonCard from '@/components/ui/SkeletonCard';
 import LoadingSkeleton from '@/components/ui/LoadingSkeleton';
+import EmptyState from '@/components/ui/EmptyState';
 import {
   loadSpoilerPreference,
   getMaxScopeForAPI,
@@ -53,6 +54,9 @@ export default function ComparisonView({
 
   // Track which diffs have expanded comments (persists across spoiler changes)
   const [expandedComments, setExpandedComments] = useState<Set<number>>(new Set());
+
+  // Track which categories are expanded
+  const [expandedCategories, setExpandedCategories] = useState<Set<string>>(new Set(['PLOT', 'CHARACTER', 'ENDING', 'SETTING', 'THEME', 'TONE', 'TIMELINE', 'WORLDBUILDING', 'OTHER']));
 
   // Filter and sort state
   const [selectedCategories, setSelectedCategories] = useState<Set<DiffCategory>>(new Set());
@@ -266,6 +270,18 @@ export default function ComparisonView({
     setSelectedCategories(new Set());
   };
 
+  const handleToggleCategoryExpansion = (category: string): void => {
+    setExpandedCategories((prev) => {
+      const next = new Set(prev);
+      if (next.has(category)) {
+        next.delete(category);
+      } else {
+        next.add(category);
+      }
+      return next;
+    });
+  };
+
   const handleIncreaseSpoilerLevel = (): void => {
     switch (spoilerPreference) {
       case 'SAFE':
@@ -288,19 +304,24 @@ export default function ComparisonView({
     <div className="max-w-6xl mx-auto p-4 sm:p-6">
       {/* Header */}
       <div className="mb-6 sm:mb-8">
+        {/* Bookmark button - top right */}
+        <div className="flex justify-end mb-3">
+          <BookmarkButton workId={work.id} screenWorkId={screenWork.id} />
+        </div>
+
         <div className="flex flex-col md:flex-row md:items-start md:justify-between mb-4 sm:mb-6 gap-6">
           {/* Book Section */}
-          <div className="flex-1 flex gap-4">
+          <div className="flex-1 flex gap-4 min-w-0">
             {work.cover_url && (
               <img
                 src={work.cover_url}
                 alt={`${work.title} cover`}
-                className="w-24 h-36 sm:w-32 sm:h-48 object-cover rounded-md border border-border shadow-md"
+                className="w-24 h-36 sm:w-32 sm:h-48 object-cover rounded-md border border-border shadow-md flex-shrink-0"
               />
             )}
-            <div className="flex-1">
+            <div className="flex-1 min-w-0">
               <h2 className="text-xs sm:text-sm text-muted mb-1 sm:mb-2">Book</h2>
-              <h1 className="text-xl sm:text-2xl md:text-3xl font-bold">{work.title}</h1>
+              <h1 className="text-xl sm:text-2xl md:text-3xl font-bold break-words">{work.title}</h1>
               {work.year && <p className="text-sm sm:text-base text-muted">({work.year})</p>}
               {work.summary && (
                 <p className="text-sm text-muted mt-2 line-clamp-3">{work.summary}</p>
@@ -308,23 +329,23 @@ export default function ComparisonView({
             </div>
           </div>
 
-          <div className="text-3xl sm:text-4xl text-muted self-center hidden md:block mx-2">→</div>
+          <div className="text-3xl sm:text-4xl text-muted self-center hidden md:block mx-2 flex-shrink-0">→</div>
           <div className="text-2xl text-muted self-center md:hidden">↓</div>
 
           {/* Movie Section */}
-          <div className="flex-1 flex gap-4 md:flex-row-reverse">
+          <div className="flex-1 flex gap-4 md:flex-row-reverse min-w-0">
             {screenWork.poster_url && (
               <img
                 src={screenWork.poster_url}
                 alt={`${screenWork.title} poster`}
-                className="w-24 h-36 sm:w-32 sm:h-48 object-cover rounded-md border border-border shadow-md"
+                className="w-24 h-36 sm:w-32 sm:h-48 object-cover rounded-md border border-border shadow-md flex-shrink-0"
               />
             )}
-            <div className="flex-1 md:text-right">
+            <div className="flex-1 md:text-right min-w-0">
               <h2 className="text-xs sm:text-sm text-muted mb-1 sm:mb-2">
                 {screenWork.type === 'MOVIE' ? 'Movie' : 'TV Series'}
               </h2>
-              <div className="mb-1 sm:mb-2 md:flex md:justify-end">
+              <div className="mb-1 sm:mb-2 md:flex md:justify-end min-w-0">
                 <AdaptationSwitcher
                   workId={work.id}
                   workSlug={work.slug}
@@ -332,6 +353,7 @@ export default function ComparisonView({
                   currentScreenWorkTitle={screenWork.title}
                   currentScreenWorkYear={screenWork.year}
                   currentScreenWorkType={screenWork.type}
+                  currentScreenWorkPosterUrl={screenWork.poster_url}
                 />
               </div>
               {screenWork.year && <p className="text-sm sm:text-base text-muted">({screenWork.year})</p>}
@@ -359,6 +381,44 @@ export default function ComparisonView({
         topCategories={topCategories}
       />
 
+      {/* Stats Line */}
+      {visibleDiffs.length > 0 && (
+        <div className="mb-4 px-4 py-2 bg-surface2/30 border border-border rounded-md">
+          <div className="flex flex-wrap items-center gap-x-4 gap-y-2 text-xs text-muted">
+            <span className="font-semibold text-foreground">
+              {visibleDiffs.length} {visibleDiffs.length === 1 ? 'diff' : 'diffs'} shown
+            </span>
+            {consensusAccuracy > 0 && (
+              <>
+                <span>·</span>
+                <span>
+                  <span className="font-semibold text-link">{Math.round(consensusAccuracy)}%</span> accurate
+                </span>
+              </>
+            )}
+            {topCategories.length > 0 && (
+              <>
+                <span>·</span>
+                <span className="flex items-center gap-1.5 flex-wrap">
+                  <span>Most common:</span>
+                  {topCategories.map((cat, idx) => (
+                    <span key={cat.category}>
+                      <button
+                        onClick={() => handleToggleCategory(cat.category.toUpperCase() as DiffCategory)}
+                        className="font-medium text-link hover:underline"
+                      >
+                        {cat.category}
+                      </button>
+                      {idx < topCategories.length - 1 && ', '}
+                    </span>
+                  ))}
+                </span>
+              </>
+            )}
+          </div>
+        </div>
+      )}
+
       {/* Filter Bar */}
       <div className="mb-8">
         <div className="space-y-4">
@@ -372,11 +432,10 @@ export default function ComparisonView({
               />
             </div>
             <div className="flex gap-3">
-              <BookmarkButton workId={work.id} screenWorkId={screenWork.id} />
               <DiffSort value={sortOption} onChange={setSortOption} />
               <button
                 onClick={handleAddDiff}
-                className="px-4 bg-link text-white rounded-md hover:bg-link/90 transition-colors font-medium whitespace-nowrap h-[40px] flex items-center justify-center"
+                className="btn-primary whitespace-nowrap"
               >
                 Add Difference
               </button>
@@ -420,12 +479,10 @@ export default function ComparisonView({
         <div className="space-y-6 sm:space-y-8">
           {/* Empty state when no diffs match filters */}
           {Object.keys(visibleDiffsByCategory).length === 0 && !hasActiveFilters && Object.keys(maskedDiffsByCategory).length === 0 && (
-            <div className="text-center py-8 sm:py-12 text-muted px-4">
-              <p className="text-base sm:text-lg mb-2">No differences found for this comparison.</p>
-              <p className="text-sm">
-                Be the first to add a difference!
-              </p>
-            </div>
+            <EmptyState
+              message="No differences found for this comparison. Be the first to add a difference!"
+              className="py-12"
+            />
           )}
 
           {/* Empty state when filters active but no matches */}
@@ -452,39 +509,56 @@ export default function ComparisonView({
           )}
 
           {/* Visible Diffs */}
-          {Object.entries(visibleDiffsByCategory).map(([category, categoryDiffs]) => (
-            <div key={category} className="border-b border-border pb-4 sm:pb-6 last:border-0">
-              <h2 className="text-lg sm:text-xl font-semibold mb-3 sm:mb-4 capitalize">
-                {category.toLowerCase().replace('_', ' ')}
-              </h2>
-              <div className="space-y-3 sm:space-y-4">
-                {categoryDiffs.map((diff) => (
-                  <DiffItemCard
-                    key={diff.id}
-                    diff={diff}
-                    userSpoilerScope={currentSpoilerScope}
-                    onSpoilerPreferenceChange={(pref) => {
-                      scrollToDiffIdRef.current = diff.id;
-                      setSpoilerPreference(pref);
-                    }}
-                    currentSpoilerPreference={spoilerPreference}
-                    commentsExpanded={expandedComments.has(diff.id)}
-                    onCommentsExpandedChange={(expanded) => {
-                      setExpandedComments(prev => {
-                        const next = new Set(prev);
-                        if (expanded) {
-                          next.add(diff.id);
-                        } else {
-                          next.delete(diff.id);
-                        }
-                        return next;
-                      });
-                    }}
-                  />
-                ))}
+          {Object.entries(visibleDiffsByCategory).map(([category, categoryDiffs]) => {
+            const isExpanded = expandedCategories.has(category);
+            return (
+              <div key={category} className="border-b border-border pb-4 sm:pb-6 last:border-0">
+                {/* Category Header - Collapsible */}
+                <button
+                  onClick={() => handleToggleCategoryExpansion(category)}
+                  className="w-full flex items-center justify-between mb-3 sm:mb-4 text-left group hover:text-link transition-colors"
+                >
+                  <h2 className="text-base sm:text-lg font-semibold capitalize flex items-center gap-2">
+                    <span className="text-muted group-hover:text-link transition-colors">
+                      {isExpanded ? '▾' : '▸'}
+                    </span>
+                    <span>{category.toLowerCase().replace('_', ' ')}</span>
+                    <span className="text-sm text-muted font-normal">· {categoryDiffs.length}</span>
+                  </h2>
+                </button>
+
+                {/* Category Diffs */}
+                {isExpanded && (
+                  <div className="space-y-3 sm:space-y-4">
+                    {categoryDiffs.map((diff) => (
+                      <DiffItemCard
+                        key={diff.id}
+                        diff={diff}
+                        userSpoilerScope={currentSpoilerScope}
+                        onSpoilerPreferenceChange={(pref) => {
+                          scrollToDiffIdRef.current = diff.id;
+                          setSpoilerPreference(pref);
+                        }}
+                        currentSpoilerPreference={spoilerPreference}
+                        commentsExpanded={expandedComments.has(diff.id)}
+                        onCommentsExpandedChange={(expanded) => {
+                          setExpandedComments(prev => {
+                            const next = new Set(prev);
+                            if (expanded) {
+                              next.add(diff.id);
+                            } else {
+                              next.delete(diff.id);
+                            }
+                            return next;
+                          });
+                        }}
+                      />
+                    ))}
+                  </div>
+                )}
               </div>
-            </div>
-          ))}
+            );
+          })}
 
           {/* Masked Diffs - Show these after visible diffs */}
           {maskedDiffs.length > 0 && (

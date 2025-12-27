@@ -69,11 +69,14 @@ export interface DiffItem {
   work_slug?: string;
   screen_work_title?: string;
   screen_work_slug?: string;
+  cover_url?: string;
+  poster_url?: string;
   category: DiffCategory;
   claim: string;
   detail: string;
   spoiler_scope: SpoilerScope;
   status: string;
+  image?: string | null;
   created_by: number;
   created_by_username: string;
   vote_counts: {
@@ -286,6 +289,7 @@ export interface BrowseSections {
   recently_updated: BrowseComparison[];
   most_documented: BrowseComparison[];
   trending: BrowseComparison[];
+  all_comparisons: BrowseComparison[];
 }
 
 export interface GenreListResponse {
@@ -328,6 +332,7 @@ export interface TrendingComparison {
   work_id: number;
   work_title: string;
   work_slug: string;
+  work_year?: number | null;
   cover_url?: string;
   screen_work_id: number;
   screen_work_title: string;
@@ -477,8 +482,26 @@ export interface VoteResponse {
   };
 }
 
+export interface NeedsHelpComparison {
+  work_id: number;
+  work_title: string;
+  work_slug: string;
+  work_author?: string;
+  cover_url?: string;
+  screen_work_id: number;
+  screen_work_title: string;
+  screen_work_slug: string;
+  screen_work_type: string;
+  screen_work_year?: number;
+  poster_url?: string;
+  diff_count?: number;
+  disputed_diff_count?: number;
+  no_comment_diff_count?: number;
+  total_votes?: number;
+}
+
 export interface NeedsHelpResponse {
-  needs_differences: BrowseComparison[];
-  most_disputed: DiffItem[];
-  no_comments: DiffItem[];
+  needs_differences: NeedsHelpComparison[];
+  most_disputed: NeedsHelpComparison[];
+  no_comments: NeedsHelpComparison[];
 }

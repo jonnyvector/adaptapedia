@@ -2,10 +2,11 @@ import { Metadata } from 'next';
 import { api } from '@/lib/api';
 import type { BrowseSections } from '@/lib/types';
 import ComparisonCard from '@/components/browse/ComparisonCard';
+import EmptyState from '@/components/ui/EmptyState';
 
 export const metadata: Metadata = {
-  title: 'Browse Comparisons - Adaptapedia',
-  description: 'Explore book-to-screen comparisons with documented differences',
+  title: 'Browse Comparisons - Book vs. Movie',
+  description: 'Explore book-to-movie comparisons with documented differences',
 };
 
 export default async function BrowsePage(): Promise<JSX.Element> {
@@ -20,6 +21,7 @@ export default async function BrowsePage(): Promise<JSX.Element> {
       recently_updated: [],
       most_documented: [],
       trending: [],
+      all_comparisons: [],
     };
   }
 
@@ -27,14 +29,15 @@ export default async function BrowsePage(): Promise<JSX.Element> {
     sections.featured.length > 0 ||
     sections.recently_updated.length > 0 ||
     sections.most_documented.length > 0 ||
-    sections.trending.length > 0;
+    sections.trending.length > 0 ||
+    sections.all_comparisons.length > 0;
 
   return (
     <main className="min-h-screen">
-      <div className="container py-8 sm:py-12">
+      <div className="container py-8 md:py-12">
         {/* Header */}
-        <div className="mb-8 sm:mb-12">
-          <h1 className="mb-3 text-3xl sm:text-4xl font-bold">
+        <div className="mb-12">
+          <h1 className="mb-3 text-4xl md:text-5xl font-bold">
             Browse Comparisons
           </h1>
           <p className="text-base sm:text-lg text-muted max-w-2xl">
@@ -44,21 +47,17 @@ export default async function BrowsePage(): Promise<JSX.Element> {
         </div>
 
         {!hasAnyContent ? (
-          <div className="border border-border rounded-lg p-12 text-center">
-            <p className="text-muted mb-4">
-              No comparisons available yet. Be the first to document differences!
-            </p>
-            <a href="/" className="text-link hover:underline">
-              ← Back to Home
-            </a>
-          </div>
+          <EmptyState
+            message="No comparisons available yet. Be the first to document differences!"
+            action={{ label: "← Back to Home", href: "/" }}
+          />
         ) : (
           <div className="space-y-12 sm:space-y-16">
             {/* Featured Section */}
             {sections.featured.length > 0 && (
               <section>
                 <div className="mb-6">
-                  <h2 className="text-2xl font-bold mb-2">Featured</h2>
+                  <h2 className="text-3xl md:text-4xl font-bold mb-2">Featured</h2>
                   <p className="text-muted">
                     Top comparisons with the most engagement
                   </p>
@@ -75,7 +74,7 @@ export default async function BrowsePage(): Promise<JSX.Element> {
             {sections.recently_updated.length > 0 && (
               <section>
                 <div className="mb-6">
-                  <h2 className="text-2xl font-bold mb-2">Recently Updated</h2>
+                  <h2 className="text-3xl md:text-4xl font-bold mb-2">Recently Updated</h2>
                   <p className="text-muted">
                     Fresh activity in the last 48 hours
                   </p>
@@ -92,7 +91,7 @@ export default async function BrowsePage(): Promise<JSX.Element> {
             {sections.most_documented.length > 0 && (
               <section>
                 <div className="mb-6">
-                  <h2 className="text-2xl font-bold mb-2">Most Documented</h2>
+                  <h2 className="text-3xl md:text-4xl font-bold mb-2">Most Documented</h2>
                   <p className="text-muted">
                     Comprehensive coverage with the most differences
                   </p>
@@ -109,13 +108,30 @@ export default async function BrowsePage(): Promise<JSX.Element> {
             {sections.trending.length > 0 && (
               <section>
                 <div className="mb-6">
-                  <h2 className="text-2xl font-bold mb-2">Trending This Week</h2>
+                  <h2 className="text-3xl md:text-4xl font-bold mb-2">Trending This Week</h2>
                   <p className="text-muted">
                     Most active comparisons in the last 7 days
                   </p>
                 </div>
                 <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 sm:gap-6">
                   {sections.trending.map((comparison) => (
+                    <ComparisonCard key={`${comparison.work_id}-${comparison.screen_work_id}`} comparison={comparison} />
+                  ))}
+                </div>
+              </section>
+            )}
+
+            {/* All Comparisons */}
+            {sections.all_comparisons.length > 0 && (
+              <section>
+                <div className="mb-6">
+                  <h2 className="text-3xl md:text-4xl font-bold mb-2">All Comparisons</h2>
+                  <p className="text-muted">
+                    Browse all available book-to-screen adaptations
+                  </p>
+                </div>
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 sm:gap-6">
+                  {sections.all_comparisons.map((comparison) => (
                     <ComparisonCard key={`${comparison.work_id}-${comparison.screen_work_id}`} comparison={comparison} />
                   ))}
                 </div>

@@ -19,6 +19,9 @@ django-celery-beat==2.6.0
 requests==2.31.0
 SPARQLWrapper==2.0.0
 
+# Image handling
+Pillow==10.2.0
+
 # Environment variables
 python-dotenv==1.0.1
 

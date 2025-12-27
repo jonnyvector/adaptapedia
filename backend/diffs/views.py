@@ -274,6 +274,7 @@ class DiffItemViewSet(viewsets.ModelViewSet):
             'recently_updated': DiffService.get_recently_updated(limit=12),
             'most_documented': DiffService.get_most_documented(limit=12),
             'trending': DiffService.get_trending_comparisons(limit=12, days=7),
+            'all_comparisons': DiffService.get_all_comparisons(limit=50),
         }
 
         # Cache for 15 minutes (900 seconds)

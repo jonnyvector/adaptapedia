@@ -26,9 +26,9 @@ export default function Home(): JSX.Element {
 
             {/* CTA Buttons */}
             <div className="flex flex-col sm:flex-row gap-4 justify-center items-center mb-16">
-              <Link href="/search" className="group inline-flex items-center gap-2 justify-center text-base px-8 py-4 bg-primary hover:bg-primary-hover text-white font-semibold rounded-xl shadow-lg hover:shadow-xl transition-all">
+              <Link href="/search" className="btn-primary btn-lg group">
                 Start exploring
-                <svg className="w-4 h-4 group-hover:translate-x-1 transition-transform" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <svg className="icon-sm group-hover:translate-x-1 transition-transform" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 7l5 5m0 0l-5 5m5-5H6" />
                 </svg>
               </Link>
@@ -77,9 +77,9 @@ export default function Home(): JSX.Element {
           {/* Balanced grid layout */}
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6 max-w-6xl mx-auto">
             {/* Card 1 - Structured Comparisons */}
-            <div className="card group hover:shadow-2xl hover:border-primary/30 transition-all duration-300 bg-gradient-to-br from-primary/5 to-transparent p-8">
+            <div className="card card-interactive bg-gradient-to-br from-primary/5 to-transparent p-8 relative overflow-hidden group-hover:shadow-2xl">
               <div className="mb-6 inline-flex items-center justify-center w-16 h-16 rounded-2xl bg-gradient-to-br from-primary to-accent-violet shadow-lg group-hover:scale-110 transition-transform">
-                <svg className="w-8 h-8 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <svg className="icon-xl text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-3 7h3m-3 4h3m-6-4h.01M9 16h.01" />
                 </svg>
               </div>
@@ -96,9 +96,9 @@ export default function Home(): JSX.Element {
             </div>
 
             {/* Card 2 - Spoiler Control */}
-            <div className="card group hover:shadow-2xl hover:border-primary/30 transition-all duration-300 p-8">
+            <div className="card card-interactive p-8 relative overflow-hidden">
               <div className="mb-6 inline-flex items-center justify-center w-16 h-16 rounded-2xl bg-gradient-to-br from-accent-violet to-primary shadow-lg group-hover:scale-110 transition-transform">
-                <svg className="w-8 h-8 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <svg className="icon-xl text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13.875 18.825A10.05 10.05 0 0112 19c-4.478 0-8.268-2.943-9.543-7a9.97 9.97 0 011.563-3.029m5.858.908a3 3 0 114.243 4.243M9.878 9.878l4.242 4.242M9.88 9.88l-3.29-3.29m7.532 7.532l3.29 3.29M3 3l3.59 3.59m0 0A9.953 9.953 0 0112 5c4.478 0 8.268 2.943 9.543 7a10.025 10.025 0 01-4.132 5.411m0 0L21 21" />
                 </svg>
               </div>
@@ -108,29 +108,29 @@ export default function Home(): JSX.Element {
               </p>
               <div className="space-y-3">
                 <div className="flex items-center gap-3">
-                  <div className="w-3 h-3 rounded-full bg-accent-emerald"></div>
+                  <div className="icon-xs rounded-full bg-accent-emerald"></div>
                   <span className="text-sm text-secondary font-medium">None - Completely safe</span>
                 </div>
                 <div className="flex items-center gap-3">
-                  <div className="w-3 h-3 rounded-full bg-accent-amber"></div>
+                  <div className="icon-xs rounded-full bg-accent-amber"></div>
                   <span className="text-sm text-secondary font-medium">Book only spoilers</span>
                 </div>
                 <div className="flex items-center gap-3">
-                  <div className="w-3 h-3 rounded-full bg-accent-amber"></div>
+                  <div className="icon-xs rounded-full bg-accent-amber"></div>
                   <span className="text-sm text-secondary font-medium">Screen only spoilers</span>
                 </div>
                 <div className="flex items-center gap-3">
-                  <div className="w-3 h-3 rounded-full bg-accent-rose"></div>
+                  <div className="icon-xs rounded-full bg-accent-rose"></div>
                   <span className="text-sm text-secondary font-medium">Full spoilers</span>
                 </div>
               </div>
             </div>
 
             {/* Card 3 - Community Driven - Full Width */}
-            <div className="md:col-span-2 card group hover:shadow-2xl hover:border-primary/30 transition-all duration-300 p-8 bg-gradient-to-r from-accent-emerald/5 to-transparent">
+            <div className="md:col-span-2 card card-interactive p-8 bg-gradient-to-r from-accent-emerald/5 to-transparent relative overflow-hidden">
               <div className="flex flex-col md:flex-row items-start md:items-center gap-6">
                 <div className="flex-shrink-0 w-16 h-16 rounded-2xl bg-gradient-to-br from-accent-emerald to-accent-blue shadow-lg group-hover:scale-110 transition-transform flex items-center justify-center">
-                  <svg className="w-8 h-8 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <svg className="icon-xl text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z" />
                   </svg>
                 </div>
@@ -175,13 +175,13 @@ export default function Home(): JSX.Element {
                 </p>
                 <div className="flex flex-col gap-2 text-sm text-muted">
                   <div className="flex items-center gap-2">
-                    <svg className="w-4 h-4 text-accent-emerald flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
+                    <svg className="icon-sm text-accent-emerald flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
                       <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
                     </svg>
                     <span>Typo tolerant</span>
                   </div>
                   <div className="flex items-center gap-2">
-                    <svg className="w-4 h-4 text-accent-emerald flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
+                    <svg className="icon-sm text-accent-emerald flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
                       <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
                     </svg>
                     <span>Genre & year filters</span>
@@ -190,7 +190,7 @@ export default function Home(): JSX.Element {
               </div>
               {/* Connector arrow - hidden on mobile */}
               <div className="hidden md:block absolute top-8 -right-4 text-muted">
-                <svg className="w-8 h-8" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <svg className="icon-xl" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 7l5 5m0 0l-5 5m5-5H6" />
                 </svg>
               </div>
@@ -208,13 +208,13 @@ export default function Home(): JSX.Element {
                 </p>
                 <div className="flex flex-col gap-2 text-sm text-muted">
                   <div className="flex items-center gap-2">
-                    <svg className="w-4 h-4 text-accent-emerald flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
+                    <svg className="icon-sm text-accent-emerald flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
                       <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
                     </svg>
                     <span>Custom spoiler levels</span>
                   </div>
                   <div className="flex items-center gap-2">
-                    <svg className="w-4 h-4 text-accent-emerald flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
+                    <svg className="icon-sm text-accent-emerald flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
                       <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
                     </svg>
                     <span>Categorized diffs</span>
@@ -223,7 +223,7 @@ export default function Home(): JSX.Element {
               </div>
               {/* Connector arrow */}
               <div className="hidden md:block absolute top-8 -right-4 text-muted">
-                <svg className="w-8 h-8" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <svg className="icon-xl" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 7l5 5m0 0l-5 5m5-5H6" />
                 </svg>
               </div>
@@ -241,13 +241,13 @@ export default function Home(): JSX.Element {
                 </p>
                 <div className="flex flex-col gap-2 text-sm text-muted">
                   <div className="flex items-center gap-2">
-                    <svg className="w-4 h-4 text-accent-emerald flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
+                    <svg className="icon-sm text-accent-emerald flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
                       <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
                     </svg>
                     <span>Vote on accuracy</span>
                   </div>
                   <div className="flex items-center gap-2">
-                    <svg className="w-4 h-4 text-accent-emerald flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
+                    <svg className="icon-sm text-accent-emerald flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
                       <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
                     </svg>
                     <span>Earn reputation</span>

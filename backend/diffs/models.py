@@ -49,6 +49,12 @@ class DiffItem(models.Model):
     detail = models.TextField(blank=True, help_text="Detailed explanation (optional)")
     spoiler_scope = models.CharField(max_length=15, choices=SpoilerScope.choices, default=SpoilerScope.NONE)
     status = models.CharField(max_length=10, choices=DiffStatus.choices, default=DiffStatus.LIVE)
+    image = models.ImageField(
+        upload_to='diff_images/',
+        blank=True,
+        null=True,
+        help_text="Optional image to illustrate the difference (max 5MB)"
+    )
     created_by = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, related_name='created_diffs')
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)

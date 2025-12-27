@@ -12,6 +12,8 @@ class DiffItemSerializer(serializers.ModelSerializer):
     work_slug = serializers.CharField(source='work.slug', read_only=True)
     screen_work_title = serializers.CharField(source='screen_work.title', read_only=True)
     screen_work_slug = serializers.CharField(source='screen_work.slug', read_only=True)
+    cover_url = serializers.CharField(source='work.cover_url', read_only=True)
+    poster_url = serializers.CharField(source='screen_work.poster_url', read_only=True)
     user_vote = serializers.SerializerMethodField()
 
     class Meta:
@@ -26,11 +28,14 @@ class DiffItemSerializer(serializers.ModelSerializer):
             'work_slug',
             'screen_work_title',
             'screen_work_slug',
+            'cover_url',
+            'poster_url',
             'category',
             'claim',
             'detail',
             'spoiler_scope',
             'status',
+            'image',
             'created_by',
             'created_by_username',
             'vote_counts',
@@ -61,6 +66,20 @@ class DiffItemSerializer(serializers.ModelSerializer):
         """Validate detail field."""
         if len(value) > 1000:
             raise serializers.ValidationError('Detail must not exceed 1000 characters.')
+        return value
+
+    def validate_image(self, value):
+        """Validate uploaded image."""
+        if value:
+            # Check file size (max 5MB)
+            if value.size > 5 * 1024 * 1024:
+                raise serializers.ValidationError('Image size must be less than 5MB.')
+
+            # Check file type
+            allowed_types = ['image/jpeg', 'image/jpg', 'image/png', 'image/webp']
+            if value.content_type not in allowed_types:
+                raise serializers.ValidationError('Only JPEG, PNG, and WebP images are allowed.')
+
         return value
 
 

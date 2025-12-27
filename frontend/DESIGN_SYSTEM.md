@@ -55,6 +55,7 @@ className="bg-accent-violet"
 ```tsx
 <button className="btn-outline">Add Difference</button>
 ```
+*Note: Automatically uses brighter blue (#60A5FA) in dark mode for better contrast*
 
 #### Semantic Variants
 ```tsx

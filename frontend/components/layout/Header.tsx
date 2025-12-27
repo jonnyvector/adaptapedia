@@ -195,7 +195,7 @@ export default function Header(): JSX.Element {
                 {/* Bookmarks Icon (Desktop only) */}
                 <Link
                   href={`/u/${user.username}/bookmarks`}
-                  className="hidden md:flex p-2 text-muted hover:text-foreground transition-colors min-h-[40px] min-w-[40px] items-center justify-center"
+                  className="icon-btn hidden md:flex"
                   title="My Bookmarks"
                   aria-label="My Bookmarks"
                 >
@@ -205,7 +205,7 @@ export default function Header(): JSX.Element {
                     viewBox="0 0 24 24"
                     strokeWidth="1.5"
                     stroke="currentColor"
-                    className="w-5 h-5"
+                    className="icon-md"
                   >
                     <path
                       strokeLinecap="round"
@@ -224,7 +224,7 @@ export default function Header(): JSX.Element {
             ) : (
               <Link
                 href="/auth/login"
-                className="text-sm px-3 py-2 bg-link text-white rounded-md hover:bg-link-hover transition-colors min-h-[40px] flex items-center"
+                className="btn-primary btn-sm"
               >
                 Login
               </Link>
