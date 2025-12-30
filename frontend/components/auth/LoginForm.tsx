@@ -93,7 +93,7 @@ export default function LoginForm({ redirectTo = '/' }: LoginFormProps): JSX.Ele
       <button
         type="submit"
         disabled={isSubmitting}
-        className="w-full flex items-center justify-center gap-2 px-4 py-3 bg-link text-white rounded-lg font-medium hover:bg-link/90 disabled:opacity-50 disabled:cursor-not-allowed transition-colors min-h-[48px]"
+        className="w-full btn-primary btn-lg"
       >
         {isSubmitting && <LoadingSpinner size="sm" />}
         {isSubmitting ? 'Logging in...' : 'Log In'}
