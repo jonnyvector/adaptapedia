@@ -1,5 +1,6 @@
 'use client';
 
+import Image from 'next/image';
 import type { Work, ScreenWork } from '@/lib/types';
 import type { SpoilerPreference } from './SpoilerControl';
 import AdaptationSwitcher from './AdaptationSwitcher';
@@ -48,9 +49,11 @@ export default function ComparisonHero({
 
             {work.cover_url && (
               <div className="relative flex-shrink-0">
-                <img
+                <Image
                   src={work.cover_url}
                   alt={`${work.title} cover`}
+                  width={144}
+                  height={208}
                   className="w-28 h-40 sm:w-36 sm:h-52 object-cover rounded-lg shadow-lg"
                 />
               </div>
@@ -115,9 +118,11 @@ export default function ComparisonHero({
           <div className="flex-1 flex gap-4 md:gap-5 md:flex-row-reverse min-w-0 relative">
             {screenWork.poster_url && (
               <div className="relative flex-shrink-0">
-                <img
+                <Image
                   src={screenWork.poster_url}
                   alt={`${screenWork.title} poster`}
+                  width={144}
+                  height={208}
                   className="w-28 h-40 sm:w-36 sm:h-52 object-cover rounded-lg shadow-lg"
                 />
               </div>

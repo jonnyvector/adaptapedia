@@ -2,6 +2,7 @@
 
 import { useState, useEffect, useMemo } from 'react';
 import { useRouter } from 'next/navigation';
+import Image from 'next/image';
 import type { AdaptationEdge, ApiResponse } from '@/lib/types';
 import { api } from '@/lib/api';
 
@@ -136,9 +137,11 @@ export default function AdaptationSwitcher({
             role="menuitem"
           >
             {currentScreenWorkPosterUrl && (
-              <img
+              <Image
                 src={currentScreenWorkPosterUrl}
                 alt={currentScreenWorkTitle}
+                width={48}
+                height={72}
                 className="w-12 h-18 object-cover rounded flex-shrink-0"
               />
             )}
@@ -171,9 +174,11 @@ export default function AdaptationSwitcher({
                   role="menuitem"
                 >
                   {screen.poster_url && (
-                    <img
+                    <Image
                       src={screen.poster_url}
                       alt={screen.title}
+                      width={48}
+                      height={72}
                       className="w-12 h-18 object-cover rounded flex-shrink-0"
                     />
                   )}

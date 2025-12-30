@@ -1,6 +1,7 @@
 'use client';
 
 import { useMemo, useState } from 'react';
+import Image from 'next/image';
 import type { Work, ScreenWork, WatchProvider } from '@/lib/types';
 import { BookOpenIcon, FilmIcon, ArrowTopRightOnSquareIcon } from '@/components/ui/Icons';
 
@@ -183,9 +184,11 @@ export default function GetItNowModule({ work, screenWork }: GetItNowModuleProps
             >
               <div className="flex items-center gap-3">
                 {bestStreamingProvider.logo_path && (
-                  <img
+                  <Image
                     src={`https://image.tmdb.org/t/p/original${bestStreamingProvider.logo_path}`}
                     alt={bestStreamingProvider.provider_name}
+                    width={32}
+                    height={32}
                     className="w-8 h-8 rounded"
                   />
                 )}
@@ -214,9 +217,11 @@ export default function GetItNowModule({ work, screenWork }: GetItNowModuleProps
                     className="group px-3 py-2 text-sm rounded-lg border-2 border-gray-200 dark:border-border bg-white dark:bg-surface hover:border-blue-500 dark:hover:border-blue-500 hover:bg-blue-50 dark:hover:bg-blue-950/20 transition-all flex items-center gap-2"
                   >
                     {provider.logo_path && (
-                      <img
+                      <Image
                         src={`https://image.tmdb.org/t/p/original${provider.logo_path}`}
                         alt={provider.provider_name}
+                        width={24}
+                        height={24}
                         className="w-6 h-6 rounded flex-shrink-0"
                       />
                     )}
@@ -245,9 +250,11 @@ export default function GetItNowModule({ work, screenWork }: GetItNowModuleProps
                       className="px-2 py-1.5 text-xs rounded-lg border border-gray-200 dark:border-border hover:bg-gray-50 dark:hover:bg-surface2 transition-colors flex items-center gap-2"
                     >
                       {provider.logo_path && (
-                        <img
+                        <Image
                           src={`https://image.tmdb.org/t/p/original${provider.logo_path}`}
                           alt={provider.provider_name}
+                          width={20}
+                          height={20}
                           className="w-5 h-5 rounded flex-shrink-0"
                         />
                       )}
@@ -263,9 +270,11 @@ export default function GetItNowModule({ work, screenWork }: GetItNowModuleProps
                       className="px-2 py-1.5 text-xs rounded-lg border border-gray-200 dark:border-border hover:bg-gray-50 dark:hover:bg-surface2 transition-colors flex items-center gap-2"
                     >
                       {provider.logo_path && (
-                        <img
+                        <Image
                           src={`https://image.tmdb.org/t/p/original${provider.logo_path}`}
                           alt={provider.provider_name}
+                          width={20}
+                          height={20}
                           className="w-5 h-5 rounded flex-shrink-0"
                         />
                       )}

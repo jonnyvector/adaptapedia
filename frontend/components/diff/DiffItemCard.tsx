@@ -3,6 +3,7 @@
 import { useState, useEffect, useRef } from 'react';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
+import Image from 'next/image';
 import type { DiffItem, VoteType, SpoilerScope, Comment } from '@/lib/types';
 import type { SpoilerPreference } from './SpoilerControl';
 import { useVoting } from '@/hooks/useVoting';
@@ -216,9 +217,11 @@ export default function DiffItemCard({
         {/* Image display */}
         {diff.image && (
           <div className="mb-3">
-            <img
+            <Image
               src={diff.image}
               alt="Difference illustration"
+              width={800}
+              height={400}
               className="max-w-full rounded-md border border-border cursor-pointer hover:opacity-90 transition-opacity"
               style={{ maxHeight: '400px' }}
               onClick={() => setLightboxOpen(true)}
