@@ -4,6 +4,7 @@ import { useState } from 'react';
 import type { DiffItem, SpoilerScope } from '@/lib/types';
 import DiffItemCard from './DiffItemCard';
 import { BookOpenIcon, FilmIcon, ExclamationTriangleIcon, LockClosedIcon } from '@/components/ui/Icons';
+import { getSpoilerLabel } from '@/lib/badge-utils';
 
 interface MaskedDiffCardProps {
   diff: DiffItem;
@@ -15,19 +16,6 @@ export default function MaskedDiffCard({
   userSpoilerScope,
 }: MaskedDiffCardProps): JSX.Element {
   const [revealed, setRevealed] = useState(false);
-
-  const getSpoilerTypeLabel = (scope: SpoilerScope): string => {
-    switch (scope) {
-      case 'BOOK_ONLY':
-        return 'Book Spoiler';
-      case 'SCREEN_ONLY':
-        return 'Screen Spoiler';
-      case 'FULL':
-        return 'Full Spoiler';
-      default:
-        return 'Spoiler';
-    }
-  };
 
   const getSpoilerIcon = (scope: SpoilerScope): JSX.Element => {
     const iconClass = "w-8 h-8";
@@ -56,7 +44,7 @@ export default function MaskedDiffCard({
         </span>
         <div className="flex-1">
           <h3 className="text-base sm:text-lg font-bold text-warn flex items-center gap-2">
-            {getSpoilerTypeLabel(diff.spoiler_scope)} Hidden
+            {getSpoilerLabel(diff.spoiler_scope)} Hidden
           </h3>
           <p className="text-sm text-muted mt-1">
             This difference contains{' '}
@@ -96,7 +84,7 @@ export default function MaskedDiffCard({
         <button
           onClick={() => setRevealed(true)}
           className="px-4 py-3 bg-warn text-white rounded-lg hover:bg-warn/90 transition-all font-semibold text-sm min-h-[48px] flex items-center justify-center gap-2 shadow-md hover:shadow-lg"
-          aria-label={`Reveal ${getSpoilerTypeLabel(diff.spoiler_scope).toLowerCase()}`}
+          aria-label={`Reveal ${getSpoilerLabel(diff.spoiler_scope).toLowerCase()}`}
         >
           <span className="text-lg" aria-hidden="true">👁️</span>
           <span>Reveal Spoiler</span>

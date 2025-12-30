@@ -10,6 +10,8 @@ import AddCommentForm from './AddCommentForm';
 import { useAuth } from '@/lib/auth-context';
 import LoadingSkeleton from '@/components/ui/LoadingSkeleton';
 import UserBadge from '@/components/user/UserBadge';
+import { getSpoilerBadgeColor, getSpoilerLabel } from '@/lib/badge-utils';
+import { getTimeSince } from '@/lib/date-utils';
 
 interface CommentsListProps {
   diffItemId: number;
@@ -33,55 +35,6 @@ function shouldShowComment(commentScope: SpoilerScope, userScope: SpoilerScope):
   if (userScope === 'SCREEN_ONLY' && commentScope === 'BOOK_ONLY') return false;
 
   return scopeHierarchy[commentScope] <= scopeHierarchy[userScope];
-}
-
-// Format timestamp as "X hours ago", "X days ago", etc.
-function formatTimestamp(timestamp: string): string {
-  const now = new Date();
-  const created = new Date(timestamp);
-  const diffMs = now.getTime() - created.getTime();
-  const diffMins = Math.floor(diffMs / 60000);
-  const diffHours = Math.floor(diffMs / 3600000);
-  const diffDays = Math.floor(diffMs / 86400000);
-
-  if (diffMins < 1) return 'just now';
-  if (diffMins < 60) return `${diffMins} minute${diffMins !== 1 ? 's' : ''} ago`;
-  if (diffHours < 24) return `${diffHours} hour${diffHours !== 1 ? 's' : ''} ago`;
-  if (diffDays < 30) return `${diffDays} day${diffDays !== 1 ? 's' : ''} ago`;
-
-  return created.toLocaleDateString();
-}
-
-// Get badge color for spoiler scope
-function getSpoilerBadgeColor(scope: SpoilerScope): string {
-  switch (scope) {
-    case 'NONE':
-      return 'bg-success/10 text-success border border-success/30';
-    case 'BOOK_ONLY':
-      return 'bg-cyan/10 text-cyan border border-cyan/30';
-    case 'SCREEN_ONLY':
-      return 'bg-purple/10 text-purple border border-purple/30';
-    case 'FULL':
-      return 'bg-magenta/10 text-magenta border border-magenta/30';
-    default:
-      return 'bg-surface border border-border';
-  }
-}
-
-// Get label for spoiler scope
-function getSpoilerLabel(scope: SpoilerScope): string {
-  switch (scope) {
-    case 'NONE':
-      return 'Safe';
-    case 'BOOK_ONLY':
-      return 'Book Spoilers';
-    case 'SCREEN_ONLY':
-      return 'Screen Spoilers';
-    case 'FULL':
-      return 'Full Spoilers';
-    default:
-      return scope;
-  }
 }
 
 // Avatar colors for different nesting levels
@@ -179,7 +132,7 @@ function CommentItem({ comment, depth = 0, isLast = false, onReplyAdded }: Comme
             )}
             <span className="text-muted text-xs">•</span>
             <span className="text-muted text-xs">
-              {formatTimestamp(comment.created_at)}
+              {getTimeSince(comment.created_at)}
             </span>
             {/* Spoiler badge (only if not NONE) */}
             {comment.spoiler_scope !== 'NONE' && (
