@@ -39,11 +39,12 @@ async function getComparisonData(
     throw error;
   }
 
-  // Get diffs with NONE spoiler scope for SSR
+  // Get ALL diffs with FULL scope server-side (will be filtered client-side by preference)
+  // This prevents unnecessary client-side refetching when spoiler preferences change
   const diffsResponse = (await api.compare.get(
     work.id,
     screenWork.id,
-    'NONE'
+    'FULL'
   )) as ApiResponse<DiffItem>;
 
   return {

@@ -51,9 +51,9 @@ export default function ComparisonView({
     setSpoilerPreference(loadSpoilerPreference());
   }, []);
 
-  const [ordering, setOrdering] = useState<string>('best');
-  const [diffs, setDiffs] = useState<DiffItem[]>(initialDiffs);
-  const [loading, setLoading] = useState(false);
+  // Use initialDiffs directly - no need to fetch client-side
+  // All diffs are provided server-side with FULL scope, we filter client-side
+  const diffs = initialDiffs;
 
   // Track which diffs have expanded comments (persists across spoiler changes)
   const [expandedComments, setExpandedComments] = useState<Set<number>>(new Set());
@@ -73,25 +73,6 @@ export default function ComparisonView({
     }
     router.push(`/compare/${work.slug}/${screenWork.slug}/add`);
   };
-
-  // Fetch diffs when preference or ordering changes
-  useEffect(() => {
-    const fetchDiffs = async (): Promise<void> => {
-      setLoading(true);
-      try {
-        // Always fetch FULL scope from API - we'll filter client-side
-        const maxScope = getMaxScopeForAPI(spoilerPreference);
-        const response = await api.compare.get(work.id, screenWork.id, maxScope, ordering);
-        setDiffs((response as { results: DiffItem[] }).results);
-      } catch (error) {
-        console.error('Failed to fetch diffs:', error);
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    fetchDiffs();
-  }, [spoilerPreference, ordering, work.id, screenWork.id]);
 
   // Filter diffs based on spoiler preference
   const { visible: visibleDiffs, masked: maskedDiffs } = useMemo(() => {
@@ -396,28 +377,8 @@ export default function ComparisonView({
         </div>
       )}
 
-      {/* Loading State */}
-      {loading && (
-        <div className="space-y-8" aria-live="polite" aria-busy="true">
-          <div>
-            <LoadingSkeleton width="w-48" height="h-7" className="mb-4" />
-            <div className="space-y-4">
-              <SkeletonCard variant="detailed" />
-              <SkeletonCard variant="detailed" />
-            </div>
-          </div>
-          <div>
-            <LoadingSkeleton width="w-40" height="h-7" className="mb-4" />
-            <div className="space-y-4">
-              <SkeletonCard variant="detailed" />
-            </div>
-          </div>
-        </div>
-      )}
-
       {/* Diffs by Category */}
-      {!loading && (
-        <div className="space-y-6 sm:space-y-8">
+      <div className="space-y-6 sm:space-y-8">
           {/* Starter Kit - when no diffs exist */}
           {diffs.length === 0 && (
             <DiffStarterKit workSlug={work.slug} screenSlug={screenWork.slug} />
@@ -527,10 +488,9 @@ export default function ComparisonView({
             </div>
           )}
         </div>
-      )}
 
       {/* Stats Footer */}
-      {!loading && diffs.length > 0 && (
+      {diffs.length > 0 && (
         <div className="mt-6 sm:mt-8 p-3 sm:p-4 bg-muted/10 rounded-lg text-center text-xs sm:text-sm text-muted">
           {hasActiveFilters ? (
             <>
