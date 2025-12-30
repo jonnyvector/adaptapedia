@@ -3,23 +3,24 @@
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import type { Work, ScreenWork, PreferenceChoice, ComparisonVoteStats } from '@/lib/types';
-import { api } from '@/lib/api';
 import { useAuth } from '@/lib/auth-context';
 import { calculateVotePercentage } from '@/lib/vote-utils';
 import { CheckCircleIcon } from '@/components/ui/Icons';
+import { submitComparisonVote, getComparisonVoteStats } from '@/app/actions/comparison-votes';
 
 interface ComparisonVotingProps {
   work: Work;
   screenWork: ScreenWork;
+  initialStats?: ComparisonVoteStats | null;
   onVoteSubmitted?: () => void;
 }
 
-export default function ComparisonVoting({ work, screenWork, onVoteSubmitted }: ComparisonVotingProps): JSX.Element {
+export default function ComparisonVoting({ work, screenWork, initialStats = null, onVoteSubmitted }: ComparisonVotingProps): JSX.Element {
   const router = useRouter();
   const { isAuthenticated } = useAuth();
 
-  const [stats, setStats] = useState<ComparisonVoteStats | null>(null);
-  const [loading, setLoading] = useState(true);
+  const [stats, setStats] = useState<ComparisonVoteStats | null>(initialStats);
+  const [loading, setLoading] = useState(!initialStats);
   const [submitting, setSubmitting] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [showSuccess, setShowSuccess] = useState(false);
@@ -32,13 +33,15 @@ export default function ComparisonVoting({ work, screenWork, onVoteSubmitted }: 
 
   const fetchStats = async () => {
     try {
-      const data = await api.comparisonVotes.getStats(work.id, screenWork.id);
-      setStats(data);
+      const result = await getComparisonVoteStats(work.id, screenWork.id);
+      if (result.success && result.data) {
+        setStats(result.data);
 
-      // Pre-fill form if user has already voted
-      if (data.user_vote) {
-        setPreference(data.user_vote.preference);
-        setFaithfulnessRating(data.user_vote.faithfulness_rating);
+        // Pre-fill form if user has already voted
+        if (result.data.user_vote) {
+          setPreference(result.data.user_vote.preference);
+          setFaithfulnessRating(result.data.user_vote.faithfulness_rating);
+        }
       }
     } catch (err) {
       console.error('Failed to fetch voting stats:', err);
@@ -48,8 +51,17 @@ export default function ComparisonVoting({ work, screenWork, onVoteSubmitted }: 
   };
 
   useEffect(() => {
-    fetchStats();
-  }, [work.id, screenWork.id]);
+    // Only fetch if we don't have initial stats
+    if (!initialStats) {
+      fetchStats();
+    } else {
+      // Pre-fill form from initial stats
+      if (initialStats.user_vote) {
+        setPreference(initialStats.user_vote.preference);
+        setFaithfulnessRating(initialStats.user_vote.faithfulness_rating);
+      }
+    }
+  }, [work.id, screenWork.id, initialStats]);
 
   const submitVote = async (selectedPreference: PreferenceChoice, faithfulness: number | null = null) => {
     if (!isAuthenticated) {
@@ -71,14 +83,17 @@ export default function ComparisonVoting({ work, screenWork, onVoteSubmitted }: 
     setError(null);
 
     try {
-      await api.comparisonVotes.submit({
-        work: work.id,
-        screen_work: screenWork.id,
-        has_read_book: true,
-        has_watched_adaptation: true,
-        preference: selectedPreference,
-        faithfulness_rating: faithfulness || faithfulnessRating,
-      });
+      // Use server action instead of direct API call
+      const result = await submitComparisonVote(
+        work.id,
+        screenWork.id,
+        selectedPreference,
+        faithfulness || faithfulnessRating
+      );
+
+      if (!result.success) {
+        throw new Error(result.error || 'Failed to submit vote');
+      }
 
       setPreference(selectedPreference);
       setShowSuccess(true);
