@@ -250,3 +250,50 @@ Store the QIDs (`?screenWork`, `?bookWork`) for traceability and refreshes.
 - TMDb logo/attribution on all pages using TMDb data
 - Open Library attribution in footer
 - Wikidata attribution on data sources page
+
+## Safety Protocols for Autonomous Work
+
+When given permissions to work autonomously, follow these strict safeguards:
+
+### Git Workflow
+- **ALWAYS** work on a feature branch (never directly on master)
+- Create branch: `git checkout -b feature/description`
+- Commit frequently with clear messages
+- Push regularly so progress is visible
+- **NEVER** force push
+- **NEVER** delete master branch
+
+### Safe Operations (Allowed)
+- Frontend component refactoring
+- Creating new React components/utilities
+- Updating imports and file structure
+- Adding TypeScript types
+- CSS/styling changes
+- Server actions (read-only or with revalidation)
+- Running `npm run type-check` and `npm run build` to verify changes
+
+### Unsafe Operations (Forbidden)
+- Running Django migrations (`python manage.py migrate`)
+- Django management commands that modify data
+- Direct database queries
+- Deleting files with data
+- Modifying Django models (requires migration)
+- npm/pip package updates without explicit permission
+- Any operation that could cause data loss
+
+### Emergency Rollback
+If something goes wrong, the user can:
+```bash
+# Discard all changes
+git checkout master
+git branch -D feature/branch-name
+
+# Or revert to specific point
+git reset --hard <commit-hash>
+```
+
+### Verification Steps
+Before each commit:
+1. Run `npm run type-check` (frontend)
+2. Verify no console errors
+3. Write clear commit message describing changes
