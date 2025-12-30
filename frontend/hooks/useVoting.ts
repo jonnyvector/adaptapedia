@@ -1,7 +1,7 @@
 import { useState, useCallback } from 'react';
-import { api } from '@/lib/api';
 import type { VoteType } from '@/lib/types';
 import { useToast } from '@/lib/toast-context';
+import { submitVote as submitVoteAction } from '@/app/actions/votes';
 
 interface VoteCounts {
   accurate: number;
@@ -75,7 +75,14 @@ export function useVoting(
       setUserVote(newUserVote);
 
       try {
-        const response = await api.diffs.vote(diffId, voteType);
+        // Use server action instead of direct API call
+        const result = await submitVoteAction(diffId, voteType);
+
+        if (!result.success) {
+          throw new Error(result.error || 'Failed to submit vote');
+        }
+
+        const response = result.data;
 
         // Show actionable toast with consensus data
         if (wasToggleOff) {
