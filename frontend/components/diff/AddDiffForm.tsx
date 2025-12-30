@@ -238,7 +238,7 @@ export default function AddDiffForm({ work, screenWork, initialCategory }: AddDi
       <div className="max-w-2xl mx-auto p-4 sm:p-6">
         <div className="bg-success/10 border border-success rounded-lg p-6 text-center">
           <div className="flex justify-center mb-4">
-            <CheckCircleIcon className="w-16 h-16 text-success" />
+            <CheckCircleIcon className="icon-2xl text-success" />
           </div>
           <h2 className="text-lg sm:text-xl font-semibold text-success mb-2">
             Difference submitted successfully!
@@ -384,7 +384,7 @@ export default function AddDiffForm({ work, screenWork, initialCategory }: AddDi
                   const fileInput = document.getElementById('image') as HTMLInputElement;
                   if (fileInput) fileInput.value = '';
                 }}
-                className="absolute top-2 right-2 bg-danger text-white rounded-full w-8 h-8 flex items-center justify-center hover:bg-danger/90 transition-colors"
+                className="absolute top-2 right-2 btn-danger icon-btn-primary"
                 aria-label="Remove image"
               >
                 ×
@@ -443,7 +443,7 @@ export default function AddDiffForm({ work, screenWork, initialCategory }: AddDi
           <button
             type="submit"
             disabled={isSubmitting}
-            className="flex-1 flex items-center justify-center gap-2 px-6 py-3 bg-link text-white rounded-md hover:bg-link/90 disabled:opacity-50 disabled:cursor-not-allowed transition-colors font-medium min-h-[48px]"
+            className="flex-1 btn-primary btn-lg"
           >
             {isSubmitting && <LoadingSpinner size="sm" />}
             {isSubmitting ? 'Submitting...' : 'Submit Difference'}
@@ -452,7 +452,7 @@ export default function AddDiffForm({ work, screenWork, initialCategory }: AddDi
             type="button"
             onClick={handleClear}
             disabled={isSubmitting}
-            className="px-6 py-3 bg-surface border border-border rounded-md hover:bg-surface2 disabled:opacity-50 disabled:cursor-not-allowed transition-colors min-h-[48px] font-medium"
+            className="btn-secondary btn-lg"
           >
             Clear
           </button>
@@ -460,7 +460,7 @@ export default function AddDiffForm({ work, screenWork, initialCategory }: AddDi
             type="button"
             onClick={handleCancel}
             disabled={isSubmitting}
-            className="px-6 py-3 bg-surface border border-border rounded-md hover:bg-surface2 disabled:opacity-50 disabled:cursor-not-allowed transition-colors min-h-[48px] font-medium"
+            className="btn-secondary btn-lg"
           >
             Cancel
           </button>
