@@ -74,7 +74,7 @@ export default function AdaptationSwitcher({
     router.push(`/book/${workSlug}`);
   };
 
-  // Close dropdown when clicking outside
+  // Close dropdown when clicking outside or pressing Escape
   useEffect(() => {
     if (!isOpen) return;
 
@@ -85,8 +85,18 @@ export default function AdaptationSwitcher({
       }
     };
 
+    const handleEscapeKey = (event: KeyboardEvent): void => {
+      if (event.key === 'Escape') {
+        setIsOpen(false);
+      }
+    };
+
     document.addEventListener('mousedown', handleClickOutside);
-    return () => document.removeEventListener('mousedown', handleClickOutside);
+    document.addEventListener('keydown', handleEscapeKey);
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+      document.removeEventListener('keydown', handleEscapeKey);
+    };
   }, [isOpen]);
 
   // Don't render switcher if loading or only one adaptation
