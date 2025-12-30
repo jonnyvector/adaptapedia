@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect, useMemo, useRef } from 'react';
+import { useState, useEffect, useMemo, useRef, useCallback } from 'react';
 import { useRouter } from 'next/navigation';
 import type { Work, ScreenWork, DiffItem, SpoilerScope, DiffCategory } from '@/lib/types';
 import { api } from '@/lib/api';
@@ -232,7 +232,7 @@ export default function ComparisonView({
       }));
   }, [categoryCounts]);
 
-  const handleToggleCategory = (category: DiffCategory): void => {
+  const handleToggleCategory = useCallback((category: DiffCategory): void => {
     setSelectedCategories((prev) => {
       const next = new Set(prev);
       if (next.has(category)) {
@@ -242,11 +242,11 @@ export default function ComparisonView({
       }
       return next;
     });
-  };
+  }, []);
 
-  const handleClearFilters = (): void => {
+  const handleClearFilters = useCallback((): void => {
     setSelectedCategories(new Set());
-  };
+  }, []);
 
   const handleToggleCategoryExpansion = (category: string): void => {
     setExpandedCategories((prev) => {

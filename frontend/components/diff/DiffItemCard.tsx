@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect, useRef } from 'react';
+import { useState, useEffect, useRef, useCallback } from 'react';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import Image from 'next/image';
@@ -114,7 +114,7 @@ export default function DiffItemCard({
     fetchCommentCount();
   }, [diff.id]);
 
-  const handleVote = async (voteType: VoteType) => {
+  const handleVote = useCallback(async (voteType: VoteType) => {
     if (!isAuthenticated) {
       // Store the vote intent in sessionStorage
       sessionStorage.setItem(`pendingVote_${diff.id}`, voteType);
@@ -124,7 +124,7 @@ export default function DiffItemCard({
 
     setShowError(false);
     await submitVote(voteType);
-  };
+  }, [isAuthenticated, diff.id, router, submitVote]);
 
   // Show error when it appears from voting hook
   useEffect(() => {
