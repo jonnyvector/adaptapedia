@@ -123,7 +123,7 @@ export default function SearchBar({
     <form onSubmit={handleSubmit} className="w-full max-w-2xl mx-auto">
       <div className="relative" ref={containerRef}>
         <div className="absolute left-4 top-1/2 -translate-y-1/2 text-muted pointer-events-none">
-          <SearchIcon className="w-5 h-5" />
+          <SearchIcon className="icon-md" />
         </div>
         <input
           ref={inputRef}
@@ -145,16 +145,16 @@ export default function SearchBar({
           <button
             type="button"
             onClick={handleClear}
-            className="absolute right-4 top-1/2 -translate-y-1/2 text-muted hover:text-foreground transition-colors w-5 h-5 flex items-center justify-center"
+            className="absolute right-4 top-1/2 -translate-y-1/2 text-muted hover:text-foreground transition-colors icon-md flex items-center justify-center"
             aria-label="Clear search"
             style={{ all: 'unset', cursor: 'pointer', position: 'absolute', right: '16px', top: '50%', transform: 'translateY(-50%)', color: 'var(--muted)', transition: 'color 0.15s ease' }}
           >
-            <XIcon className="w-4 h-4" />
+            <XIcon className="icon-sm" />
           </button>
         )}
         {isSearching && (
           <div className="absolute right-14 top-1/2 -translate-y-1/2">
-            <div className="w-4 h-4 border-2 border-link border-t-transparent rounded-full animate-spin" />
+            <div className="icon-sm border-2 border-link border-t-transparent rounded-full animate-spin" />
           </div>
         )}
 
