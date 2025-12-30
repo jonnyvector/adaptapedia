@@ -2,7 +2,8 @@
 
 import { useState, useEffect } from 'react';
 import { useAuth } from '@/lib/auth-context';
-import { api, ApiError } from '@/lib/api';
+import { ApiError } from '@/lib/api';
+import { checkBookmark, createBookmark, deleteBookmarkByComparison } from '@/app/actions/bookmarks';
 
 interface BookmarkButtonProps {
   workId: number;
@@ -23,21 +24,23 @@ export default function BookmarkButton({
 
   // Check if comparison is bookmarked
   useEffect(() => {
-    const checkBookmark = async (): Promise<void> => {
+    const checkBookmarkStatus = async (): Promise<void> => {
       if (!isAuthenticated) {
         return;
       }
 
       try {
-        const result = await api.bookmarks.check(workId, screenWorkId);
-        setIsBookmarked(result.is_bookmarked);
-        setBookmarkId(result.bookmark_id);
+        const result = await checkBookmark(workId, screenWorkId);
+        if (result.success && result.data) {
+          setIsBookmarked(result.data.is_bookmarked);
+          setBookmarkId(result.data.bookmark_id);
+        }
       } catch (err) {
         console.error('Failed to check bookmark status:', err);
       }
     };
 
-    checkBookmark();
+    checkBookmarkStatus();
   }, [isAuthenticated, workId, screenWorkId]);
 
   const handleToggleBookmark = async (): Promise<void> => {
@@ -52,15 +55,21 @@ export default function BookmarkButton({
 
     try {
       if (isBookmarked) {
-        // Remove bookmark
-        await api.bookmarks.deleteByComparison(workId, screenWorkId);
+        // Remove bookmark using server action
+        const result = await deleteBookmarkByComparison(workId, screenWorkId);
+        if (!result.success) {
+          throw new Error(result.error || 'Failed to delete bookmark');
+        }
         setIsBookmarked(false);
         setBookmarkId(null);
       } else {
-        // Add bookmark
-        const bookmark = await api.bookmarks.create(workId, screenWorkId);
+        // Add bookmark using server action
+        const result = await createBookmark(workId, screenWorkId);
+        if (!result.success) {
+          throw new Error(result.error || 'Failed to create bookmark');
+        }
         setIsBookmarked(true);
-        setBookmarkId(bookmark.id);
+        setBookmarkId(result.data?.id || null);
       }
     } catch (err) {
       console.error('Failed to toggle bookmark:', err);
