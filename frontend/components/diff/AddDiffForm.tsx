@@ -6,6 +6,7 @@ import type { Work, ScreenWork, DiffCategory, SpoilerScope } from '@/lib/types';
 import { api, ApiError } from '@/lib/api';
 import LoadingSpinner from '@/components/ui/LoadingSpinner';
 import { CheckCircleIcon } from '@/components/ui/Icons';
+import { MAX_IMAGE_SIZE_BYTES, MAX_IMAGE_SIZE_MB, MIN_CLAIM_LENGTH, MAX_CLAIM_LENGTH, MAX_DETAIL_LENGTH } from '@/lib/constants';
 
 interface AddDiffFormProps {
   work: Work;
@@ -114,9 +115,9 @@ export default function AddDiffForm({ work, screenWork, initialCategory }: AddDi
       return;
     }
 
-    // Validate file size (max 5MB)
-    if (file.size > 5 * 1024 * 1024) {
-      setError('Image size must be less than 5MB.');
+    // Validate file size
+    if (file.size > MAX_IMAGE_SIZE_BYTES) {
+      setError(`Image size must be less than ${MAX_IMAGE_SIZE_MB}MB.`);
       e.target.value = '';
       return;
     }
@@ -145,14 +146,14 @@ export default function AddDiffForm({ work, screenWork, initialCategory }: AddDi
     if (!formData.category) {
       return 'Please select a category.';
     }
-    if (formData.claim.length < 10) {
-      return 'Claim must be at least 10 characters long.';
+    if (formData.claim.length < MIN_CLAIM_LENGTH) {
+      return `Claim must be at least ${MIN_CLAIM_LENGTH} characters long.`;
     }
-    if (formData.claim.length > 200) {
-      return 'Claim must not exceed 200 characters.';
+    if (formData.claim.length > MAX_CLAIM_LENGTH) {
+      return `Claim must not exceed ${MAX_CLAIM_LENGTH} characters.`;
     }
-    if (formData.detail.length > 1000) {
-      return 'Detail must not exceed 1000 characters.';
+    if (formData.detail.length > MAX_DETAIL_LENGTH) {
+      return `Detail must not exceed ${MAX_DETAIL_LENGTH} characters.`;
     }
     return null;
   };

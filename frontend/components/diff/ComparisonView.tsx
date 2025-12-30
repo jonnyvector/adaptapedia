@@ -20,6 +20,7 @@ import SkeletonCard from '@/components/ui/SkeletonCard';
 import LoadingSkeleton from '@/components/ui/LoadingSkeleton';
 import EmptyState from '@/components/ui/EmptyState';
 import DiffStarterKit from './DiffStarterKit';
+import { DIFF_CATEGORIES, CATEGORY_LABELS } from '@/lib/constants';
 import {
   loadSpoilerPreference,
   getMaxScopeForAPI,
@@ -221,18 +222,6 @@ export default function ComparisonView({
 
   // Get top 3 categories
   const topCategories = useMemo(() => {
-    const CATEGORY_LABELS: Record<DiffCategory, string> = {
-      PLOT: 'Plot',
-      CHARACTER: 'Characters',
-      ENDING: 'Ending',
-      SETTING: 'Setting',
-      THEME: 'Theme',
-      TONE: 'Tone',
-      TIMELINE: 'Timeline',
-      WORLDBUILDING: 'Worldbuilding',
-      OTHER: 'Other',
-    };
-
     return Object.entries(categoryCounts)
       .sort(([, a], [, b]) => b - a)
       .slice(0, 3)
@@ -242,19 +231,6 @@ export default function ComparisonView({
         count,
       }));
   }, [categoryCounts]);
-
-  // All available categories
-  const allCategories: DiffCategory[] = [
-    'PLOT',
-    'CHARACTER',
-    'ENDING',
-    'SETTING',
-    'THEME',
-    'TONE',
-    'TIMELINE',
-    'WORLDBUILDING',
-    'OTHER',
-  ];
 
   const handleToggleCategory = (category: DiffCategory): void => {
     setSelectedCategories((prev) => {
@@ -409,7 +385,7 @@ export default function ComparisonView({
             {/* Category Filters */}
             {visibleDiffs.length > 0 && (
               <DiffFilters
-                categories={allCategories}
+                categories={DIFF_CATEGORIES}
                 selectedCategories={selectedCategories}
                 categoryCounts={categoryCounts}
                 onToggleCategory={handleToggleCategory}
