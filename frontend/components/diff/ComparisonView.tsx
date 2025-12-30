@@ -399,7 +399,7 @@ export default function ComparisonView({
                     setSelectedCategories(new Set());
                     setSearchQuery('');
                   }}
-                  className="px-4 py-2 text-sm bg-surface border border-border rounded-md hover:bg-surface2 transition-colors min-h-[40px]"
+                  className="btn-secondary btn-sm"
                 >
                   Clear all filters
                 </button>
@@ -464,7 +464,7 @@ export default function ComparisonView({
             <div className="border-t-2 border-warn pt-6 sm:pt-8">
               <div className="mb-4 p-3 sm:p-4 bg-warn/10 border border-warn/30 rounded-lg">
                 <h2 className="text-lg sm:text-xl font-bold text-warn mb-2 flex items-center gap-2">
-                  <LockClosedIcon className="w-6 h-6" aria-hidden="true" />
+                  <LockClosedIcon className="icon-lg" aria-hidden="true" />
                   {maskedDiffs.length} Hidden Difference{maskedDiffs.length !== 1 ? 's' : ''}
                 </h2>
                 <p className="text-sm text-foreground">
