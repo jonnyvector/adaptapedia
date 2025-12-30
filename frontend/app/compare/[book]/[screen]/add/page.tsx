@@ -1,10 +1,10 @@
 'use client';
 
 import { useEffect, useState } from 'react';
-import { useRouter } from 'next/navigation';
+import { useRouter, useSearchParams } from 'next/navigation';
 import { useAuth } from '@/lib/auth-context';
 import { api } from '@/lib/api';
-import type { Work, ScreenWork } from '@/lib/types';
+import type { Work, ScreenWork, DiffCategory } from '@/lib/types';
 import AddDiffForm from '@/components/diff/AddDiffForm';
 
 interface PageProps {
@@ -16,11 +16,15 @@ interface PageProps {
 
 export default function AddDiffPage({ params }: PageProps): JSX.Element {
   const router = useRouter();
+  const searchParams = useSearchParams();
   const { isAuthenticated, isLoading } = useAuth();
   const [work, setWork] = useState<Work | null>(null);
   const [screenWork, setScreenWork] = useState<ScreenWork | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+
+  // Get initial category from query params
+  const initialCategory = searchParams.get('category') as DiffCategory | null;
 
   useEffect(() => {
     // Redirect to login if not authenticated
@@ -90,7 +94,7 @@ export default function AddDiffPage({ params }: PageProps): JSX.Element {
 
   return (
     <main className="min-h-screen py-8">
-      <AddDiffForm work={work} screenWork={screenWork} />
+      <AddDiffForm work={work} screenWork={screenWork} initialCategory={initialCategory} />
     </main>
   );
 }

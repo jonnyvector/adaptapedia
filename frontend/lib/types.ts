@@ -29,8 +29,28 @@ export interface Work {
   wikidata_qid?: string;
   openlibrary_work_id?: string;
   cover_url?: string;
+  average_rating?: number;
+  ratings_count?: number;
   created_at: string;
   updated_at: string;
+}
+
+export interface WatchProvider {
+  logo_path: string;
+  provider_id: number;
+  provider_name: string;
+  display_priority: number;
+}
+
+export interface CountryWatchProviders {
+  link: string;
+  flatrate?: WatchProvider[];  // Streaming
+  rent?: WatchProvider[];
+  buy?: WatchProvider[];
+}
+
+export interface WatchProviders {
+  [countryCode: string]: CountryWatchProviders;
 }
 
 export interface ScreenWork {
@@ -44,8 +64,14 @@ export interface ScreenWork {
   tmdb_id?: number;
   tmdb_popularity?: number;
   poster_url?: string;
+  backdrop_path?: string;
+  dominant_color?: string;
+  director?: string;
+  average_rating?: number;
+  ratings_count?: number;
   primary_genre?: string;
   genres?: string[];
+  watch_providers?: WatchProviders;
   created_at: string;
   updated_at: string;
 }

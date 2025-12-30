@@ -97,6 +97,14 @@ def search_book(title: str, author: Optional[str] = None) -> Optional[Dict[str, 
             if vol_info.get('description'):
                 score += 2
 
+            # Has ratings (very important for our use case!)
+            ratings_count = vol_info.get('ratingsCount', 0)
+            if ratings_count:
+                # Heavy weight for ratings - we want editions with ratings
+                score += 15  # Base score for having any ratings
+                # Bonus for more ratings (up to 10 more points)
+                score += min(10, ratings_count // 10)
+
             scored_items.append((score, item))
 
         # Return highest scoring result
@@ -190,6 +198,10 @@ def parse_book_data(volume_data: Dict[str, Any]) -> Dict[str, Any]:
     categories = volume_info.get('categories', [])
     genre = categories[0] if categories else None
 
+    # Get ratings (1-5 scale)
+    average_rating = volume_info.get('averageRating')
+    ratings_count = volume_info.get('ratingsCount')
+
     return {
         'title': volume_info.get('title'),
         'author': author,
@@ -205,6 +217,8 @@ def parse_book_data(volume_data: Dict[str, Any]) -> Dict[str, Any]:
         'isbn_13': isbn_13,
         'cover_url': cover_url,
         'google_books_id': volume_data.get('id'),
+        'average_rating': average_rating,
+        'ratings_count': ratings_count,
     }
 
 

@@ -8,16 +8,18 @@ import { useAuth } from '@/lib/auth-context';
 import DiffItemCard from './DiffItemCard';
 import MaskedDiffCard from './MaskedDiffCard';
 import SpoilerControl, { type SpoilerPreference } from './SpoilerControl';
-import CompactVoteStrip from './CompactVoteStrip';
 import DiffFilters from './DiffFilters';
+import GetItNowModule from './GetItNowModule';
 import DiffSort, { type SortOption } from './DiffSort';
 import DiffSearch from './DiffSearch';
 import { LockClosedIcon } from '@/components/ui/Icons';
 import AdaptationSwitcher from './AdaptationSwitcher';
 import BookmarkButton from './BookmarkButton';
+import ComparisonHero from './ComparisonHero';
 import SkeletonCard from '@/components/ui/SkeletonCard';
 import LoadingSkeleton from '@/components/ui/LoadingSkeleton';
 import EmptyState from '@/components/ui/EmptyState';
+import DiffStarterKit from './DiffStarterKit';
 import {
   loadSpoilerPreference,
   getMaxScopeForAPI,
@@ -300,79 +302,40 @@ export default function ComparisonView({
 
   const hasActiveFilters = selectedCategories.size > 0 || searchQuery.trim().length > 0;
 
+  // Calculate total votes across all diffs
+  const totalVotes = useMemo(() => {
+    return diffs.reduce((total, diff) => {
+      return total + diff.vote_counts.accurate + diff.vote_counts.needs_nuance + diff.vote_counts.disagree;
+    }, 0);
+  }, [diffs]);
+
   return (
     <div className="max-w-6xl mx-auto p-4 sm:p-6">
-      {/* Header */}
-      <div className="mb-6 sm:mb-8">
-        {/* Bookmark button - top right */}
-        <div className="flex justify-end mb-3">
-          <BookmarkButton workId={work.id} screenWorkId={screenWork.id} />
-        </div>
-
-        <div className="flex flex-col md:flex-row md:items-start md:justify-between mb-4 sm:mb-6 gap-6">
-          {/* Book Section */}
-          <div className="flex-1 flex gap-4 min-w-0">
-            {work.cover_url && (
-              <img
-                src={work.cover_url}
-                alt={`${work.title} cover`}
-                className="w-24 h-36 sm:w-32 sm:h-48 object-cover rounded-md border border-border shadow-md flex-shrink-0"
-              />
-            )}
-            <div className="flex-1 min-w-0">
-              <h2 className="text-xs sm:text-sm text-muted mb-1 sm:mb-2">Book</h2>
-              <h1 className="text-xl sm:text-2xl md:text-3xl font-bold break-words">{work.title}</h1>
-              {work.year && <p className="text-sm sm:text-base text-muted">({work.year})</p>}
-              {work.summary && (
-                <p className="text-sm text-muted mt-2 line-clamp-3">{work.summary}</p>
-              )}
-            </div>
-          </div>
-
-          <div className="text-3xl sm:text-4xl text-muted self-center hidden md:block mx-2 flex-shrink-0">→</div>
-          <div className="text-2xl text-muted self-center md:hidden">↓</div>
-
-          {/* Movie Section */}
-          <div className="flex-1 flex gap-4 md:flex-row-reverse min-w-0">
-            {screenWork.poster_url && (
-              <img
-                src={screenWork.poster_url}
-                alt={`${screenWork.title} poster`}
-                className="w-24 h-36 sm:w-32 sm:h-48 object-cover rounded-md border border-border shadow-md flex-shrink-0"
-              />
-            )}
-            <div className="flex-1 md:text-right min-w-0">
-              <h2 className="text-xs sm:text-sm text-muted mb-1 sm:mb-2">
-                {screenWork.type === 'MOVIE' ? 'Movie' : 'TV Series'}
-              </h2>
-              <div className="mb-1 sm:mb-2 md:flex md:justify-end min-w-0">
-                <AdaptationSwitcher
-                  workId={work.id}
-                  workSlug={work.slug}
-                  currentScreenWorkId={screenWork.id}
-                  currentScreenWorkTitle={screenWork.title}
-                  currentScreenWorkYear={screenWork.year}
-                  currentScreenWorkType={screenWork.type}
-                  currentScreenWorkPosterUrl={screenWork.poster_url}
-                />
-              </div>
-              {screenWork.year && <p className="text-sm sm:text-base text-muted">({screenWork.year})</p>}
-              {screenWork.summary && (
-                <p className="text-sm text-muted mt-2 line-clamp-3 md:text-right">{screenWork.summary}</p>
-              )}
-            </div>
-          </div>
-        </div>
+      {/* Bookmark button - top right */}
+      <div className="flex justify-end mb-3">
+        <BookmarkButton workId={work.id} screenWorkId={screenWork.id} />
       </div>
 
-      {/* Summary Container - unified design */}
-      <div className="mb-6 rounded-lg border border-border bg-surface2/20 overflow-hidden">
-        {/* Community Preference */}
-        <CompactVoteStrip work={work} screenWork={screenWork} />
+      {/* Cinematic Hero with Backdrop */}
+      <ComparisonHero
+        work={work}
+        screenWork={screenWork}
+        spoilerPreference={spoilerPreference}
+        diffCount={diffs.length}
+        voteCount={totalVotes}
+      />
+
+      {/* Get It Now Module - Mobile Only (below hero) */}
+      <div className="lg:hidden mb-6">
+        <GetItNowModule work={work} screenWork={screenWork} />
       </div>
 
-      {/* Spoiler Control - Sticky at top */}
-      <SpoilerControl
+      {/* Main Content Grid - Desktop has sidebar */}
+      <div className="lg:grid lg:grid-cols-[1fr_320px] lg:gap-6">
+        {/* Main Content Column */}
+        <div className="min-w-0">
+          {/* Spoiler Control - Sticky at top */}
+          <SpoilerControl
         currentPreference={spoilerPreference}
         onPreferenceChange={setSpoilerPreference}
         visibleCount={visibleDiffs.length}
@@ -419,41 +382,43 @@ export default function ComparisonView({
         </div>
       )}
 
-      {/* Filter Bar */}
-      <div className="mb-8">
-        <div className="space-y-4">
-          {/* Search and Sort row */}
-          <div className="flex flex-col sm:flex-row gap-3 sm:gap-4">
-            <div className="flex-1">
-              <DiffSearch
-                value={searchQuery}
-                onChange={setSearchQuery}
-                resultsCount={filteredDiffs.length}
-              />
+      {/* Filter Bar - only show when there are diffs */}
+      {diffs.length > 0 && (
+        <div className="mb-8">
+          <div className="space-y-4">
+            {/* Search and Sort row */}
+            <div className="flex flex-col sm:flex-row gap-3 sm:gap-4">
+              <div className="flex-1">
+                <DiffSearch
+                  value={searchQuery}
+                  onChange={setSearchQuery}
+                  resultsCount={filteredDiffs.length}
+                />
+              </div>
+              <div className="flex gap-3">
+                <DiffSort value={sortOption} onChange={setSortOption} />
+                <button
+                  onClick={handleAddDiff}
+                  className="btn-primary whitespace-nowrap"
+                >
+                  Add Difference
+                </button>
+              </div>
             </div>
-            <div className="flex gap-3">
-              <DiffSort value={sortOption} onChange={setSortOption} />
-              <button
-                onClick={handleAddDiff}
-                className="btn-primary whitespace-nowrap"
-              >
-                Add Difference
-              </button>
-            </div>
-          </div>
 
-          {/* Category Filters */}
-          {visibleDiffs.length > 0 && (
-            <DiffFilters
-              categories={allCategories}
-              selectedCategories={selectedCategories}
-              categoryCounts={categoryCounts}
-              onToggleCategory={handleToggleCategory}
-              onClearAll={handleClearFilters}
-            />
-          )}
+            {/* Category Filters */}
+            {visibleDiffs.length > 0 && (
+              <DiffFilters
+                categories={allCategories}
+                selectedCategories={selectedCategories}
+                categoryCounts={categoryCounts}
+                onToggleCategory={handleToggleCategory}
+                onClearAll={handleClearFilters}
+              />
+            )}
+          </div>
         </div>
-      </div>
+      )}
 
       {/* Loading State */}
       {loading && (
@@ -477,12 +442,9 @@ export default function ComparisonView({
       {/* Diffs by Category */}
       {!loading && (
         <div className="space-y-6 sm:space-y-8">
-          {/* Empty state when no diffs match filters */}
-          {Object.keys(visibleDiffsByCategory).length === 0 && !hasActiveFilters && Object.keys(maskedDiffsByCategory).length === 0 && (
-            <EmptyState
-              message="No differences found for this comparison. Be the first to add a difference!"
-              className="py-12"
-            />
+          {/* Starter Kit - when no diffs exist */}
+          {diffs.length === 0 && (
+            <DiffStarterKit workSlug={work.slug} screenSlug={screenWork.slug} />
           )}
 
           {/* Empty state when filters active but no matches */}
@@ -614,6 +576,15 @@ export default function ComparisonView({
           )}
         </div>
       )}
+        </div>
+        {/* End Main Content Column */}
+
+        {/* Sidebar - Desktop Only */}
+        <div className="hidden lg:block">
+          <GetItNowModule work={work} screenWork={screenWork} />
+        </div>
+      </div>
+      {/* End Grid */}
     </div>
   );
 }

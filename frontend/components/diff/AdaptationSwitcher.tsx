@@ -91,28 +91,36 @@ export default function AdaptationSwitcher({
   // Don't render switcher if loading or only one adaptation
   if (loading || otherAdaptations.length === 0) {
     return (
-      <div className="text-xl sm:text-2xl md:text-3xl font-bold" style={{ wordBreak: 'break-word', overflowWrap: 'break-word' }}>
+      <div className="text-xl sm:text-2xl md:text-3xl font-bold text-left md:text-right w-full text-gray-900 dark:text-white" style={{ wordBreak: 'break-word', overflowWrap: 'break-word' }}>
         {currentScreenWorkTitle}
       </div>
     );
   }
 
   return (
-    <div className="relative inline-block max-w-full" data-adaptation-switcher>
+    <div className="relative w-full" data-adaptation-switcher>
       {/* Current adaptation button */}
       <button
         onClick={() => setIsOpen(!isOpen)}
-        className="text-xl sm:text-2xl md:text-3xl font-bold text-left hover:text-link transition-colors group !border-0 !bg-transparent !p-0"
-        style={{ wordBreak: 'break-word', overflowWrap: 'break-word', whiteSpace: 'normal', maxWidth: '100%' }}
+        className="text-xl sm:text-2xl md:text-3xl font-bold text-left md:text-right text-gray-900 dark:text-white hover:text-link transition-colors group !border-0 !bg-transparent !p-0 block w-full"
+        style={{
+          wordBreak: 'break-word',
+          overflowWrap: 'break-word',
+          whiteSpace: 'normal',
+          fontFamily: 'inherit',
+          fontWeight: 'inherit'
+        }}
         aria-expanded={isOpen}
         aria-haspopup="true"
       >
-        {currentScreenWorkTitle}
-        <span
-          className="text-base sm:text-lg text-muted group-hover:text-link transition-colors ml-2"
-          aria-hidden="true"
-        >
-          {isOpen ? '▴' : '▾'}
+        <span className="inline font-bold">
+          {currentScreenWorkTitle}
+          <span
+            className="text-base sm:text-lg text-gray-600 dark:text-muted group-hover:text-link transition-colors ml-2"
+            aria-hidden="true"
+          >
+            {isOpen ? '▴' : '▾'}
+          </span>
         </span>
       </button>
 

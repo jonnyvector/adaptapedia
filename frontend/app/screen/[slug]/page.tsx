@@ -8,6 +8,7 @@ import type {
 } from '@/lib/types';
 import { notFound } from 'next/navigation';
 import Infobox from '@/components/shared/Infobox';
+import { ArrowTopRightOnSquareIcon } from '@/components/ui/Icons';
 import DiffItemCard from '@/components/diff/DiffItemCard';
 import DiffPreview from '@/components/diff/DiffPreview';
 import Link from 'next/link';
@@ -157,9 +158,10 @@ export default async function ScreenWorkPage({
                 }/${screenWork.tmdb_id}`}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="text-link hover:underline"
+                className="text-link hover:underline inline-flex items-center gap-1"
               >
                 View on TMDb
+                <ArrowTopRightOnSquareIcon className="w-3 h-3" />
               </a>
             ),
           },

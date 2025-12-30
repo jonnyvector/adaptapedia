@@ -214,6 +214,35 @@ def enrich_work_from_openlibrary(work_id: int) -> Dict[str, Any]:
             if 'subjects' in ol_data and ol_data['subjects'] and not work.genre:
                 work.genre = extract_primary_genre(ol_data['subjects'])
 
+            # Fetch ratings from Open Library
+            ratings_url = f"{settings.OPEN_LIBRARY_BASE_URL}{work.openlibrary_work_id}/ratings.json"
+            try:
+                ratings_response = requests.get(ratings_url, timeout=10)
+                ratings_response.raise_for_status()
+                ratings_data = ratings_response.json()
+
+                if 'summary' in ratings_data:
+                    ol_average = ratings_data['summary'].get('average')
+                    ol_count = ratings_data['summary'].get('count')
+
+                    # Use Open Library ratings if they have more votes than existing (Google Books)
+                    # or if no ratings exist yet
+                    if ol_average and ol_count:
+                        should_use_ol = False
+
+                        if not work.average_rating or not work.ratings_count:
+                            # No existing ratings, use OL
+                            should_use_ol = True
+                        elif ol_count > work.ratings_count:
+                            # OL has more ratings, use it
+                            should_use_ol = True
+
+                        if should_use_ol:
+                            work.average_rating = ol_average
+                            work.ratings_count = ol_count
+            except Exception as e:
+                print(f"Failed to fetch Open Library ratings: {e}")
+
             work.save()
 
             return {'success': True, 'work_id': work_id}

@@ -22,6 +22,8 @@ class WorkSerializer(serializers.ModelSerializer):
             'wikidata_qid',
             'openlibrary_work_id',
             'cover_url',
+            'average_rating',
+            'ratings_count',
             'created_at',
             'updated_at',
         ]

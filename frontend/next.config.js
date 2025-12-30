@@ -13,6 +13,9 @@ const nextConfig = {
       'books.google.com',
       'books.googleusercontent.com',
       'upload.wikimedia.org',
+      'static.wikia.nocookie.net',
+      'encrypted-tbn0.gstatic.com',
+      'michaelcrichton.com',
     ],
   },
 };

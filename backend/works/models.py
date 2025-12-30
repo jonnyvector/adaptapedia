@@ -16,6 +16,9 @@ class Work(models.Model):
     wikidata_qid = models.CharField(max_length=20, unique=True, null=True, blank=True, db_index=True)
     openlibrary_work_id = models.CharField(max_length=50, unique=True, null=True, blank=True, db_index=True)
     cover_url = models.URLField(blank=True)
+    # Ratings from Google Books (1-5 scale)
+    average_rating = models.DecimalField(max_digits=2, decimal_places=1, null=True, blank=True)
+    ratings_count = models.IntegerField(null=True, blank=True)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 

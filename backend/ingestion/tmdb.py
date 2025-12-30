@@ -4,6 +4,7 @@ import requests
 from celery import shared_task
 from django.conf import settings
 from screen.models import ScreenWork
+from screen.utils.color_extraction import extract_dominant_color
 
 # TMDb genre ID to standard genre mapping
 TMDB_GENRE_MAPPING = {
@@ -119,6 +120,17 @@ def enrich_screenwork_from_tmdb(screen_work_id: int) -> Dict[str, Any]:
                 # Use w780 for higher quality (or 'original' for highest, but larger file size)
                 screen_work.poster_url = f"https://image.tmdb.org/t/p/w780{tmdb_data['poster_path']}"
 
+                # Extract dominant color from poster for light mode background tints
+                if not screen_work.dominant_color:
+                    dominant_color = extract_dominant_color(screen_work.poster_url, lighten_percent=0.80)
+                    if dominant_color:
+                        screen_work.dominant_color = dominant_color
+
+            # Set backdrop for cinematic hero backgrounds
+            if 'backdrop_path' in tmdb_data and tmdb_data['backdrop_path'] and not screen_work.backdrop_path:
+                # Use 'original' for highest quality backdrop images
+                screen_work.backdrop_path = f"https://image.tmdb.org/t/p/original{tmdb_data['backdrop_path']}"
+
             # Set year from release date
             if screen_work.type == 'MOVIE' and 'release_date' in tmdb_data and not screen_work.year:
                 release_date = tmdb_data['release_date']
@@ -133,11 +145,58 @@ def enrich_screenwork_from_tmdb(screen_work_id: int) -> Dict[str, Any]:
             if 'popularity' in tmdb_data:
                 screen_work.tmdb_popularity = tmdb_data['popularity']
 
+            # Extract ratings from TMDb
+            if 'vote_average' in tmdb_data and tmdb_data['vote_average']:
+                screen_work.average_rating = tmdb_data['vote_average']
+            if 'vote_count' in tmdb_data and tmdb_data['vote_count']:
+                screen_work.ratings_count = tmdb_data['vote_count']
+
             # Extract and store genres
             primary_genre, all_genres = extract_genres_from_tmdb(tmdb_data)
             if primary_genre:
                 screen_work.primary_genre = primary_genre
                 screen_work.genres = all_genres
+
+            # Fetch director/creator information
+            if not screen_work.director:
+                if screen_work.type == 'MOVIE':
+                    # For movies, fetch from credits endpoint
+                    credits_url = f"https://api.themoviedb.org/3/movie/{screen_work.tmdb_id}/credits"
+                    try:
+                        credits_response = requests.get(credits_url, params={'api_key': settings.TMDB_API_KEY}, timeout=10)
+                        credits_response.raise_for_status()
+                        credits_data = credits_response.json()
+
+                        # Find director in crew
+                        crew = credits_data.get('crew', [])
+                        directors = [person['name'] for person in crew if person.get('job') == 'Director']
+                        if directors:
+                            # Use first director, or combine multiple with '&' if there are 2
+                            screen_work.director = directors[0] if len(directors) == 1 else f"{directors[0]} & {directors[1]}"
+                    except Exception as e:
+                        print(f"Failed to fetch director from credits: {e}")
+                elif screen_work.type == 'TV':
+                    # For TV series, use 'created_by' from main details
+                    created_by = tmdb_data.get('created_by', [])
+                    if created_by:
+                        creators = [creator['name'] for creator in created_by if creator.get('name')]
+                        if creators:
+                            # Use first creator, or combine multiple with '&' if there are 2
+                            screen_work.director = creators[0] if len(creators) == 1 else f"{creators[0]} & {creators[1]}"
+
+            # Fetch watch providers (JustWatch data via TMDb)
+            if not screen_work.watch_providers:
+                providers_url = f"https://api.themoviedb.org/3/{media_type}/{screen_work.tmdb_id}/watch/providers"
+                try:
+                    providers_response = requests.get(providers_url, params={'api_key': settings.TMDB_API_KEY}, timeout=10)
+                    providers_response.raise_for_status()
+                    providers_data = providers_response.json()
+
+                    # Store the results (keyed by country code)
+                    if 'results' in providers_data:
+                        screen_work.watch_providers = providers_data['results']
+                except Exception as e:
+                    print(f"Failed to fetch watch providers: {e}")
 
             screen_work.save()
 

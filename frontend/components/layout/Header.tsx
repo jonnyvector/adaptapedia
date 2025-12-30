@@ -169,6 +169,14 @@ export default function Header(): JSX.Element {
               Browse
             </Link>
 
+            {/* Catalog Link */}
+            <Link
+              href="/catalog"
+              className="hidden sm:inline text-sm px-2 py-2 text-muted hover:text-foreground transition-colors min-h-[40px] flex items-center"
+            >
+              Catalog
+            </Link>
+
             {/* Contribute Link */}
             <Link
               href="/contribute"

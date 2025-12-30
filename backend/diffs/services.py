@@ -226,7 +226,8 @@ class DiffService:
         from screen.models import ScreenWork
 
         # Curated work IDs - only these will appear in featured
-        CURATED_WORK_IDS = [3115, 3105, 3108, 3121, 4486, 3141, 3194, 2192]
+        # Lord of the Rings, Jurassic Park, Harry Potter, It, Dune, Hunger Games, The Shining, Fight Club
+        CURATED_WORK_IDS = [1, 12, 9, 23, 10, 11, 22, 38]
 
         comparisons = DiffItem.objects.filter(
             status='LIVE',

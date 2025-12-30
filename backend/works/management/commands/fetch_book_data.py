@@ -112,7 +112,7 @@ class Command(BaseCommand):
 
     def update_work(self, work, dry_run=False):
         """Update an existing work with Google Books data."""
-        book_data = search_book(work.title)
+        book_data = search_book(work.title, work.author if work.author else None)
 
         if not book_data:
             self.stdout.write(self.style.WARNING(f'  No Google Books data found for: {work.title}'))
@@ -124,15 +124,27 @@ class Command(BaseCommand):
             self.stdout.write('  Would update:')
             if book_data.get('cover_url'):
                 self.stdout.write(f"    Cover URL: {book_data['cover_url']}")
+            if book_data.get('author') and not work.author:
+                self.stdout.write(f"    Author: {book_data['author']}")
             if book_data.get('description') and not work.summary:
                 self.stdout.write(f"    Summary: {book_data['description'][:50]}...")
             if book_data.get('year') and not work.year:
                 self.stdout.write(f"    Year: {book_data['year']}")
+            if book_data.get('genre') and not work.genre:
+                self.stdout.write(f"    Genre: {book_data['genre']}")
+            if book_data.get('language') and not work.language:
+                self.stdout.write(f"    Language: {book_data['language']}")
+            if book_data.get('average_rating'):
+                self.stdout.write(f"    Rating: {book_data['average_rating']} ({book_data.get('ratings_count', 0)} ratings)")
         else:
             updated = False
 
             if book_data.get('cover_url'):
                 work.cover_url = book_data['cover_url']
+                updated = True
+
+            if book_data.get('author') and not work.author:
+                work.author = book_data['author']
                 updated = True
 
             if book_data.get('description') and not work.summary:
@@ -141,6 +153,22 @@ class Command(BaseCommand):
 
             if book_data.get('year') and not work.year:
                 work.year = book_data['year']
+                updated = True
+
+            if book_data.get('genre') and not work.genre:
+                work.genre = book_data['genre']
+                updated = True
+
+            if book_data.get('language') and not work.language:
+                work.language = book_data['language']
+                updated = True
+
+            if book_data.get('average_rating'):
+                work.average_rating = book_data['average_rating']
+                updated = True
+
+            if book_data.get('ratings_count'):
+                work.ratings_count = book_data['ratings_count']
                 updated = True
 
             if updated:

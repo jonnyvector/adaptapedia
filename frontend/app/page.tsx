@@ -28,28 +28,33 @@ async function getFeaturedComparisons(): Promise<BrowseComparison[]> {
 export default async function Home(): Promise<JSX.Element> {
   const featuredComparisons = await getFeaturedComparisons();
   return (
-    <main className="min-h-screen">
+    <main className="min-h-screen home-page-gradient">
       {/* Hero Section - Search-focused */}
       <div className="relative py-16 md:py-20 mb-12">
         <div className="container">
           <div className="max-w-4xl mx-auto text-center">
             {/* Clean, focused headline */}
             <h1 className="text-5xl md:text-7xl font-black mb-6 leading-[1.1] tracking-tight">
-              Every difference between
-              <br />
               <span className="bg-gradient-to-r from-primary via-accent-violet to-primary bg-clip-text text-transparent">
-                book and movie
+                Spot the change.
               </span>
+              <br />
+              Post the diff.
             </h1>
 
             <p className="text-xl md:text-2xl text-secondary max-w-2xl mx-auto mb-8 leading-relaxed">
-              Community-powered comparisons of books and their film adaptations
+              Adaptapedia is where fans log, vote on, and discuss what changed from book to screen — with spoiler controls so everyone can participate safely.
             </p>
 
             {/* Search Bar - Primary Action */}
-            <div className="max-w-2xl mx-auto mb-6">
-              <SearchBar placeholder="Search comparisons: Dune, The Shining, Jurassic Park..." />
+            <div className="max-w-2xl mx-auto mb-2">
+              <SearchBar placeholder="Search a book or adaptation (e.g., Dune, The Shining...)" />
             </div>
+
+            {/* Helper text */}
+            <p className="text-sm text-muted max-w-2xl mx-auto mb-6">
+              New pages start empty — that's the point. Your diffs build the database.
+            </p>
 
             {/* Secondary CTAs */}
             <div className="flex flex-col sm:flex-row gap-3 justify-center items-center mb-8">
@@ -61,21 +66,26 @@ export default async function Home(): Promise<JSX.Element> {
             </div>
 
             {/* Simplified stats - inline proof */}
-            <div className="flex items-center justify-center gap-6 text-xs text-muted">
-              <div className="flex items-center gap-1.5">
-                <div className="text-lg font-black text-foreground">2,185</div>
-                <span>books</span>
+            <div className="flex flex-col items-center justify-center gap-3">
+              <div className="flex items-center gap-6 text-xs text-muted">
+                <div className="flex items-center gap-1.5">
+                  <div className="text-lg font-black text-foreground">2,185</div>
+                  <span>books</span>
+                </div>
+                <div className="w-1 h-1 rounded-full bg-border"></div>
+                <div className="flex items-center gap-1.5">
+                  <div className="text-lg font-black text-foreground">3,417</div>
+                  <span>adaptations</span>
+                </div>
+                <div className="w-1 h-1 rounded-full bg-border"></div>
+                <div className="flex items-center gap-1.5">
+                  <div className="text-lg font-black text-foreground">12.8K</div>
+                  <span>differences</span>
+                </div>
               </div>
-              <div className="w-1 h-1 rounded-full bg-border"></div>
-              <div className="flex items-center gap-1.5">
-                <div className="text-lg font-black text-foreground">3,417</div>
-                <span>adaptations</span>
-              </div>
-              <div className="w-1 h-1 rounded-full bg-border"></div>
-              <div className="flex items-center gap-1.5">
-                <div className="text-lg font-black text-foreground">12.8K</div>
-                <span>differences</span>
-              </div>
+              <p className="text-xs text-muted">
+                Thousands of works are indexed — the community fills in the diffs.
+              </p>
             </div>
           </div>
         </div>
@@ -121,7 +131,7 @@ export default async function Home(): Promise<JSX.Element> {
         <div className="mb-16">
           <div className="text-center mb-8">
             <h2 className="text-3xl font-bold mb-2">Why Book vs. Movie?</h2>
-            <p className="text-muted">Built for readers, viewers, and story lovers</p>
+            <p className="text-muted">Built for fans who love to compare notes</p>
           </div>
 
           {/* Balanced grid layout */}
@@ -135,7 +145,7 @@ export default async function Home(): Promise<JSX.Element> {
               </div>
               <h3 className="text-2xl font-bold mb-3">Structured Comparisons</h3>
               <p className="text-secondary mb-4">
-                Differences organized by category with community voting and consensus tracking.
+                Post differences as structured claims (plot, character, ending, tone). Vote and discuss to refine them into something accurate — not just hot takes.
               </p>
 
               {/* Mini Diff Card Preview */}
@@ -195,7 +205,7 @@ export default async function Home(): Promise<JSX.Element> {
               </div>
               <h3 className="text-2xl font-bold mb-3">Spoiler Control</h3>
               <p className="text-secondary mb-4">
-                Choose exactly what spoilers you see. Never get spoiled accidentally.
+                Talk about changes without ruining the story. Start spoiler-safe, then opt into Book-only, Screen-only, or Full spoilers.
               </p>
 
               {/* Mini Spoiler Control */}
@@ -251,7 +261,7 @@ export default async function Home(): Promise<JSX.Element> {
                 <div className="flex-1">
                   <h3 className="text-2xl font-bold mb-3">Community Driven</h3>
                   <p className="text-secondary text-lg mb-4">
-                    Vote on accuracy, contribute new differences, add context through comments. Quality rises through community consensus.
+                    Add diffs, challenge claims, and push for nuance. Consensus signals make it clear what's agreed on — and what's still debated.
                   </p>
 
                   {/* Recent Activity */}
@@ -321,7 +331,7 @@ export default async function Home(): Promise<JSX.Element> {
               </div>
               <h3 className="text-2xl font-bold mb-3">Search</h3>
               <p className="text-secondary mb-4">
-                Find any book or screen adaptation with fuzzy search and filters
+                Find a book + adaptation fast — even if you type it wrong
               </p>
               <div className="flex flex-col gap-2 text-sm text-muted">
                 <div className="flex items-center gap-2">
@@ -355,9 +365,9 @@ export default async function Home(): Promise<JSX.Element> {
               <div className="mb-6 w-16 h-16 rounded-full bg-gradient-to-br from-accent-violet to-primary flex items-center justify-center text-white text-2xl font-black shadow-lg">
                 2
               </div>
-              <h3 className="text-2xl font-bold mb-3">Explore</h3>
+              <h3 className="text-2xl font-bold mb-3">Compare & Discuss</h3>
               <p className="text-secondary mb-4">
-                Browse differences organized by category with spoiler protection
+                Browse diffs by category, then jump into threads where fans debate what changed (spoiler-safe)
               </p>
               <div className="flex flex-col gap-2 text-sm text-muted">
                 <div className="flex items-center gap-2">
@@ -393,7 +403,7 @@ export default async function Home(): Promise<JSX.Element> {
               </div>
               <h3 className="text-2xl font-bold mb-3">Contribute</h3>
               <p className="text-secondary mb-4">
-                Vote on accuracy and add new differences to help the community
+                Add the differences you noticed. Earn votes, build reputation, and help shape the consensus
               </p>
               <div className="flex flex-col gap-2 text-sm text-muted">
                 <div className="flex items-center gap-2">

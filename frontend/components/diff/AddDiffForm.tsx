@@ -10,6 +10,7 @@ import { CheckCircleIcon } from '@/components/ui/Icons';
 interface AddDiffFormProps {
   work: Work;
   screenWork: ScreenWork;
+  initialCategory?: DiffCategory | null;
 }
 
 interface FormData {
@@ -39,10 +40,10 @@ const SPOILER_SCOPES: { value: SpoilerScope; label: string; description: string 
   { value: 'FULL', label: 'Full (both)', description: 'Spoils both the book and adaptation' },
 ];
 
-export default function AddDiffForm({ work, screenWork }: AddDiffFormProps): JSX.Element {
+export default function AddDiffForm({ work, screenWork, initialCategory }: AddDiffFormProps): JSX.Element {
   const router = useRouter();
   const [formData, setFormData] = useState<FormData>({
-    category: '',
+    category: initialCategory || '',
     claim: '',
     detail: '',
     spoiler_scope: 'NONE',
@@ -61,13 +62,18 @@ export default function AddDiffForm({ work, screenWork }: AddDiffFormProps): JSX
     if (savedDraft) {
       try {
         const draft = JSON.parse(savedDraft) as FormData;
-        setFormData(draft);
+        // If we have an initial category from URL, preserve it (don't override with draft)
+        if (initialCategory) {
+          setFormData({ ...draft, category: initialCategory });
+        } else {
+          setFormData(draft);
+        }
         setIsDirty(true);
       } catch (error) {
         console.error('Failed to load draft:', error);
       }
     }
-  }, [work.id, screenWork.id]);
+  }, [work.id, screenWork.id, initialCategory]);
 
   // Auto-save draft to localStorage
   useEffect(() => {

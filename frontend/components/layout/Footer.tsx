@@ -1,4 +1,5 @@
 import Link from 'next/link';
+import { ArrowTopRightOnSquareIcon } from '@/components/ui/Icons';
 
 export default function Footer(): JSX.Element {
   const currentYear = new Date().getFullYear();
@@ -51,9 +52,10 @@ export default function Footer(): JSX.Element {
                   href="https://github.com/adaptapedia/adaptapedia"
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="hover:text-link inline-block min-h-[28px] flex items-center"
+                  className="hover:text-link inline-block min-h-[28px] flex items-center gap-1"
                 >
                   GitHub Repository
+                  <ArrowTopRightOnSquareIcon className="w-3 h-3 opacity-60" />
                 </a>
               </li>
               <li className="text-xs pt-4">

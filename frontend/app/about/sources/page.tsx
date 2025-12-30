@@ -1,5 +1,6 @@
 import Link from 'next/link';
 import type { Metadata } from 'next';
+import { ArrowTopRightOnSquareIcon } from '@/components/ui/Icons';
 
 export const metadata: Metadata = {
   title: 'Data Sources & Attribution - Book vs. Movie',
@@ -40,9 +41,10 @@ export default function DataSourcesPage(): JSX.Element {
                   href="https://www.themoviedb.org"
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="text-link hover:underline text-sm"
+                  className="text-link hover:underline text-sm inline-flex items-center gap-1"
                 >
                   themoviedb.org
+                  <ArrowTopRightOnSquareIcon className="w-3 h-3" />
                 </a>
               </div>
               {/* Placeholder for TMDb logo */}
@@ -79,9 +81,10 @@ export default function DataSourcesPage(): JSX.Element {
                   href="https://www.themoviedb.org/terms-of-use"
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="text-link hover:underline text-sm"
+                  className="text-link hover:underline text-sm inline-flex items-center gap-1"
                 >
                   View TMDb Terms of Use
+                  <ArrowTopRightOnSquareIcon className="w-3 h-3" />
                 </a>
               </div>
             </div>
@@ -98,9 +101,10 @@ export default function DataSourcesPage(): JSX.Element {
                   href="https://www.wikidata.org"
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="text-link hover:underline text-sm"
+                  className="text-link hover:underline text-sm inline-flex items-center gap-1"
                 >
                   wikidata.org
+                  <ArrowTopRightOnSquareIcon className="w-3 h-3" />
                 </a>
               </div>
               {/* Placeholder for Wikidata logo */}
@@ -132,17 +136,19 @@ export default function DataSourcesPage(): JSX.Element {
                     href="https://www.wikidata.org"
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="text-link hover:underline"
+                    className="text-link hover:underline inline-flex items-center gap-1"
                   >
                     Visit Wikidata
+                    <ArrowTopRightOnSquareIcon className="w-3 h-3" />
                   </a>
                   <a
                     href="https://creativecommons.org/publicdomain/zero/1.0/"
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="text-link hover:underline"
+                    className="text-link hover:underline inline-flex items-center gap-1"
                   >
                     CC0 License Details
+                    <ArrowTopRightOnSquareIcon className="w-3 h-3" />
                   </a>
                 </div>
               </div>
@@ -160,9 +166,10 @@ export default function DataSourcesPage(): JSX.Element {
                   href="https://openlibrary.org"
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="text-link hover:underline text-sm"
+                  className="text-link hover:underline text-sm inline-flex items-center gap-1"
                 >
                   openlibrary.org
+                  <ArrowTopRightOnSquareIcon className="w-3 h-3" />
                 </a>
               </div>
               {/* Placeholder for Open Library logo */}
@@ -194,17 +201,19 @@ export default function DataSourcesPage(): JSX.Element {
                     href="https://openlibrary.org"
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="text-link hover:underline"
+                    className="text-link hover:underline inline-flex items-center gap-1"
                   >
                     Visit Open Library
+                    <ArrowTopRightOnSquareIcon className="w-3 h-3" />
                   </a>
                   <a
                     href="https://creativecommons.org/publicdomain/zero/1.0/"
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="text-link hover:underline"
+                    className="text-link hover:underline inline-flex items-center gap-1"
                   >
                     CC0 License Details
+                    <ArrowTopRightOnSquareIcon className="w-3 h-3" />
                   </a>
                 </div>
               </div>
