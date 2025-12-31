@@ -59,7 +59,7 @@ class RequestLoggingMiddleware:
         request_id = getattr(request, 'id', 'unknown')
 
         # Log incoming request
-        user_info = request.user.username if request.user.is_authenticated else 'anonymous'
+        user_info = request.user.username if hasattr(request, 'user') and request.user.is_authenticated else 'anonymous'
         logger.info(
             f"[{request_id}] {request.method} {request.path} - User: {user_info}",
             extra={
