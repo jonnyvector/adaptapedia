@@ -6,6 +6,7 @@ from rest_framework_simplejwt.tokens import RefreshToken
 from django.contrib.auth import authenticate
 from django.db import models
 from django.shortcuts import get_object_or_404
+from adaptapedia.throttles import AuthRateThrottle
 from .models import User, Bookmark, Notification
 from .serializers import (
     UserSerializer,
@@ -165,6 +166,7 @@ class SignupView(APIView):
     """View for user registration."""
 
     permission_classes = [permissions.AllowAny]
+    throttle_classes = [AuthRateThrottle]
 
     def post(self, request):
         """Create a new user account."""
@@ -190,6 +192,7 @@ class LoginView(APIView):
     """View for user login."""
 
     permission_classes = [permissions.AllowAny]
+    throttle_classes = [AuthRateThrottle]
 
     def post(self, request):
         """Authenticate user and return JWT tokens."""

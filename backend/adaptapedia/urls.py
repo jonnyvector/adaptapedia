@@ -3,10 +3,7 @@ from django.contrib import admin
 from django.urls import path, include
 from django.conf import settings
 from django.conf.urls.static import static
-from rest_framework_simplejwt.views import (
-    TokenObtainPairView,
-    TokenRefreshView,
-)
+from users.jwt_views import TokenObtainPairView, TokenRefreshView
 from .health import health_check, readiness_check, liveness_check
 
 urlpatterns = [

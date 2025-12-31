@@ -5,6 +5,7 @@ from rest_framework.response import Response
 from rest_framework.pagination import PageNumberPagination
 from django_filters.rest_framework import DjangoFilterBackend
 from django.db.models import Count
+from adaptapedia.throttles import SearchRateThrottle, PublicListRateThrottle
 from .models import Work
 from .serializers import WorkSerializer, WorkWithAdaptationsSerializer, GenreSerializer, SimilarBookSerializer
 from .services import SearchService, SimilarBooksService
@@ -31,8 +32,9 @@ class WorkViewSet(viewsets.ReadOnlyModelViewSet):
     ordering_fields = ['title', 'year', 'created_at']
     ordering = ['-created_at']
     pagination_class = WorkPagination
+    throttle_classes = [PublicListRateThrottle]
 
-    @action(detail=False, methods=['get'], url_path='search-with-adaptations')
+    @action(detail=False, methods=['get'], url_path='search-with-adaptations', throttle_classes=[SearchRateThrottle])
     def search_with_adaptations(self, request):
         """
         Comparison-first search endpoint.

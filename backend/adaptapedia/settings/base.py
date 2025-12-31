@@ -142,6 +142,12 @@ REST_FRAMEWORK = {
         'rest_framework.filters.SearchFilter',
         'rest_framework.filters.OrderingFilter',
     ],
+    'DEFAULT_THROTTLE_RATES': {
+        'auth': '5/min',           # Authentication endpoints
+        'search': '30/min',        # Search endpoints
+        'public_list': '60/min',   # Public list endpoints
+        'user': '300/min',         # Authenticated users
+    },
 }
 
 # Celery
