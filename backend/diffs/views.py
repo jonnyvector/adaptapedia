@@ -36,15 +36,15 @@ class DiffItemViewSet(viewsets.ModelViewSet):
 
         # Filter by spoiler scope
         if spoiler_scope:
-            # Order by spoiler severity: NONE < BOOK_ONLY/SCREEN_ONLY < FULL
-            scope_order = {
-                SpoilerScope.NONE: 0,
-                SpoilerScope.BOOK_ONLY: 1,
-                SpoilerScope.SCREEN_ONLY: 1,
-                SpoilerScope.FULL: 2,
+            # BOOK_ONLY and SCREEN_ONLY are mutually exclusive branches
+            # NONE → BOOK_ONLY/SCREEN_ONLY → FULL
+            allowed_scopes_map = {
+                SpoilerScope.NONE: [SpoilerScope.NONE],
+                SpoilerScope.BOOK_ONLY: [SpoilerScope.NONE, SpoilerScope.BOOK_ONLY],
+                SpoilerScope.SCREEN_ONLY: [SpoilerScope.NONE, SpoilerScope.SCREEN_ONLY],
+                SpoilerScope.FULL: [SpoilerScope.NONE, SpoilerScope.BOOK_ONLY, SpoilerScope.SCREEN_ONLY, SpoilerScope.FULL],
             }
-            max_level = scope_order.get(spoiler_scope, 0)
-            allowed_scopes = [k for k, v in scope_order.items() if v <= max_level]
+            allowed_scopes = allowed_scopes_map.get(spoiler_scope, [SpoilerScope.NONE])
             queryset = queryset.filter(spoiler_scope__in=allowed_scopes)
 
         # Annotate with vote metrics
