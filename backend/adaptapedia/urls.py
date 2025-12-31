@@ -7,8 +7,14 @@ from rest_framework_simplejwt.views import (
     TokenObtainPairView,
     TokenRefreshView,
 )
+from .health import health_check, readiness_check, liveness_check
 
 urlpatterns = [
+    # Health checks (no authentication required)
+    path('health/', health_check, name='health'),
+    path('ready/', readiness_check, name='readiness'),
+    path('live/', liveness_check, name='liveness'),
+    # Admin and API
     path('admin/', admin.site.urls),
     path('api/token/', TokenObtainPairView.as_view(), name='token_obtain_pair'),
     path('api/token/refresh/', TokenRefreshView.as_view(), name='token_refresh'),
