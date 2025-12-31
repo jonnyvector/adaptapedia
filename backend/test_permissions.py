@@ -100,7 +100,7 @@ class DiffsPermissionTestCase(APITestCase):
             'work': self.work.id,
             'screen_work': self.screen.id,
             'category': DiffCategory.PLOT,
-            'claim': 'New diff',
+            'claim': 'New difference to test creation',
             'spoiler_scope': SpoilerScope.NONE
         })
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
