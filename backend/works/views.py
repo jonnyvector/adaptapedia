@@ -2,6 +2,7 @@
 from rest_framework import viewsets, filters, status
 from rest_framework.decorators import action
 from rest_framework.response import Response
+from rest_framework.exceptions import ValidationError
 from rest_framework.pagination import PageNumberPagination
 from django_filters.rest_framework import DjangoFilterBackend
 from django.db.models import Count
@@ -48,10 +49,7 @@ class WorkViewSet(viewsets.ReadOnlyModelViewSet):
         query = request.query_params.get('q', '').strip()
 
         if not query or len(query) < 2:
-            return Response(
-                {'error': 'Query parameter "q" must be at least 2 characters'},
-                status=status.HTTP_400_BAD_REQUEST
-            )
+            raise ValidationError('Query parameter "q" must be at least 2 characters')
 
         limit = int(request.query_params.get('limit', 20))
 

@@ -148,6 +148,7 @@ REST_FRAMEWORK = {
         'public_list': '60/min',   # Public list endpoints
         'user': '300/min',         # Authenticated users
     },
+    'EXCEPTION_HANDLER': 'adaptapedia.exceptions.custom_exception_handler',
 }
 
 # Celery

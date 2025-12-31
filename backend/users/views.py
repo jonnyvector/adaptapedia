@@ -1,6 +1,7 @@
 """Views for users app."""
 from rest_framework import viewsets, permissions, decorators, response, status
 from rest_framework.views import APIView
+from rest_framework.exceptions import AuthenticationFailed
 from rest_framework.pagination import PageNumberPagination
 from rest_framework_simplejwt.tokens import RefreshToken
 from django.contrib.auth import authenticate
@@ -171,21 +172,21 @@ class SignupView(APIView):
     def post(self, request):
         """Create a new user account."""
         serializer = SignupSerializer(data=request.data)
-        if serializer.is_valid():
-            user = serializer.save()
-            # Generate JWT tokens
-            refresh = RefreshToken.for_user(user)
-            user_data = UserDetailSerializer(user).data
+        serializer.is_valid(raise_exception=True)
 
-            return response.Response(
-                {
-                    'user': user_data,
-                    'access': str(refresh.access_token),
-                    'refresh': str(refresh),
-                },
-                status=status.HTTP_201_CREATED
-            )
-        return response.Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+        user = serializer.save()
+        # Generate JWT tokens
+        refresh = RefreshToken.for_user(user)
+        user_data = UserDetailSerializer(user).data
+
+        return response.Response(
+            {
+                'user': user_data,
+                'access': str(refresh.access_token),
+                'refresh': str(refresh),
+            },
+            status=status.HTTP_201_CREATED
+        )
 
 
 class LoginView(APIView):
@@ -197,29 +198,27 @@ class LoginView(APIView):
     def post(self, request):
         """Authenticate user and return JWT tokens."""
         serializer = LoginSerializer(data=request.data)
-        if serializer.is_valid():
-            username = serializer.validated_data['username']
-            password = serializer.validated_data['password']
+        serializer.is_valid(raise_exception=True)
 
-            user = authenticate(username=username, password=password)
-            if user is not None:
-                # Generate JWT tokens
-                refresh = RefreshToken.for_user(user)
-                user_data = UserDetailSerializer(user).data
+        username = serializer.validated_data['username']
+        password = serializer.validated_data['password']
 
-                return response.Response(
-                    {
-                        'user': user_data,
-                        'access': str(refresh.access_token),
-                        'refresh': str(refresh),
-                    },
-                    status=status.HTTP_200_OK
-                )
-            return response.Response(
-                {'error': 'Invalid credentials'},
-                status=status.HTTP_401_UNAUTHORIZED
-            )
-        return response.Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+        user = authenticate(username=username, password=password)
+        if user is None:
+            raise AuthenticationFailed('Invalid credentials')
+
+        # Generate JWT tokens
+        refresh = RefreshToken.for_user(user)
+        user_data = UserDetailSerializer(user).data
+
+        return response.Response(
+            {
+                'user': user_data,
+                'access': str(refresh.access_token),
+                'refresh': str(refresh),
+            },
+            status=status.HTTP_200_OK
+        )
 
 
 class LogoutView(APIView):
