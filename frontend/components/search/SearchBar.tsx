@@ -28,6 +28,7 @@ export default function SearchBar({
   const inputRef = useRef<HTMLInputElement>(null);
   const containerRef = useRef<HTMLDivElement>(null);
   const justSubmittedRef = useRef(false);
+  const hasInteractedRef = useRef(false);
 
   // Sync state when defaultValue changes (e.g., navigating via link)
   useEffect(() => {
@@ -50,7 +51,10 @@ export default function SearchBar({
         try {
           const results = await api.works.searchWithAdaptations(query, 5);
           setSearchResults(results);
-          setShowDropdown(true);
+          // Only auto-show dropdown if user has interacted with the input
+          if (hasInteractedRef.current) {
+            setShowDropdown(true);
+          }
         } catch (error) {
           console.error('Search error:', error);
           setSearchResults(null);
@@ -113,6 +117,7 @@ export default function SearchBar({
     setQuery('');
     setSearchResults(null);
     setShowDropdown(false);
+    hasInteractedRef.current = false;
   };
 
   const handleResultClick = (): void => {
@@ -129,10 +134,13 @@ export default function SearchBar({
           ref={inputRef}
           type="text"
           value={query}
-          onChange={(e) => setQuery(e.target.value)}
+          onChange={(e) => {
+            setQuery(e.target.value);
+            hasInteractedRef.current = true;
+          }}
           onFocus={() => {
-            // Don't show dropdown immediately after submitting search
-            if (!justSubmittedRef.current && query.length >= 2) {
+            // Only show dropdown if user has typed something (not just autofocus after navigation)
+            if (!justSubmittedRef.current && hasInteractedRef.current && query.length >= 2) {
               setShowDropdown(true);
             }
           }}
