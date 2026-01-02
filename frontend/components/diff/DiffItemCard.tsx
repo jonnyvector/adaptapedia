@@ -48,6 +48,7 @@ export default function DiffItemCard({
   const [loadingCommentCount, setLoadingCommentCount] = useState(true);
   const [isTextClamped, setIsTextClamped] = useState(false);
   const [lightboxOpen, setLightboxOpen] = useState(false);
+  const [autoOpenCommentForm, setAutoOpenCommentForm] = useState(false);
   const detailRef = useRef<HTMLParagraphElement>(null);
 
   // Use external state if provided, otherwise use local state
@@ -242,7 +243,12 @@ export default function DiffItemCard({
               </span>
               {(consensusLabel === 'Mixed' || consensusLabel === 'Disputed') && (
                 <button
-                  onClick={() => setCommentsExpanded(true)}
+                  onClick={() => {
+                    setCommentsExpanded(true);
+                    if (commentCount === 0) {
+                      setAutoOpenCommentForm(true);
+                    }
+                  }}
                   className="px-1.5 py-0.5 text-xs font-medium rounded bg-amber-500/10 text-amber-700 dark:text-amber-400 border border-amber-500/20 hover:bg-amber-500/20 transition-colors cursor-pointer"
                   title={commentCount > 0 ? "High disagreement — view discussion" : "High disagreement — be first to comment"}
                 >
@@ -366,7 +372,25 @@ export default function DiffItemCard({
           {/* Comment CTA - styled as button with icon */}
           {!loadingCommentCount && (
             <button
-              onClick={() => setCommentsExpanded(!commentsExpanded)}
+              onClick={() => {
+                if (!commentsExpanded) {
+                  // Check authentication only when trying to add a comment (no existing comments)
+                  if (commentCount === 0 && !isAuthenticated) {
+                    sessionStorage.setItem('pendingAddComment', 'true');
+                    router.push('/auth/login?redirect=' + encodeURIComponent(window.location.pathname));
+                    return;
+                  }
+                  // Open comments and auto-open the form if no comments exist
+                  setCommentsExpanded(true);
+                  if (commentCount === 0) {
+                    setAutoOpenCommentForm(true);
+                  }
+                } else {
+                  // If comments already open, toggle them closed
+                  setCommentsExpanded(false);
+                  setAutoOpenCommentForm(false);
+                }
+              }}
               className="flex items-center gap-1.5 text-link hover:text-link-hover font-medium transition-colors"
             >
               <svg className="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -376,7 +400,7 @@ export default function DiffItemCard({
                 {commentCount > 0
                   ? `${commentCount} ${commentCount === 1 ? 'comment' : 'comments'}`
                   : 'Add comment'
-                }
+              }
               </span>
             </button>
           )}
@@ -392,6 +416,7 @@ export default function DiffItemCard({
             onCommentCountChange={(count) => setCommentCount(count)}
             onSpoilerPreferenceChange={onSpoilerPreferenceChange}
             currentSpoilerPreference={currentSpoilerPreference}
+            autoOpenForm={autoOpenCommentForm}
           />
         </div>
       )}

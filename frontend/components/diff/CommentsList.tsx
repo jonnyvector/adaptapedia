@@ -19,6 +19,7 @@ interface CommentsListProps {
   onCommentCountChange?: (count: number) => void;
   onSpoilerPreferenceChange?: (pref: SpoilerPreference) => void;
   currentSpoilerPreference?: SpoilerPreference;
+  autoOpenForm?: boolean;
 }
 
 // Helper to determine if a comment should be shown based on user's spoiler preference
@@ -234,13 +235,14 @@ export default function CommentsList({
   onCommentCountChange,
   onSpoilerPreferenceChange,
   currentSpoilerPreference,
+  autoOpenForm = false,
 }: CommentsListProps): JSX.Element {
   const { isAuthenticated, isLoading: authLoading } = useAuth();
   const router = useRouter();
   const [comments, setComments] = useState<Comment[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
-  const [showAddForm, setShowAddForm] = useState(false);
+  const [showAddForm, setShowAddForm] = useState(autoOpenForm);
 
   const fetchComments = async (): Promise<void> => {
     setLoading(true);
