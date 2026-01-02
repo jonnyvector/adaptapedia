@@ -40,6 +40,8 @@ export default function GetItNowModule({ work, screenWork }: GetItNowModuleProps
       .replace(/\s+(Amazon|Roku|Apple\s*TV)(\s+Premium)?\s+Channel/gi, '')
       // Remove tier/quality variants
       .replace(/\s+(Essential|Premium|Showtime|with\s+Ads)/gi, '')
+      // Remove trailing single letters (e.g., "Peacock I" -> "Peacock")
+      .replace(/\s+[A-Z]$/g, '')
       .trim();
   };
 
@@ -77,8 +79,7 @@ export default function GetItNowModule({ work, screenWork }: GetItNowModuleProps
 
   // Book affiliate link generator (TODO: Replace with actual affiliate IDs)
   const getBookLink = (provider: string) => {
-    const isbn = work.openlibrary_work_id; // Will need ISBN for better targeting
-
+    // TODO: Use ISBN from work.openlibrary_work_id for better targeting
     switch (provider) {
       case 'bookshop':
         return `https://bookshop.org/search?keywords=${encodeURIComponent(work.title)}`;
