@@ -2,8 +2,7 @@
 
 import { useState, useEffect } from 'react';
 import { useAuth } from '@/lib/auth-context';
-import { ApiError } from '@/lib/api';
-import { checkBookmark, createBookmark, deleteBookmarkByComparison } from '@/app/actions/bookmarks';
+import { api, ApiError } from '@/lib/api';
 
 interface BookmarkButtonProps {
   workId: number;
@@ -30,11 +29,9 @@ export default function BookmarkButton({
       }
 
       try {
-        const result = await checkBookmark(workId, screenWorkId);
-        if (result.success && result.data) {
-          setIsBookmarked(result.data.is_bookmarked);
-          setBookmarkId(result.data.bookmark_id);
-        }
+        const result = await api.bookmarks.check(workId, screenWorkId);
+        setIsBookmarked(result.is_bookmarked);
+        setBookmarkId(result.bookmark_id);
       } catch (err) {
         console.error('Failed to check bookmark status:', err);
       }
@@ -55,21 +52,15 @@ export default function BookmarkButton({
 
     try {
       if (isBookmarked) {
-        // Remove bookmark using server action
-        const result = await deleteBookmarkByComparison(workId, screenWorkId);
-        if (!result.success) {
-          throw new Error(result.error || 'Failed to delete bookmark');
-        }
+        // Remove bookmark using API client
+        await api.bookmarks.deleteByComparison(workId, screenWorkId);
         setIsBookmarked(false);
         setBookmarkId(null);
       } else {
-        // Add bookmark using server action
-        const result = await createBookmark(workId, screenWorkId);
-        if (!result.success) {
-          throw new Error(result.error || 'Failed to create bookmark');
-        }
+        // Add bookmark using API client
+        const result = await api.bookmarks.create(workId, screenWorkId);
         setIsBookmarked(true);
-        setBookmarkId(result.data?.id || null);
+        setBookmarkId(result.id);
       }
     } catch (err) {
       console.error('Failed to toggle bookmark:', err);
