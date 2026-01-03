@@ -6,6 +6,7 @@ import Link from 'next/link';
 import { useAuth } from '@/lib/auth-context';
 import { ApiError } from '@/lib/api';
 import LoadingSpinner from '@/components/ui/LoadingSpinner';
+import { FONTS, LETTER_SPACING, BORDERS, TEXT, monoUppercase } from '@/lib/brutalist-design';
 
 interface SignupFormProps {
   redirectTo?: string;
@@ -90,13 +91,13 @@ export default function SignupForm({ redirectTo = '/' }: SignupFormProps): JSX.E
   return (
     <form onSubmit={handleSubmit} className="space-y-5 sm:space-y-6 w-full max-w-md">
       {errors.general && (
-        <div className="bg-red-50 border border-red-200 text-red-700 px-3 sm:px-4 py-3 rounded text-sm sm:text-base">
+        <div className={`bg-red-50 dark:bg-red-950 border ${BORDERS.medium} border-red-500/40 dark:border-red-400/40 text-red-700 dark:text-red-300 px-3 sm:px-4 py-3 rounded-md text-sm sm:text-base`} style={{ fontFamily: FONTS.sans }}>
           {errors.general}
         </div>
       )}
 
       <div>
-        <label htmlFor="username" className="block text-sm font-medium mb-2">
+        <label htmlFor="username" className={`block ${TEXT.secondary} font-bold mb-2 text-black dark:text-white ${monoUppercase}`} style={{ fontFamily: FONTS.mono, letterSpacing: LETTER_SPACING.wide }}>
           Username
         </label>
         <input
@@ -105,19 +106,18 @@ export default function SignupForm({ redirectTo = '/' }: SignupFormProps): JSX.E
           value={formData.username}
           onChange={(e) => setFormData({ ...formData, username: e.target.value })}
           required
-          className={`w-full px-3 py-3 text-base border rounded-lg focus:outline-none focus:ring-2 focus:ring-link/50 min-h-[44px] bg-surface text-foreground ${
-            errors.username ? 'border-red-500' : 'border-border'
-          }`}
+          className={`w-full px-3 py-3 ${TEXT.body} border ${errors.username ? 'border-red-500 dark:border-red-400' : BORDERS.medium} rounded-md focus:outline-none focus:border-black focus:dark:border-white min-h-[44px] bg-white dark:bg-black text-black dark:text-white`}
+          style={{ fontFamily: FONTS.mono, letterSpacing: LETTER_SPACING.normal }}
           disabled={isSubmitting}
           autoComplete="username"
         />
         {errors.username && (
-          <p className="mt-1 text-xs text-red-600">{errors.username}</p>
+          <p className="mt-1 text-xs text-red-600 dark:text-red-400" style={{ fontFamily: FONTS.mono }}>{errors.username}</p>
         )}
       </div>
 
       <div>
-        <label htmlFor="email" className="block text-sm font-medium mb-2">
+        <label htmlFor="email" className={`block ${TEXT.secondary} font-bold mb-2 text-black dark:text-white ${monoUppercase}`} style={{ fontFamily: FONTS.mono, letterSpacing: LETTER_SPACING.wide }}>
           Email
         </label>
         <input
@@ -126,19 +126,18 @@ export default function SignupForm({ redirectTo = '/' }: SignupFormProps): JSX.E
           value={formData.email}
           onChange={(e) => setFormData({ ...formData, email: e.target.value })}
           required
-          className={`w-full px-3 py-3 text-base border rounded-lg focus:outline-none focus:ring-2 focus:ring-link/50 min-h-[44px] bg-surface text-foreground ${
-            errors.email ? 'border-red-500' : 'border-border'
-          }`}
+          className={`w-full px-3 py-3 ${TEXT.body} border ${errors.email ? 'border-red-500 dark:border-red-400' : BORDERS.medium} rounded-md focus:outline-none focus:border-black focus:dark:border-white min-h-[44px] bg-white dark:bg-black text-black dark:text-white`}
+          style={{ fontFamily: FONTS.mono, letterSpacing: LETTER_SPACING.normal }}
           disabled={isSubmitting}
           autoComplete="email"
         />
         {errors.email && (
-          <p className="mt-1 text-xs text-red-600">{errors.email}</p>
+          <p className="mt-1 text-xs text-red-600 dark:text-red-400" style={{ fontFamily: FONTS.mono }}>{errors.email}</p>
         )}
       </div>
 
       <div>
-        <label htmlFor="password" className="block text-sm font-medium mb-2">
+        <label htmlFor="password" className={`block ${TEXT.secondary} font-bold mb-2 text-black dark:text-white ${monoUppercase}`} style={{ fontFamily: FONTS.mono, letterSpacing: LETTER_SPACING.wide }}>
           Password
         </label>
         <input
@@ -147,22 +146,21 @@ export default function SignupForm({ redirectTo = '/' }: SignupFormProps): JSX.E
           value={formData.password}
           onChange={(e) => setFormData({ ...formData, password: e.target.value })}
           required
-          className={`w-full px-3 py-3 text-base border rounded-lg focus:outline-none focus:ring-2 focus:ring-link/50 min-h-[44px] bg-surface text-foreground ${
-            errors.password ? 'border-red-500' : 'border-border'
-          }`}
+          className={`w-full px-3 py-3 ${TEXT.body} border ${errors.password ? 'border-red-500 dark:border-red-400' : BORDERS.medium} rounded-md focus:outline-none focus:border-black focus:dark:border-white min-h-[44px] bg-white dark:bg-black text-black dark:text-white`}
+          style={{ fontFamily: FONTS.mono, letterSpacing: LETTER_SPACING.normal }}
           disabled={isSubmitting}
           autoComplete="new-password"
         />
         {errors.password && (
-          <p className="mt-1 text-xs text-red-600">{errors.password}</p>
+          <p className="mt-1 text-xs text-red-600 dark:text-red-400" style={{ fontFamily: FONTS.mono }}>{errors.password}</p>
         )}
-        <p className="mt-1 text-xs text-muted">
+        <p className={`mt-1 ${TEXT.metadata} ${TEXT.mutedMedium}`} style={{ fontFamily: FONTS.mono }}>
           Must be at least 8 characters
         </p>
       </div>
 
       <div>
-        <label htmlFor="password_confirm" className="block text-sm font-medium mb-2">
+        <label htmlFor="password_confirm" className={`block ${TEXT.secondary} font-bold mb-2 text-black dark:text-white ${monoUppercase}`} style={{ fontFamily: FONTS.mono, letterSpacing: LETTER_SPACING.wide }}>
           Confirm Password
         </label>
         <input
@@ -171,29 +169,29 @@ export default function SignupForm({ redirectTo = '/' }: SignupFormProps): JSX.E
           value={formData.password_confirm}
           onChange={(e) => setFormData({ ...formData, password_confirm: e.target.value })}
           required
-          className={`w-full px-3 py-3 text-base border rounded-lg focus:outline-none focus:ring-2 focus:ring-link/50 min-h-[44px] bg-surface text-foreground ${
-            errors.password_confirm ? 'border-red-500' : 'border-border'
-          }`}
+          className={`w-full px-3 py-3 ${TEXT.body} border ${errors.password_confirm ? 'border-red-500 dark:border-red-400' : BORDERS.medium} rounded-md focus:outline-none focus:border-black focus:dark:border-white min-h-[44px] bg-white dark:bg-black text-black dark:text-white`}
+          style={{ fontFamily: FONTS.mono, letterSpacing: LETTER_SPACING.normal }}
           disabled={isSubmitting}
           autoComplete="new-password"
         />
         {errors.password_confirm && (
-          <p className="mt-1 text-xs text-red-600">{errors.password_confirm}</p>
+          <p className="mt-1 text-xs text-red-600 dark:text-red-400" style={{ fontFamily: FONTS.mono }}>{errors.password_confirm}</p>
         )}
       </div>
 
       <button
         type="submit"
         disabled={isSubmitting}
-        className="w-full flex items-center justify-center gap-2 px-4 py-3 bg-link text-white rounded-lg font-medium hover:bg-link/90 disabled:opacity-50 disabled:cursor-not-allowed transition-colors min-h-[48px]"
+        className={`w-full flex items-center justify-center gap-2 px-4 py-3 bg-black dark:bg-white text-white dark:text-black rounded-md font-bold hover:bg-black/90 hover:dark:bg-white/90 disabled:opacity-50 disabled:cursor-not-allowed transition-colors min-h-[48px] border ${BORDERS.solid} ${TEXT.secondary} ${monoUppercase}`}
+        style={{ fontFamily: FONTS.mono, letterSpacing: LETTER_SPACING.tight }}
       >
         {isSubmitting && <LoadingSpinner size="sm" />}
         {isSubmitting ? 'Creating account...' : 'Sign Up'}
       </button>
 
-      <p className="text-center text-sm text-muted">
+      <p className={`text-center ${TEXT.secondary} ${TEXT.mutedMedium}`} style={{ fontFamily: FONTS.sans }}>
         Already have an account?{' '}
-        <Link href="/auth/login" className="text-link hover:underline">
+        <Link href="/auth/login" className="text-black dark:text-white hover:opacity-70 transition-opacity font-bold">
           Log in
         </Link>
       </p>
