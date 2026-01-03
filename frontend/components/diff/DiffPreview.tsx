@@ -1,5 +1,6 @@
 import type { DiffItem } from '@/lib/types';
 import Link from 'next/link';
+import { FONTS, LETTER_SPACING, BORDERS, TEXT, monoUppercase } from '@/lib/brutalist-design';
 
 interface DiffPreviewProps {
   diffs: DiffItem[];
@@ -17,7 +18,7 @@ export default function DiffPreview({
 
   if (previewDiffs.length === 0) {
     return (
-      <div className="text-sm text-muted italic">
+      <div className={`${TEXT.secondary} ${TEXT.mutedMedium}`} style={{ fontFamily: FONTS.sans }}>
         No differences documented yet. Be the first to add one!
       </div>
     );
@@ -63,45 +64,46 @@ export default function DiffPreview({
 
   return (
     <div className="space-y-3">
-      <div className="text-sm font-medium text-muted mb-2">
+      <div className={`${TEXT.secondary} font-bold ${TEXT.mutedMedium} mb-2 ${monoUppercase}`} style={{ fontFamily: FONTS.mono, letterSpacing: LETTER_SPACING.wide }}>
         See what changed...
       </div>
 
       {previewDiffs.map((diff) => (
         <div
           key={diff.id}
-          className="border border-border rounded-lg p-3 bg-surface hover:shadow-sm transition-shadow"
+          className={`border ${BORDERS.medium} rounded-md p-3 bg-white dark:bg-black hover:border-black hover:dark:border-white transition-colors`}
         >
           <div className="flex items-start gap-2 mb-2">
             <span className="text-lg" title={diff.category}>
               {getCategoryIcon(diff.category)}
             </span>
             <div className="flex-1 min-w-0">
-              <p className="text-sm font-medium text-foreground line-clamp-2">
+              <p className={`${TEXT.secondary} font-bold text-black dark:text-white line-clamp-2`} style={{ fontFamily: FONTS.mono }}>
                 {diff.claim}
               </p>
             </div>
             <span
-              className={`px-2 py-0.5 text-xs font-mono rounded flex-shrink-0 ${getSpoilerBadgeColor(
+              className={`px-2 py-0.5 ${TEXT.metadata} font-bold rounded-md flex-shrink-0 ${getSpoilerBadgeColor(
                 diff.spoiler_scope
               )}`}
+              style={{ fontFamily: FONTS.mono }}
             >
               {diff.spoiler_scope === 'NONE' ? 'Safe' : 'Spoiler'}
             </span>
           </div>
 
           {diff.vote_counts && (
-            <div className="flex items-center gap-2 text-xs text-muted">
+            <div className={`flex items-center gap-2 ${TEXT.metadata} ${TEXT.mutedMedium}`} style={{ fontFamily: FONTS.mono }}>
               <span className="flex items-center gap-1">
-                <span className="text-success">↑</span>
+                <span className="text-green-700 dark:text-green-400">↑</span>
                 {diff.vote_counts.accurate}
               </span>
               <span className="flex items-center gap-1">
-                <span className="text-yellow-500">~</span>
+                <span className="text-amber-700 dark:text-amber-400">~</span>
                 {diff.vote_counts.needs_nuance}
               </span>
               <span className="flex items-center gap-1">
-                <span className="text-danger">↓</span>
+                <span className="text-red-700 dark:text-red-400">↓</span>
                 {diff.vote_counts.disagree}
               </span>
             </div>
@@ -111,7 +113,8 @@ export default function DiffPreview({
 
       <Link
         href={compareUrl}
-        className="block text-center text-sm text-link hover:underline py-2"
+        className={`block text-center ${TEXT.secondary} text-black dark:text-white hover:opacity-70 py-2 font-bold ${monoUppercase}`}
+        style={{ fontFamily: FONTS.mono, letterSpacing: LETTER_SPACING.tight }}
       >
         {totalDiffs > maxItems
           ? `See all ${totalDiffs} differences →`

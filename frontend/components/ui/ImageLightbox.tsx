@@ -1,6 +1,7 @@
 'use client';
 
 import { useEffect } from 'react';
+import { BORDERS } from '@/lib/brutalist-design';
 
 interface ImageLightboxProps {
   src: string;
@@ -35,7 +36,7 @@ export default function ImageLightbox({ src, alt, onClose }: ImageLightboxProps)
       {/* Close button */}
       <button
         onClick={onClose}
-        className="absolute top-4 right-4 text-white hover:text-gray-300 transition-colors bg-black/50 rounded-full w-10 h-10 flex items-center justify-center text-2xl"
+        className={`absolute top-4 right-4 text-white hover:text-white/70 transition-colors bg-black border ${BORDERS.solid} border-white rounded-full w-10 h-10 flex items-center justify-center text-2xl`}
         aria-label="Close lightbox"
       >
         ×

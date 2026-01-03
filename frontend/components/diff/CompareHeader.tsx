@@ -11,6 +11,7 @@ import type {
   ApiResponse,
 } from '@/lib/types';
 import { api } from '@/lib/api';
+import { FONTS, LETTER_SPACING, BORDERS, TEXT, monoUppercase, COLORS } from '@/lib/brutalist-design';
 
 interface CompareHeaderProps {
   work: Work;
@@ -85,7 +86,7 @@ export default function CompareHeader({
   };
 
   return (
-    <div className="sticky top-0 z-10 bg-surface border-b-2 border-border shadow-md mb-6">
+    <div className={`sticky top-0 z-10 bg-white dark:bg-black border-b ${BORDERS.solid} mb-6`}>
       <div className="max-w-6xl mx-auto p-4 sm:p-6">
         {/* Main Comparison Header */}
         <div className="grid grid-cols-1 md:grid-cols-[1fr_auto_1fr] gap-4 md:gap-6 mb-4">
@@ -96,30 +97,30 @@ export default function CompareHeader({
                 <img
                   src={work.cover_url}
                   alt={`${work.title} cover`}
-                  className="w-20 h-28 sm:w-24 sm:h-36 object-cover rounded border-2 border-border shadow-sm"
+                  className={`w-20 h-28 sm:w-24 sm:h-36 object-cover border ${BORDERS.medium}`}
                 />
               </div>
             )}
             <div className="flex-1 min-w-0">
-              <div className="text-xs font-mono text-cyan mb-1 uppercase tracking-wide">
+              <div className={`${TEXT.metadata} font-bold mb-1 ${monoUppercase}`} style={{ fontFamily: FONTS.mono, letterSpacing: LETTER_SPACING.wider, color: COLORS.book }}>
                 Book
               </div>
-              <h1 className="text-lg sm:text-xl font-bold mb-1 leading-tight">
+              <h1 className={`text-lg sm:text-xl font-bold mb-1 leading-tight text-black dark:text-white`} style={{ fontFamily: FONTS.mono }}>
                 {work.title}
               </h1>
               {work.author && (
-                <p className="text-sm text-muted mb-1">by {work.author}</p>
+                <p className={`${TEXT.secondary} ${TEXT.mutedMedium} mb-1`} style={{ fontFamily: FONTS.sans }}>by {work.author}</p>
               )}
               {work.year && (
-                <p className="text-xs text-muted font-mono">{work.year}</p>
+                <p className={`${TEXT.metadata} ${TEXT.mutedMedium}`} style={{ fontFamily: FONTS.mono }}>{work.year}</p>
               )}
             </div>
           </div>
 
           {/* VS Separator */}
           <div className="flex items-center justify-center">
-            <div className="flex items-center gap-2 px-3 py-2 bg-muted/10 rounded-lg border border-border">
-              <span className="text-2xl sm:text-3xl font-mono font-bold text-cyan">↔</span>
+            <div className={`flex items-center gap-2 px-3 py-2 bg-black dark:bg-white rounded-md border ${BORDERS.solid}`}>
+              <span className={`text-2xl sm:text-3xl font-bold text-white dark:text-black`} style={{ fontFamily: FONTS.mono }}>VS</span>
             </div>
           </div>
 
@@ -130,19 +131,19 @@ export default function CompareHeader({
                 <img
                   src={screenWork.poster_url}
                   alt={`${screenWork.title} poster`}
-                  className="w-20 h-28 sm:w-24 sm:h-36 object-cover rounded border-2 border-border shadow-sm"
+                  className={`w-20 h-28 sm:w-24 sm:h-36 object-cover border ${BORDERS.medium}`}
                 />
               </div>
             )}
             <div className="flex-1 min-w-0 md:text-right">
-              <div className="text-xs font-mono text-magenta mb-1 uppercase tracking-wide">
+              <div className={`${TEXT.metadata} font-bold mb-1 ${monoUppercase}`} style={{ fontFamily: FONTS.mono, letterSpacing: LETTER_SPACING.wider, color: COLORS.screen }}>
                 {screenWork.type === 'MOVIE' ? 'Movie' : 'TV Series'}
               </div>
-              <h1 className="text-lg sm:text-xl font-bold mb-1 leading-tight">
+              <h1 className={`text-lg sm:text-xl font-bold mb-1 leading-tight text-black dark:text-white`} style={{ fontFamily: FONTS.mono }}>
                 {screenWork.title}
               </h1>
               {screenWork.year && (
-                <p className="text-xs text-muted font-mono">{screenWork.year}</p>
+                <p className={`${TEXT.metadata} ${TEXT.mutedMedium}`} style={{ fontFamily: FONTS.mono }}>{screenWork.year}</p>
               )}
             </div>
           </div>
@@ -150,16 +151,17 @@ export default function CompareHeader({
 
         {/* Adaptation Selector (if multiple adaptations exist) */}
         {!loadingAdaptations && adaptations.length > 1 && (
-          <div className="mb-4 p-3 bg-surface2 rounded-lg border border-border">
+          <div className={`mb-4 p-3 bg-stone-50 dark:bg-stone-950 rounded-md border ${BORDERS.medium}`}>
             <div className="flex flex-col sm:flex-row sm:items-center gap-2">
-              <label htmlFor="adaptation-select" className="text-xs font-mono uppercase tracking-wide text-muted whitespace-nowrap">
+              <label htmlFor="adaptation-select" className={`${TEXT.metadata} font-bold ${monoUppercase} ${TEXT.mutedMedium} whitespace-nowrap`} style={{ fontFamily: FONTS.mono, letterSpacing: LETTER_SPACING.wider }}>
                 Switch adaptation:
               </label>
               <select
                 id="adaptation-select"
                 value={screenWork.slug}
                 onChange={(e) => handleAdaptationChange(e.target.value)}
-                className="flex-1 px-3 py-2 text-sm bg-surface text-text border border-border rounded focus:outline-none focus:ring-2 focus:ring-link font-mono"
+                className={`flex-1 px-3 py-2 ${TEXT.secondary} bg-white dark:bg-black text-black dark:text-white border ${BORDERS.medium} rounded-md focus:outline-none focus:border-black dark:focus:border-white`}
+                style={{ fontFamily: FONTS.mono, letterSpacing: LETTER_SPACING.normal }}
               >
                 {adaptations.map((adaptation) => (
                   <option key={adaptation.id} value={adaptation.slug}>
@@ -174,25 +176,25 @@ export default function CompareHeader({
         {/* Stats Bar */}
         <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
           {/* Diff Count */}
-          <div className="bg-surface2 rounded-lg border border-border p-3">
-            <div className="text-xs font-mono uppercase tracking-wide text-muted mb-1">
+          <div className={`bg-stone-50 dark:bg-stone-950 rounded-md border ${BORDERS.medium} p-3`}>
+            <div className={`${TEXT.metadata} font-bold ${monoUppercase} ${TEXT.mutedMedium} mb-1`} style={{ fontFamily: FONTS.mono, letterSpacing: LETTER_SPACING.wider }}>
               Differences
             </div>
-            <div className="text-2xl font-bold font-mono text-link">
+            <div className={`text-2xl font-bold text-black dark:text-white`} style={{ fontFamily: FONTS.mono }}>
               {diffCount}
             </div>
           </div>
 
           {/* Community Vote */}
-          <div className="bg-surface2 rounded-lg border border-border p-3">
-            <div className="text-xs font-mono uppercase tracking-wide text-muted mb-1">
+          <div className={`bg-stone-50 dark:bg-stone-950 rounded-md border ${BORDERS.medium} p-3`}>
+            <div className={`${TEXT.metadata} font-bold ${monoUppercase} ${TEXT.mutedMedium} mb-1`} style={{ fontFamily: FONTS.mono, letterSpacing: LETTER_SPACING.wider }}>
               Community
             </div>
-            <div className="text-sm font-semibold text-text truncate">
+            <div className={`${TEXT.secondary} font-bold text-black dark:text-white truncate`} style={{ fontFamily: FONTS.mono }}>
               {loadingStats ? '...' : getPreferenceWinner()}
             </div>
             {stats && stats.total_votes > 0 && (
-              <div className="text-xs text-muted mt-0.5">
+              <div className={`${TEXT.metadata} ${TEXT.mutedMedium} mt-0.5`} style={{ fontFamily: FONTS.mono }}>
                 {stats.total_votes} {stats.total_votes === 1 ? 'vote' : 'votes'}
               </div>
             )}
@@ -200,11 +202,11 @@ export default function CompareHeader({
 
           {/* Book Preference */}
           {!loadingStats && stats && stats.total_votes > 0 && (
-            <div className="bg-surface2 rounded-lg border border-border p-3">
-              <div className="text-xs font-mono uppercase tracking-wide text-muted mb-1">
+            <div className={`bg-stone-50 dark:bg-stone-950 rounded-md border ${BORDERS.medium} p-3`}>
+              <div className={`${TEXT.metadata} font-bold ${monoUppercase} ${TEXT.mutedMedium} mb-1`} style={{ fontFamily: FONTS.mono, letterSpacing: LETTER_SPACING.wider }}>
                 Book
               </div>
-              <div className="text-2xl font-bold font-mono text-amber-500">
+              <div className={`text-2xl font-bold`} style={{ fontFamily: FONTS.mono, color: COLORS.book }}>
                 {getPreferencePercentage('BOOK')}%
               </div>
             </div>
@@ -212,11 +214,11 @@ export default function CompareHeader({
 
           {/* Screen Preference */}
           {!loadingStats && stats && stats.total_votes > 0 && (
-            <div className="bg-surface2 rounded-lg border border-border p-3">
-              <div className="text-xs font-mono uppercase tracking-wide text-muted mb-1">
+            <div className={`bg-stone-50 dark:bg-stone-950 rounded-md border ${BORDERS.medium} p-3`}>
+              <div className={`${TEXT.metadata} font-bold ${monoUppercase} ${TEXT.mutedMedium} mb-1`} style={{ fontFamily: FONTS.mono, letterSpacing: LETTER_SPACING.wider }}>
                 Screen
               </div>
-              <div className="text-2xl font-bold font-mono text-cyan">
+              <div className={`text-2xl font-bold`} style={{ fontFamily: FONTS.mono, color: COLORS.screen }}>
                 {getPreferencePercentage('SCREEN')}%
               </div>
             </div>
@@ -224,13 +226,13 @@ export default function CompareHeader({
 
           {/* Faithfulness (if available) */}
           {!loadingStats && stats && stats.faithfulness.average !== null && (
-            <div className="bg-surface2 rounded-lg border border-border p-3">
-              <div className="text-xs font-mono uppercase tracking-wide text-muted mb-1">
+            <div className={`bg-stone-50 dark:bg-stone-950 rounded-md border ${BORDERS.medium} p-3`}>
+              <div className={`${TEXT.metadata} font-bold ${monoUppercase} ${TEXT.mutedMedium} mb-1`} style={{ fontFamily: FONTS.mono, letterSpacing: LETTER_SPACING.wider }}>
                 Faithfulness
               </div>
-              <div className="text-2xl font-bold font-mono text-purple">
+              <div className={`text-2xl font-bold text-black dark:text-white`} style={{ fontFamily: FONTS.mono }}>
                 {stats.faithfulness.average.toFixed(1)}
-                <span className="text-sm text-muted">/5</span>
+                <span className={`${TEXT.secondary} ${TEXT.mutedMedium}`}>/5</span>
               </div>
             </div>
           )}
