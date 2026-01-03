@@ -1,5 +1,6 @@
 import Link from 'next/link';
 import type { Comment } from '@/lib/types';
+import { FONTS, LETTER_SPACING, BORDERS, TEXT, monoUppercase } from '@/lib/brutalist-design';
 
 interface UserCommentsListProps {
   comments: Comment[];
@@ -54,9 +55,9 @@ export default function UserCommentsList({
 }: UserCommentsListProps): JSX.Element {
   if (comments.length === 0) {
     return (
-      <div className="border border-border rounded-lg p-12 text-center">
-        <p className="text-muted text-lg">No comments posted yet</p>
-        <p className="text-muted text-sm mt-2">
+      <div className={`border ${BORDERS.medium} rounded-md p-12 text-center bg-stone-50 dark:bg-stone-950`}>
+        <p className={`${TEXT.body} ${TEXT.mutedMedium} font-bold`} style={{ fontFamily: FONTS.mono }}>No comments posted yet</p>
+        <p className={`${TEXT.secondary} ${TEXT.mutedMedium} mt-2`} style={{ fontFamily: FONTS.sans }}>
           Join the discussion on diffs to share your insights
         </p>
       </div>
@@ -68,37 +69,39 @@ export default function UserCommentsList({
       {comments.map((comment) => (
         <div
           key={comment.id}
-          className="border border-border rounded-lg p-5 hover:shadow-md transition-shadow bg-white"
+          className={`border ${BORDERS.medium} rounded-md p-5 hover:border-black hover:dark:border-white transition-colors bg-white dark:bg-black`}
         >
           {/* Context - which diff this comment is on */}
-          <div className="mb-3 pb-3 border-b border-border">
-            <div className="text-xs text-muted mb-1">Comment on</div>
+          <div className={`mb-3 pb-3 border-b ${BORDERS.subtle}`}>
+            <div className={`${TEXT.metadata} ${TEXT.mutedMedium} mb-1 font-bold ${monoUppercase}`} style={{ fontFamily: FONTS.mono, letterSpacing: LETTER_SPACING.wide }}>Comment on</div>
             <Link
               href={`/compare/${comment.work_slug}/${comment.screen_work_slug}`}
-              className="text-sm font-medium text-link hover:underline"
+              className={`${TEXT.secondary} font-bold text-black dark:text-white hover:opacity-70`}
+              style={{ fontFamily: FONTS.mono }}
             >
               {comment.work_title} vs {comment.screen_work_title}
             </Link>
-            <div className="text-sm text-muted mt-1">
+            <div className={`${TEXT.secondary} ${TEXT.mutedMedium} mt-1`} style={{ fontFamily: FONTS.sans }}>
               Diff: {comment.diff_item_claim}
             </div>
           </div>
 
           {/* Comment body */}
           <div className="mb-3">
-            <p className="text-sm leading-relaxed">{comment.body}</p>
+            <p className={`${TEXT.secondary} leading-relaxed`} style={{ fontFamily: FONTS.sans }}>{comment.body}</p>
           </div>
 
           {/* Footer with spoiler badge and timestamp */}
-          <div className="flex items-center justify-between text-sm">
+          <div className={`flex items-center justify-between ${TEXT.secondary}`}>
             <span
-              className={`px-2 py-1 text-xs font-mono rounded ${getSpoilerBadgeColor(
+              className={`px-2 py-1 ${TEXT.metadata} font-bold rounded-md ${getSpoilerBadgeColor(
                 comment.spoiler_scope
               )}`}
+              style={{ fontFamily: FONTS.mono }}
             >
               {getSpoilerLabel(comment.spoiler_scope)}
             </span>
-            <span className="text-muted">{formatDate(comment.created_at)}</span>
+            <span className={TEXT.mutedMedium} style={{ fontFamily: FONTS.mono }}>{formatDate(comment.created_at)}</span>
           </div>
         </div>
       ))}

@@ -1,5 +1,6 @@
 import Link from 'next/link';
 import type { DiffItem } from '@/lib/types';
+import { FONTS, LETTER_SPACING, BORDERS, TEXT, monoUppercase } from '@/lib/brutalist-design';
 
 interface UserDiffsListProps {
   diffs: DiffItem[];
@@ -69,9 +70,9 @@ export default function UserDiffsList({
 }: UserDiffsListProps): JSX.Element {
   if (diffs.length === 0) {
     return (
-      <div className="border border-border rounded-lg p-12 text-center">
-        <p className="text-muted text-lg">No diffs created yet</p>
-        <p className="text-muted text-sm mt-2">
+      <div className={`border ${BORDERS.medium} rounded-md p-12 text-center bg-stone-50 dark:bg-stone-950`}>
+        <p className={`${TEXT.body} ${TEXT.mutedMedium} font-bold`} style={{ fontFamily: FONTS.mono }}>No diffs created yet</p>
+        <p className={`${TEXT.secondary} ${TEXT.mutedMedium} mt-2`} style={{ fontFamily: FONTS.sans }}>
           Start comparing books and screen adaptations to add your first diff
         </p>
       </div>
@@ -83,13 +84,14 @@ export default function UserDiffsList({
       {diffs.map((diff) => (
         <div
           key={diff.id}
-          className="border border-border rounded-lg p-5 hover:shadow-md transition-shadow bg-white"
+          className={`border ${BORDERS.medium} rounded-md p-5 hover:border-black hover:dark:border-white transition-colors bg-white dark:bg-black`}
         >
           {/* Header with comparison link */}
           <div className="mb-3">
             <Link
               href={`/compare/${diff.work_slug}/${diff.screen_work_slug}`}
-              className="text-sm text-link hover:underline font-medium"
+              className={`${TEXT.secondary} text-black dark:text-white hover:opacity-70 font-bold`}
+              style={{ fontFamily: FONTS.mono }}
             >
               {diff.work_title} vs {diff.screen_work_title}
             </Link>
@@ -97,19 +99,21 @@ export default function UserDiffsList({
 
           {/* Main claim */}
           <div className="flex items-start justify-between mb-3">
-            <h3 className="text-lg font-semibold flex-1">{diff.claim}</h3>
+            <h3 className={`${TEXT.body} font-bold flex-1`} style={{ fontFamily: FONTS.mono }}>{diff.claim}</h3>
             <div className="flex gap-2 ml-3">
               <span
-                className={`px-2 py-1 text-xs font-semibold rounded border ${getCategoryBadgeColor(
+                className={`px-2 py-1 ${TEXT.metadata} font-bold rounded-md border ${BORDERS.solid} ${getCategoryBadgeColor(
                   diff.category
-                )}`}
+                )} ${monoUppercase}`}
+                style={{ fontFamily: FONTS.mono, letterSpacing: LETTER_SPACING.wide }}
               >
                 {diff.category}
               </span>
               <span
-                className={`px-2 py-1 text-xs font-mono rounded ${getSpoilerBadgeColor(
+                className={`px-2 py-1 ${TEXT.metadata} font-bold rounded-md ${getSpoilerBadgeColor(
                   diff.spoiler_scope
                 )}`}
+                style={{ fontFamily: FONTS.mono }}
               >
                 {getSpoilerLabel(diff.spoiler_scope)}
               </span>
@@ -118,25 +122,25 @@ export default function UserDiffsList({
 
           {/* Detail */}
           {diff.detail && (
-            <p className="text-sm text-muted mb-4 leading-relaxed">
+            <p className={`${TEXT.secondary} ${TEXT.mutedMedium} mb-4 leading-relaxed`} style={{ fontFamily: FONTS.sans }}>
               {diff.detail}
             </p>
           )}
 
           {/* Vote counts and timestamp */}
-          <div className="flex items-center justify-between text-sm">
+          <div className={`flex items-center justify-between ${TEXT.secondary}`}>
             <div className="flex gap-4">
-              <span className="text-green-700 font-medium">
+              <span className="text-green-700 dark:text-green-400 font-bold" style={{ fontFamily: FONTS.mono }}>
                 {diff.vote_counts.accurate} accurate
               </span>
-              <span className="text-yellow-700 font-medium">
+              <span className="text-amber-700 dark:text-amber-400 font-bold" style={{ fontFamily: FONTS.mono }}>
                 {diff.vote_counts.needs_nuance} needs nuance
               </span>
-              <span className="text-red-700 font-medium">
+              <span className="text-red-700 dark:text-red-400 font-bold" style={{ fontFamily: FONTS.mono }}>
                 {diff.vote_counts.disagree} disagree
               </span>
             </div>
-            <span className="text-muted">{formatDate(diff.created_at)}</span>
+            <span className={TEXT.mutedMedium} style={{ fontFamily: FONTS.mono }}>{formatDate(diff.created_at)}</span>
           </div>
         </div>
       ))}

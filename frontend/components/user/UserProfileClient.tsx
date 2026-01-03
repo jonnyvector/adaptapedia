@@ -6,6 +6,7 @@ import { api } from '@/lib/api';
 import type { UserProfile, DiffItem, Vote, Comment, ApiResponse } from '@/lib/types';
 import Link from 'next/link';
 import ReputationProgress from './ReputationProgress';
+import { FONTS, LETTER_SPACING, BORDERS, TEXT, monoUppercase } from '@/lib/brutalist-design';
 
 interface UserProfileClientProps {
   profile: UserProfile;
