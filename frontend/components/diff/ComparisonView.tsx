@@ -14,8 +14,7 @@ import DiffSort, { type SortOption } from './DiffSort';
 import DiffSearch from './DiffSearch';
 import { LockClosedIcon } from '@/components/ui/Icons';
 import AdaptationSwitcher from './AdaptationSwitcher';
-import BookmarkButton from './BookmarkButton';
-import ComparisonHero from './ComparisonHero';
+import MatchupScoreboard from './MatchupScoreboard';
 import SkeletonCard from '@/components/ui/SkeletonCard';
 import LoadingSkeleton from '@/components/ui/LoadingSkeleton';
 import EmptyState from '@/components/ui/EmptyState';
@@ -268,18 +267,13 @@ export default function ComparisonView({
 
   return (
     <div className="max-w-6xl mx-auto p-4 sm:p-6">
-      {/* Bookmark button - top right */}
-      <div className="flex justify-end mb-3">
-        <BookmarkButton workId={work.id} screenWorkId={screenWork.id} />
-      </div>
-
-      {/* Cinematic Hero with Backdrop */}
-      <ComparisonHero
+      {/* Matchup Scoreboard */}
+      <MatchupScoreboard
         work={work}
         screenWork={screenWork}
-        spoilerPreference={spoilerPreference}
-        diffCount={diffs.length}
-        voteCount={totalVotes}
+        onAddDiff={handleAddDiff}
+        workId={work.id}
+        screenWorkId={screenWork.id}
       />
 
       {/* Get It Now Module - Mobile Only (below hero) */}

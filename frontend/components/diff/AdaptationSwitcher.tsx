@@ -101,44 +101,32 @@ export default function AdaptationSwitcher({
 
   // Don't render switcher if loading or only one adaptation
   if (loading || otherAdaptations.length === 0) {
-    return (
-      <div className="text-xl sm:text-2xl md:text-3xl font-bold text-left md:text-right w-full text-gray-900 dark:text-white" style={{ wordBreak: 'break-word', overflowWrap: 'break-word' }}>
-        {currentScreenWorkTitle}
-      </div>
-    );
+    return null;
   }
 
   return (
     <div className="relative w-full" data-adaptation-switcher>
-      {/* Current adaptation button */}
+      {/* Current adaptation button - subtle switcher */}
       <button
         onClick={() => setIsOpen(!isOpen)}
-        className="text-xl sm:text-2xl md:text-3xl font-bold text-left md:text-right text-gray-900 dark:text-white hover:text-link transition-colors group !border-0 !bg-transparent !p-0 block w-full"
+        className="w-full px-3 py-2 border border-black/20 dark:border-white/20 bg-transparent text-black dark:text-white hover:border-black hover:dark:border-white transition-colors text-[10px] font-bold uppercase tracking-wider flex items-center justify-center gap-2 rounded-md"
         style={{
-          wordBreak: 'break-word',
-          overflowWrap: 'break-word',
-          whiteSpace: 'normal',
-          fontFamily: 'inherit',
-          fontWeight: 'inherit'
+          fontFamily: 'JetBrains Mono, monospace',
+          letterSpacing: '0.12em'
         }}
         aria-expanded={isOpen}
         aria-haspopup="true"
       >
-        <span className="inline font-bold">
-          {currentScreenWorkTitle}
-          <span
-            className="text-base sm:text-lg text-gray-600 dark:text-muted group-hover:text-link transition-colors ml-2"
-            aria-hidden="true"
-          >
-            {isOpen ? '▴' : '▾'}
-          </span>
+        <span className="truncate">OTHER VERSIONS</span>
+        <span className="flex-shrink-0" aria-hidden="true">
+          {isOpen ? '▴' : '▾'}
         </span>
       </button>
 
       {/* Dropdown menu */}
       {isOpen && (
         <div
-          className="absolute top-full right-0 md:right-0 left-auto mt-2 w-80 max-w-[calc(100vw-2rem)] bg-background border border-border rounded-lg shadow-xl z-50 overflow-hidden"
+          className="absolute bottom-full right-0 md:right-0 left-auto mb-2 w-80 max-w-[calc(100vw-2rem)] bg-background border border-border rounded-lg shadow-xl z-50 overflow-hidden"
           role="menu"
         >
           {/* Current adaptation (highlighted) */}

@@ -79,22 +79,25 @@ export default function BookmarkButton({
       <button
         onClick={handleToggleBookmark}
         disabled={isLoading}
-        className={`inline-flex items-center justify-center rounded-md border transition-colors h-[40px] w-[40px] ${
+        className={`inline-flex items-center justify-center border transition-colors px-2 py-1 rounded-none ${
           isBookmarked
-            ? 'bg-link/10 border-link text-link hover:bg-link/20'
-            : 'bg-surface border-border text-muted hover:text-foreground hover:bg-surface2'
+            ? 'bg-black dark:bg-white border-black dark:border-white text-white dark:text-black'
+            : 'bg-white dark:bg-black border-black/40 dark:border-white/40 text-black dark:text-white hover:border-black dark:hover:border-white'
         } ${isLoading ? 'opacity-50 cursor-not-allowed' : ''}`}
+        style={{
+          fontFamily: 'JetBrains Mono, monospace'
+        }}
         title={isBookmarked ? 'Remove from bookmarks' : 'Add to bookmarks'}
         aria-label={isBookmarked ? 'Remove from bookmarks' : 'Add to bookmarks'}
       >
         <svg
-          width="20"
-          height="20"
+          width="16"
+          height="16"
           viewBox="0 0 24 24"
-          style={{ minWidth: '20px', minHeight: '20px', flexShrink: 0 }}
+          style={{ minWidth: '16px', minHeight: '16px', flexShrink: 0 }}
           xmlns="http://www.w3.org/2000/svg"
-          fill="none"
-          strokeWidth="1.5"
+          fill={isBookmarked ? 'currentColor' : 'none'}
+          strokeWidth="2"
           stroke="currentColor"
         >
           <path
