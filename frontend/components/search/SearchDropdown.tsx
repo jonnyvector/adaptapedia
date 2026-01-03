@@ -81,7 +81,7 @@ export default function SearchDropdown({
   return (
     <div
       ref={dropdownRef}
-      className={`absolute top-full left-0 right-0 mt-2 bg-white dark:bg-black border ${BORDERS.solid} rounded-md max-h-96 overflow-y-auto z-50`}
+      className={`absolute top-full left-0 right-0 mt-2 bg-white dark:bg-black border ${BORDERS.medium} rounded-md max-h-96 overflow-y-auto z-50`}
     >
       {isLoading ? (
         <div className={`p-4 text-center ${TEXT.mutedMedium}`}>
@@ -171,7 +171,7 @@ export default function SearchDropdown({
           <Link
             href={`/search?q=${encodeURIComponent(query)}`}
             onClick={onResultClick}
-            className={`block px-4 py-3 text-center ${TEXT.secondary} text-black dark:text-white hover:bg-stone-100 hover:dark:bg-stone-900 border-t ${BORDERS.solid} transition-colors font-bold ${monoUppercase}`}
+            className={`block px-4 py-3 text-center ${TEXT.secondary} text-black dark:text-white hover:bg-stone-100 hover:dark:bg-stone-900 border-t ${BORDERS.subtle} transition-colors font-bold ${monoUppercase}`}
             style={{ fontFamily: FONTS.mono, letterSpacing: LETTER_SPACING.tight }}
           >
             {results.total_count && results.total_count > results.results.length

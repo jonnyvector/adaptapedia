@@ -77,6 +77,12 @@ export const BRUTALIST_STYLES = {
 
   // Input: Text field
   input: `border ${BORDERS.medium} bg-white dark:bg-black ${TEXT.body} focus:border-black focus:dark:border-white ${RADIUS.control}`,
+
+  // Dropdown: Floating menus (search, notifications, etc)
+  dropdown: `border ${BORDERS.medium} bg-white dark:bg-black ${RADIUS.control}`,
+
+  // Dropdown Divider: Internal separators
+  dropdownDivider: `border-t ${BORDERS.subtle}`,
 } as const;
 
 // Helper Functions

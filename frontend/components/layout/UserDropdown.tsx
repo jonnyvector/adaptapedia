@@ -41,7 +41,7 @@ export default function UserDropdown({ user }: UserDropdownProps): JSX.Element {
       </button>
 
       {isOpen && (
-        <div className={`absolute right-0 top-full mt-1 w-48 bg-white dark:bg-black border ${BORDERS.solid} py-1 z-50`}>
+        <div className={`absolute right-0 top-full mt-1 w-48 bg-white dark:bg-black border ${BORDERS.medium} rounded-md py-1 z-50`}>
           <Link
             href={`/u/${user.username}`}
             className={`block px-4 py-2 ${TEXT.label} text-black dark:text-white hover:bg-stone-100 hover:dark:bg-stone-900 transition-colors font-bold ${monoUppercase}`}
@@ -58,7 +58,7 @@ export default function UserDropdown({ user }: UserDropdownProps): JSX.Element {
           >
             Bookmarks
           </Link>
-          <hr className={`my-1 border ${BORDERS.subtle}`} />
+          <hr className={`my-1 border-t ${BORDERS.subtle}`} />
           <Link
             href="/auth/logout"
             className={`block px-4 py-2 ${TEXT.label} text-black dark:text-white hover:bg-stone-100 hover:dark:bg-stone-900 transition-colors font-bold ${monoUppercase}`}
