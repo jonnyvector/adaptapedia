@@ -15,7 +15,7 @@ export default function LoadingSpinner({
 
   return (
     <div
-      className={`${sizeClasses[size]} border-muted border-t-link rounded-full animate-spin ${className}`}
+      className={`${sizeClasses[size]} border-black/20 dark:border-white/20 border-t-black dark:border-t-white rounded-full animate-spin ${className}`}
       role="status"
       aria-label="Loading"
     >

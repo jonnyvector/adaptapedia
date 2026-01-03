@@ -1,4 +1,5 @@
 import Link from 'next/link';
+import { FONTS, LETTER_SPACING, BORDERS, TEXT } from '@/lib/brutalist-design';
 
 interface EmptyStateProps {
   message: string;
@@ -11,10 +12,10 @@ interface EmptyStateProps {
 
 export default function EmptyState({ message, action, className = '' }: EmptyStateProps): JSX.Element {
   return (
-    <div className={`border border-border rounded-lg p-12 text-center ${className}`}>
-      <p className="text-muted mb-4">{message}</p>
+    <div className={`border ${BORDERS.medium} p-12 text-center ${className}`}>
+      <p className={`${TEXT.mutedMedium} mb-4`} style={{ fontFamily: FONTS.sans }}>{message}</p>
       {action && (
-        <Link href={action.href} className="text-link hover:underline">
+        <Link href={action.href} className="text-black dark:text-white hover:opacity-70 transition-opacity font-bold" style={{ fontFamily: FONTS.mono }}>
           {action.label}
         </Link>
       )}
