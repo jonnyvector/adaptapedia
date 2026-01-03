@@ -103,7 +103,7 @@ export default function GetItNowModule({ work, screenWork }: GetItNowModuleProps
   const adaptationType = screenWork.type === 'MOVIE' ? 'movie' : 'show';
 
   return (
-    <div className={`p-5 sm:p-6 sticky top-24 bg-stone-50 dark:bg-stone-950 border ${BORDERS.medium}`}>
+    <div className={`p-5 sm:p-6 sticky top-32 bg-stone-50 dark:bg-stone-950 border ${BORDERS.medium}`}>
       <h3 className={`${TEXT.body} font-bold mb-5 text-black dark:text-white ${monoUppercase}`} style={{ fontFamily: FONTS.mono, letterSpacing: LETTER_SPACING.wider }}>
         Where to get it
       </h3>
