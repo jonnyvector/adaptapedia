@@ -1,4 +1,5 @@
 import type { SpoilerScope } from '@/lib/types';
+import { FONTS, LETTER_SPACING, BORDERS, TEXT, monoUppercase } from '@/lib/brutalist-design';
 
 interface SpoilerScopeToggleProps {
   currentScope: SpoilerScope;
@@ -34,17 +35,18 @@ export default function SpoilerScopeToggle({
 }: SpoilerScopeToggleProps): JSX.Element {
   return (
     <div className="flex-1">
-      <h3 className="text-sm font-semibold mb-2 sm:mb-3">Spoiler Level</h3>
+      <h3 className={`${TEXT.secondary} font-bold mb-2 sm:mb-3 ${monoUppercase}`} style={{ fontFamily: FONTS.mono, letterSpacing: LETTER_SPACING.wide }}>Spoiler Level</h3>
       <div className="flex flex-wrap gap-2">
         {scopes.map((scope) => (
           <button
             key={scope.value}
             onClick={() => onScopeChange(scope.value)}
-            className={`px-3 sm:px-4 py-2 rounded-lg text-xs sm:text-sm font-medium transition-colors min-h-[44px] flex items-center ${
+            className={`px-3 sm:px-4 py-2 rounded-md ${TEXT.metadata} font-bold transition-colors min-h-[44px] flex items-center ${monoUppercase} ${
               currentScope === scope.value
-                ? 'bg-link text-white'
-                : 'bg-muted/10 text-foreground hover:bg-muted/20'
+                ? `bg-black dark:bg-white text-white dark:text-black border ${BORDERS.solid}`
+                : `bg-white dark:bg-black text-black dark:text-white border ${BORDERS.medium} hover:border-black hover:dark:border-white`
             }`}
+            style={{ fontFamily: FONTS.mono, letterSpacing: LETTER_SPACING.wide }}
             title={scope.description}
             aria-pressed={currentScope === scope.value}
           >
@@ -52,7 +54,7 @@ export default function SpoilerScopeToggle({
           </button>
         ))}
       </div>
-      <p className="text-xs text-muted mt-2 hidden sm:block">
+      <p className={`${TEXT.metadata} ${TEXT.mutedMedium} mt-2 hidden sm:block`} style={{ fontFamily: FONTS.sans }}>
         {scopes.find((s) => s.value === currentScope)?.description}
       </p>
     </div>

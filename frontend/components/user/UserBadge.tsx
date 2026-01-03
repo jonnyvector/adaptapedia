@@ -8,7 +8,7 @@ interface UserBadgeProps {
 }
 
 const getBadgeIcon = (badgeType: BadgeType): string => {
-  const iconMap: Record<BadgeType, string> = {
+  const iconMap: Partial<Record<BadgeType, string>> = {
     // Milestone badges
     FIRST_VOTE: '🗳️',
     FIRST_COMMENT: '💬',
@@ -18,7 +18,6 @@ const getBadgeIcon = (badgeType: BadgeType): string => {
     VOTER_100: '👑',
     COMMENTER_10: '💭',
     COMMENTER_50: '🗨️',
-    COMMENTER_100: '📣',
     CONTRIBUTOR_10: '📝',
     CONTRIBUTOR_50: '📚',
     CONTRIBUTOR_100: '🏅',

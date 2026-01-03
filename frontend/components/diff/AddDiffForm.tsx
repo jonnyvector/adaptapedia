@@ -7,6 +7,7 @@ import { api, ApiError } from '@/lib/api';
 import LoadingSpinner from '@/components/ui/LoadingSpinner';
 import { CheckCircleIcon } from '@/components/ui/Icons';
 import { MAX_IMAGE_SIZE_BYTES, MAX_IMAGE_SIZE_MB, MIN_CLAIM_LENGTH, MAX_CLAIM_LENGTH, MAX_DETAIL_LENGTH } from '@/lib/constants';
+import { FONTS, LETTER_SPACING, BORDERS, TEXT, monoUppercase } from '@/lib/brutalist-design';
 
 interface AddDiffFormProps {
   work: Work;
@@ -236,14 +237,14 @@ export default function AddDiffForm({ work, screenWork, initialCategory }: AddDi
   if (showSuccess) {
     return (
       <div className="max-w-2xl mx-auto p-4 sm:p-6">
-        <div className="bg-success/10 border border-success rounded-lg p-6 text-center">
+        <div className={`bg-black dark:bg-white border ${BORDERS.solid} rounded-md p-6 text-center`}>
           <div className="flex justify-center mb-4">
-            <CheckCircleIcon className="w-16 h-16 text-success" />
+            <CheckCircleIcon className="w-16 h-16 text-white dark:text-black" />
           </div>
-          <h2 className="text-lg sm:text-xl font-semibold text-success mb-2">
+          <h2 className={`${TEXT.body} font-bold text-white dark:text-black mb-2 ${monoUppercase}`} style={{ fontFamily: FONTS.mono, letterSpacing: LETTER_SPACING.wide }}>
             Difference submitted successfully!
           </h2>
-          <p className="text-sm sm:text-base text-success">
+          <p className={`${TEXT.secondary} text-white dark:text-black`} style={{ fontFamily: FONTS.mono }}>
             Redirecting you back to the comparison page...
           </p>
         </div>
@@ -254,16 +255,16 @@ export default function AddDiffForm({ work, screenWork, initialCategory }: AddDi
   return (
     <div className="max-w-2xl mx-auto p-4 sm:p-6">
       <div className="mb-4 sm:mb-6">
-        <h1 className="text-xl sm:text-2xl font-bold mb-2">Add New Difference</h1>
-        <p className="text-sm sm:text-base text-muted">
-          Comparing <span className="font-semibold text-foreground">{work.title}</span> (book) and{' '}
-          <span className="font-semibold text-foreground">{screenWork.title}</span> (
+        <h1 className={`text-xl sm:text-2xl font-bold mb-2 text-black dark:text-white ${monoUppercase}`} style={{ fontFamily: FONTS.mono, letterSpacing: LETTER_SPACING.wider }}>Add New Difference</h1>
+        <p className={`${TEXT.secondary} ${TEXT.mutedMedium}`} style={{ fontFamily: FONTS.sans }}>
+          Comparing <span className="font-semibold text-black dark:text-white">{work.title}</span> (book) and{' '}
+          <span className="font-semibold text-black dark:text-white">{screenWork.title}</span> (
           {screenWork.type === 'MOVIE' ? 'movie' : 'TV series'})
         </p>
       </div>
 
       {error && (
-        <div className="mb-4 sm:mb-6 p-3 sm:p-4 bg-danger/10 border border-danger rounded-lg text-sm sm:text-base text-danger">
+        <div className={`mb-4 sm:mb-6 p-3 sm:p-4 bg-red-50 dark:bg-red-950/20 border ${BORDERS.solid} border-red-600 dark:border-red-400 rounded-md ${TEXT.secondary} text-red-600 dark:text-red-400`} style={{ fontFamily: FONTS.mono }}>
           {error}
         </div>
       )}
@@ -271,7 +272,7 @@ export default function AddDiffForm({ work, screenWork, initialCategory }: AddDi
       <form onSubmit={handleSubmit} className="space-y-5 sm:space-y-6">
         {/* Category */}
         <div>
-          <label htmlFor="category" className="block text-sm font-medium mb-2">
+          <label htmlFor="category" className={`block ${TEXT.secondary} font-bold mb-2 ${monoUppercase}`} style={{ fontFamily: FONTS.mono, letterSpacing: LETTER_SPACING.wide }}>
             Category <span className="text-red-500">*</span>
           </label>
           <select
@@ -280,7 +281,8 @@ export default function AddDiffForm({ work, screenWork, initialCategory }: AddDi
             value={formData.category}
             onChange={handleChange}
             required
-            className="w-full px-3 py-3 text-base bg-surface text-foreground border border-border rounded-md focus:outline-none focus:ring-2 focus:ring-link min-h-[44px]"
+            className={`w-full px-3 py-3 ${TEXT.secondary} bg-white dark:bg-black text-black dark:text-white border ${BORDERS.medium} rounded-md focus:outline-none focus:border-black dark:focus:border-white min-h-[44px]`}
+            style={{ fontFamily: FONTS.mono, letterSpacing: LETTER_SPACING.normal }}
           >
             <option value="">Select a category...</option>
             {DIFF_CATEGORIES.map((cat) => (
@@ -289,14 +291,14 @@ export default function AddDiffForm({ work, screenWork, initialCategory }: AddDi
               </option>
             ))}
           </select>
-          <p className="mt-1 text-xs sm:text-sm text-muted">
+          <p className={`mt-1 ${TEXT.metadata} ${TEXT.mutedMedium}`} style={{ fontFamily: FONTS.sans }}>
             Choose the category that best describes this difference.
           </p>
         </div>
 
         {/* Claim */}
         <div>
-          <label htmlFor="claim" className="block text-sm font-medium mb-2">
+          <label htmlFor="claim" className={`block ${TEXT.secondary} font-bold mb-2 ${monoUppercase}`} style={{ fontFamily: FONTS.mono, letterSpacing: LETTER_SPACING.wide }}>
             Claim <span className="text-red-500">*</span>
           </label>
           <input
@@ -308,20 +310,22 @@ export default function AddDiffForm({ work, screenWork, initialCategory }: AddDi
             required
             maxLength={200}
             placeholder="e.g., Ian Malcolm has a larger role in the movie"
-            className="w-full px-3 py-3 text-base bg-surface text-foreground border border-border rounded-md focus:outline-none focus:ring-2 focus:ring-link min-h-[44px]"
+            className={`w-full px-3 py-3 ${TEXT.secondary} bg-white dark:bg-black text-black dark:text-white border ${BORDERS.medium} rounded-md focus:outline-none focus:border-black dark:focus:border-white min-h-[44px]`}
+            style={{ fontFamily: FONTS.mono, letterSpacing: LETTER_SPACING.normal }}
           />
           <div className="flex flex-col sm:flex-row sm:justify-between mt-1 gap-1">
-            <p className="text-xs sm:text-sm text-muted">
+            <p className={`${TEXT.metadata} ${TEXT.mutedMedium}`} style={{ fontFamily: FONTS.sans }}>
               A brief statement describing the difference (10-200 characters).
             </p>
             <span
-              className={`text-xs sm:text-sm ${
+              className={`${TEXT.metadata} ${
                 claimCharCount < 10
-                  ? 'text-danger'
+                  ? 'text-red-600 dark:text-red-400'
                   : claimCharCount > 200
-                  ? 'text-danger'
-                  : 'text-muted'
+                  ? 'text-red-600 dark:text-red-400'
+                  : TEXT.mutedMedium
               }`}
+              style={{ fontFamily: FONTS.mono }}
             >
               {claimCharCount}/200
             </span>
@@ -330,7 +334,7 @@ export default function AddDiffForm({ work, screenWork, initialCategory }: AddDi
 
         {/* Detail */}
         <div>
-          <label htmlFor="detail" className="block text-sm font-medium mb-2">
+          <label htmlFor="detail" className={`block ${TEXT.secondary} font-bold mb-2 ${monoUppercase}`} style={{ fontFamily: FONTS.mono, letterSpacing: LETTER_SPACING.wide }}>
             Detail (Optional)
           </label>
           <textarea
@@ -341,13 +345,14 @@ export default function AddDiffForm({ work, screenWork, initialCategory }: AddDi
             rows={6}
             maxLength={1000}
             placeholder="Provide a more detailed explanation of the difference..."
-            className="w-full px-3 py-3 text-base bg-surface text-foreground border border-border rounded-md focus:outline-none focus:ring-2 focus:ring-link resize-y min-h-[120px]"
+            className={`w-full px-3 py-3 ${TEXT.secondary} bg-white dark:bg-black text-black dark:text-white border ${BORDERS.medium} rounded-md focus:outline-none focus:border-black dark:focus:border-white resize-y min-h-[120px]`}
+            style={{ fontFamily: FONTS.mono, letterSpacing: LETTER_SPACING.normal }}
           />
           <div className="flex flex-col sm:flex-row sm:justify-between mt-1 gap-1">
-            <p className="text-xs sm:text-sm text-muted">
+            <p className={`${TEXT.metadata} ${TEXT.mutedMedium}`} style={{ fontFamily: FONTS.sans }}>
               Optional: Provide more context or explanation (max 1000 characters).
             </p>
-            <span className={`text-xs sm:text-sm ${detailCharCount > 1000 ? 'text-danger' : 'text-muted'}`}>
+            <span className={`${TEXT.metadata} ${detailCharCount > 1000 ? 'text-red-600 dark:text-red-400' : TEXT.mutedMedium}`} style={{ fontFamily: FONTS.mono }}>
               {detailCharCount}/1000
             </span>
           </div>
@@ -355,7 +360,7 @@ export default function AddDiffForm({ work, screenWork, initialCategory }: AddDi
 
         {/* Image Upload */}
         <div>
-          <label htmlFor="image" className="block text-sm font-medium mb-2">
+          <label htmlFor="image" className={`block ${TEXT.secondary} font-bold mb-2 ${monoUppercase}`} style={{ fontFamily: FONTS.mono, letterSpacing: LETTER_SPACING.wide }}>
             Image (Optional)
           </label>
           <input
@@ -364,9 +369,10 @@ export default function AddDiffForm({ work, screenWork, initialCategory }: AddDi
             name="image"
             accept="image/jpeg,image/jpg,image/png,image/webp"
             onChange={handleFileChange}
-            className="w-full px-3 py-3 text-base bg-surface text-foreground border border-border rounded-md focus:outline-none focus:ring-2 focus:ring-link file:mr-4 file:py-2 file:px-4 file:rounded-md file:border-0 file:text-sm file:font-semibold file:bg-link/10 file:text-link hover:file:bg-link/20 min-h-[44px]"
+            className={`w-full px-3 py-3 ${TEXT.secondary} bg-white dark:bg-black text-black dark:text-white border ${BORDERS.medium} rounded-md focus:outline-none focus:border-black dark:focus:border-white file:mr-4 file:py-2 file:px-4 file:rounded-md file:border-0 ${TEXT.metadata} file:font-bold file:bg-black/10 dark:file:bg-white/10 file:text-black dark:file:text-white hover:file:bg-black/20 hover:dark:file:bg-white/20 min-h-[44px]`}
+            style={{ fontFamily: FONTS.mono }}
           />
-          <p className="mt-1 text-xs sm:text-sm text-muted">
+          <p className={`mt-1 ${TEXT.metadata} ${TEXT.mutedMedium}`} style={{ fontFamily: FONTS.sans }}>
             Optional: Add an image to illustrate the difference (max 5MB, JPEG/PNG/WebP).
           </p>
           {imagePreview && (
@@ -374,7 +380,7 @@ export default function AddDiffForm({ work, screenWork, initialCategory }: AddDi
               <img
                 src={imagePreview}
                 alt="Preview"
-                className="max-w-full max-h-64 rounded-md border border-border"
+                className={`max-w-full max-h-64 rounded-md border ${BORDERS.medium}`}
               />
               <button
                 type="button"
@@ -384,7 +390,7 @@ export default function AddDiffForm({ work, screenWork, initialCategory }: AddDi
                   const fileInput = document.getElementById('image') as HTMLInputElement;
                   if (fileInput) fileInput.value = '';
                 }}
-                className="absolute top-2 right-2 bg-danger text-white rounded-full w-8 h-8 flex items-center justify-center hover:bg-danger/90 transition-colors"
+                className={`absolute top-2 right-2 bg-red-600 dark:bg-red-500 text-white rounded-full w-8 h-8 flex items-center justify-center hover:bg-red-700 dark:hover:bg-red-600 transition-colors`}
                 aria-label="Remove image"
               >
                 ×
@@ -395,14 +401,14 @@ export default function AddDiffForm({ work, screenWork, initialCategory }: AddDi
 
         {/* Spoiler Scope */}
         <div>
-          <label className="block text-sm font-medium mb-2">
+          <label className={`block ${TEXT.secondary} font-bold mb-2 ${monoUppercase}`} style={{ fontFamily: FONTS.mono, letterSpacing: LETTER_SPACING.wide }}>
             Spoiler Scope <span className="text-red-500">*</span>
           </label>
           <div className="space-y-2">
             {SPOILER_SCOPES.map((scope) => (
               <label
                 key={scope.value}
-                className="flex items-start gap-3 p-3 bg-surface border border-border rounded-md cursor-pointer hover:bg-surface2 transition-colors min-h-[48px]"
+                className={`flex items-start gap-3 p-3 bg-stone-50 dark:bg-stone-950 border ${BORDERS.medium} rounded-md cursor-pointer hover:border-black hover:dark:border-white transition-colors min-h-[48px]`}
               >
                 <input
                   type="radio"
@@ -413,8 +419,8 @@ export default function AddDiffForm({ work, screenWork, initialCategory }: AddDi
                   className="mt-1 min-w-[20px] min-h-[20px]"
                 />
                 <div className="flex-1">
-                  <div className="font-medium text-sm sm:text-base">{scope.label}</div>
-                  <div className="text-xs sm:text-sm text-muted">{scope.description}</div>
+                  <div className={`font-bold ${TEXT.secondary}`} style={{ fontFamily: FONTS.mono }}>{scope.label}</div>
+                  <div className={`${TEXT.metadata} ${TEXT.mutedMedium}`} style={{ fontFamily: FONTS.sans }}>{scope.description}</div>
                 </div>
               </label>
             ))}
@@ -423,15 +429,15 @@ export default function AddDiffForm({ work, screenWork, initialCategory }: AddDi
 
         {/* Preview */}
         {formData.claim && (
-          <div className="border border-border rounded-lg p-4 bg-surface2">
-            <h3 className="text-sm font-medium mb-2">Preview</h3>
+          <div className={`border ${BORDERS.medium} rounded-md p-4 bg-stone-50 dark:bg-stone-950`}>
+            <h3 className={`${TEXT.secondary} font-bold mb-2 ${monoUppercase}`} style={{ fontFamily: FONTS.mono, letterSpacing: LETTER_SPACING.wide }}>Preview</h3>
             <div className="space-y-2">
               <div>
-                <span className="text-xs text-muted uppercase">{formData.category || 'Category'}</span>
+                <span className={`${TEXT.metadata} ${TEXT.mutedMedium} font-bold ${monoUppercase}`} style={{ fontFamily: FONTS.mono, letterSpacing: LETTER_SPACING.wide }}>{formData.category || 'Category'}</span>
               </div>
-              <p className="font-medium">{formData.claim}</p>
-              {formData.detail && <p className="text-sm text-muted">{formData.detail}</p>}
-              <div className="text-xs text-muted">
+              <p className="font-bold" style={{ fontFamily: FONTS.mono }}>{formData.claim}</p>
+              {formData.detail && <p className={`${TEXT.secondary} ${TEXT.mutedMedium}`} style={{ fontFamily: FONTS.sans }}>{formData.detail}</p>}
+              <div className={`${TEXT.metadata} ${TEXT.mutedMedium}`} style={{ fontFamily: FONTS.mono }}>
                 Spoiler: {SPOILER_SCOPES.find((s) => s.value === formData.spoiler_scope)?.label}
               </div>
             </div>
@@ -443,7 +449,8 @@ export default function AddDiffForm({ work, screenWork, initialCategory }: AddDi
           <button
             type="submit"
             disabled={isSubmitting}
-            className="flex-1 flex items-center justify-center gap-2 px-6 py-3 bg-link text-white rounded-md hover:bg-link/90 disabled:opacity-50 disabled:cursor-not-allowed transition-colors font-medium min-h-[48px]"
+            className={`flex-1 flex items-center justify-center gap-2 px-6 py-3 bg-black dark:bg-white text-white dark:text-black rounded-md border ${BORDERS.solid} hover:bg-black/90 hover:dark:bg-white/90 disabled:opacity-50 disabled:cursor-not-allowed transition-colors font-bold min-h-[48px] ${monoUppercase}`}
+            style={{ fontFamily: FONTS.mono, letterSpacing: LETTER_SPACING.tight }}
           >
             {isSubmitting && <LoadingSpinner size="sm" />}
             {isSubmitting ? 'Submitting...' : 'Submit Difference'}
@@ -452,7 +459,8 @@ export default function AddDiffForm({ work, screenWork, initialCategory }: AddDi
             type="button"
             onClick={handleClear}
             disabled={isSubmitting}
-            className="px-6 py-3 bg-surface border border-border rounded-md hover:bg-surface2 disabled:opacity-50 disabled:cursor-not-allowed transition-colors min-h-[48px] font-medium"
+            className={`px-6 py-3 bg-white dark:bg-black border ${BORDERS.medium} rounded-md hover:border-black hover:dark:border-white disabled:opacity-50 disabled:cursor-not-allowed transition-colors min-h-[48px] font-bold ${monoUppercase}`}
+            style={{ fontFamily: FONTS.mono, letterSpacing: LETTER_SPACING.tight }}
           >
             Clear
           </button>
@@ -460,7 +468,8 @@ export default function AddDiffForm({ work, screenWork, initialCategory }: AddDi
             type="button"
             onClick={handleCancel}
             disabled={isSubmitting}
-            className="px-6 py-3 bg-surface border border-border rounded-md hover:bg-surface2 disabled:opacity-50 disabled:cursor-not-allowed transition-colors min-h-[48px] font-medium"
+            className={`px-6 py-3 bg-white dark:bg-black border ${BORDERS.medium} rounded-md hover:border-black hover:dark:border-white disabled:opacity-50 disabled:cursor-not-allowed transition-colors min-h-[48px] font-bold ${monoUppercase}`}
+            style={{ fontFamily: FONTS.mono, letterSpacing: LETTER_SPACING.tight }}
           >
             Cancel
           </button>

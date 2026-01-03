@@ -3,6 +3,7 @@
 import { useState, useRef, useEffect } from 'react';
 import type { SpoilerScope } from '@/lib/types';
 import LoadingSpinner from '@/components/ui/LoadingSpinner';
+import { FONTS, LETTER_SPACING, BORDERS, TEXT, monoUppercase } from '@/lib/brutalist-design';
 
 interface AddCommentFormProps {
   diffItemId: number;
@@ -108,7 +109,7 @@ export default function AddCommentForm({
     <form onSubmit={handleSubmit} className="space-y-4">
       {/* Textarea */}
       <div>
-        <label htmlFor="comment-body" className="block text-sm font-medium mb-2">
+        <label htmlFor="comment-body" className={`block ${TEXT.secondary} font-bold mb-2 ${monoUppercase}`} style={{ fontFamily: FONTS.mono, letterSpacing: LETTER_SPACING.wide }}>
           {parentId ? 'Add a reply' : 'Add your comment'}
         </label>
         <textarea
@@ -117,11 +118,12 @@ export default function AddCommentForm({
           value={body}
           onChange={(e) => setBody(e.target.value)}
           placeholder={parentId ? 'Write your reply...' : 'Share your thoughts on this difference...'}
-          className={`w-full px-3 py-2 border rounded-lg resize-none bg-surface text-foreground focus:outline-none focus:ring-2 focus:ring-link/50 transition-colors ${
+          className={`w-full px-3 py-2 border rounded-md resize-none bg-white dark:bg-black text-black dark:text-white focus:outline-none transition-colors ${
             isOverLimit
-              ? 'border-danger focus:border-danger focus:ring-danger/50'
-              : 'border-border'
+              ? `border-red-600 dark:border-red-400 focus:border-red-600 dark:focus:border-red-400`
+              : `${BORDERS.medium} focus:border-black dark:focus:border-white`
           }`}
+          style={{ fontFamily: FONTS.mono, letterSpacing: LETTER_SPACING.normal }}
           rows={parentId ? 2 : 3}
           disabled={isSubmitting}
           aria-describedby="char-count comment-error"
@@ -132,30 +134,31 @@ export default function AddCommentForm({
         <div className="flex items-center justify-between mt-1">
           <div>
             {isTooShort && (
-              <p className="text-xs text-danger">
+              <p className={`${TEXT.metadata} text-red-600 dark:text-red-400`} style={{ fontFamily: FONTS.mono }}>
                 Minimum {MIN_CHARS} characters required
               </p>
             )}
             {error && (
-              <p id="comment-error" className="text-xs text-danger">
+              <p id="comment-error" className={`${TEXT.metadata} text-red-600 dark:text-red-400`} style={{ fontFamily: FONTS.mono }}>
                 {error}
               </p>
             )}
             {success && (
-              <p className="text-xs text-success">
+              <p className={`${TEXT.metadata} text-black dark:text-white`} style={{ fontFamily: FONTS.mono }}>
                 Comment posted successfully!
               </p>
             )}
           </div>
           <span
             id="char-count"
-            className={`text-xs ${
+            className={`${TEXT.metadata} ${
               isOverLimit
-                ? 'text-danger font-semibold'
+                ? 'text-red-600 dark:text-red-400 font-bold'
                 : charCount > CHAR_LIMIT * 0.9
-                ? 'text-warn'
-                : 'text-muted'
+                ? 'text-amber-600 dark:text-amber-400'
+                : TEXT.mutedMedium
             }`}
+            style={{ fontFamily: FONTS.mono }}
           >
             {charCount}/{CHAR_LIMIT}
           </span>
@@ -164,7 +167,7 @@ export default function AddCommentForm({
 
       {/* Spoiler scope selector */}
       <div>
-        <label className="block text-sm font-medium mb-2">
+        <label className={`block ${TEXT.secondary} font-bold mb-2 ${monoUppercase}`} style={{ fontFamily: FONTS.mono, letterSpacing: LETTER_SPACING.wide }}>
           Spoiler Level
         </label>
         <div className="flex flex-wrap gap-2">
@@ -174,11 +177,12 @@ export default function AddCommentForm({
               type="button"
               onClick={() => setSpoilerScope(scope.value)}
               disabled={isSubmitting}
-              className={`px-3 py-1.5 rounded-md text-xs font-medium transition-colors ${
+              className={`px-3 py-1.5 rounded-md ${TEXT.metadata} font-bold transition-colors ${monoUppercase} ${
                 spoilerScope === scope.value
-                  ? 'bg-link text-white'
-                  : 'bg-surface border border-border text-foreground hover:bg-surface2 disabled:opacity-50'
+                  ? `bg-black dark:bg-white text-white dark:text-black border ${BORDERS.solid}`
+                  : `bg-white dark:bg-black border ${BORDERS.medium} text-black dark:text-white hover:border-black hover:dark:border-white disabled:opacity-50`
               }`}
+              style={{ fontFamily: FONTS.mono, letterSpacing: LETTER_SPACING.wide }}
               title={scope.description}
               aria-label={`${scope.label} - ${scope.description}`}
             >
@@ -186,7 +190,7 @@ export default function AddCommentForm({
             </button>
           ))}
         </div>
-        <p className="text-xs text-muted mt-1">
+        <p className={`${TEXT.metadata} ${TEXT.mutedMedium} mt-1`} style={{ fontFamily: FONTS.sans }}>
           {spoilerScopes.find((s) => s.value === spoilerScope)?.description}
         </p>
       </div>
@@ -196,7 +200,8 @@ export default function AddCommentForm({
         <button
           type="submit"
           disabled={!isValid || isSubmitting}
-          className="flex items-center gap-2 px-4 py-2 bg-link text-white rounded-lg text-sm font-medium hover:bg-link/90 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+          className={`flex items-center gap-2 px-4 py-2 bg-black dark:bg-white text-white dark:text-black rounded-md border ${BORDERS.solid} ${TEXT.secondary} font-bold hover:bg-black/90 hover:dark:bg-white/90 disabled:opacity-50 disabled:cursor-not-allowed transition-colors ${monoUppercase}`}
+          style={{ fontFamily: FONTS.mono, letterSpacing: LETTER_SPACING.tight }}
           aria-label="Post comment"
         >
           {isSubmitting && <LoadingSpinner size="sm" />}
@@ -208,7 +213,8 @@ export default function AddCommentForm({
             type="button"
             onClick={onCancel}
             disabled={isSubmitting}
-            className="px-4 py-2 bg-surface border border-border text-foreground rounded-lg text-sm font-medium hover:bg-surface2 disabled:opacity-50 transition-colors"
+            className={`px-4 py-2 bg-white dark:bg-black border ${BORDERS.medium} text-black dark:text-white rounded-md ${TEXT.secondary} font-bold hover:border-black hover:dark:border-white disabled:opacity-50 transition-colors ${monoUppercase}`}
+            style={{ fontFamily: FONTS.mono, letterSpacing: LETTER_SPACING.tight }}
           >
             Cancel
           </button>
