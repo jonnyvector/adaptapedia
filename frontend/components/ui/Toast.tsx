@@ -1,6 +1,7 @@
 'use client';
 
 import { useEffect } from 'react';
+import { FONTS, LETTER_SPACING, BORDERS, TEXT } from '@/lib/brutalist-design';
 
 export interface ToastProps {
   message: string;
@@ -18,12 +19,6 @@ export default function Toast({ message, type = 'success', duration = 4000, onCl
     return () => clearTimeout(timer);
   }, [duration, onClose]);
 
-  const bgColor = {
-    success: 'bg-green-500',
-    error: 'bg-red-500',
-    info: 'bg-blue-500',
-  }[type];
-
   const icon = {
     success: '✓',
     error: '✕',
@@ -32,22 +27,22 @@ export default function Toast({ message, type = 'success', duration = 4000, onCl
 
   return (
     <div
-      className="fixed bottom-4 right-4 z-50 flex items-center gap-3 px-4 py-3 text-white rounded-lg shadow-lg animate-slide-in-up"
+      className={`fixed bottom-4 right-4 z-50 flex items-center gap-3 px-4 py-3 bg-black dark:bg-white border ${BORDERS.solid} rounded-md animate-slide-in-up`}
       style={{
         animation: 'slideInUp 0.3s ease-out',
         maxWidth: '90vw',
         width: 'auto',
       }}
     >
-      <div className={`${bgColor} rounded-full w-8 h-8 flex items-center justify-center font-bold flex-shrink-0`}>
+      <div className="flex items-center justify-center font-bold flex-shrink-0 text-white dark:text-black">
         {icon}
       </div>
       <div className="flex-1 min-w-0">
-        <p className="text-sm font-medium text-white break-words">{message}</p>
+        <p className={`${TEXT.secondary} font-bold text-white dark:text-black break-words`} style={{ fontFamily: FONTS.mono }}>{message}</p>
       </div>
       <button
         onClick={onClose}
-        className="flex-shrink-0 text-white/80 hover:text-white transition-colors"
+        className="flex-shrink-0 text-white/80 dark:text-black/80 hover:text-white hover:dark:text-black transition-colors"
         aria-label="Close"
       >
         <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
