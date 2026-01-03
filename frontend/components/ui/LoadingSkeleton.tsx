@@ -11,11 +11,11 @@ export default function LoadingSkeleton({
   className = '',
   variant = 'rectangular'
 }: LoadingSkeletonProps): JSX.Element {
-  const baseClasses = 'bg-muted/20 animate-pulse';
+  const baseClasses = 'bg-black/10 dark:bg-white/10 animate-pulse';
 
   const variantClasses = {
     text: 'rounded',
-    rectangular: 'rounded-lg',
+    rectangular: 'rounded-md',
     circular: 'rounded-full',
   };
 
