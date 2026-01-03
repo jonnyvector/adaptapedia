@@ -5,6 +5,7 @@
 ### ✅ Completed (MVP Foundation)
 
 **Backend (100% core functionality):**
+
 - ✓ Django + DRF with 6 apps (works, screen, diffs, users, moderation, ingestion)
 - ✓ Complete data models with type hints
 - ✓ RESTful API for all entities
@@ -17,6 +18,7 @@
 - ✓ Sample data: Jurassic Park (6 diffs), Sphere (5 diffs)
 
 **Frontend (30% MVP):**
+
 - ✓ Next.js App Router with TypeScript
 - ✓ Comparison page with spoiler controls
 - ✓ Vote display (read-only)
@@ -26,6 +28,7 @@
 - ✓ Tailwind CSS design system
 
 **Infrastructure:**
+
 - ✓ Docker Compose setup (6 services: db, redis, backend, worker, beat, frontend)
 - ✓ PostgreSQL + Redis
 - ✓ Git repository initialized
@@ -37,13 +40,16 @@
 ## 🔥 High Priority (Core MVP Features)
 
 ### User Interaction
+
 - [ ] **1. Add interactive voting UI to DiffItemCard**
+
   - Vote buttons (↑ Accurate, ~ Needs Nuance, ↓ Disagree)
   - Show user's current vote with highlighting
   - Optimistic UI updates
   - Login prompt for unauthenticated users
 
 - [ ] **2. Create authentication pages**
+
   - Login page (/login)
   - Signup page (/signup)
   - JWT token storage
@@ -52,6 +58,7 @@
   - User context provider
 
 - [ ] **3. Add comment display section to DiffItemCard**
+
   - List comments below each diff
   - Show comment spoiler scope
   - Filter by user's spoiler preference
@@ -66,7 +73,9 @@
   - Optimistic UI update
 
 ### Content Discovery
+
 - [ ] **5. Build Add Diff page** (/compare/[book]/[screen]/add)
+
   - Category dropdown
   - Claim input (140-200 chars)
   - Detail textarea (optional, 1-8 paragraphs)
@@ -76,12 +85,14 @@
   - Success message + redirect
 
 - [ ] **6. Create Book Work detail page** (/book/[slug])
+
   - Lead summary + infobox
   - List of adaptations with links
   - "Top diffs" from all adaptations
   - Add to comparison CTA
 
 - [ ] **7. Create Screen Work detail page** (/screen/[slug])
+
   - Lead summary + infobox
   - "Based on" source book(s)
   - Top diffs
@@ -95,7 +106,9 @@
   - Empty state handling
 
 ### User-Facing Pages
+
 - [ ] **9. Create moderation queue UI** (/mod/queue)
+
   - Admin/mod only access
   - List of reports with filters
   - Report detail view
@@ -103,6 +116,7 @@
   - Audit log
 
 - [ ] **10. Build About/Data Sources attribution page** (/about/sources)
+
   - TMDb attribution + logo
   - Open Library attribution
   - Wikidata attribution
@@ -121,6 +135,7 @@
 ## 🎨 Medium Priority (Polish & Quality)
 
 ### Design & UX
+
 - [ ] **12. Add Retro Mode theme toggle**
   - Toggle component in header
   - CSS variable overrides
@@ -130,7 +145,9 @@
   - Maintain readability
 
 ### Testing
+
 - [ ] **13. Write backend tests**
+
   - Models: Work, ScreenWork, DiffItem, User
   - API endpoints: GET/POST for diffs, works, screen
   - Services: WorkService, DiffService
@@ -147,7 +164,9 @@
   - E2E: Search → Compare → Add Diff
 
 ### Content
+
 - [ ] **15. Enrich 10-20 popular titles with TMDb metadata**
+
   - Run `enrich_screenwork_from_tmdb` task
   - Priority: Jurassic Park, Sphere, Harry Potter, LOTR, etc.
   - Add posters, summaries, cast info
@@ -160,13 +179,16 @@
   - Add votes from test users
 
 ### Infrastructure
+
 - [ ] **17. Implement error pages**
+
   - 404 Not Found (custom message)
   - 500 Internal Server Error
   - API error boundary
   - Helpful messages + navigation back
 
 - [ ] **18. Add loading states to all async operations**
+
   - Comparison page loading
   - Vote button loading
   - Comment submit loading
@@ -192,6 +214,7 @@
   - Monitoring/alerting (optional)
 
 ### Future Enhancements (Post-MVP)
+
 - [ ] Shareable "diff cards" (OG images)
 - [ ] Trending pages/diffs
 - [ ] "Request a title" queue
@@ -208,27 +231,16 @@
 ## 🚀 Quickest Path to Usable MVP
 
 **Phase 1: Core Interaction (Week 1)**
+
 1. Authentication UI (Task #2)
 2. Interactive voting (Task #1)
 3. Comments display + form (Tasks #3-4)
 
-**Phase 2: Content Discovery (Week 2)**
-4. Search functionality (Task #8)
-5. Work detail pages (Tasks #6-7)
-6. Add Diff page (Task #5)
+**Phase 2: Content Discovery (Week 2)** 4. Search functionality (Task #8) 5. Work detail pages (Tasks #6-7) 6. Add Diff page (Task #5)
 
-**Phase 3: Quality & Testing (Week 3)**
-7. Backend tests (Task #13)
-8. Frontend tests (Task #14)
-9. Error pages + loading states (Tasks #17-18)
-10. Mobile optimization (Task #19)
+**Phase 3: Quality & Testing (Week 3)** 7. Backend tests (Task #13) 8. Frontend tests (Task #14) 9. Error pages + loading states (Tasks #17-18) 10. Mobile optimization (Task #19)
 
-**Phase 4: Polish & Launch (Week 4)**
-11. Attribution page (Task #10)
-12. User profiles (Task #11)
-13. More sample data (Tasks #15-16)
-14. Retro Mode (Task #12)
-15. Moderation UI (Task #9)
+**Phase 4: Polish & Launch (Week 4)** 11. Attribution page (Task #10) 12. User profiles (Task #11) 13. More sample data (Tasks #15-16) 14. Retro Mode (Task #12) 15. Moderation UI (Task #9)
 
 ---
 
