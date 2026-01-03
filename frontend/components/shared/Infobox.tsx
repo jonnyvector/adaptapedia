@@ -1,4 +1,5 @@
 import Image from 'next/image';
+import { FONTS, LETTER_SPACING, BORDERS, TEXT, monoUppercase } from '@/lib/brutalist-design';
 
 interface InfoboxProps {
   title: string;
@@ -17,8 +18,8 @@ export default function Infobox({
   imageAlt,
 }: InfoboxProps): JSX.Element {
   return (
-    <div className="border border-border rounded-lg p-4 bg-muted/5">
-      <h3 className="text-lg font-semibold mb-3">{title}</h3>
+    <div className={`border ${BORDERS.medium} p-4 bg-stone-50 dark:bg-stone-950`}>
+      <h3 className={`${TEXT.secondary} font-bold mb-3 text-black dark:text-white ${monoUppercase}`} style={{ fontFamily: FONTS.mono, letterSpacing: LETTER_SPACING.wide }}>{title}</h3>
 
       {imageUrl && (
         <div className="mb-4">
@@ -27,7 +28,7 @@ export default function Infobox({
             alt={imageAlt || title}
             width={200}
             height={300}
-            className="rounded-md w-full h-auto"
+            className="w-full h-auto"
           />
         </div>
       )}
@@ -35,10 +36,10 @@ export default function Infobox({
       <dl className="space-y-2">
         {items.map((item, index) => (
           <div key={index} className="flex flex-col">
-            <dt className="text-xs text-muted font-semibold uppercase tracking-wide">
+            <dt className={`${TEXT.metadata} ${TEXT.mutedMedium} font-bold ${monoUppercase}`} style={{ fontFamily: FONTS.mono, letterSpacing: LETTER_SPACING.wide }}>
               {item.label}
             </dt>
-            <dd className="text-sm mt-1">{item.value}</dd>
+            <dd className={`${TEXT.secondary} mt-1 text-black dark:text-white`} style={{ fontFamily: FONTS.sans }}>{item.value}</dd>
           </div>
         ))}
       </dl>
