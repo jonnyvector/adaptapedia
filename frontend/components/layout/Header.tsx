@@ -10,6 +10,7 @@ import NotificationBell from './NotificationBell';
 import SearchDropdown from '@/components/search/SearchDropdown';
 import { api } from '@/lib/api';
 import type { SearchWithAdaptationsResponse } from '@/lib/types';
+import { FONTS, LETTER_SPACING, BORDERS, TEXT, monoUppercase } from '@/lib/brutalist-design';
 
 export default function Header(): JSX.Element {
   const router = useRouter();
@@ -111,10 +112,8 @@ export default function Header(): JSX.Element {
 
   return (
     <header
-      className={`sticky top-0 z-50 border-b border-border backdrop-blur-md transition-shadow duration-200 ${
-        isSticky ? 'shadow-md' : ''
-      } ${
-        isHomePage ? 'bg-transparent' : 'bg-surface/80'
+      className={`sticky top-0 z-50 border-b ${BORDERS.medium} bg-white dark:bg-black transition-all ${
+        isSticky ? 'border-black dark:border-white' : ''
       }`}
     >
       <div className="container">
@@ -122,7 +121,8 @@ export default function Header(): JSX.Element {
           {/* Logo/Home Link */}
           <Link
             href="/"
-            className="text-xl sm:text-2xl font-bold text-foreground hover:text-link transition-colors flex-shrink-0"
+            className={`text-xl sm:text-2xl font-bold text-black dark:text-white hover:${TEXT.mutedMedium} transition-colors flex-shrink-0 ${monoUppercase}`}
+            style={{ fontFamily: FONTS.mono, letterSpacing: LETTER_SPACING.wider }}
             aria-label="Book vs. Movie Home"
           >
             Book vs. Movie
@@ -141,8 +141,9 @@ export default function Header(): JSX.Element {
                       setShowDropdown(true);
                     }
                   }}
-                  placeholder="Search books and adaptations..."
-                  className="w-full px-3 py-2 text-sm bg-surface text-foreground border border-border rounded-md focus:outline-none focus:ring-2 focus:ring-link min-h-[40px]"
+                  placeholder="SEARCH BOOKS..."
+                  className={`w-full px-3 py-2 ${TEXT.body} bg-white dark:bg-black text-black dark:text-white border ${BORDERS.medium} rounded-md focus:outline-none focus:border-black focus:dark:border-white placeholder:${TEXT.mutedLight} placeholder:uppercase min-h-[40px]`}
+                  style={{ fontFamily: FONTS.mono, letterSpacing: LETTER_SPACING.normal }}
                   aria-label="Search"
                 />
               </form>
@@ -164,7 +165,8 @@ export default function Header(): JSX.Element {
             {/* Main Navigation Links */}
             <Link
               href="/browse"
-              className="hidden sm:inline text-sm px-2 py-2 text-muted hover:text-foreground transition-colors min-h-[40px] flex items-center"
+              className={`hidden sm:inline ${TEXT.label} px-2 py-2 ${TEXT.mutedStrong} hover:text-black hover:dark:text-white transition-colors min-h-[40px] flex items-center font-bold ${monoUppercase}`}
+              style={{ fontFamily: FONTS.mono, letterSpacing: LETTER_SPACING.wide }}
             >
               Browse
             </Link>
@@ -172,7 +174,8 @@ export default function Header(): JSX.Element {
             {/* Catalog Link */}
             <Link
               href="/catalog"
-              className="hidden sm:inline text-sm px-2 py-2 text-muted hover:text-foreground transition-colors min-h-[40px] flex items-center"
+              className={`hidden sm:inline ${TEXT.label} px-2 py-2 ${TEXT.mutedStrong} hover:text-black hover:dark:text-white transition-colors min-h-[40px] flex items-center font-bold ${monoUppercase}`}
+              style={{ fontFamily: FONTS.mono, letterSpacing: LETTER_SPACING.wide }}
             >
               Catalog
             </Link>
@@ -180,7 +183,8 @@ export default function Header(): JSX.Element {
             {/* Contribute Link */}
             <Link
               href="/contribute"
-              className="hidden sm:inline text-sm px-2 py-2 text-muted hover:text-foreground transition-colors min-h-[40px] flex items-center"
+              className={`hidden sm:inline ${TEXT.label} px-2 py-2 ${TEXT.mutedStrong} hover:text-black hover:dark:text-white transition-colors min-h-[40px] flex items-center font-bold ${monoUppercase}`}
+              style={{ fontFamily: FONTS.mono, letterSpacing: LETTER_SPACING.wide }}
             >
               Contribute
             </Link>
@@ -188,7 +192,8 @@ export default function Header(): JSX.Element {
             {/* Needs Help Link */}
             <Link
               href="/needs-help"
-              className="hidden sm:inline text-sm px-2 py-2 text-muted hover:text-foreground transition-colors min-h-[40px] flex items-center"
+              className={`hidden sm:inline ${TEXT.label} px-2 py-2 ${TEXT.mutedStrong} hover:text-black hover:dark:text-white transition-colors min-h-[40px] flex items-center font-bold ${monoUppercase}`}
+              style={{ fontFamily: FONTS.mono, letterSpacing: LETTER_SPACING.wide }}
             >
               Needs Help
             </Link>
@@ -197,7 +202,8 @@ export default function Header(): JSX.Element {
             {isModerator && (
               <Link
                 href="/mod/queue"
-                className="hidden sm:inline text-sm px-2 py-2 text-muted hover:text-foreground transition-colors min-h-[40px] flex items-center"
+                className={`hidden sm:inline ${TEXT.label} px-2 py-2 ${TEXT.mutedStrong} hover:text-black hover:dark:text-white transition-colors min-h-[40px] flex items-center font-bold ${monoUppercase}`}
+                style={{ fontFamily: FONTS.mono, letterSpacing: LETTER_SPACING.wide }}
                 title="Moderation Queue"
               >
                 Mod Queue
@@ -207,7 +213,8 @@ export default function Header(): JSX.Element {
             {/* About Link */}
             <Link
               href="/about"
-              className="hidden sm:inline text-sm px-2 py-2 text-muted hover:text-foreground transition-colors min-h-[40px] flex items-center"
+              className={`hidden sm:inline ${TEXT.label} px-2 py-2 ${TEXT.mutedStrong} hover:text-black hover:dark:text-white transition-colors min-h-[40px] flex items-center font-bold ${monoUppercase}`}
+              style={{ fontFamily: FONTS.mono, letterSpacing: LETTER_SPACING.wide }}
             >
               About
             </Link>
@@ -249,7 +256,8 @@ export default function Header(): JSX.Element {
             ) : (
               <Link
                 href="/auth/login"
-                className="btn-primary btn-sm"
+                className={`px-3 py-1.5 border ${BORDERS.solid} bg-black dark:bg-white text-white dark:text-black hover:bg-white hover:dark:bg-black hover:text-black hover:dark:text-white font-bold transition-all ${TEXT.label} rounded-md ${monoUppercase}`}
+                style={{ fontFamily: FONTS.mono, letterSpacing: LETTER_SPACING.tight }}
               >
                 Login
               </Link>
@@ -269,8 +277,9 @@ export default function Header(): JSX.Element {
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
                 onFocus={() => searchQuery.length >= 2 && setShowDropdown(true)}
-                placeholder="Search books and adaptations..."
-                className="w-full px-3 py-2 text-sm bg-surface text-foreground border border-border rounded-md focus:outline-none focus:ring-2 focus:ring-link min-h-[40px]"
+                placeholder="SEARCH BOOKS..."
+                className={`w-full px-3 py-2 ${TEXT.body} bg-white dark:bg-black text-black dark:text-white border ${BORDERS.medium} rounded-md focus:outline-none focus:border-black focus:dark:border-white placeholder:${TEXT.mutedLight} placeholder:uppercase min-h-[40px]`}
+                style={{ fontFamily: FONTS.mono, letterSpacing: LETTER_SPACING.normal }}
                 aria-label="Search"
               />
             </form>
