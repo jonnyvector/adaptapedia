@@ -4,6 +4,7 @@ import { useRouter } from 'next/navigation';
 import { useAuth } from '@/lib/auth-context';
 import type { DiffCategory } from '@/lib/types';
 import { BookOpenIcon, UserIcon, FilmIcon, SparklesIcon } from '@/components/ui/Icons';
+import { FONTS, LETTER_SPACING, BORDERS, TEXT, monoUppercase } from '@/lib/brutalist-design';
 
 interface DiffStarterKitProps {
   workSlug: string;
@@ -60,10 +61,10 @@ export default function DiffStarterKit({ workSlug, screenSlug }: DiffStarterKitP
   return (
     <div className="py-8 sm:py-12 px-4">
       <div className="max-w-2xl mx-auto text-center mb-8">
-        <h2 className="text-xl sm:text-2xl font-bold text-gray-900 dark:text-white mb-3">
+        <h2 className={`text-xl sm:text-2xl font-bold text-black dark:text-white mb-3 ${monoUppercase}`} style={{ fontFamily: FONTS.mono, letterSpacing: LETTER_SPACING.wider }}>
           Start building this comparison
         </h2>
-        <p className="text-sm sm:text-base text-gray-600 dark:text-gray-400">
+        <p className={`${TEXT.secondary} ${TEXT.mutedMedium}`} style={{ fontFamily: FONTS.mono, letterSpacing: LETTER_SPACING.normal }}>
           Pick a category to add the first difference. Your contribution makes this page useful.
         </p>
       </div>
@@ -73,17 +74,17 @@ export default function DiffStarterKit({ workSlug, screenSlug }: DiffStarterKitP
           <button
             key={category}
             onClick={() => handleCategoryClick(category)}
-            className="group p-4 sm:p-5 bg-white dark:bg-surface border-2 border-gray-200 dark:border-border rounded-xl hover:border-primary dark:hover:border-primary transition-all hover:shadow-md text-left"
+            className={`group p-4 sm:p-5 bg-stone-50 dark:bg-stone-950 border ${BORDERS.medium} hover:border-black hover:dark:border-white transition-all text-left`}
           >
             <div className="flex items-start gap-3">
-              <div className="flex-shrink-0 text-gray-600 dark:text-gray-400 group-hover:text-primary transition-colors">
+              <div className={`flex-shrink-0 ${TEXT.mutedMedium}`}>
                 <Icon className="w-7 h-7 sm:w-8 sm:h-8" />
               </div>
               <div className="flex-1 min-w-0">
-                <h3 className="text-base sm:text-lg font-semibold text-gray-900 dark:text-white mb-1 group-hover:text-primary transition-colors">
+                <h3 className={`text-base sm:text-lg font-bold text-black dark:text-white mb-1 ${monoUppercase}`} style={{ fontFamily: FONTS.mono, letterSpacing: LETTER_SPACING.tight }}>
                   {label}
                 </h3>
-                <p className="text-xs sm:text-sm text-gray-600 dark:text-gray-400">
+                <p className={`${TEXT.metadata} ${TEXT.mutedMedium}`} style={{ fontFamily: FONTS.mono, letterSpacing: LETTER_SPACING.normal }}>
                   {description}
                 </p>
               </div>
@@ -93,12 +94,13 @@ export default function DiffStarterKit({ workSlug, screenSlug }: DiffStarterKitP
       </div>
 
       <div className="text-center mt-8">
-        <p className="text-xs sm:text-sm text-gray-500 dark:text-gray-400 mb-3">
+        <p className={`${TEXT.metadata} ${TEXT.mutedMedium} mb-3 ${monoUppercase}`} style={{ fontFamily: FONTS.mono, letterSpacing: LETTER_SPACING.wide }}>
           Or add a different type of difference
         </p>
         <button
           onClick={() => handleCategoryClick('OTHER')}
-          className="inline-flex items-center gap-2 px-4 py-2 text-sm font-medium text-gray-700 dark:text-gray-300 border border-gray-300 dark:border-border rounded-lg hover:bg-gray-50 dark:hover:bg-surface2 transition-colors"
+          className={`inline-flex items-center gap-2 px-4 py-2 ${TEXT.secondary} font-bold border ${BORDERS.medium} bg-white dark:bg-black text-black dark:text-white hover:border-black hover:dark:border-white transition-colors rounded-md ${monoUppercase}`}
+          style={{ fontFamily: FONTS.mono, letterSpacing: LETTER_SPACING.tight }}
         >
           Add custom difference
         </button>
