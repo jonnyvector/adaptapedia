@@ -350,7 +350,8 @@ export default function ComparisonView({
                 <DiffSort value={sortOption} onChange={setSortOption} />
                 <button
                   onClick={handleAddDiff}
-                  className="btn-primary whitespace-nowrap"
+                  className="px-4 py-2 border border-black dark:border-white bg-black dark:bg-white text-white dark:text-black hover:bg-white hover:dark:bg-black hover:text-black hover:dark:text-white font-bold transition-all text-sm rounded-md whitespace-nowrap uppercase"
+                  style={{ fontFamily: 'JetBrains Mono, monospace', letterSpacing: '0.05em' }}
                 >
                   Add Difference
                 </button>

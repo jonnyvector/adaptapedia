@@ -14,6 +14,7 @@ import ImageLightbox from '@/components/ui/ImageLightbox';
 import { calculateVotePercentage, getConsensusLabel } from '@/lib/vote-utils';
 import { getTimeSince } from '@/lib/date-utils';
 import { getSpoilerBadgeColor, getSpoilerLabel, getCategoryBadgeColor, getCategoryLabel } from '@/lib/badge-utils';
+import { FONTS, LETTER_SPACING, BORDERS, TEXT, monoUppercase } from '@/lib/brutalist-design';
 
 interface DiffItemCardProps {
   diff: DiffItem;
@@ -150,7 +151,7 @@ export default function DiffItemCard({
   const hasDetail = diff.detail && diff.detail.trim().length > 0;
 
   return (
-    <div id={`diff-${diff.id}`} className="border border-border rounded bg-surface hover:shadow-md hover:border-border-strong transition-all duration-200 overflow-hidden">
+    <div id={`diff-${diff.id}`} className={`border ${BORDERS.medium} bg-stone-50 dark:bg-stone-950 hover:border-black hover:dark:border-white transition-all overflow-hidden`}>
       {/* Compact header row - always visible */}
       <div className="p-3 sm:p-4">
         {/* Title row with claim - clickable header */}
@@ -175,14 +176,16 @@ export default function DiffItemCard({
         {/* Badges row - smaller, tag-like */}
         <div className="flex flex-wrap items-center gap-2 mb-2">
           <span
-            className={`px-1.5 py-0.5 text-xs font-medium rounded ${getCategoryBadgeColor(diff.category)}`}
+            className={`px-2 py-0.5 ${TEXT.metadata} font-bold border ${BORDERS.subtle} bg-white dark:bg-black text-black dark:text-white ${monoUppercase}`}
+            style={{ fontFamily: FONTS.mono, letterSpacing: LETTER_SPACING.wide }}
           >
             {getCategoryLabel(diff.category)}
           </span>
           {/* Only show spoiler badge if NOT safe */}
           {diff.spoiler_scope !== 'NONE' && (
             <span
-              className={`px-1.5 py-0.5 text-xs font-mono rounded ${getSpoilerBadgeColor(diff.spoiler_scope)}`}
+              className={`px-2 py-0.5 ${TEXT.metadata} font-bold border ${BORDERS.subtle} bg-white dark:bg-black ${TEXT.mutedStrong} ${monoUppercase}`}
+              style={{ fontFamily: FONTS.mono, letterSpacing: LETTER_SPACING.wide }}
             >
               {getSpoilerLabel(diff.spoiler_scope)}
             </span>
@@ -257,24 +260,24 @@ export default function DiffItemCard({
               )}
             </div>
             {/* Compact stacked bar */}
-            <div className="h-1.5 bg-gray-200 dark:bg-gray-800 rounded-full overflow-hidden flex">
+            <div className="h-1.5 bg-black/10 dark:bg-white/10 overflow-hidden flex border border-black/20 dark:border-white/20">
               {voteCounts.accurate > 0 && (
                 <div
-                  className="bg-green-500 dark:bg-green-400"
+                  className="bg-black dark:bg-white"
                   style={{ width: `${getVotePercentage(voteCounts.accurate)}%` }}
                   title={`${voteCounts.accurate} Accurate (${getVotePercentage(voteCounts.accurate)}%)`}
                 />
               )}
               {voteCounts.needs_nuance > 0 && (
                 <div
-                  className="bg-yellow-500 dark:bg-yellow-400"
+                  className="bg-black/50 dark:bg-white/50"
                   style={{ width: `${getVotePercentage(voteCounts.needs_nuance)}%` }}
                   title={`${voteCounts.needs_nuance} Needs Nuance (${getVotePercentage(voteCounts.needs_nuance)}%)`}
                 />
               )}
               {voteCounts.disagree > 0 && (
                 <div
-                  className="bg-red-500 dark:bg-red-400"
+                  className="bg-black/20 dark:bg-white/20"
                   style={{ width: `${getVotePercentage(voteCounts.disagree)}%` }}
                   title={`${voteCounts.disagree} Disagree (${getVotePercentage(voteCounts.disagree)}%)`}
                 />
@@ -292,7 +295,7 @@ export default function DiffItemCard({
 
         {!showError && (
           <div
-            className="inline-flex items-stretch rounded-md border border-border/20 overflow-hidden bg-surface2/30"
+            className="inline-flex items-stretch gap-2 rounded-md overflow-hidden"
             role="group"
             aria-label="Vote on this difference"
             title="Choose one: Accurate / Nuance / Disagree"
@@ -300,56 +303,55 @@ export default function DiffItemCard({
             <button
               onClick={() => handleVote('ACCURATE')}
               disabled={isVoting}
-              className={`inline-flex items-center justify-center gap-1.5 px-2.5 py-1 text-xs font-medium transition-all duration-200 ${
+              className={`inline-flex items-center justify-center gap-1.5 px-3 py-1.5 ${TEXT.metadata} font-bold border rounded-md transition-all ${
                 userVote === 'ACCURATE'
-                  ? 'bg-link/90 text-white shadow-sm rounded-l-md'
-                  : 'text-muted hover:text-foreground hover:bg-surface/80'
-              } ${isVoting ? 'cursor-wait opacity-50' : 'cursor-pointer focus:outline-none focus:ring-2 focus:ring-link/50 focus:z-10'}`}
+                  ? `bg-black dark:bg-white ${BORDERS.solid} text-white dark:text-black`
+                  : `bg-white dark:bg-black ${BORDERS.medium} ${TEXT.mutedStrong} hover:${BORDERS.solid}`
+              } ${isVoting ? 'cursor-wait opacity-50' : 'cursor-pointer'}`}
+              style={{ fontFamily: FONTS.mono, letterSpacing: LETTER_SPACING.tight }}
               title="This diff is accurate - well-stated and correct"
               aria-label="Vote accurate"
               aria-pressed={userVote === 'ACCURATE'}
             >
-              <span className={`leading-none transition-opacity ${userVote === 'ACCURATE' ? 'opacity-100' : 'opacity-50'}`}>↑</span>
-              <span>Accurate</span>
-              <span className="font-semibold">({voteCounts.accurate})</span>
+              <span className="leading-none">↑</span>
+              <span className="uppercase">Accurate</span>
+              <span>({voteCounts.accurate})</span>
             </button>
-
-            <div className="w-px bg-border/40 flex-shrink-0"></div>
 
             <button
               onClick={() => handleVote('NEEDS_NUANCE')}
               disabled={isVoting}
-              className={`inline-flex items-center justify-center gap-1.5 px-2.5 py-1 text-xs font-medium transition-all duration-200 ${
+              className={`inline-flex items-center justify-center gap-1.5 px-3 py-1.5 ${TEXT.metadata} font-bold border rounded-md transition-all ${
                 userVote === 'NEEDS_NUANCE'
-                  ? 'bg-link/90 text-white shadow-sm'
-                  : 'text-muted hover:text-foreground hover:bg-surface/80'
-              } ${isVoting ? 'cursor-wait opacity-50' : 'cursor-pointer focus:outline-none focus:ring-2 focus:ring-link/50 focus:z-10'}`}
+                  ? `bg-black dark:bg-white ${BORDERS.solid} text-white dark:text-black`
+                  : `bg-white dark:bg-black ${BORDERS.medium} ${TEXT.mutedStrong} hover:${BORDERS.solid}`
+              } ${isVoting ? 'cursor-wait opacity-50' : 'cursor-pointer'}`}
+              style={{ fontFamily: FONTS.mono, letterSpacing: LETTER_SPACING.tight }}
               title="Mostly correct but needs more context or clarification"
               aria-label="Vote needs nuance"
               aria-pressed={userVote === 'NEEDS_NUANCE'}
             >
-              <span className={`leading-none transition-opacity ${userVote === 'NEEDS_NUANCE' ? 'opacity-100' : 'opacity-50'}`}>~</span>
-              <span>Nuance</span>
-              <span className="font-semibold">({voteCounts.needs_nuance})</span>
+              <span className="leading-none">~</span>
+              <span className="uppercase">Nuance</span>
+              <span>({voteCounts.needs_nuance})</span>
             </button>
-
-            <div className="w-px bg-border/40 flex-shrink-0"></div>
 
             <button
               onClick={() => handleVote('DISAGREE')}
               disabled={isVoting}
-              className={`inline-flex items-center justify-center gap-1.5 px-2.5 py-1 text-xs font-medium transition-all duration-200 ${
+              className={`inline-flex items-center justify-center gap-1.5 px-3 py-1.5 ${TEXT.metadata} font-bold border rounded-md transition-all ${
                 userVote === 'DISAGREE'
-                  ? 'bg-link/90 text-white shadow-sm rounded-r-md'
-                  : 'text-muted hover:text-foreground hover:bg-surface/80'
-              } ${isVoting ? 'cursor-wait opacity-50' : 'cursor-pointer focus:outline-none focus:ring-2 focus:ring-link/50 focus:z-10'}`}
+                  ? `bg-black dark:bg-white ${BORDERS.solid} text-white dark:text-black`
+                  : `bg-white dark:bg-black ${BORDERS.medium} ${TEXT.mutedStrong} hover:${BORDERS.solid}`
+              } ${isVoting ? 'cursor-wait opacity-50' : 'cursor-pointer'}`}
+              style={{ fontFamily: FONTS.mono, letterSpacing: LETTER_SPACING.tight }}
               title="This diff is inaccurate or misleading"
               aria-label="Vote disagree"
               aria-pressed={userVote === 'DISAGREE'}
             >
-              <span className={`leading-none transition-opacity ${userVote === 'DISAGREE' ? 'opacity-100' : 'opacity-50'}`}>↓</span>
-              <span>Disagree</span>
-              <span className="font-semibold">({voteCounts.disagree})</span>
+              <span className="leading-none">↓</span>
+              <span className="uppercase">Disagree</span>
+              <span>({voteCounts.disagree})</span>
             </button>
           </div>
         )}

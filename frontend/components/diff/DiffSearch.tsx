@@ -1,5 +1,7 @@
 'use client';
 
+import { FONTS, LETTER_SPACING, BORDERS, TEXT, RADIUS } from '@/lib/brutalist-design';
+
 interface DiffSearchProps {
   value: string;
   onChange: (value: string) => void;
@@ -14,14 +16,15 @@ export default function DiffSearch({ value, onChange, resultsCount }: DiffSearch
           type="text"
           value={value}
           onChange={(e) => onChange(e.target.value)}
-          placeholder="Search diffs..."
-          className="w-full px-4 pr-10 text-sm bg-surface text-foreground border border-border rounded-md focus:outline-none focus:ring-2 focus:ring-link placeholder:text-muted h-[40px]"
+          placeholder="SEARCH DIFFS..."
+          className={`w-full px-4 pr-10 ${TEXT.body} bg-white dark:bg-black text-black dark:text-white border ${BORDERS.medium} ${RADIUS.control} focus:outline-none focus:border-black focus:dark:border-white placeholder:${TEXT.mutedLight} placeholder:uppercase h-[40px]`}
+          style={{ fontFamily: FONTS.mono, letterSpacing: LETTER_SPACING.normal }}
           aria-label="Search diffs"
         />
         {value && (
           <button
             onClick={() => onChange('')}
-            className="absolute right-2 top-1/2 -translate-y-1/2 text-muted hover:text-foreground transition-colors p-1 min-h-[32px] min-w-[32px]"
+            className={`absolute right-2 top-1/2 -translate-y-1/2 ${TEXT.mutedMedium} hover:text-black hover:dark:text-white transition-colors p-1 min-h-[32px] min-w-[32px] font-bold`}
             aria-label="Clear search"
           >
             ✕
@@ -29,7 +32,7 @@ export default function DiffSearch({ value, onChange, resultsCount }: DiffSearch
         )}
       </div>
       {value && resultsCount !== undefined && (
-        <p className="text-xs text-muted px-1">
+        <p className={`${TEXT.metadata} ${TEXT.mutedMedium} px-1 uppercase`} style={{ fontFamily: FONTS.mono, letterSpacing: LETTER_SPACING.wide }}>
           {resultsCount} {resultsCount === 1 ? 'result' : 'results'}
         </p>
       )}

@@ -4,6 +4,7 @@ import { useMemo, useState } from 'react';
 import Image from 'next/image';
 import type { Work, ScreenWork, WatchProvider } from '@/lib/types';
 import { BookOpenIcon, FilmIcon, ArrowTopRightOnSquareIcon } from '@/components/ui/Icons';
+import { FONTS, LETTER_SPACING, BORDERS, TEXT, monoUppercase } from '@/lib/brutalist-design';
 
 interface GetItNowModuleProps {
   work: Work;
@@ -102,74 +103,78 @@ export default function GetItNowModule({ work, screenWork }: GetItNowModuleProps
   const adaptationType = screenWork.type === 'MOVIE' ? 'movie' : 'show';
 
   return (
-    <div className="rounded-xl p-5 sm:p-6 sticky top-24 bg-white dark:bg-surface border border-gray-200 dark:border-border shadow-sm">
-      <h3 className="text-lg font-bold mb-5 text-gray-900 dark:text-white">
+    <div className={`p-5 sm:p-6 sticky top-24 bg-stone-50 dark:bg-stone-950 border ${BORDERS.medium}`}>
+      <h3 className={`${TEXT.body} font-bold mb-5 text-black dark:text-white ${monoUppercase}`} style={{ fontFamily: FONTS.mono, letterSpacing: LETTER_SPACING.wider }}>
         Where to get it
       </h3>
 
       {/* Read the Book */}
       <div className="mb-6">
-        <div className="flex items-center gap-2 mb-3">
-          <BookOpenIcon className="w-4 h-4 text-gray-600 dark:text-gray-400" />
-          <h4 className="text-sm font-semibold text-gray-700 dark:text-gray-300">Read the book</h4>
+        <div className="flex items-center gap-2 mb-3 border-b border-black/10 dark:border-white/10 pb-2">
+          <BookOpenIcon className={`w-4 h-4 ${TEXT.mutedMedium}`} />
+          <h4 className={`${TEXT.label} font-bold ${TEXT.mutedStrong} ${monoUppercase}`} style={{ fontFamily: FONTS.mono, letterSpacing: LETTER_SPACING.wider }}>Read the book</h4>
         </div>
         <div className="grid grid-cols-2 gap-2">
           <a
             href={getBookLink('bookshop')}
             target="_blank"
             rel="nofollow sponsored noopener noreferrer"
-            className="group px-3 py-2.5 text-sm font-medium rounded-lg border-2 border-gray-200 dark:border-border bg-white dark:bg-surface hover:border-blue-500 dark:hover:border-blue-500 hover:bg-blue-50 dark:hover:bg-blue-950/20 transition-all text-left flex flex-col"
+            className={`group px-3 py-2.5 ${TEXT.secondary} font-bold border ${BORDERS.medium} bg-white dark:bg-black hover:border-black hover:dark:border-white transition-all text-left flex flex-col rounded-md`}
+            style={{ fontFamily: FONTS.mono, letterSpacing: LETTER_SPACING.tight }}
           >
-            <span className="font-semibold text-gray-900 dark:text-white group-hover:text-blue-600 dark:group-hover:text-blue-400 flex items-center gap-1">
+            <span className={`font-bold text-black dark:text-white flex items-center gap-1 ${monoUppercase}`}>
               Bookshop
               <ArrowTopRightOnSquareIcon className="w-3 h-3 opacity-50" />
             </span>
-            <span className="text-xs text-gray-600 dark:text-gray-400">Local stores</span>
+            <span className={`${TEXT.metadata} ${TEXT.mutedMedium}`}>Local stores</span>
           </a>
           <a
             href={getBookLink('amazon-print')}
             target="_blank"
             rel="nofollow sponsored noopener noreferrer"
-            className="group px-3 py-2.5 text-sm font-medium rounded-lg border-2 border-gray-200 dark:border-border bg-white dark:bg-surface hover:border-blue-500 dark:hover:border-blue-500 hover:bg-blue-50 dark:hover:bg-blue-950/20 transition-all text-left flex flex-col"
+            className={`group px-3 py-2.5 ${TEXT.secondary} font-bold border ${BORDERS.medium} bg-white dark:bg-black hover:border-black hover:dark:border-white transition-all text-left flex flex-col rounded-md`}
+            style={{ fontFamily: FONTS.mono, letterSpacing: LETTER_SPACING.tight }}
           >
-            <span className="font-semibold text-gray-900 dark:text-white group-hover:text-blue-600 dark:group-hover:text-blue-400 flex items-center gap-1">
+            <span className={`font-bold text-black dark:text-white flex items-center gap-1 ${monoUppercase}`}>
               Amazon
               <ArrowTopRightOnSquareIcon className="w-3 h-3 opacity-50" />
             </span>
-            <span className="text-xs text-gray-600 dark:text-gray-400">Print book</span>
+            <span className={`${TEXT.metadata} ${TEXT.mutedMedium}`}>Print book</span>
           </a>
           <a
             href={getBookLink('kindle')}
             target="_blank"
             rel="nofollow sponsored noopener noreferrer"
-            className="group px-3 py-2.5 text-sm font-medium rounded-lg border-2 border-gray-200 dark:border-border bg-white dark:bg-surface hover:border-blue-500 dark:hover:border-blue-500 hover:bg-blue-50 dark:hover:bg-blue-950/20 transition-all text-left flex flex-col"
+            className={`group px-3 py-2.5 ${TEXT.secondary} font-bold border ${BORDERS.medium} bg-white dark:bg-black hover:border-black hover:dark:border-white transition-all text-left flex flex-col rounded-md`}
+            style={{ fontFamily: FONTS.mono, letterSpacing: LETTER_SPACING.tight }}
           >
-            <span className="font-semibold text-gray-900 dark:text-white group-hover:text-blue-600 dark:group-hover:text-blue-400 flex items-center gap-1">
+            <span className={`font-bold text-black dark:text-white flex items-center gap-1 ${monoUppercase}`}>
               Kindle
               <ArrowTopRightOnSquareIcon className="w-3 h-3 opacity-50" />
             </span>
-            <span className="text-xs text-gray-600 dark:text-gray-400">E-book</span>
+            <span className={`${TEXT.metadata} ${TEXT.mutedMedium}`}>E-book</span>
           </a>
           <a
             href={getBookLink('audible')}
             target="_blank"
             rel="nofollow sponsored noopener noreferrer"
-            className="group px-3 py-2.5 text-sm font-medium rounded-lg border-2 border-gray-200 dark:border-border bg-white dark:bg-surface hover:border-blue-500 dark:hover:border-blue-500 hover:bg-blue-50 dark:hover:bg-blue-950/20 transition-all text-left flex flex-col"
+            className={`group px-3 py-2.5 ${TEXT.secondary} font-bold border ${BORDERS.medium} bg-white dark:bg-black hover:border-black hover:dark:border-white transition-all text-left flex flex-col rounded-md`}
+            style={{ fontFamily: FONTS.mono, letterSpacing: LETTER_SPACING.tight }}
           >
-            <span className="font-semibold text-gray-900 dark:text-white group-hover:text-blue-600 dark:group-hover:text-blue-400 flex items-center gap-1">
+            <span className={`font-bold text-black dark:text-white flex items-center gap-1 ${monoUppercase}`}>
               Audible
               <ArrowTopRightOnSquareIcon className="w-3 h-3 opacity-50" />
             </span>
-            <span className="text-xs text-gray-600 dark:text-gray-400">Audiobook</span>
+            <span className={`${TEXT.metadata} ${TEXT.mutedMedium}`}>Audiobook</span>
           </a>
         </div>
       </div>
 
       {/* Watch the Movie/Show */}
       <div>
-        <div className="flex items-center gap-2 mb-3">
-          <FilmIcon className="w-4 h-4 text-gray-600 dark:text-gray-400" />
-          <h4 className="text-sm font-semibold text-gray-700 dark:text-gray-300">
+        <div className="flex items-center gap-2 mb-3 border-b border-black/10 dark:border-white/10 pb-2">
+          <FilmIcon className={`w-4 h-4 ${TEXT.mutedMedium}`} />
+          <h4 className={`${TEXT.label} font-bold ${TEXT.mutedStrong} ${monoUppercase}`} style={{ fontFamily: FONTS.mono, letterSpacing: LETTER_SPACING.wider }}>
             Watch the {adaptationType}
           </h4>
         </div>
@@ -181,7 +186,8 @@ export default function GetItNowModule({ work, screenWork }: GetItNowModuleProps
               href={getWatchLink()}
               target="_blank"
               rel="nofollow noopener noreferrer"
-              className="group w-full px-4 py-3 text-sm font-semibold rounded-lg border-2 border-blue-500 bg-blue-50 dark:bg-blue-950/20 hover:bg-blue-100 dark:hover:bg-blue-950/30 transition-all text-left flex items-center justify-between"
+              className={`group w-full px-4 py-3 ${TEXT.secondary} font-bold border ${BORDERS.solid} bg-black dark:bg-white hover:bg-white hover:dark:bg-black transition-all text-left flex items-center justify-between rounded-md`}
+              style={{ fontFamily: FONTS.mono, letterSpacing: LETTER_SPACING.tight }}
             >
               <div className="flex items-center gap-3">
                 {bestStreamingProvider.logo_path && (
@@ -190,18 +196,18 @@ export default function GetItNowModule({ work, screenWork }: GetItNowModuleProps
                     alt={bestStreamingProvider.provider_name}
                     width={32}
                     height={32}
-                    className="w-8 h-8 rounded"
+                    className="w-8 h-8"
                   />
                 )}
                 <div>
-                  <div className="font-semibold text-gray-900 dark:text-white flex items-center gap-1.5">
+                  <div className={`font-bold text-white dark:text-black group-hover:text-black group-hover:dark:text-white flex items-center gap-1.5 ${monoUppercase}`}>
                     {bestStreamingProvider.provider_name}
                     <ArrowTopRightOnSquareIcon className="w-3.5 h-3.5 opacity-50" />
                   </div>
-                  <div className="text-xs text-gray-600 dark:text-gray-400">Stream now</div>
+                  <div className={`${TEXT.metadata} text-white/70 dark:text-black/70 group-hover:text-black/70 group-hover:dark:text-white/70`}>Stream now</div>
                 </div>
               </div>
-              <span className="text-xs px-2 py-1 rounded-full bg-blue-600 text-white font-medium">
+              <span className={`${TEXT.metadata} px-2 py-1 border ${BORDERS.subtle} bg-white dark:bg-black text-black dark:text-white font-bold ${monoUppercase} rounded-md`} style={{ fontFamily: FONTS.mono, letterSpacing: LETTER_SPACING.wide }}>
                 Best
               </span>
             </a>
@@ -215,7 +221,8 @@ export default function GetItNowModule({ work, screenWork }: GetItNowModuleProps
                     href={getWatchLink()}
                     target="_blank"
                     rel="nofollow noopener noreferrer"
-                    className="group px-3 py-2 text-sm rounded-lg border-2 border-gray-200 dark:border-border bg-white dark:bg-surface hover:border-blue-500 dark:hover:border-blue-500 hover:bg-blue-50 dark:hover:bg-blue-950/20 transition-all flex items-center gap-2"
+                    className={`group px-3 py-2 ${TEXT.secondary} border ${BORDERS.medium} bg-white dark:bg-black hover:border-black hover:dark:border-white transition-all flex items-center gap-2 rounded-md`}
+                    style={{ fontFamily: FONTS.mono, letterSpacing: LETTER_SPACING.tight }}
                   >
                     {provider.logo_path && (
                       <Image
@@ -223,10 +230,10 @@ export default function GetItNowModule({ work, screenWork }: GetItNowModuleProps
                         alt={provider.provider_name}
                         width={24}
                         height={24}
-                        className="w-6 h-6 rounded flex-shrink-0"
+                        className="w-6 h-6 flex-shrink-0"
                       />
                     )}
-                    <span className="text-xs font-medium text-gray-900 dark:text-white truncate flex items-center gap-1">
+                    <span className={`${TEXT.metadata} font-bold text-black dark:text-white truncate flex items-center gap-1 ${monoUppercase}`}>
                       {provider.provider_name}
                       <ArrowTopRightOnSquareIcon className="w-3 h-3 opacity-50 flex-shrink-0" />
                     </span>
@@ -287,7 +294,7 @@ export default function GetItNowModule({ work, screenWork }: GetItNowModuleProps
             )}
           </div>
         ) : (
-          <div className="text-sm text-gray-600 dark:text-gray-400 py-4 text-center border-2 border-dashed border-gray-200 dark:border-border rounded-lg">
+          <div className={`${TEXT.secondary} ${TEXT.mutedMedium} py-4 text-center border border-dashed ${BORDERS.subtle} rounded-md font-bold ${monoUppercase}`} style={{ fontFamily: FONTS.mono, letterSpacing: LETTER_SPACING.wide }}>
             Check local streaming services
           </div>
         )}

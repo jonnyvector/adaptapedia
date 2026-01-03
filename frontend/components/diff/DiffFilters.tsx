@@ -1,6 +1,7 @@
 'use client';
 
 import type { DiffCategory } from '@/lib/types';
+import { FONTS, LETTER_SPACING, BORDERS, TEXT, RADIUS, monoUppercase } from '@/lib/brutalist-design';
 
 interface DiffFiltersProps {
   categories: DiffCategory[];
@@ -34,13 +35,14 @@ export default function DiffFilters({
   return (
     <div className="space-y-2">
       <div className="flex items-center justify-between">
-        <label className="text-sm font-medium text-muted">
-          Filter by category:
+        <label className={`${TEXT.label} ${monoUppercase} ${TEXT.mutedMedium} font-bold`} style={{ fontFamily: FONTS.mono, letterSpacing: LETTER_SPACING.wider }}>
+          Filter by category
         </label>
         {hasActiveFilters && (
           <button
             onClick={onClearAll}
-            className="text-xs text-link hover:text-linkHover transition-colors px-2 py-1 rounded hover:bg-surface2 min-h-[32px]"
+            className={`${TEXT.metadata} ${TEXT.mutedStrong} border ${BORDERS.subtle} px-2 py-1 ${RADIUS.control} hover:${BORDERS.solid} transition-all ${monoUppercase} font-bold`}
+            style={{ fontFamily: FONTS.mono, letterSpacing: LETTER_SPACING.wide }}
           >
             Clear all
           </button>
@@ -58,15 +60,16 @@ export default function DiffFilters({
             <button
               key={category}
               onClick={() => onToggleCategory(category)}
-              className={`px-3 py-2 rounded-md border text-sm font-medium transition-all min-h-[40px] ${
+              className={`px-3 py-2 ${RADIUS.control} border ${TEXT.secondary} font-bold transition-all ${
                 isSelected
-                  ? 'bg-link text-white border-link shadow-sm'
-                  : 'bg-surface text-foreground border-border hover:border-link hover:bg-link/5'
+                  ? `bg-black dark:bg-white ${BORDERS.solid} text-white dark:text-black`
+                  : `bg-white dark:bg-black ${BORDERS.medium} ${TEXT.mutedStrong} hover:${BORDERS.solid}`
               }`}
+              style={{ fontFamily: FONTS.mono, letterSpacing: LETTER_SPACING.tight }}
               aria-pressed={isSelected}
             >
               {CATEGORY_LABELS[category]}
-              <span className={`ml-2 text-xs ${isSelected ? 'text-white/80' : 'text-muted'}`}>
+              <span className={`ml-2 ${TEXT.metadata} ${isSelected ? 'text-white/80 dark:text-black/80' : TEXT.mutedLight}`}>
                 ({count})
               </span>
             </button>
