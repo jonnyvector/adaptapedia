@@ -5,6 +5,7 @@ import Link from 'next/link';
 import { api } from '@/lib/api';
 import type { Notification } from '@/lib/types';
 import { BellIcon } from '@/components/ui/Icons';
+import { FONTS, LETTER_SPACING, BORDERS, TEXT, monoUppercase } from '@/lib/brutalist-design';
 
 export default function NotificationBell() {
   const [notifications, setNotifications] = useState<Notification[]>([]);
@@ -132,7 +133,7 @@ export default function NotificationBell() {
       {/* Bell Button */}
       <button
         onClick={toggleDropdown}
-        className="relative p-2 text-muted hover:text-foreground transition-colors min-h-[40px] min-w-[40px] border-0 bg-transparent hover:bg-transparent"
+        className={`relative p-2 ${TEXT.mutedStrong} hover:text-black hover:dark:text-white transition-colors min-h-[40px] min-w-[40px] border-0 bg-transparent hover:bg-transparent`}
         aria-label="Notifications"
       >
         <BellIcon className="w-5 h-5" />
@@ -145,14 +146,17 @@ export default function NotificationBell() {
 
       {/* Dropdown */}
       {isOpen && (
-        <div className="absolute right-0 mt-2 w-96 bg-surface border border-border rounded-lg shadow-xl z-50 max-h-[600px] overflow-hidden flex flex-col">
+        <div className={`absolute right-0 mt-2 w-96 bg-white dark:bg-black border ${BORDERS.solid} z-50 max-h-[600px] overflow-hidden flex flex-col`}>
           {/* Header */}
-          <div className="px-4 py-3 border-b border-border flex items-center justify-between">
-            <h3 className="font-semibold text-foreground">Notifications</h3>
+          <div className={`px-4 py-3 border-b ${BORDERS.solid} flex items-center justify-between`}>
+            <h3 className={`${TEXT.secondary} font-bold text-black dark:text-white ${monoUppercase}`} style={{ fontFamily: FONTS.mono, letterSpacing: LETTER_SPACING.wide }}>
+              Notifications
+            </h3>
             {unreadCount > 0 && (
               <button
                 onClick={markAllAsRead}
-                className="text-xs text-link hover:underline"
+                className={`${TEXT.label} text-black dark:text-white hover:opacity-70 transition-opacity font-bold ${monoUppercase}`}
+                style={{ fontFamily: FONTS.mono, letterSpacing: LETTER_SPACING.tight }}
               >
                 Mark all read
               </button>
@@ -162,9 +166,9 @@ export default function NotificationBell() {
           {/* Notifications List */}
           <div className="overflow-y-auto flex-1">
             {loading ? (
-              <div className="p-8 text-center text-secondary">Loading...</div>
+              <div className={`p-8 text-center ${TEXT.mutedMedium}`} style={{ fontFamily: FONTS.mono }}>Loading...</div>
             ) : notifications.length === 0 ? (
-              <div className="p-8 text-center text-secondary">
+              <div className={`p-8 text-center ${TEXT.mutedMedium}`} style={{ fontFamily: FONTS.mono }}>
                 <div className="mb-2">🔔</div>
                 <div>No notifications yet</div>
               </div>
@@ -173,8 +177,8 @@ export default function NotificationBell() {
                 {notifications.map((notification) => (
                   <div
                     key={notification.id}
-                    className={`px-4 py-3 border-b border-border hover:bg-surface2 transition-colors ${
-                      !notification.is_read ? 'bg-primary/5' : ''
+                    className={`px-4 py-3 border-b ${BORDERS.subtle} hover:bg-stone-100 hover:dark:bg-stone-900 transition-colors ${
+                      !notification.is_read ? 'bg-stone-50 dark:bg-stone-950' : ''
                     }`}
                   >
                     <div className="flex items-start gap-3">
@@ -193,25 +197,25 @@ export default function NotificationBell() {
                             }}
                             className="block"
                           >
-                            <div className="font-medium text-foreground mb-1">
+                            <div className={`${TEXT.secondary} font-bold text-black dark:text-white mb-1`} style={{ fontFamily: FONTS.sans }}>
                               {notification.title}
                             </div>
-                            <div className="text-sm text-secondary line-clamp-2">
+                            <div className={`${TEXT.secondary} ${TEXT.mutedMedium} line-clamp-2`} style={{ fontFamily: FONTS.sans }}>
                               {notification.message}
                             </div>
-                            <div className="text-xs text-muted mt-1">
+                            <div className={`${TEXT.metadata} ${TEXT.mutedMedium} mt-1 ${monoUppercase}`} style={{ fontFamily: FONTS.mono, letterSpacing: LETTER_SPACING.wide }}>
                               {timeAgo(notification.created_at)}
                             </div>
                           </Link>
                         ) : (
                           <>
-                            <div className="font-medium text-foreground mb-1">
+                            <div className={`${TEXT.secondary} font-bold text-black dark:text-white mb-1`} style={{ fontFamily: FONTS.sans }}>
                               {notification.title}
                             </div>
-                            <div className="text-sm text-secondary line-clamp-2">
+                            <div className={`${TEXT.secondary} ${TEXT.mutedMedium} line-clamp-2`} style={{ fontFamily: FONTS.sans }}>
                               {notification.message}
                             </div>
-                            <div className="text-xs text-muted mt-1">
+                            <div className={`${TEXT.metadata} ${TEXT.mutedMedium} mt-1 ${monoUppercase}`} style={{ fontFamily: FONTS.mono, letterSpacing: LETTER_SPACING.wide }}>
                               {timeAgo(notification.created_at)}
                             </div>
                           </>
@@ -223,7 +227,8 @@ export default function NotificationBell() {
                               e.stopPropagation();
                               markAsRead(notification.id);
                             }}
-                            className="text-xs text-link hover:underline mt-1"
+                            className={`${TEXT.label} text-black dark:text-white hover:opacity-70 transition-opacity mt-1 font-bold ${monoUppercase}`}
+                            style={{ fontFamily: FONTS.mono, letterSpacing: LETTER_SPACING.tight }}
                           >
                             Mark as read
                           </button>

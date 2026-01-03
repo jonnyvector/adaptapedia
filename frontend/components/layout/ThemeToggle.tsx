@@ -94,7 +94,7 @@ export default function ThemeToggle(): JSX.Element {
   return (
     <button
       onClick={toggleTheme}
-      className="px-2 py-2 hover:opacity-70 transition-opacity flex items-center justify-center border-0 bg-transparent"
+      className="px-2 py-2 text-black dark:text-white hover:opacity-70 transition-opacity flex items-center justify-center border-0 bg-transparent"
       aria-label={`Switch to ${displayTheme === 'light' ? 'dark' : 'light'} mode`}
       title={`Switch to ${displayTheme === 'light' ? 'dark' : 'light'} mode`}
     >
