@@ -3,6 +3,7 @@
 import { useEffect, useRef, useState } from 'react';
 import Link from 'next/link';
 import type { WorkWithAdaptations, ScreenWork } from '@/lib/types';
+import { FONTS, LETTER_SPACING, BORDERS, TEXT, monoUppercase } from '@/lib/brutalist-design';
 
 interface SearchDropdownProps {
   results: {
@@ -80,11 +81,11 @@ export default function SearchDropdown({
   return (
     <div
       ref={dropdownRef}
-      className="absolute top-full left-0 right-0 mt-2 bg-surface border border-border rounded-lg shadow-lg max-h-96 overflow-y-auto z-50"
+      className={`absolute top-full left-0 right-0 mt-2 bg-white dark:bg-black border ${BORDERS.solid} rounded-md max-h-96 overflow-y-auto z-50`}
     >
       {isLoading ? (
-        <div className="p-4 text-center text-muted">
-          <div className="w-6 h-6 border-2 border-link border-t-transparent rounded-full animate-spin mx-auto" />
+        <div className={`p-4 text-center ${TEXT.mutedMedium}`}>
+          <div className="w-6 h-6 border-2 border-black dark:border-white border-t-transparent rounded-full animate-spin mx-auto" />
         </div>
       ) : results && results.results.length > 0 ? (
         <div className="py-2">
@@ -95,39 +96,39 @@ export default function SearchDropdown({
                 key={work.id}
                 href={getResultLink(work, 'book')}
                 onClick={onResultClick}
-                className={`flex items-center gap-3 px-4 py-3 hover:bg-surface2 transition-colors ${
-                  index === selectedIndex ? 'bg-surface2' : ''
+                className={`flex items-center gap-3 px-4 py-3 hover:bg-stone-100 hover:dark:bg-stone-900 transition-colors border-b ${BORDERS.subtle} last:border-0 ${
+                  index === selectedIndex ? 'bg-stone-100 dark:bg-stone-900' : ''
                 }`}
               >
                 {work.cover_url ? (
                   <img
                     src={work.cover_url}
                     alt={work.title}
-                    className="w-10 h-14 object-cover rounded"
+                    className="w-10 h-14 object-cover"
                   />
                 ) : (
-                  <div className="w-10 h-14 bg-surface2 rounded flex items-center justify-center text-xs text-muted">
+                  <div className={`w-10 h-14 bg-stone-100 dark:bg-stone-900 flex items-center justify-center ${TEXT.metadata} ${TEXT.mutedMedium}`}>
                     No cover
                   </div>
                 )}
                 <div className="flex-1 min-w-0">
-                  <div className="font-medium text-foreground truncate">
+                  <div className={`font-bold text-black dark:text-white truncate`} style={{ fontFamily: FONTS.sans }}>
                     {work.title}
                   </div>
                   {work.author && (
-                    <div className="text-sm text-secondary truncate">
+                    <div className={`${TEXT.secondary} ${TEXT.mutedMedium} truncate`} style={{ fontFamily: FONTS.sans }}>
                       by {work.author}
                     </div>
                   )}
                   {work.adaptations && work.adaptations.length > 0 && (
-                    <div className="text-xs text-tertiary mt-1">
+                    <div className={`${TEXT.metadata} ${TEXT.mutedMedium} mt-1 ${monoUppercase}`} style={{ fontFamily: FONTS.mono, letterSpacing: LETTER_SPACING.wide }}>
                       {work.adaptations.length}{' '}
                       {work.adaptations.length === 1 ? 'adaptation' : 'adaptations'}
                     </div>
                   )}
                 </div>
                 {work.year && (
-                  <div className="text-sm text-tertiary">{work.year}</div>
+                  <div className={`${TEXT.secondary} ${TEXT.mutedMedium}`} style={{ fontFamily: FONTS.mono }}>{work.year}</div>
                 )}
               </Link>
             ))
@@ -138,26 +139,26 @@ export default function SearchDropdown({
                 key={screenWork.id}
                 href={getResultLink(screenWork, 'screen')}
                 onClick={onResultClick}
-                className={`flex items-center gap-3 px-4 py-3 hover:bg-surface2 transition-colors ${
-                  index === selectedIndex ? 'bg-surface2' : ''
+                className={`flex items-center gap-3 px-4 py-3 hover:bg-stone-100 hover:dark:bg-stone-900 transition-colors border-b ${BORDERS.subtle} last:border-0 ${
+                  index === selectedIndex ? 'bg-stone-100 dark:bg-stone-900' : ''
                 }`}
               >
                 {screenWork.poster_url ? (
                   <img
                     src={screenWork.poster_url}
                     alt={screenWork.title}
-                    className="w-10 h-14 object-cover rounded"
+                    className="w-10 h-14 object-cover"
                   />
                 ) : (
-                  <div className="w-10 h-14 bg-surface2 rounded flex items-center justify-center text-xs text-muted">
+                  <div className={`w-10 h-14 bg-stone-100 dark:bg-stone-900 flex items-center justify-center ${TEXT.metadata} ${TEXT.mutedMedium}`}>
                     No poster
                   </div>
                 )}
                 <div className="flex-1 min-w-0">
-                  <div className="font-medium text-foreground truncate">
+                  <div className={`font-bold text-black dark:text-white truncate`} style={{ fontFamily: FONTS.sans }}>
                     {screenWork.title}
                   </div>
-                  <div className="text-sm text-secondary">
+                  <div className={`${TEXT.secondary} ${TEXT.mutedMedium}`} style={{ fontFamily: FONTS.sans }}>
                     {screenWork.type === 'MOVIE' ? 'Movie' : 'TV Series'}
                     {screenWork.year && ` • ${screenWork.year}`}
                   </div>
@@ -170,7 +171,8 @@ export default function SearchDropdown({
           <Link
             href={`/search?q=${encodeURIComponent(query)}`}
             onClick={onResultClick}
-            className="block px-4 py-3 text-center text-sm text-link hover:bg-surface2 border-t border-border transition-colors font-medium"
+            className={`block px-4 py-3 text-center ${TEXT.secondary} text-black dark:text-white hover:bg-stone-100 hover:dark:bg-stone-900 border-t ${BORDERS.solid} transition-colors font-bold ${monoUppercase}`}
+            style={{ fontFamily: FONTS.mono, letterSpacing: LETTER_SPACING.tight }}
           >
             {results.total_count && results.total_count > results.results.length
               ? `View all ${results.total_count} results for "${query}" →`
@@ -179,7 +181,7 @@ export default function SearchDropdown({
           </Link>
         </div>
       ) : (
-        <div className="p-4 text-center text-muted text-sm">
+        <div className={`p-4 text-center ${TEXT.mutedMedium} ${TEXT.secondary}`} style={{ fontFamily: FONTS.mono }}>
           No results found
         </div>
       )}
