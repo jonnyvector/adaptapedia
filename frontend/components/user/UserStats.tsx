@@ -1,4 +1,5 @@
 import type { UserProfile } from '@/lib/types';
+import { FONTS, LETTER_SPACING, BORDERS, TEXT, monoUppercase } from '@/lib/brutalist-design';
 
 interface UserStatsProps {
   profile: UserProfile;
@@ -9,29 +10,26 @@ export default function UserStats({ profile }: UserStatsProps): JSX.Element {
     {
       label: 'Diffs Created',
       value: profile.diffs_count,
-      color: 'text-blue-600',
     },
     {
       label: 'Votes Cast',
       value: profile.votes_count,
-      color: 'text-green-600',
     },
     {
       label: 'Comments Posted',
       value: profile.comments_count,
-      color: 'text-purple-600',
     },
   ];
 
   return (
     <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4 mb-4 sm:mb-6">
       {/* Reputation Score - Prominent */}
-      <div className="bg-gradient-to-br from-amber-50 to-amber-100 border-2 border-amber-300 rounded-lg p-4 sm:p-6 text-center">
-        <div className="text-3xl sm:text-4xl font-bold text-amber-700 mb-1">
+      <div className={`bg-black dark:bg-white border ${BORDERS.solid} p-4 sm:p-6 text-center`}>
+        <div className="text-3xl sm:text-4xl font-bold text-white dark:text-black mb-1" style={{ fontFamily: FONTS.mono }}>
           {profile.reputation_score}
         </div>
-        <div className="text-sm font-medium text-amber-800">Reputation</div>
-        <div className="text-xs text-amber-600 mt-1">
+        <div className={`${TEXT.secondary} font-bold text-white dark:text-black ${monoUppercase}`} style={{ fontFamily: FONTS.mono, letterSpacing: LETTER_SPACING.wide }}>Reputation</div>
+        <div className={`${TEXT.metadata} text-white/80 dark:text-black/80 mt-1`} style={{ fontFamily: FONTS.mono }}>
           Based on community votes
         </div>
       </div>
@@ -40,12 +38,12 @@ export default function UserStats({ profile }: UserStatsProps): JSX.Element {
       {stats.map((stat) => (
         <div
           key={stat.label}
-          className="bg-white border border-border rounded-lg p-4 sm:p-6 text-center hover:shadow-md transition-shadow"
+          className={`bg-stone-50 dark:bg-stone-950 border ${BORDERS.medium} p-4 sm:p-6 text-center hover:border-black hover:dark:border-white transition-colors`}
         >
-          <div className={`text-2xl sm:text-3xl font-bold ${stat.color} mb-1`}>
+          <div className="text-2xl sm:text-3xl font-bold text-black dark:text-white mb-1" style={{ fontFamily: FONTS.mono }}>
             {stat.value}
           </div>
-          <div className="text-xs sm:text-sm text-muted">{stat.label}</div>
+          <div className={`${TEXT.metadata} ${TEXT.mutedMedium} font-bold ${monoUppercase}`} style={{ fontFamily: FONTS.mono, letterSpacing: LETTER_SPACING.wide }}>{stat.label}</div>
         </div>
       ))}
     </div>

@@ -1,4 +1,5 @@
 import type { BadgeType } from '@/lib/types';
+import { FONTS, LETTER_SPACING, monoUppercase } from '@/lib/brutalist-design';
 
 interface UserBadgeProps {
   badgeType: BadgeType;
@@ -64,7 +65,7 @@ export default function UserBadge({ badgeType, size = 'sm', showLabel = false }:
       aria-label={label}
     >
       <span>{icon}</span>
-      {showLabel && <span className="font-medium">{label}</span>}
+      {showLabel && <span className={`font-bold ${monoUppercase}`} style={{ fontFamily: FONTS.mono, letterSpacing: LETTER_SPACING.wide }}>{label}</span>}
     </span>
   );
 }

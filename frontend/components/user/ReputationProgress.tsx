@@ -1,4 +1,5 @@
 import type { User } from '@/lib/types';
+import { FONTS, LETTER_SPACING, BORDERS, TEXT, monoUppercase } from '@/lib/brutalist-design';
 
 interface ReputationProgressProps {
   user: User;
@@ -24,21 +25,21 @@ export default function ReputationProgress({ user }: ReputationProgressProps) {
   };
 
   return (
-    <div className="bg-surface border border-border rounded-lg p-6">
+    <div className={`bg-stone-50 dark:bg-stone-950 border ${BORDERS.medium} p-6`}>
       <div className="flex items-center justify-between mb-4">
-        <h2 className="text-xl font-bold text-foreground">Reputation Progress</h2>
-        <div className="text-2xl font-bold text-link">{reputation_points}</div>
+        <h2 className={`text-xl font-bold text-black dark:text-white ${monoUppercase}`} style={{ fontFamily: FONTS.mono, letterSpacing: LETTER_SPACING.wide }}>Reputation Progress</h2>
+        <div className="text-2xl font-bold text-black dark:text-white" style={{ fontFamily: FONTS.mono }}>{reputation_points}</div>
       </div>
 
       {permissions.next_unlock && (
-        <div className="mb-4 p-3 bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-800 rounded-lg">
+        <div className={`mb-4 p-3 bg-white dark:bg-black border ${BORDERS.medium} border-black/40 dark:border-white/40 rounded-md`}>
           <div className="flex items-center gap-2 mb-1">
-            <span className="text-sm font-medium text-foreground">Next Unlock:</span>
-            <span className="text-sm text-link font-semibold">
+            <span className={`${TEXT.secondary} font-bold text-black dark:text-white ${monoUppercase}`} style={{ fontFamily: FONTS.mono, letterSpacing: LETTER_SPACING.tight }}>Next Unlock:</span>
+            <span className={`${TEXT.secondary} text-black dark:text-white font-bold`} style={{ fontFamily: FONTS.mono }}>
               {permissions.next_unlock.permission}
             </span>
           </div>
-          <div className="text-xs text-muted">
+          <div className={`${TEXT.metadata} ${TEXT.mutedMedium}`} style={{ fontFamily: FONTS.mono }}>
             {permissions.next_unlock.points_needed} more {permissions.next_unlock.points_needed === 1 ? 'point' : 'points'} to reach {permissions.next_unlock.level} reputation
           </div>
         </div>
@@ -53,18 +54,18 @@ export default function ReputationProgress({ user }: ReputationProgressProps) {
             <div key={milestone.level} className="space-y-2">
               <div className="flex items-center justify-between">
                 <div className="flex items-center gap-2">
-                  <span className={`text-sm font-medium ${isUnlocked ? 'text-green-600 dark:text-green-400' : 'text-muted'}`}>
+                  <span className={`${TEXT.secondary} font-bold ${isUnlocked ? 'text-black dark:text-white' : TEXT.mutedMedium}`} style={{ fontFamily: FONTS.mono }}>
                     {isUnlocked ? '✓' : '🔒'} {milestone.label}
                   </span>
                 </div>
-                <span className="text-xs text-muted">{milestone.level} rep</span>
+                <span className={`${TEXT.metadata} ${TEXT.mutedMedium} ${monoUppercase}`} style={{ fontFamily: FONTS.mono, letterSpacing: LETTER_SPACING.wide }}>{milestone.level} rep</span>
               </div>
-              <div className="relative h-2 bg-surface2 rounded-full overflow-hidden">
+              <div className="relative h-2 bg-black/10 dark:bg-white/10 overflow-hidden border border-black/20 dark:border-white/20">
                 <div
                   className={`absolute top-0 left-0 h-full transition-all duration-300 ${
                     isUnlocked
-                      ? 'bg-green-500 dark:bg-green-400'
-                      : 'bg-blue-500 dark:bg-blue-400'
+                      ? 'bg-black dark:bg-white'
+                      : 'bg-black/40 dark:bg-white/40'
                   }`}
                   style={{ width: `${progress}%` }}
                 />
@@ -75,8 +76,8 @@ export default function ReputationProgress({ user }: ReputationProgressProps) {
       </div>
 
       {!permissions.next_unlock && (
-        <div className="mt-4 p-3 bg-green-50 dark:bg-green-900/20 border border-green-200 dark:border-green-800 rounded-lg text-center">
-          <div className="text-sm font-medium text-green-800 dark:text-green-200">
+        <div className={`mt-4 p-3 bg-black dark:bg-white border ${BORDERS.solid} rounded-md text-center`}>
+          <div className={`${TEXT.secondary} font-bold text-white dark:text-black ${monoUppercase}`} style={{ fontFamily: FONTS.mono, letterSpacing: LETTER_SPACING.tight }}>
             🎉 All permissions unlocked!
           </div>
         </div>
