@@ -3,6 +3,7 @@
 import { useState, useEffect } from 'react';
 import { useAuth } from '@/lib/auth-context';
 import { api, ApiError } from '@/lib/api';
+import { FONTS, BORDERS, TEXT } from '@/lib/brutalist-design';
 
 interface BookmarkButtonProps {
   workId: number;
@@ -79,14 +80,12 @@ export default function BookmarkButton({
       <button
         onClick={handleToggleBookmark}
         disabled={isLoading}
-        className={`inline-flex items-center justify-center border transition-colors px-2 py-1 rounded-none ${
+        className={`inline-flex items-center justify-center border transition-colors px-2 py-1 ${
           isBookmarked
-            ? 'bg-black dark:bg-white border-black dark:border-white text-white dark:text-black'
-            : 'bg-white dark:bg-black border-black/40 dark:border-white/40 text-black dark:text-white hover:border-black dark:hover:border-white'
+            ? `bg-black dark:bg-white ${BORDERS.solid} text-white dark:text-black`
+            : `bg-white dark:bg-black ${BORDERS.strongSubtle} text-black dark:text-white hover:${BORDERS.solid}`
         } ${isLoading ? 'opacity-50 cursor-not-allowed' : ''}`}
-        style={{
-          fontFamily: 'JetBrains Mono, monospace'
-        }}
+        style={{ fontFamily: FONTS.mono }}
         title={isBookmarked ? 'Remove from bookmarks' : 'Add to bookmarks'}
         aria-label={isBookmarked ? 'Remove from bookmarks' : 'Add to bookmarks'}
       >
@@ -108,7 +107,7 @@ export default function BookmarkButton({
         </svg>
       </button>
       {error && (
-        <p className="text-xs text-warn mt-1" role="alert">
+        <p className={`${TEXT.metadata} text-red-600 dark:text-red-400 mt-1`} role="alert" style={{ fontFamily: FONTS.mono }}>
           {error}
         </p>
       )}
