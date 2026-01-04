@@ -207,7 +207,7 @@ export default function GetItNowModule({ work, screenWork }: GetItNowModuleProps
                   <div className={`${TEXT.metadata} text-white/70 dark:text-black/70 group-hover:text-black/70 group-hover:dark:text-white/70`}>Stream now</div>
                 </div>
               </div>
-              <span className={`${TEXT.metadata} px-2 py-1 border ${BORDERS.subtle} bg-white dark:bg-black text-black dark:text-white font-bold ${monoUppercase} rounded-md`} style={{ fontFamily: FONTS.mono, letterSpacing: LETTER_SPACING.wide }}>
+              <span className={`${TEXT.metadata} px-2 py-1 border ${BORDERS.medium} bg-stone-100 dark:bg-stone-900 text-black dark:text-white font-bold ${monoUppercase} rounded-md`} style={{ fontFamily: FONTS.mono, letterSpacing: LETTER_SPACING.wide }}>
                 Best
               </span>
             </a>
