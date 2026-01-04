@@ -355,9 +355,9 @@ export default function MatchupScoreboard({
                   className="object-cover"
                   unoptimized
                 />
-                {/* Book stamp - stamped style */}
-                <div className="absolute -top-2 -left-2 px-1.5 py-0.5 border border-black/40 dark:border-white/40 bg-white dark:bg-black" style={{ transform: 'translate(-1px, -1px)' }}>
-                  <span className="text-[10px] font-bold uppercase text-black dark:text-white" style={{ fontFamily: 'JetBrains Mono, monospace', letterSpacing: '0.15em' }}>BOOK</span>
+                {/* Book stamp - bottom left, flush */}
+                <div className="absolute bottom-0 left-0 px-1.5 py-0.5 bg-black">
+                  <span className="text-[10px] font-bold uppercase text-white" style={{ fontFamily: 'JetBrains Mono, monospace', letterSpacing: '0.15em' }}>BOOK</span>
                 </div>
               </div>
             )}
@@ -537,10 +537,10 @@ export default function MatchupScoreboard({
                 className="object-cover"
                 unoptimized
               />
-              {/* Screen stamp - stamped style */}
-              <div className="absolute -top-2 -right-2 px-1.5 py-0.5 border border-black/40 dark:border-white/40 bg-white dark:bg-black" style={{ transform: 'translate(1px, -1px)' }}>
-                <span className="text-[10px] font-bold uppercase text-black dark:text-white" style={{ fontFamily: 'JetBrains Mono, monospace', letterSpacing: '0.15em' }}>
-                  {screenWork.type === 'MOVIE' ? 'MOVIE' : 'TV'}
+              {/* Screen stamp - bottom right, flush */}
+              <div className="absolute bottom-0 right-0 px-1.5 py-0.5 bg-black">
+                <span className="text-[10px] font-bold uppercase text-white" style={{ fontFamily: 'JetBrains Mono, monospace', letterSpacing: '0.15em' }}>
+                  SCREEN
                 </span>
               </div>
             </div>
@@ -584,9 +584,9 @@ export default function MatchupScoreboard({
                   sizes="50vw"
                   unoptimized
                 />
-                {/* Book stamp */}
-                <div className="absolute -top-1.5 -left-1.5 px-1.5 py-0.5 border border-black/40 dark:border-white/40 bg-white dark:bg-black" style={{ transform: 'translate(-1px, -1px)' }}>
-                  <span className="text-[9px] font-bold uppercase text-black dark:text-white" style={{ fontFamily: 'JetBrains Mono, monospace', letterSpacing: '0.15em' }}>BOOK</span>
+                {/* Book stamp - bottom left, flush */}
+                <div className="absolute bottom-0 left-0 px-1.5 py-0.5 bg-black">
+                  <span className="text-[9px] font-bold uppercase text-white" style={{ fontFamily: 'JetBrains Mono, monospace', letterSpacing: '0.15em' }}>BOOK</span>
                 </div>
               </div>
             )}
@@ -606,10 +606,10 @@ export default function MatchupScoreboard({
                   sizes="50vw"
                   unoptimized
                 />
-                {/* Movie stamp */}
-                <div className="absolute -top-1.5 -right-1.5 px-1.5 py-0.5 border border-black/40 dark:border-white/40 bg-white dark:bg-black" style={{ transform: 'translate(1px, -1px)' }}>
-                  <span className="text-[9px] font-bold uppercase text-black dark:text-white" style={{ fontFamily: 'JetBrains Mono, monospace', letterSpacing: '0.15em' }}>
-                    {screenWork.type === 'MOVIE' ? 'MOVIE' : 'TV'}
+                {/* Screen stamp - bottom right, flush */}
+                <div className="absolute bottom-0 right-0 px-1.5 py-0.5 bg-black">
+                  <span className="text-[9px] font-bold uppercase text-white" style={{ fontFamily: 'JetBrains Mono, monospace', letterSpacing: '0.15em' }}>
+                    SCREEN
                   </span>
                 </div>
               </div>
