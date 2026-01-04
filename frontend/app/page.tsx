@@ -29,7 +29,7 @@ async function getFeaturedComparisons(): Promise<BrowseComparison[]> {
 export default async function Home(): Promise<JSX.Element> {
   const featuredComparisons = await getFeaturedComparisons();
   return (
-    <main className="min-h-screen home-page-gradient">
+    <main className="min-h-screen bg-white dark:bg-black">
       {/* Hero Section - Search-focused */}
       <div className="relative py-16 md:py-20 mb-12">
         <div className="container">
