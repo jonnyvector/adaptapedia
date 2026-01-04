@@ -157,9 +157,9 @@ export default function PopularComparisons() {
                     No Cover
                   </div>
                 )}
-                {/* Book label */}
-                <div className="absolute top-1 left-1">
-                  <span className={`${TEXT.metadata} font-bold px-1.5 py-0.5 bg-black/80 text-white ${monoUppercase}`} style={{ fontFamily: FONTS.mono, letterSpacing: LETTER_SPACING.wide }}>
+                {/* Book label - bottom left, flush */}
+                <div className="absolute bottom-0 left-0">
+                  <span className={`${TEXT.metadata} font-bold px-1.5 py-0.5 bg-black text-white block ${monoUppercase}`} style={{ fontFamily: FONTS.mono, letterSpacing: LETTER_SPACING.wide }}>
                     BOOK
                   </span>
                 </div>
@@ -188,9 +188,9 @@ export default function PopularComparisons() {
                     No Poster
                   </div>
                 )}
-                {/* Screen label */}
-                <div className="absolute top-1 right-1">
-                  <span className={`${TEXT.metadata} font-bold px-1.5 py-0.5 bg-black/80 text-white ${monoUppercase}`} style={{ fontFamily: FONTS.mono, letterSpacing: LETTER_SPACING.wide }}>
+                {/* Screen label - bottom right, flush */}
+                <div className="absolute bottom-0 right-0">
+                  <span className={`${TEXT.metadata} font-bold px-1.5 py-0.5 bg-black text-white block ${monoUppercase}`} style={{ fontFamily: FONTS.mono, letterSpacing: LETTER_SPACING.wide }}>
                     SCREEN
                   </span>
                 </div>
