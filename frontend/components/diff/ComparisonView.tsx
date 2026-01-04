@@ -26,6 +26,7 @@ import {
   filterDiffsByPreference,
   getAllowedScopes,
 } from '@/lib/spoiler-utils';
+import { FONTS, BORDERS, TEXT, RADIUS } from '@/lib/brutalist-design';
 
 interface ComparisonViewProps {
   work: Work;
@@ -297,16 +298,16 @@ export default function ComparisonView({
 
       {/* Stats Line */}
       {visibleDiffs.length > 0 && (
-        <div className="mb-4 px-4 py-2 bg-surface2/30 border border-border rounded-md">
-          <div className="flex flex-wrap items-center gap-x-4 gap-y-2 text-xs text-muted">
-            <span className="font-semibold text-foreground">
+        <div className={`mb-4 px-4 py-2 bg-stone-50 dark:bg-stone-950 border ${BORDERS.medium} ${RADIUS.control}`}>
+          <div className={`flex flex-wrap items-center gap-x-4 gap-y-2 ${TEXT.secondary} ${TEXT.mutedMedium} font-bold`} style={{ fontFamily: FONTS.mono }}>
+            <span className="text-black dark:text-white">
               {visibleDiffs.length} {visibleDiffs.length === 1 ? 'diff' : 'diffs'} shown
             </span>
             {consensusAccuracy > 0 && (
               <>
                 <span>·</span>
                 <span>
-                  <span className="font-semibold text-link">{Math.round(consensusAccuracy)}%</span> accurate
+                  <span className="text-black dark:text-white">{Math.round(consensusAccuracy)}%</span> accurate
                 </span>
               </>
             )}
@@ -319,7 +320,7 @@ export default function ComparisonView({
                     <span key={cat.category}>
                       <button
                         onClick={() => handleToggleCategory(cat.category.toUpperCase() as DiffCategory)}
-                        className="font-medium text-link hover:underline"
+                        className="font-bold text-black dark:text-white hover:opacity-70 hover:underline"
                       >
                         {cat.category}
                       </button>
@@ -350,8 +351,8 @@ export default function ComparisonView({
                 <DiffSort value={sortOption} onChange={setSortOption} />
                 <button
                   onClick={handleAddDiff}
-                  className="px-4 py-2 border border-black dark:border-white bg-black dark:bg-white text-white dark:text-black hover:bg-white hover:dark:bg-black hover:text-black hover:dark:text-white font-bold transition-all text-sm rounded-md whitespace-nowrap uppercase"
-                  style={{ fontFamily: 'JetBrains Mono, monospace', letterSpacing: '0.05em' }}
+                  className={`px-4 py-2 border ${BORDERS.solid} bg-black dark:bg-white text-white dark:text-black hover:bg-white hover:dark:bg-black hover:text-black hover:dark:text-white font-bold transition-all ${TEXT.body} ${RADIUS.control} whitespace-nowrap uppercase tracking-wider`}
+                  style={{ fontFamily: FONTS.mono, letterSpacing: '0.08em' }}
                 >
                   Add Difference
                 </button>
@@ -456,13 +457,13 @@ export default function ComparisonView({
 
           {/* Masked Diffs - Show these after visible diffs */}
           {maskedDiffs.length > 0 && (
-            <div className="border-t-2 border-warn pt-6 sm:pt-8">
-              <div className="mb-4 p-3 sm:p-4 bg-warn/10 border border-warn/30 rounded-lg">
-                <h2 className="text-lg sm:text-xl font-bold text-warn mb-2 flex items-center gap-2">
+            <div className={`border-t-2 border-amber-600 dark:border-amber-400 pt-6 sm:pt-8`}>
+              <div className={`mb-4 p-3 sm:p-4 bg-amber-50 dark:bg-amber-950/30 border ${BORDERS.medium} ${RADIUS.control}`}>
+                <h2 className={`text-base sm:text-lg font-bold text-amber-700 dark:text-amber-400 mb-2 flex items-center gap-2`} style={{ fontFamily: FONTS.mono }}>
                   <LockClosedIcon className="w-6 h-6" aria-hidden="true" />
                   {maskedDiffs.length} Hidden Difference{maskedDiffs.length !== 1 ? 's' : ''}
                 </h2>
-                <p className="text-sm text-foreground">
+                <p className={`${TEXT.body} text-black dark:text-white`} style={{ fontFamily: FONTS.mono }}>
                   The following differences contain spoilers beyond your current setting.
                   Increase your spoiler level above to reveal them, or click individual reveal buttons.
                 </p>
@@ -486,23 +487,23 @@ export default function ComparisonView({
 
       {/* Stats Footer */}
       {diffs.length > 0 && (
-        <div className="mt-6 sm:mt-8 p-3 sm:p-4 bg-muted/10 rounded-lg text-center text-xs sm:text-sm text-muted">
+        <div className={`mt-6 sm:mt-8 p-3 sm:p-4 bg-stone-100 dark:bg-stone-900 ${RADIUS.control} text-center ${TEXT.secondary} sm:text-sm ${TEXT.mutedMedium} font-bold`} style={{ fontFamily: FONTS.mono }}>
           {hasActiveFilters ? (
             <>
-              Showing <span className="font-semibold">{filteredDiffs.length}</span> of{' '}
-              <span className="font-semibold">{visibleDiffs.length}</span> visible difference
+              Showing <span className="text-black dark:text-white">{filteredDiffs.length}</span> of{' '}
+              <span className="text-black dark:text-white">{visibleDiffs.length}</span> visible difference
               {visibleDiffs.length !== 1 ? 's' : ''}
             </>
           ) : (
             <>
-              Showing <span className="font-semibold">{visibleDiffs.length}</span> visible difference
+              Showing <span className="text-black dark:text-white">{visibleDiffs.length}</span> visible difference
               {visibleDiffs.length !== 1 ? 's' : ''}
             </>
           )}
           {maskedDiffs.length > 0 && (
             <>
               {' '}
-              + <span className="font-semibold">{maskedDiffs.length}</span> hidden
+              + <span className="text-black dark:text-white">{maskedDiffs.length}</span> hidden
             </>
           )}
         </div>

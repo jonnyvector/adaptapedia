@@ -1,3 +1,5 @@
+import { BORDERS } from '@/lib/brutalist-design';
+
 interface LoadingSpinnerProps {
   size?: 'sm' | 'md' | 'lg';
   className?: string;
@@ -15,7 +17,7 @@ export default function LoadingSpinner({
 
   return (
     <div
-      className={`${sizeClasses[size]} border-black/20 dark:border-white/20 border-t-black dark:border-t-white rounded-full animate-spin ${className}`}
+      className={`${sizeClasses[size]} ${BORDERS.subtle} border-t-black dark:border-t-white rounded-full animate-spin ${className}`}
       role="status"
       aria-label="Loading"
     >

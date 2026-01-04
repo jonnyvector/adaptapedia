@@ -2,6 +2,7 @@
 
 import type { DiffItem, DiffCategory } from '@/lib/types';
 import type { SpoilerPreference } from './SpoilerControl';
+import { FONTS, BORDERS, TEXT } from '@/lib/brutalist-design';
 
 interface ComparisonSummaryProps {
   visibleCount: number;
@@ -105,25 +106,25 @@ export default function ComparisonSummary({
   const canIncrease = currentPreference !== 'FULL' && maskedCount > 0;
 
   return (
-    <div className="border-t border-b border-border bg-surface2/30 py-2.5 px-4 mb-6">
+    <div className={`border-t border-b ${BORDERS.medium} bg-stone-50 dark:bg-stone-950 py-2.5 px-4 mb-6`}>
       <div className="max-w-6xl mx-auto">
-        <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2 text-xs text-muted font-mono">
+        <div className={`flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2 ${TEXT.secondary} ${TEXT.mutedMedium} font-bold`} style={{ fontFamily: FONTS.mono }}>
           {/* Left: Top categories */}
           <div className="flex items-center gap-2 flex-wrap">
             {topCategories.length > 0 && (
               <>
-                <span className="text-muted/70">Top:</span>
+                <span className={TEXT.mutedStrong}>Top:</span>
                 {topCategories.map(([category, count], index) => (
                   <span key={category} className="inline-flex items-center gap-1">
-                    {index > 0 && <span className="text-muted/50">·</span>}
+                    {index > 0 && <span className={TEXT.mutedLight}>·</span>}
                     <button
                       onClick={() => onCategoryClick(category as DiffCategory)}
-                      className="text-link hover:text-linkHover transition-colors hover:underline font-medium"
+                      className="text-black dark:text-white hover:opacity-70 transition-opacity hover:underline font-bold"
                       aria-label={`Filter by ${CATEGORY_LABELS[category as DiffCategory]}`}
                     >
                       {CATEGORY_LABELS[category as DiffCategory]}
                     </button>
-                    <span className="text-muted/70">({count})</span>
+                    <span className={TEXT.mutedStrong}>({count})</span>
                   </span>
                 ))}
               </>
@@ -135,13 +136,13 @@ export default function ComparisonSummary({
             {/* Consensus */}
             {allDiffs.length > 0 && (
               <div className="flex items-center gap-2">
-                <span className="text-muted/70">
+                <span className={TEXT.mutedStrong}>
                   {averageAccuracy > 0 ? Math.round(averageAccuracy) : 0}% accurate
                 </span>
                 {disputedCount > 0 && (
                   <>
-                    <span className="text-muted/50">·</span>
-                    <span className="text-warn font-semibold">
+                    <span className={TEXT.mutedLight}>·</span>
+                    <span className="text-amber-700 dark:text-amber-400 font-bold">
                       {disputedCount} disputed
                     </span>
                   </>
@@ -152,10 +153,10 @@ export default function ComparisonSummary({
             {/* Hidden diffs warning */}
             {maskedCount > 0 && canIncrease && (
               <>
-                <span className="text-muted/50 hidden sm:inline">·</span>
+                <span className={`${TEXT.mutedLight} hidden sm:inline`}>·</span>
                 <button
                   onClick={onSpoilerLevelIncrease}
-                  className="text-warn hover:text-warn/80 underline transition-colors font-medium"
+                  className="text-amber-700 dark:text-amber-400 hover:opacity-70 underline transition-opacity font-bold"
                   aria-label={`Increase spoiler level to ${nextPreference.toLowerCase().replace('_', ' ')}`}
                 >
                   +{maskedCount} hidden

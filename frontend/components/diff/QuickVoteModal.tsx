@@ -4,6 +4,7 @@ import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { useAuth } from '@/lib/auth-context';
 import type { Work, ScreenWork } from '@/lib/types';
+import { FONTS, BORDERS, TEXT, RADIUS } from '@/lib/brutalist-design';
 // Simple X icon component
 const XIcon = ({ className = "w-6 h-6" }: { className?: string }) => (
   <svg className={className} fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -118,17 +119,17 @@ export default function QuickVoteModal({
       aria-labelledby="vote-modal-title"
     >
       <div
-        className="bg-white dark:bg-surface rounded-t-2xl sm:rounded-2xl w-full sm:max-w-lg max-h-[90vh] overflow-y-auto shadow-2xl"
+        className={`bg-white dark:bg-black rounded-t-2xl sm:rounded-2xl w-full sm:max-w-lg max-h-[90vh] overflow-y-auto shadow-2xl border ${BORDERS.medium}`}
         onClick={(e) => e.stopPropagation()}
       >
         {/* Header */}
-        <div className="sticky top-0 bg-white dark:bg-surface border-b border-gray-200 dark:border-border p-4 flex items-center justify-between z-10">
-          <h2 id="vote-modal-title" className="text-lg font-bold text-gray-900 dark:text-white">
+        <div className={`sticky top-0 bg-white dark:bg-black border-b ${BORDERS.subtle} p-4 flex items-center justify-between z-10`}>
+          <h2 id="vote-modal-title" className={`text-base font-bold text-black dark:text-white uppercase tracking-wider`} style={{ fontFamily: FONTS.mono, letterSpacing: '0.1em' }}>
             Quick Vote
           </h2>
           <button
             onClick={onClose}
-            className="p-2 hover:bg-gray-100 dark:hover:bg-gray-800 rounded-full transition-colors"
+            className={`p-2 hover:bg-stone-100 hover:dark:bg-stone-900 ${RADIUS.control} transition-colors`}
             aria-label="Close modal"
           >
             <XIcon className="w-5 h-5" />
@@ -141,49 +142,49 @@ export default function QuickVoteModal({
           {step === 1 && (
             <div className="space-y-4">
               <div className="text-center mb-6">
-                <p className="text-sm text-gray-600 dark:text-gray-400 mb-2">Step 1 of 2</p>
-                <h3 className="text-xl font-bold text-gray-900 dark:text-white">
+                <p className={`${TEXT.body} ${TEXT.mutedMedium} mb-2 font-bold`} style={{ fontFamily: FONTS.mono }}>Step 1 of 2</p>
+                <h3 className={`text-lg font-bold text-black dark:text-white uppercase tracking-wider`} style={{ fontFamily: FONTS.mono, letterSpacing: '0.08em' }}>
                   Which did you prefer?
                 </h3>
               </div>
 
               <button
                 onClick={() => handlePreferenceSelect('BOOK')}
-                className="w-full p-4 border-2 border-gray-200 dark:border-gray-700 rounded-lg hover:border-blue-500 hover:bg-blue-50 dark:hover:bg-blue-900/20 transition-all text-left group"
+                className={`w-full p-4 border ${BORDERS.medium} ${RADIUS.control} hover:bg-stone-100 hover:dark:bg-stone-900 transition-all text-left group`}
               >
                 <div className="flex items-center gap-3">
-                  <div className="w-12 h-12 rounded-full bg-blue-100 dark:bg-blue-900/30 flex items-center justify-center group-hover:bg-blue-500 transition-colors">
-                    <span className="text-2xl group-hover:text-white">📖</span>
+                  <div className={`w-12 h-12 ${RADIUS.control} bg-stone-200 dark:bg-stone-800 flex items-center justify-center group-hover:bg-black group-hover:dark:bg-white transition-colors`}>
+                    <span className="text-2xl group-hover:text-white group-hover:dark:text-black">📖</span>
                   </div>
                   <div>
-                    <div className="font-bold text-gray-900 dark:text-white">Book</div>
-                    <div className="text-sm text-gray-600 dark:text-gray-400">{work.title}</div>
+                    <div className={`font-bold text-black dark:text-white`} style={{ fontFamily: FONTS.mono }}>Book</div>
+                    <div className={`${TEXT.body} ${TEXT.mutedMedium}`} style={{ fontFamily: FONTS.mono }}>{work.title}</div>
                   </div>
                 </div>
               </button>
 
               <button
                 onClick={() => handlePreferenceSelect('SCREEN')}
-                className="w-full p-4 border-2 border-gray-200 dark:border-gray-700 rounded-lg hover:border-blue-500 hover:bg-blue-50 dark:hover:bg-blue-900/20 transition-all text-left group"
+                className={`w-full p-4 border ${BORDERS.medium} ${RADIUS.control} hover:bg-stone-100 hover:dark:bg-stone-900 transition-all text-left group`}
               >
                 <div className="flex items-center gap-3">
-                  <div className="w-12 h-12 rounded-full bg-blue-100 dark:bg-blue-900/30 flex items-center justify-center group-hover:bg-blue-500 transition-colors">
-                    <span className="text-2xl group-hover:text-white">🎬</span>
+                  <div className={`w-12 h-12 ${RADIUS.control} bg-stone-200 dark:bg-stone-800 flex items-center justify-center group-hover:bg-black group-hover:dark:bg-white transition-colors`}>
+                    <span className="text-2xl group-hover:text-white group-hover:dark:text-black">🎬</span>
                   </div>
                   <div>
-                    <div className="font-bold text-gray-900 dark:text-white">
+                    <div className={`font-bold text-black dark:text-white`} style={{ fontFamily: FONTS.mono }}>
                       {screenWork.type === 'MOVIE' ? 'Movie' : 'TV Series'}
                     </div>
-                    <div className="text-sm text-gray-600 dark:text-gray-400">{screenWork.title}</div>
+                    <div className={`${TEXT.body} ${TEXT.mutedMedium}`} style={{ fontFamily: FONTS.mono }}>{screenWork.title}</div>
                   </div>
                 </div>
               </button>
 
               <button
                 onClick={() => handlePreferenceSelect('TIE')}
-                className="w-full p-4 border-2 border-gray-200 dark:border-gray-700 rounded-lg hover:border-gray-400 hover:bg-gray-50 dark:hover:bg-gray-800 transition-all text-center"
+                className={`w-full p-4 border ${BORDERS.medium} ${RADIUS.control} hover:bg-stone-100 hover:dark:bg-stone-900 transition-all text-center`}
               >
-                <div className="font-medium text-gray-700 dark:text-gray-300">Both were equally good</div>
+                <div className={`font-bold text-black dark:text-white`} style={{ fontFamily: FONTS.mono }}>Both were equally good</div>
               </button>
             </div>
           )}
@@ -194,15 +195,16 @@ export default function QuickVoteModal({
               <div className="text-center mb-6">
                 <button
                   onClick={() => setStep(1)}
-                  className="text-sm text-blue-600 dark:text-blue-400 hover:underline mb-2"
+                  className={`${TEXT.body} text-black dark:text-white hover:underline mb-2 font-bold`}
+                  style={{ fontFamily: FONTS.mono }}
                 >
                   ← Back
                 </button>
-                <p className="text-sm text-gray-600 dark:text-gray-400 mb-2">Step 2 of 2 (Optional)</p>
-                <h3 className="text-xl font-bold text-gray-900 dark:text-white">
+                <p className={`${TEXT.body} ${TEXT.mutedMedium} mb-2 font-bold`} style={{ fontFamily: FONTS.mono }}>Step 2 of 2 (Optional)</p>
+                <h3 className={`text-lg font-bold text-black dark:text-white uppercase tracking-wider`} style={{ fontFamily: FONTS.mono, letterSpacing: '0.08em' }}>
                   How faithful was the adaptation?
                 </h3>
-                <p className="text-sm text-gray-600 dark:text-gray-400 mt-2">
+                <p className={`${TEXT.body} ${TEXT.mutedMedium} mt-2 font-bold`} style={{ fontFamily: FONTS.mono }}>
                   1 = Completely different · 5 = Nearly identical
                 </p>
               </div>
@@ -212,11 +214,12 @@ export default function QuickVoteModal({
                   <button
                     key={rating}
                     onClick={() => setFaithfulness(rating)}
-                    className={`w-14 h-14 rounded-full font-bold text-lg transition-all ${
+                    className={`w-14 h-14 ${RADIUS.control} font-bold text-base transition-all ${
                       faithfulness === rating
-                        ? 'bg-blue-500 text-white scale-110 shadow-lg'
-                        : 'bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-300 hover:bg-gray-300 dark:hover:bg-gray-600'
+                        ? `bg-black dark:bg-white text-white dark:text-black scale-110 border ${BORDERS.solid}`
+                        : `bg-stone-200 dark:bg-stone-800 text-black dark:text-white hover:bg-stone-300 hover:dark:bg-stone-700 border ${BORDERS.subtle}`
                     }`}
+                    style={{ fontFamily: FONTS.mono }}
                     aria-label={`Rate faithfulness ${rating} out of 5`}
                   >
                     {rating}
@@ -225,8 +228,8 @@ export default function QuickVoteModal({
               </div>
 
               {/* Optional checkboxes */}
-              <div className="space-y-3 pt-4 border-t border-gray-200 dark:border-gray-700">
-                <p className="text-xs text-gray-600 dark:text-gray-400 text-center mb-3">
+              <div className={`space-y-3 pt-4 border-t ${BORDERS.subtle}`}>
+                <p className={`${TEXT.secondary} ${TEXT.mutedMedium} text-center mb-3 font-bold`} style={{ fontFamily: FONTS.mono }}>
                   Help us improve accuracy (optional)
                 </p>
                 <label className="flex items-center gap-2 cursor-pointer">
@@ -234,18 +237,18 @@ export default function QuickVoteModal({
                     type="checkbox"
                     checked={hasReadBook}
                     onChange={(e) => setHasReadBook(e.target.checked)}
-                    className="w-4 h-4 rounded border-gray-300 text-blue-500 focus:ring-blue-500"
+                    className={`w-4 h-4 ${RADIUS.control} border ${BORDERS.subtle}`}
                   />
-                  <span className="text-sm text-gray-700 dark:text-gray-300">I've read the book</span>
+                  <span className={`${TEXT.body} text-black dark:text-white font-bold`} style={{ fontFamily: FONTS.mono }}>I've read the book</span>
                 </label>
                 <label className="flex items-center gap-2 cursor-pointer">
                   <input
                     type="checkbox"
                     checked={hasWatchedAdaptation}
                     onChange={(e) => setHasWatchedAdaptation(e.target.checked)}
-                    className="w-4 h-4 rounded border-gray-300 text-blue-500 focus:ring-blue-500"
+                    className={`w-4 h-4 ${RADIUS.control} border ${BORDERS.subtle}`}
                   />
-                  <span className="text-sm text-gray-700 dark:text-gray-300">I've watched the adaptation</span>
+                  <span className={`${TEXT.body} text-black dark:text-white font-bold`} style={{ fontFamily: FONTS.mono }}>I've watched the adaptation</span>
                 </label>
               </div>
 
@@ -253,14 +256,16 @@ export default function QuickVoteModal({
               <button
                 onClick={handleSubmit}
                 disabled={isSubmitting}
-                className="w-full py-3 bg-blue-600 hover:bg-blue-700 text-white font-semibold rounded-lg transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                className={`w-full py-3 bg-black dark:bg-white text-white dark:text-black hover:bg-white hover:dark:bg-black hover:text-black hover:dark:text-white border ${BORDERS.solid} font-bold ${RADIUS.control} transition-all disabled:opacity-50 disabled:cursor-not-allowed uppercase tracking-wider`}
+                style={{ fontFamily: FONTS.mono, letterSpacing: '0.08em' }}
               >
                 {isSubmitting ? 'Submitting...' : 'Submit Vote'}
               </button>
 
               <button
                 onClick={handleSubmit}
-                className="w-full text-sm text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white transition-colors"
+                className={`w-full ${TEXT.body} ${TEXT.mutedMedium} hover:text-black hover:dark:text-white transition-colors font-bold`}
+                style={{ fontFamily: FONTS.mono }}
               >
                 Skip faithfulness rating →
               </button>

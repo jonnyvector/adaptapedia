@@ -5,6 +5,7 @@ import { useRouter } from 'next/navigation';
 import Image from 'next/image';
 import type { AdaptationEdge, ApiResponse } from '@/lib/types';
 import { api } from '@/lib/api';
+import { FONTS, BORDERS, TEXT, RADIUS } from '@/lib/brutalist-design';
 
 interface AdaptationSwitcherProps {
   workId: number;
@@ -109,9 +110,9 @@ export default function AdaptationSwitcher({
       {/* Current adaptation button - subtle switcher */}
       <button
         onClick={() => setIsOpen(!isOpen)}
-        className="w-full px-3 py-2 border border-black/20 dark:border-white/20 bg-transparent text-black dark:text-white hover:border-black hover:dark:border-white transition-colors text-[10px] font-bold uppercase tracking-wider flex items-center justify-center gap-2 rounded-md"
+        className={`w-full px-3 py-2 border ${BORDERS.subtle} bg-transparent text-black dark:text-white hover:border-black hover:dark:border-white transition-colors ${TEXT.label} font-bold uppercase tracking-wider flex items-center justify-center gap-2 ${RADIUS.control}`}
         style={{
-          fontFamily: 'JetBrains Mono, monospace',
+          fontFamily: FONTS.mono,
           letterSpacing: '0.12em'
         }}
         aria-expanded={isOpen}
@@ -126,12 +127,12 @@ export default function AdaptationSwitcher({
       {/* Dropdown menu */}
       {isOpen && (
         <div
-          className="absolute bottom-full right-0 md:right-0 left-auto mb-2 w-80 max-w-[calc(100vw-2rem)] bg-background border border-border rounded-lg shadow-xl z-50 overflow-hidden"
+          className={`absolute bottom-full right-0 md:right-0 left-auto mb-2 w-80 max-w-[calc(100vw-2rem)] bg-white dark:bg-black border ${BORDERS.medium} ${RADIUS.control} shadow-xl z-50 overflow-hidden`}
           role="menu"
         >
           {/* Current adaptation (highlighted) */}
           <div
-            className="px-4 py-3 bg-link/10 border-b border-border flex items-start gap-3"
+            className={`px-4 py-3 bg-stone-100 dark:bg-stone-900 border-b ${BORDERS.subtle} flex items-start gap-3`}
             role="menuitem"
           >
             {currentScreenWorkPosterUrl && (
@@ -140,20 +141,21 @@ export default function AdaptationSwitcher({
                 alt={currentScreenWorkTitle}
                 width={48}
                 height={72}
-                className="w-12 h-18 object-cover rounded flex-shrink-0"
+                className={`w-12 h-18 object-cover ${RADIUS.control} flex-shrink-0`}
               />
             )}
             <div className="flex-1 min-w-0 py-1 text-left">
-              <div className="text-sm font-semibold text-foreground">
+              <div className={`${TEXT.body} font-bold text-black dark:text-white`} style={{ fontFamily: FONTS.mono }}>
                 {currentScreenWorkTitle}
               </div>
-              <div className="text-xs text-muted mt-1">
+              <div className={`${TEXT.secondary} ${TEXT.mutedMedium} mt-1`} style={{ fontFamily: FONTS.mono }}>
                 {currentScreenWorkType === 'MOVIE' ? 'Movie' : 'TV Series'}
                 {currentScreenWorkYear && ` • ${currentScreenWorkYear}`}
               </div>
             </div>
             <span
-              className="text-xs px-2 py-1 bg-link/20 text-link rounded font-medium whitespace-nowrap flex-shrink-0 self-start"
+              className={`${TEXT.secondary} px-2 py-1 bg-stone-200 dark:bg-stone-800 text-black dark:text-white ${RADIUS.control} font-bold whitespace-nowrap flex-shrink-0 self-start uppercase`}
+              style={{ fontFamily: FONTS.mono, letterSpacing: '0.1em' }}
               aria-label="Currently viewing"
             >
               Current
@@ -168,7 +170,7 @@ export default function AdaptationSwitcher({
                 <button
                   key={edge.id}
                   onClick={() => handleAdaptationChange(screen.slug)}
-                  className="w-full px-4 py-3 border-b border-border last:border-b-0 hover:bg-muted/10 transition-colors flex items-start gap-3 text-left"
+                  className={`w-full px-4 py-3 border-b ${BORDERS.subtle} last:border-b-0 hover:bg-stone-50 hover:dark:bg-stone-950 transition-colors flex items-start gap-3 text-left`}
                   role="menuitem"
                 >
                   {screen.poster_url && (
@@ -177,14 +179,14 @@ export default function AdaptationSwitcher({
                       alt={screen.title}
                       width={48}
                       height={72}
-                      className="w-12 h-18 object-cover rounded flex-shrink-0"
+                      className={`w-12 h-18 object-cover ${RADIUS.control} flex-shrink-0`}
                     />
                   )}
                   <div className="flex-1 min-w-0 py-1">
-                    <div className="text-sm font-medium text-foreground">
+                    <div className={`${TEXT.body} font-bold text-black dark:text-white`} style={{ fontFamily: FONTS.mono }}>
                       {screen.title}
                     </div>
-                    <div className="text-xs text-muted mt-1">
+                    <div className={`${TEXT.secondary} ${TEXT.mutedMedium} mt-1`} style={{ fontFamily: FONTS.mono }}>
                       {screen.type === 'MOVIE' ? 'Movie' : 'TV Series'}
                       {screen.year && ` • ${screen.year}`}
                     </div>
@@ -195,10 +197,11 @@ export default function AdaptationSwitcher({
           </div>
 
           {/* View all link */}
-          <div className="border-t border-border">
+          <div className={`border-t ${BORDERS.subtle}`}>
             <button
               onClick={handleViewAll}
-              className="w-full px-4 py-3 text-sm text-link hover:bg-muted/10 font-medium transition-colors text-left"
+              className={`w-full px-4 py-3 ${TEXT.body} text-black dark:text-white hover:bg-stone-50 hover:dark:bg-stone-950 font-bold transition-colors text-left`}
+              style={{ fontFamily: FONTS.mono }}
               role="menuitem"
             >
               View all adaptations →

@@ -4,6 +4,7 @@ import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { useAuth } from '@/lib/auth-context';
 import type { Work, ScreenWork } from '@/lib/types';
+import { FONTS, BORDERS, TEXT, RADIUS } from '@/lib/brutalist-design';
 
 // Simple X icon
 const XIcon = ({ className = "w-6 h-6" }: { className?: string }) => (
@@ -89,17 +90,17 @@ export default function VoteBottomSheet({
       aria-labelledby="vote-sheet-title"
     >
       <div
-        className="bg-white dark:bg-surface rounded-t-2xl w-full shadow-2xl transform transition-transform"
+        className={`bg-white dark:bg-black rounded-t-2xl w-full shadow-2xl transform transition-transform border-t ${BORDERS.medium}`}
         onClick={(e) => e.stopPropagation()}
       >
         {/* Header */}
-        <div className="flex items-center justify-between p-4 border-b border-gray-200 dark:border-gray-700">
-          <h2 id="vote-sheet-title" className="text-lg font-bold text-gray-900 dark:text-white">
+        <div className={`flex items-center justify-between p-4 border-b ${BORDERS.subtle}`}>
+          <h2 id="vote-sheet-title" className={`text-base font-bold text-black dark:text-white uppercase tracking-wider`} style={{ fontFamily: FONTS.mono, letterSpacing: '0.1em' }}>
             Quick Vote
           </h2>
           <button
             onClick={onClose}
-            className="p-2 hover:bg-gray-100 dark:hover:bg-gray-800 rounded-full transition-colors"
+            className={`p-2 hover:bg-stone-100 hover:dark:bg-stone-900 ${RADIUS.control} transition-colors`}
             aria-label="Close"
           >
             <XIcon className="w-5 h-5" />
@@ -108,7 +109,7 @@ export default function VoteBottomSheet({
 
         {/* Content */}
         <div className="p-6 pb-8">
-          <p className="text-sm text-gray-600 dark:text-gray-400 mb-4 text-center">
+          <p className={`${TEXT.body} ${TEXT.mutedMedium} mb-4 text-center font-bold`} style={{ fontFamily: FONTS.mono }}>
             Which did you prefer?
           </p>
 
@@ -117,27 +118,30 @@ export default function VoteBottomSheet({
             <button
               onClick={() => handleVote('BOOK')}
               disabled={isSubmitting}
-              className="w-full py-4 bg-blue-600 hover:bg-blue-700 text-white font-semibold rounded-lg transition-colors disabled:opacity-50 disabled:cursor-not-allowed text-lg"
+              className={`w-full py-4 bg-black dark:bg-white text-white dark:text-black font-bold ${RADIUS.control} hover:bg-white hover:dark:bg-black hover:text-black hover:dark:text-white border ${BORDERS.solid} transition-all disabled:opacity-50 disabled:cursor-not-allowed text-base uppercase tracking-wider`}
+              style={{ fontFamily: FONTS.mono, letterSpacing: '0.08em' }}
             >
               📖 Book
             </button>
             <button
               onClick={() => handleVote('SCREEN')}
               disabled={isSubmitting}
-              className="w-full py-4 bg-blue-600 hover:bg-blue-700 text-white font-semibold rounded-lg transition-colors disabled:opacity-50 disabled:cursor-not-allowed text-lg"
+              className={`w-full py-4 bg-black dark:bg-white text-white dark:text-black font-bold ${RADIUS.control} hover:bg-white hover:dark:bg-black hover:text-black hover:dark:text-white border ${BORDERS.solid} transition-all disabled:opacity-50 disabled:cursor-not-allowed text-base uppercase tracking-wider`}
+              style={{ fontFamily: FONTS.mono, letterSpacing: '0.08em' }}
             >
               🎬 Screen
             </button>
             <button
               onClick={() => handleVote('TIE')}
               disabled={isSubmitting}
-              className="w-full py-3 bg-gray-200 dark:bg-gray-700 hover:bg-gray-300 dark:hover:bg-gray-600 text-gray-900 dark:text-white font-medium rounded-lg transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+              className={`w-full py-3 bg-stone-100 dark:bg-stone-900 hover:bg-stone-200 hover:dark:bg-stone-800 text-black dark:text-white font-bold ${RADIUS.control} border ${BORDERS.subtle} transition-all disabled:opacity-50 disabled:cursor-not-allowed uppercase tracking-wider`}
+              style={{ fontFamily: FONTS.mono, letterSpacing: '0.08em' }}
             >
               Both were equally good
             </button>
           </div>
 
-          <p className="text-xs text-center text-gray-500 dark:text-gray-500">
+          <p className={`${TEXT.secondary} text-center ${TEXT.mutedMedium} font-bold`} style={{ fontFamily: FONTS.mono }}>
             1-tap to vote. Faithfulness rating optional.
           </p>
         </div>
