@@ -251,7 +251,7 @@ export default function MatchupScoreboard({
               className={`w-7 h-7 border font-bold text-xs transition-all disabled:opacity-50 rounded-md ${
                 currentRating === rating
                   ? 'bg-black dark:bg-white text-white dark:text-black border-black dark:border-white'
-                  : 'bg-transparent text-black dark:text-white border-black/20 dark:border-white/20'
+                  : 'bg-transparent text-black dark:text-white border-black/20 dark:border-white/20 hover:bg-black hover:dark:bg-white hover:text-white hover:dark:text-black hover:border-black hover:dark:border-white'
               }`}
               style={{
                 fontFamily: 'JetBrains Mono, monospace'
