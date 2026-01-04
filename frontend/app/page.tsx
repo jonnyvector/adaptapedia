@@ -308,7 +308,7 @@ export default async function Home(): Promise<JSX.Element> {
       </div>
 
       {/* How It Works - Simplified */}
-      <div className="container py-12 md:py-20">
+      <div className="container pt-12 md:pt-20 pb-0">
         <div className="text-center mb-12">
           <h2 className={`text-3xl md:text-4xl font-bold mb-3 ${TEXT.primary}`} style={{ fontFamily: FONTS.mono }}>How It Works</h2>
           <p className={`text-lg ${TEXT.mutedMedium} uppercase tracking-wider`} style={{ fontFamily: FONTS.mono }}>Three simple steps to start exploring</p>
