@@ -391,7 +391,36 @@ export default async function Home(): Promise<JSX.Element> {
               <p className={`${TEXT.secondary} ${TEXT.mutedMedium} mb-4`} style={{ fontFamily: FONTS.mono }}>
                 Browse diffs by category, then jump into threads where fans debate what changed (spoiler-safe)
               </p>
-              <div className={`flex flex-col gap-2 ${TEXT.secondary} ${TEXT.mutedMedium}`} style={{ fontFamily: FONTS.mono }}>
+
+              {/* Mini Diff Card Preview */}
+              <div className={`relative border ${BORDERS.medium} bg-stone-50 dark:bg-stone-950 p-3 mb-4`}>
+                <div className={`${TEXT.metadata} ${TEXT.mutedLight} uppercase tracking-wide font-semibold mb-3`} style={{ fontFamily: FONTS.mono }}>Preview</div>
+                <div className={`border ${BORDERS.medium} bg-white dark:bg-black p-3`}>
+                  <div className="mb-2">
+                    <span className={`inline-block px-1.5 py-0.5 ${TEXT.metadata} font-bold bg-black/10 dark:bg-white/10 ${TEXT.primary} border ${BORDERS.medium} uppercase tracking-wider`} style={{ fontFamily: FONTS.mono }}>Character</span>
+                  </div>
+                  <h4 className={`${TEXT.secondary} font-bold mb-2 ${TEXT.primary}`} style={{ fontFamily: FONTS.mono }}>Lex's age changed</h4>
+                  <p className={`${TEXT.metadata} ${TEXT.mutedMedium} mb-3`} style={{ fontFamily: FONTS.mono }}>In the book Lex is 8, in the film she's 13...</p>
+
+                  {/* Mini vote buttons */}
+                  <div className={`flex items-center gap-1.5 text-[8px]`}>
+                    <button className={`inline-flex items-center gap-0.5 px-1 py-0.5 font-bold bg-black dark:bg-white text-white dark:text-black border ${BORDERS.solid} rounded uppercase`} style={{ fontFamily: FONTS.mono }}>
+                      <span>↑</span>
+                      <span className="font-black">(12)</span>
+                    </button>
+                    <button className={`inline-flex items-center gap-0.5 px-1 py-0.5 font-bold ${TEXT.mutedStrong} border ${BORDERS.medium} rounded uppercase`} style={{ fontFamily: FONTS.mono }}>
+                      <span>~</span>
+                      <span className="font-black">(1)</span>
+                    </button>
+                    <button className={`inline-flex items-center gap-0.5 px-1 py-0.5 font-bold ${TEXT.mutedStrong} border ${BORDERS.medium} rounded uppercase`} style={{ fontFamily: FONTS.mono }}>
+                      <span>↓</span>
+                      <span className="font-black">(0)</span>
+                    </button>
+                  </div>
+                </div>
+              </div>
+
+              <div className={`flex flex-col gap-2 ${TEXT.secondary} ${TEXT.mutedMedium} mb-4`} style={{ fontFamily: FONTS.mono }}>
                 <div className="flex items-center gap-2">
                   <svg className={`w-4 h-4 ${TEXT.primary} flex-shrink-0`} fill="currentColor" viewBox="0 0 20 20">
                     <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
