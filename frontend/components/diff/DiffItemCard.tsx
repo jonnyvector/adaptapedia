@@ -295,7 +295,7 @@ export default function DiffItemCard({
               className={`inline-flex items-center justify-center gap-1.5 px-3 py-1.5 ${TEXT.metadata} font-bold border rounded-md transition-all ${
                 userVote === 'ACCURATE'
                   ? `bg-black dark:bg-white ${BORDERS.solid} text-white dark:text-black`
-                  : `bg-white dark:bg-black ${BORDERS.medium} ${TEXT.mutedStrong} hover:${BORDERS.solid}`
+                  : `bg-white dark:bg-black ${BORDERS.medium} ${TEXT.mutedStrong} hover:border-black dark:hover:border-white`
               } ${isVoting ? 'cursor-wait opacity-50' : 'cursor-pointer'}`}
               style={{ fontFamily: FONTS.mono, letterSpacing: LETTER_SPACING.tight }}
               title="This diff is accurate - well-stated and correct"
@@ -313,7 +313,7 @@ export default function DiffItemCard({
               className={`inline-flex items-center justify-center gap-1.5 px-3 py-1.5 ${TEXT.metadata} font-bold border rounded-md transition-all ${
                 userVote === 'NEEDS_NUANCE'
                   ? `bg-black dark:bg-white ${BORDERS.solid} text-white dark:text-black`
-                  : `bg-white dark:bg-black ${BORDERS.medium} ${TEXT.mutedStrong} hover:${BORDERS.solid}`
+                  : `bg-white dark:bg-black ${BORDERS.medium} ${TEXT.mutedStrong} hover:border-black dark:hover:border-white`
               } ${isVoting ? 'cursor-wait opacity-50' : 'cursor-pointer'}`}
               style={{ fontFamily: FONTS.mono, letterSpacing: LETTER_SPACING.tight }}
               title="Mostly correct but needs more context or clarification"
@@ -331,7 +331,7 @@ export default function DiffItemCard({
               className={`inline-flex items-center justify-center gap-1.5 px-3 py-1.5 ${TEXT.metadata} font-bold border rounded-md transition-all ${
                 userVote === 'DISAGREE'
                   ? `bg-black dark:bg-white ${BORDERS.solid} text-white dark:text-black`
-                  : `bg-white dark:bg-black ${BORDERS.medium} ${TEXT.mutedStrong} hover:${BORDERS.solid}`
+                  : `bg-white dark:bg-black ${BORDERS.medium} ${TEXT.mutedStrong} hover:border-black dark:hover:border-white`
               } ${isVoting ? 'cursor-wait opacity-50' : 'cursor-pointer'}`}
               style={{ fontFamily: FONTS.mono, letterSpacing: LETTER_SPACING.tight }}
               title="This diff is inaccurate or misleading"
