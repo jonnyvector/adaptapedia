@@ -339,9 +339,9 @@ export default async function Home(): Promise<JSX.Element> {
                   <span className="uppercase tracking-wider">Genre & year filters</span>
                 </div>
               </div>
-              <Link href="/search?q=dune" className={`mt-4 ${TEXT.secondary} ${TEXT.primary} hover:underline font-bold transition-colors uppercase tracking-wider`} style={{ fontFamily: FONTS.mono }}>
-                Try searching "Dune" →
-              </Link>
+              <div className="mt-4 w-full">
+                <SearchBar placeholder="Try it: Dune, The Shining..." />
+              </div>
             </div>
             {/* Connector arrow - hidden on mobile */}
             <div className={`hidden md:block absolute top-8 -right-4 ${TEXT.mutedMedium}`}>
@@ -375,8 +375,8 @@ export default async function Home(): Promise<JSX.Element> {
                   <span className="uppercase tracking-wider">Categorized diffs</span>
                 </div>
               </div>
-              <Link href="/browse" className={`mt-4 ${TEXT.secondary} ${TEXT.primary} hover:underline font-bold transition-colors uppercase tracking-wider`} style={{ fontFamily: FONTS.mono }}>
-                View popular comparisons →
+              <Link href="/browse" className={`mt-4 ${TEXT.secondary} ${TEXT.mutedMedium} hover:${TEXT.primary} hover:underline transition-colors uppercase tracking-wider text-sm`} style={{ fontFamily: FONTS.mono }}>
+                Browse comparisons →
               </Link>
             </div>
             {/* Connector arrow */}
@@ -411,8 +411,8 @@ export default async function Home(): Promise<JSX.Element> {
                   <span className="uppercase tracking-wider">Earn reputation</span>
                 </div>
               </div>
-              <Link href="/needs-help" className={`mt-4 ${TEXT.secondary} ${TEXT.primary} hover:underline font-bold transition-colors uppercase tracking-wider`} style={{ fontFamily: FONTS.mono }}>
-                Add your first difference →
+              <Link href="/needs-help" className={`mt-4 ${TEXT.secondary} ${TEXT.mutedMedium} hover:${TEXT.primary} hover:underline transition-colors uppercase tracking-wider text-sm`} style={{ fontFamily: FONTS.mono }}>
+                Start contributing →
               </Link>
             </div>
           </div>
