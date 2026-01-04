@@ -457,9 +457,9 @@ export default function ComparisonView({
 
           {/* Masked Diffs - Show these after visible diffs */}
           {maskedDiffs.length > 0 && (
-            <div className={`border-t-2 border-amber-600 dark:border-amber-400 pt-6 sm:pt-8`}>
-              <div className={`mb-4 p-3 sm:p-4 bg-amber-50 dark:bg-amber-950/30 border ${BORDERS.medium} ${RADIUS.control}`}>
-                <h2 className={`text-base sm:text-lg font-bold text-amber-700 dark:text-amber-400 mb-2 flex items-center gap-2`} style={{ fontFamily: FONTS.mono }}>
+            <div className={`border-t ${BORDERS.medium} pt-6 sm:pt-8`}>
+              <div className={`mb-4 p-3 sm:p-4 bg-stone-50 dark:bg-stone-950 border ${BORDERS.medium}`}>
+                <h2 className={`text-base sm:text-lg font-bold text-black dark:text-white mb-2 flex items-center gap-2`} style={{ fontFamily: FONTS.mono }}>
                   <LockClosedIcon className="w-6 h-6" aria-hidden="true" />
                   {maskedDiffs.length} Hidden Difference{maskedDiffs.length !== 1 ? 's' : ''}
                 </h2>
