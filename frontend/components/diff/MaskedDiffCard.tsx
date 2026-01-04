@@ -63,7 +63,7 @@ export default function MaskedDiffCard({
 
       {/* Blurred Preview */}
       <div className={`relative mb-4 overflow-hidden`}>
-        <div className="absolute inset-0 backdrop-blur-xl bg-white/80 dark:bg-black/80 z-10 flex items-center justify-center">
+        <div className="absolute inset-0 backdrop-blur-xl bg-stone-50/95 dark:bg-stone-950/95 z-10 flex items-center justify-center">
           <div className="text-center px-4">
             <div className="mb-2 flex justify-center" aria-hidden="true">
               <LockClosedIcon className={`w-12 h-12 ${TEXT.mutedMedium}`} />
