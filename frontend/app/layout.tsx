@@ -55,7 +55,7 @@ export default function RootLayout({
         <ToastProvider>
           <AuthProvider>
             <Header />
-            <div className="flex-1">
+            <div className="flex-1 bg-white dark:bg-black">
               {children}
             </div>
             <Footer />
