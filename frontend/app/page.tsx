@@ -322,7 +322,7 @@ export default async function Home(): Promise<JSX.Element> {
                 Step 01
               </div>
               <h3 className={`text-2xl font-bold mb-3 ${TEXT.primary}`} style={{ fontFamily: FONTS.mono }}>Search</h3>
-              <p className={`${TEXT.secondary} ${TEXT.mutedMedium} mb-4`} style={{ fontFamily: FONTS.mono }}>
+              <p className={`${TEXT.secondary} ${TEXT.mutedStrong} mb-4 leading-relaxed`} style={{ fontFamily: FONTS.mono }}>
                 Find a book + adaptation fast — even if you type it wrong
               </p>
               {/* Mini Search Results Preview */}
@@ -354,7 +354,7 @@ export default async function Home(): Promise<JSX.Element> {
                 </div>
               </div>
 
-              <div className={`flex flex-col gap-2 ${TEXT.secondary} ${TEXT.mutedMedium} mb-4`} style={{ fontFamily: FONTS.mono }}>
+              <div className={`flex flex-col gap-2 ${TEXT.secondary} ${TEXT.mutedStrong} mb-4`} style={{ fontFamily: FONTS.mono }}>
                 <div className="flex items-center gap-2">
                   <svg className={`w-4 h-4 ${TEXT.primary} flex-shrink-0`} fill="currentColor" viewBox="0 0 20 20">
                     <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
@@ -388,7 +388,7 @@ export default async function Home(): Promise<JSX.Element> {
                 Step 02
               </div>
               <h3 className={`text-2xl font-bold mb-3 ${TEXT.primary}`} style={{ fontFamily: FONTS.mono }}>Compare & Discuss</h3>
-              <p className={`${TEXT.secondary} ${TEXT.mutedMedium} mb-4`} style={{ fontFamily: FONTS.mono }}>
+              <p className={`${TEXT.secondary} ${TEXT.mutedStrong} mb-4 leading-relaxed`} style={{ fontFamily: FONTS.mono }}>
                 Browse diffs by category, then jump into threads where fans debate what changed (spoiler-safe)
               </p>
 
@@ -420,7 +420,7 @@ export default async function Home(): Promise<JSX.Element> {
                 </div>
               </div>
 
-              <div className={`flex flex-col gap-2 ${TEXT.secondary} ${TEXT.mutedMedium} mb-4`} style={{ fontFamily: FONTS.mono }}>
+              <div className={`flex flex-col gap-2 ${TEXT.secondary} ${TEXT.mutedStrong} mb-4`} style={{ fontFamily: FONTS.mono }}>
                 <div className="flex items-center gap-2">
                   <svg className={`w-4 h-4 ${TEXT.primary} flex-shrink-0`} fill="currentColor" viewBox="0 0 20 20">
                     <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
@@ -434,7 +434,7 @@ export default async function Home(): Promise<JSX.Element> {
                   <span className="uppercase tracking-wider">Categorized diffs</span>
                 </div>
               </div>
-              <Link href="/browse" className={`mt-4 inline-flex items-center gap-1 ${TEXT.secondary} ${TEXT.mutedMedium} hover:${TEXT.primary} hover:underline transition-all uppercase tracking-wider text-sm group`} style={{ fontFamily: FONTS.mono }}>
+              <Link href="/browse" className={`inline-flex items-center gap-1 ${TEXT.secondary} ${TEXT.mutedMedium} hover:${TEXT.primary} hover:underline transition-all uppercase tracking-wider text-sm group`} style={{ fontFamily: FONTS.mono }}>
                 Browse comparisons
                 <span className="inline-block transition-transform group-hover:translate-x-0.5">→</span>
               </Link>
@@ -454,7 +454,7 @@ export default async function Home(): Promise<JSX.Element> {
                 Step 03
               </div>
               <h3 className={`text-2xl font-bold mb-3 ${TEXT.primary}`} style={{ fontFamily: FONTS.mono }}>Contribute</h3>
-              <p className={`${TEXT.secondary} ${TEXT.mutedMedium} mb-4`} style={{ fontFamily: FONTS.mono }}>
+              <p className={`${TEXT.secondary} ${TEXT.mutedStrong} mb-4 leading-relaxed`} style={{ fontFamily: FONTS.mono }}>
                 Add the differences you noticed. Earn votes, build reputation, and help shape the consensus
               </p>
 
@@ -488,7 +488,7 @@ export default async function Home(): Promise<JSX.Element> {
                 </div>
               </div>
 
-              <div className={`flex flex-col gap-2 ${TEXT.secondary} ${TEXT.mutedMedium} mb-4`} style={{ fontFamily: FONTS.mono }}>
+              <div className={`flex flex-col gap-2 ${TEXT.secondary} ${TEXT.mutedStrong} mb-4`} style={{ fontFamily: FONTS.mono }}>
                 <div className="flex items-center gap-2">
                   <svg className={`w-4 h-4 ${TEXT.primary} flex-shrink-0`} fill="currentColor" viewBox="0 0 20 20">
                     <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
@@ -502,7 +502,7 @@ export default async function Home(): Promise<JSX.Element> {
                   <span className="uppercase tracking-wider">Earn reputation</span>
                 </div>
               </div>
-              <Link href="/needs-help" className={`mt-4 inline-flex items-center gap-1 ${TEXT.secondary} ${TEXT.mutedMedium} hover:${TEXT.primary} hover:underline transition-all uppercase tracking-wider text-sm group`} style={{ fontFamily: FONTS.mono }}>
+              <Link href="/needs-help" className={`inline-flex items-center gap-1 ${TEXT.secondary} ${TEXT.mutedMedium} hover:${TEXT.primary} hover:underline transition-all uppercase tracking-wider text-sm group`} style={{ fontFamily: FONTS.mono }}>
                 Start contributing
                 <span className="inline-block transition-transform group-hover:translate-x-0.5">→</span>
               </Link>
