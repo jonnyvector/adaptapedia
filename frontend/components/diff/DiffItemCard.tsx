@@ -154,25 +154,6 @@ export default function DiffItemCard({
     <div id={`diff-${diff.id}`} className={`border ${BORDERS.medium} bg-stone-50 dark:bg-stone-950 hover:border-black hover:dark:border-white transition-all overflow-hidden`}>
       {/* Compact header row - always visible */}
       <div className="p-3 sm:p-4">
-        {/* Title row with claim - clickable header */}
-        <button
-          onClick={() => hasDetail && (isTextClamped || detailExpanded) && setDetailExpanded(!detailExpanded)}
-          className={`flex items-start gap-2 mb-2 w-full text-left ${hasDetail && (isTextClamped || detailExpanded) ? 'cursor-pointer group' : 'cursor-default'}`}
-          disabled={!hasDetail || (!isTextClamped && !detailExpanded)}
-          aria-label={hasDetail && (isTextClamped || detailExpanded) ? (detailExpanded ? 'Collapse details' : 'Expand details') : undefined}
-          title={hasDetail && isTextClamped && !detailExpanded ? 'Expand for details' : undefined}
-        >
-          <h3 className="text-base font-semibold flex-1 text-foreground leading-tight group-hover:text-link group-hover:underline decoration-link/30 underline-offset-2 transition-all">
-            {diff.claim}
-          </h3>
-          {/* Chevron indicator - only show if text is clamped or already expanded */}
-          {hasDetail && (isTextClamped || detailExpanded) && (
-            <span className={`text-muted group-hover:text-link transition-all duration-200 text-xl leading-none mt-0.5 font-semibold ${detailExpanded ? 'rotate-90' : ''}`} style={{ display: 'inline-block', transform: detailExpanded ? 'rotate(90deg)' : 'rotate(0deg)' }}>
-              ›
-            </span>
-          )}
-        </button>
-
         {/* Badges row - smaller, tag-like */}
         <div className="flex flex-wrap items-center gap-2 mb-2">
           <span
@@ -191,6 +172,25 @@ export default function DiffItemCard({
             </span>
           )}
         </div>
+
+        {/* Title row with claim - clickable header */}
+        <button
+          onClick={() => hasDetail && (isTextClamped || detailExpanded) && setDetailExpanded(!detailExpanded)}
+          className={`flex items-start gap-2 mb-2 w-full text-left ${hasDetail && (isTextClamped || detailExpanded) ? 'cursor-pointer group' : 'cursor-default'}`}
+          disabled={!hasDetail || (!isTextClamped && !detailExpanded)}
+          aria-label={hasDetail && (isTextClamped || detailExpanded) ? (detailExpanded ? 'Collapse details' : 'Expand details') : undefined}
+          title={hasDetail && isTextClamped && !detailExpanded ? 'Expand for details' : undefined}
+        >
+          <h3 className="text-base font-semibold flex-1 text-black dark:text-white leading-tight group-hover:text-link group-hover:underline decoration-link/30 underline-offset-2 transition-all" style={{ fontFamily: FONTS.mono }}>
+            {diff.claim}
+          </h3>
+          {/* Chevron indicator - only show if text is clamped or already expanded */}
+          {hasDetail && (isTextClamped || detailExpanded) && (
+            <span className={`text-muted group-hover:text-link transition-all duration-200 text-xl leading-none mt-0.5 font-semibold ${detailExpanded ? 'rotate-90' : ''}`} style={{ display: 'inline-block', transform: detailExpanded ? 'rotate(90deg)' : 'rotate(0deg)' }}>
+              ›
+            </span>
+          )}
+        </button>
 
         {/* Detail preview/full (when not expanded, show 2 lines max) */}
         {hasDetail && !detailExpanded && (
