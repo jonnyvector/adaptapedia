@@ -33,7 +33,7 @@ export default function ComparisonCard({ comparison, showTrendingBadge = false }
   return (
     <Link
       href={comparisonUrl}
-      className={`group block border ${BORDERS.medium} overflow-hidden hover:border-black hover:dark:border-white transition-all duration-200 bg-white dark:bg-black`}
+      className={`group block border ${BORDERS.medium} overflow-hidden hover:border-black hover:dark:border-white transition-all duration-200 bg-stone-50 dark:bg-stone-950`}
     >
       {/* Visual: Book Cover ↔ Movie Poster */}
       <div className="relative flex h-48 bg-stone-50 dark:bg-stone-950">

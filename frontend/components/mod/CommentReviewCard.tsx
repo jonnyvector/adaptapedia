@@ -48,7 +48,7 @@ export default function CommentReviewCard({
   };
 
   return (
-    <div className={`border ${BORDERS.medium} rounded-md p-6 bg-white dark:bg-black`}>
+    <div className={`border ${BORDERS.medium} rounded-md p-6 bg-stone-50 dark:bg-stone-950`}>
       {/* Status Badge */}
       <div className="mb-4">
         <span
