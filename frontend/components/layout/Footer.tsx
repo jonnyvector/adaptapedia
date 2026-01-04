@@ -19,7 +19,7 @@ export default function Footer(): JSX.Element {
 
           {/* Links Section */}
           <div>
-            <h4 className={`font-bold text-sm sm:text-base mb-3 sm:mb-4 text-black dark:text-white ${monoUppercase}`} style={{ fontFamily: FONTS.mono, letterSpacing: LETTER_SPACING.wide }}>Resources</h4>
+            <h4 className={`font-bold text-sm sm:text-base mb-3 sm:mb-4 text-black dark:text-white ${monoUppercase}`} style={{ fontFamily: FONTS.mono, letterSpacing: LETTER_SPACING.wide }}>Index</h4>
             <ul className={`space-y-2 ${TEXT.secondary}`}>
               <li>
                 <Link href="/browse" className={`${TEXT.mutedMedium} hover:text-black hover:dark:text-white inline-block min-h-[28px] flex items-center transition-colors`} style={{ fontFamily: FONTS.mono }}>
