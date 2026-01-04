@@ -167,7 +167,7 @@ export default async function Home(): Promise<JSX.Element> {
                 </div>
 
                 {/* Mini vote control */}
-                <div className={`inline-flex items-stretch border ${BORDERS.medium} overflow-hidden ${TEXT.metadata}`}>
+                <div className={`inline-flex items-stretch border ${BORDERS.medium} overflow-hidden ${RADIUS.control} ${TEXT.metadata}`}>
                   <button className={`inline-flex items-center justify-center gap-1 px-2 py-0.5 font-bold bg-black dark:bg-white text-white dark:text-black uppercase tracking-wider`} style={{ fontFamily: FONTS.mono }}>
                     <span>↑</span>
                     <span>Accurate</span>
@@ -211,7 +211,7 @@ export default async function Home(): Promise<JSX.Element> {
                 <div className="flex items-center justify-between mb-3">
                   <span className={`${TEXT.metadata} font-bold ${TEXT.mutedMedium} uppercase tracking-wide`} style={{ fontFamily: FONTS.mono }}>Spoiler Level</span>
                 </div>
-                <div className={`inline-flex items-stretch border ${BORDERS.medium} overflow-hidden w-full`}>
+                <div className={`inline-flex items-stretch border ${BORDERS.medium} overflow-hidden ${RADIUS.control} w-full`}>
                   <button className={`flex-1 inline-flex items-center justify-center gap-1.5 px-3 py-2 ${TEXT.metadata} font-bold bg-black dark:bg-white text-white dark:text-black uppercase tracking-wider`} style={{ fontFamily: FONTS.mono }}>
                     <span className={`inline-block w-2 h-2 border ${BORDERS.medium} bg-white dark:bg-black`}></span>
                     <span>Safe</span>
