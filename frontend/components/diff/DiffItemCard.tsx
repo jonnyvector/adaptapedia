@@ -201,7 +201,8 @@ export default function DiffItemCard({
             {isTextClamped && (
               <button
                 onClick={() => setDetailExpanded(true)}
-                className="text-xs text-link hover:underline mt-1"
+                className={`${TEXT.metadata} ${TEXT.primary} hover:underline mt-1 font-bold uppercase tracking-wider`}
+                style={{ fontFamily: FONTS.mono }}
               >
                 Read more
               </button>
@@ -359,11 +360,12 @@ export default function DiffItemCard({
         {/* Meta row - moved to bottom for quieter hierarchy */}
         <div className="mt-4 pt-3 border-t border-border/[0.02] flex flex-wrap items-center justify-between gap-2 text-xs">
           <div className="flex flex-wrap items-center gap-x-3 gap-y-1 text-muted">
-            <span>
+            <span style={{ fontFamily: FONTS.mono }}>
               Added by{' '}
               <Link
                 href={`/u/${diff.created_by_username}`}
-                className="text-link hover:underline font-medium"
+                className={`${TEXT.primary} hover:underline font-bold`}
+                style={{ fontFamily: FONTS.mono }}
               >
                 @{diff.created_by_username}
               </Link>
@@ -393,7 +395,8 @@ export default function DiffItemCard({
                   setAutoOpenCommentForm(false);
                 }
               }}
-              className="flex items-center gap-1.5 text-link hover:text-link-hover font-medium transition-colors"
+              className={`flex items-center gap-1.5 ${TEXT.primary} hover:underline font-bold transition-colors`}
+              style={{ fontFamily: FONTS.mono }}
             >
               <svg className="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z" />
