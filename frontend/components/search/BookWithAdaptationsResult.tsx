@@ -4,6 +4,7 @@ import { useState } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
 import type { WorkWithAdaptations } from '@/lib/types';
+import { FONTS, LETTER_SPACING, BORDERS, TEXT, monoUppercase } from '@/lib/brutalist-design';
 
 interface BookWithAdaptationsResultProps {
   work: WorkWithAdaptations;
@@ -31,36 +32,36 @@ export default function BookWithAdaptationsResult({ work }: BookWithAdaptationsR
   const otherAdaptations = work.adaptations.slice(1);
 
   return (
-    <div className="border border-border rounded-lg p-4 hover:border-link/50 transition-colors bg-card">
+    <div className={`border ${BORDERS.medium} rounded-md p-4 hover:border-black hover:dark:border-white transition-colors bg-white dark:bg-black`}>
       {/* Book Info */}
       <div className="mb-3">
         <div className="flex items-start justify-between gap-3">
           <div className="flex-1 min-w-0">
-            <Link href={`/book/${work.slug}`} className="text-link hover:underline">
-              <h3 className="text-lg font-semibold truncate">{work.title}</h3>
+            <Link href={`/book/${work.slug}`} className="text-black dark:text-white hover:opacity-70">
+              <h3 className={`${TEXT.body} font-bold truncate`} style={{ fontFamily: FONTS.mono }}>{work.title}</h3>
             </Link>
             <div className="flex items-center gap-2 flex-wrap mt-1">
               {work.author && (
-                <span className="text-sm text-muted">by {work.author}</span>
+                <span className={`${TEXT.secondary} ${TEXT.mutedMedium}`} style={{ fontFamily: FONTS.sans }}>by {work.author}</span>
               )}
               {work.year && (
-                <span className="text-sm text-muted">({work.year})</span>
+                <span className={`${TEXT.secondary} ${TEXT.mutedMedium}`} style={{ fontFamily: FONTS.mono }}>({work.year})</span>
               )}
               {work.genre && (
-                <span className="text-xs px-2 py-0.5 rounded-full bg-muted/30 text-muted">
+                <span className={`${TEXT.metadata} px-2 py-0.5 rounded-md bg-stone-100 dark:bg-stone-900 ${TEXT.mutedMedium} font-bold ${monoUppercase}`} style={{ fontFamily: FONTS.mono, letterSpacing: LETTER_SPACING.wide }}>
                   {work.genre}
                 </span>
               )}
             </div>
           </div>
           {work.cover_url && (
-            <div className="relative w-16 h-24 flex-shrink-0">
+            <div className={`relative w-16 h-24 flex-shrink-0 border ${BORDERS.medium} rounded-md overflow-hidden`}>
               <Image
                 src={work.cover_url}
                 alt={`${work.title} cover`}
                 fill
                 sizes="64px"
-                className="object-cover rounded"
+                className="object-cover"
                 unoptimized
               />
             </div>
@@ -74,7 +75,7 @@ export default function BookWithAdaptationsResult({ work }: BookWithAdaptationsR
               href={`/compare/${work.slug}/${bestMatch.slug}`}
               className="block w-full sm:w-auto"
             >
-              <button className="w-full sm:w-auto px-6 py-3 bg-link text-white font-medium rounded-lg hover:bg-link/90 transition-colors shadow-sm">
+              <button className={`w-full sm:w-auto px-6 py-3 bg-black dark:bg-white text-white dark:text-black font-bold rounded-md border ${BORDERS.solid} hover:opacity-90 transition-opacity ${TEXT.secondary} ${monoUppercase}`} style={{ fontFamily: FONTS.mono, letterSpacing: LETTER_SPACING.tight }}>
                 Compare with {bestMatch.title} ({bestMatch.year} {bestMatch.type === 'MOVIE' ? 'Movie' : 'TV Series'})
               </button>
             </Link>
@@ -84,7 +85,8 @@ export default function BookWithAdaptationsResult({ work }: BookWithAdaptationsR
               <div className="mt-2">
                 <button
                   onClick={() => setShowAllAdaptations(!showAllAdaptations)}
-                  className="text-sm text-muted hover:text-link transition-colors"
+                  className={`${TEXT.secondary} ${TEXT.mutedMedium} hover:text-black hover:dark:text-white transition-colors`}
+                  style={{ fontFamily: FONTS.mono }}
                 >
                   or view {otherAdaptations.length} other adaptation{otherAdaptations.length !== 1 ? 's' : ''} {showAllAdaptations ? '▴' : '▾'}
                 </button>
@@ -94,14 +96,14 @@ export default function BookWithAdaptationsResult({ work }: BookWithAdaptationsR
         )}
 
         {work.summary && (
-          <p className="text-sm text-muted mt-3 line-clamp-2">{work.summary}</p>
+          <p className={`${TEXT.secondary} ${TEXT.mutedMedium} mt-3 line-clamp-2`} style={{ fontFamily: FONTS.sans }}>{work.summary}</p>
         )}
       </div>
 
       {/* Other Adaptations - Only show if multiple adaptations AND expanded */}
       {otherAdaptations.length > 0 && showAllAdaptations && (
-        <div className="border-t border-border pt-3">
-          <h4 className="text-sm font-medium text-muted mb-2">
+        <div className={`border-t ${BORDERS.subtle} pt-3`}>
+          <h4 className={`${TEXT.secondary} font-bold ${TEXT.mutedMedium} mb-2 ${monoUppercase}`} style={{ fontFamily: FONTS.mono, letterSpacing: LETTER_SPACING.wide }}>
             Other Adaptations
           </h4>
 
@@ -110,50 +112,50 @@ export default function BookWithAdaptationsResult({ work }: BookWithAdaptationsR
               <Link
                 key={adaptation.id}
                 href={`/compare/${work.slug}/${adaptation.slug}`}
-                className="flex items-center justify-between gap-3 p-3 rounded-lg bg-muted/10 hover:bg-muted/20 border border-transparent hover:border-link/30 transition-colors group"
+                className={`flex items-center justify-between gap-3 p-3 rounded-md bg-stone-50 dark:bg-stone-950 border ${BORDERS.medium} hover:border-black hover:dark:border-white transition-colors group`}
               >
                 <div className="flex-1 min-w-0">
                   <div className="flex items-baseline gap-2">
-                    <span className="font-medium text-foreground group-hover:text-link transition-colors">
+                    <span className={`font-bold ${TEXT.secondary} text-black dark:text-white group-hover:opacity-70 transition-opacity`} style={{ fontFamily: FONTS.mono }}>
                       {adaptation.title}
                     </span>
                     {adaptation.year && (
-                      <span className="text-sm text-muted">({adaptation.year})</span>
+                      <span className={`${TEXT.metadata} ${TEXT.mutedMedium}`} style={{ fontFamily: FONTS.mono }}>({adaptation.year})</span>
                     )}
                   </div>
                   <div className="flex items-center gap-2 mt-1 flex-wrap">
-                    <span className="text-xs px-2 py-0.5 rounded-full bg-muted/30 text-muted">
+                    <span className={`${TEXT.metadata} px-2 py-0.5 rounded-md bg-stone-100 dark:bg-stone-900 ${TEXT.mutedMedium} font-bold ${monoUppercase}`} style={{ fontFamily: FONTS.mono, letterSpacing: LETTER_SPACING.wide }}>
                       {adaptation.type === 'MOVIE' ? 'Movie' : 'TV Series'}
                     </span>
-                    <span className="text-muted">•</span>
+                    <span className={TEXT.mutedMedium}>•</span>
                     {adaptation.diff_count > 0 ? (
                       <>
-                        <span className="text-xs text-muted">
-                          <span className="font-mono font-semibold">{adaptation.diff_count}</span> diffs
+                        <span className={`${TEXT.metadata} ${TEXT.mutedMedium}`} style={{ fontFamily: FONTS.mono }}>
+                          <span className="font-bold">{adaptation.diff_count}</span> diffs
                         </span>
                         {adaptation.last_diff_updated && (
                           <>
-                            <span className="text-muted">•</span>
-                            <span className="text-xs text-muted">
+                            <span className={TEXT.mutedMedium}>•</span>
+                            <span className={`${TEXT.metadata} ${TEXT.mutedMedium}`} style={{ fontFamily: FONTS.mono }}>
                               updated {getRelativeTime(adaptation.last_diff_updated)}
                             </span>
                           </>
                         )}
                       </>
                     ) : (
-                      <span className="text-xs text-muted/70 italic">No diffs yet</span>
+                      <span className={`${TEXT.metadata} ${TEXT.mutedMedium} italic`} style={{ fontFamily: FONTS.sans }}>No diffs yet</span>
                     )}
                     {adaptation.diff_count < 3 && adaptation.diff_count > 0 && (
                       <>
-                        <span className="text-muted">•</span>
-                        <span className="text-xs px-2 py-0.5 rounded-full bg-warn/20 text-warn">
+                        <span className={TEXT.mutedMedium}>•</span>
+                        <span className={`${TEXT.metadata} px-2 py-0.5 rounded-md bg-amber-100 dark:bg-amber-950/30 text-amber-800 dark:text-amber-400 font-bold ${monoUppercase}`} style={{ fontFamily: FONTS.mono, letterSpacing: LETTER_SPACING.wide }}>
                           Needs work
                         </span>
                       </>
                     )}
                   </div>
                 </div>
-                <div className="text-sm font-medium text-link group-hover:underline flex-shrink-0">
+                <div className={`${TEXT.secondary} font-bold text-black dark:text-white group-hover:opacity-70 flex-shrink-0`} style={{ fontFamily: FONTS.mono }}>
                   Compare →
                 </div>
               </Link>
@@ -164,10 +166,10 @@ export default function BookWithAdaptationsResult({ work }: BookWithAdaptationsR
 
       {/* No adaptations fallback */}
       {work.adaptations.length === 0 && (
-        <div className="border-t border-border pt-3">
-          <p className="text-sm text-muted italic">
+        <div className={`border-t ${BORDERS.subtle} pt-3`}>
+          <p className={`${TEXT.secondary} ${TEXT.mutedMedium} italic`} style={{ fontFamily: FONTS.sans }}>
             No adaptations found yet.{' '}
-            <Link href={`/book/${work.slug}`} className="text-link hover:underline">
+            <Link href={`/book/${work.slug}`} className="text-black dark:text-white hover:opacity-70" style={{ fontFamily: FONTS.mono }}>
               View book page
             </Link>
           </p>

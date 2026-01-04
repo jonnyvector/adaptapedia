@@ -1,6 +1,7 @@
 'use client';
 
 import { useState } from 'react';
+import { FONTS, LETTER_SPACING, BORDERS, TEXT, monoUppercase } from '@/lib/brutalist-design';
 
 interface ModerationActionsProps {
   type: 'diff' | 'comment';
@@ -70,11 +71,12 @@ export default function ModerationActions({
       {/* Action Messages */}
       {actionMessage && (
         <div
-          className={`p-3 rounded-lg text-sm ${
+          className={`p-3 rounded-md border ${TEXT.secondary} ${
             actionMessage.type === 'success'
-              ? 'bg-green-100 text-green-800 border border-green-200'
-              : 'bg-red-100 text-red-800 border border-red-200'
+              ? `bg-green-100 dark:bg-green-950/30 text-green-800 dark:text-green-400 ${BORDERS.medium} border-green-600 dark:border-green-400`
+              : `bg-red-100 dark:bg-red-950/30 text-red-800 dark:text-red-400 ${BORDERS.medium} border-red-600 dark:border-red-400`
           }`}
+          style={{ fontFamily: FONTS.mono }}
         >
           {actionMessage.text}
         </div>
@@ -85,7 +87,8 @@ export default function ModerationActions({
         <button
           onClick={() => handleAction(onApprove, 'Approved successfully')}
           disabled={disabled || isLoading}
-          className="px-4 py-2 bg-green-600 text-white rounded hover:bg-green-700 disabled:bg-gray-300 disabled:cursor-not-allowed transition-colors"
+          className={`px-4 py-2 bg-green-600 dark:bg-green-700 text-white rounded-md border ${BORDERS.solid} hover:opacity-90 disabled:bg-black/20 disabled:dark:bg-white/20 disabled:cursor-not-allowed transition-opacity ${TEXT.secondary} font-bold ${monoUppercase}`}
+          style={{ fontFamily: FONTS.mono, letterSpacing: LETTER_SPACING.tight }}
         >
           {isLoading ? 'Processing...' : 'Approve'}
         </button>
@@ -94,7 +97,8 @@ export default function ModerationActions({
           <button
             onClick={() => setShowRejectInput(!showRejectInput)}
             disabled={disabled || isLoading}
-            className="px-4 py-2 bg-red-600 text-white rounded hover:bg-red-700 disabled:bg-gray-300 disabled:cursor-not-allowed transition-colors"
+            className={`px-4 py-2 bg-red-600 dark:bg-red-700 text-white rounded-md border ${BORDERS.solid} hover:opacity-90 disabled:bg-black/20 disabled:dark:bg-white/20 disabled:cursor-not-allowed transition-opacity ${TEXT.secondary} font-bold ${monoUppercase}`}
+            style={{ fontFamily: FONTS.mono, letterSpacing: LETTER_SPACING.tight }}
           >
             Reject
           </button>
@@ -106,7 +110,8 @@ export default function ModerationActions({
               handleAction(onFlag, 'Flagged for further review')
             }
             disabled={disabled || isLoading}
-            className="px-4 py-2 bg-yellow-600 text-white rounded hover:bg-yellow-700 disabled:bg-gray-300 disabled:cursor-not-allowed transition-colors"
+            className={`px-4 py-2 bg-amber-600 dark:bg-amber-700 text-white rounded-md border ${BORDERS.solid} hover:opacity-90 disabled:bg-black/20 disabled:dark:bg-white/20 disabled:cursor-not-allowed transition-opacity ${TEXT.secondary} font-bold ${monoUppercase}`}
+            style={{ fontFamily: FONTS.mono, letterSpacing: LETTER_SPACING.tight }}
           >
             Flag
           </button>
@@ -116,7 +121,8 @@ export default function ModerationActions({
           <button
             onClick={() => handleAction(onHide, 'Comment hidden')}
             disabled={disabled || isLoading}
-            className="px-4 py-2 bg-orange-600 text-white rounded hover:bg-orange-700 disabled:bg-gray-300 disabled:cursor-not-allowed transition-colors"
+            className={`px-4 py-2 bg-orange-600 dark:bg-orange-700 text-white rounded-md border ${BORDERS.solid} hover:opacity-90 disabled:bg-black/20 disabled:dark:bg-white/20 disabled:cursor-not-allowed transition-opacity ${TEXT.secondary} font-bold ${monoUppercase}`}
+            style={{ fontFamily: FONTS.mono, letterSpacing: LETTER_SPACING.tight }}
           >
             Hide
           </button>
@@ -126,7 +132,8 @@ export default function ModerationActions({
           <button
             onClick={() => setShowDeleteConfirm(true)}
             disabled={disabled || isLoading}
-            className="px-4 py-2 bg-red-600 text-white rounded hover:bg-red-700 disabled:bg-gray-300 disabled:cursor-not-allowed transition-colors"
+            className={`px-4 py-2 bg-red-600 dark:bg-red-700 text-white rounded-md border ${BORDERS.solid} hover:opacity-90 disabled:bg-black/20 disabled:dark:bg-white/20 disabled:cursor-not-allowed transition-opacity ${TEXT.secondary} font-bold ${monoUppercase}`}
+            style={{ fontFamily: FONTS.mono, letterSpacing: LETTER_SPACING.tight }}
           >
             Delete
           </button>
@@ -135,22 +142,24 @@ export default function ModerationActions({
 
       {/* Reject Input */}
       {showRejectInput && onReject && (
-        <div className="border border-gray-300 rounded-lg p-4 bg-gray-50">
-          <label className="block text-sm font-medium mb-2">
+        <div className={`border ${BORDERS.medium} rounded-md p-4 bg-stone-50 dark:bg-stone-950`}>
+          <label className={`block ${TEXT.secondary} font-bold mb-2 ${monoUppercase} text-black dark:text-white`} style={{ fontFamily: FONTS.mono, letterSpacing: LETTER_SPACING.wide }}>
             Rejection Reason (optional)
           </label>
           <textarea
             value={rejectReason}
             onChange={(e) => setRejectReason(e.target.value)}
             placeholder="Explain why this content is being rejected..."
-            className="w-full p-2 border border-gray-300 rounded mb-3 min-h-[80px] bg-surface text-foreground"
+            className={`w-full p-2 border ${BORDERS.medium} rounded-md mb-3 min-h-[80px] bg-white dark:bg-black text-black dark:text-white ${TEXT.secondary} focus:outline-none focus:border-black focus:dark:border-white`}
+            style={{ fontFamily: FONTS.sans }}
             disabled={isLoading}
           />
           <div className="flex gap-2">
             <button
               onClick={handleReject}
               disabled={isLoading}
-              className="px-4 py-2 bg-red-600 text-white rounded hover:bg-red-700 disabled:bg-gray-300 transition-colors"
+              className={`px-4 py-2 bg-red-600 dark:bg-red-700 text-white rounded-md border ${BORDERS.solid} hover:opacity-90 disabled:bg-black/20 disabled:dark:bg-white/20 transition-opacity ${TEXT.secondary} font-bold ${monoUppercase}`}
+              style={{ fontFamily: FONTS.mono, letterSpacing: LETTER_SPACING.tight }}
             >
               Confirm Reject
             </button>
@@ -160,7 +169,8 @@ export default function ModerationActions({
                 setRejectReason('');
               }}
               disabled={isLoading}
-              className="px-4 py-2 bg-gray-300 text-gray-700 rounded hover:bg-gray-400 transition-colors"
+              className={`px-4 py-2 bg-stone-300 dark:bg-stone-700 text-black dark:text-white rounded-md border ${BORDERS.solid} hover:opacity-90 transition-opacity ${TEXT.secondary} font-bold ${monoUppercase}`}
+              style={{ fontFamily: FONTS.mono, letterSpacing: LETTER_SPACING.tight }}
             >
               Cancel
             </button>
@@ -170,8 +180,8 @@ export default function ModerationActions({
 
       {/* Delete Confirmation */}
       {showDeleteConfirm && onDelete && (
-        <div className="border border-red-300 rounded-lg p-4 bg-red-50">
-          <p className="text-sm font-medium mb-3">
+        <div className={`border ${BORDERS.medium} border-red-600 dark:border-red-400 rounded-md p-4 bg-red-50 dark:bg-red-950/20`}>
+          <p className={`${TEXT.secondary} font-bold mb-3 text-red-800 dark:text-red-400`} style={{ fontFamily: FONTS.mono }}>
             Are you sure you want to permanently delete this comment? This
             action cannot be undone.
           </p>
@@ -179,14 +189,16 @@ export default function ModerationActions({
             <button
               onClick={handleDelete}
               disabled={isLoading}
-              className="px-4 py-2 bg-red-600 text-white rounded hover:bg-red-700 disabled:bg-gray-300 transition-colors"
+              className={`px-4 py-2 bg-red-600 dark:bg-red-700 text-white rounded-md border ${BORDERS.solid} hover:opacity-90 disabled:bg-black/20 disabled:dark:bg-white/20 transition-opacity ${TEXT.secondary} font-bold ${monoUppercase}`}
+              style={{ fontFamily: FONTS.mono, letterSpacing: LETTER_SPACING.tight }}
             >
               Confirm Delete
             </button>
             <button
               onClick={() => setShowDeleteConfirm(false)}
               disabled={isLoading}
-              className="px-4 py-2 bg-gray-300 text-gray-700 rounded hover:bg-gray-400 transition-colors"
+              className={`px-4 py-2 bg-stone-300 dark:bg-stone-700 text-black dark:text-white rounded-md border ${BORDERS.solid} hover:opacity-90 transition-opacity ${TEXT.secondary} font-bold ${monoUppercase}`}
+              style={{ fontFamily: FONTS.mono, letterSpacing: LETTER_SPACING.tight }}
             >
               Cancel
             </button>

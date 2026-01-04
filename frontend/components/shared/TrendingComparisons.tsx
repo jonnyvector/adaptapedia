@@ -4,6 +4,7 @@ import { useEffect, useState } from 'react';
 import { api } from '@/lib/api';
 import type { TrendingComparison } from '@/lib/types';
 import ComparisonCard from '@/components/browse/ComparisonCard';
+import { FONTS, TEXT } from '@/lib/brutalist-design';
 
 interface TrendingComparisonsProps {
   limit?: number;
@@ -36,9 +37,9 @@ export default function TrendingComparisons({ limit = 6 }: TrendingComparisonsPr
     return (
       <div className="space-y-3">
         {[...Array(3)].map((_, i) => (
-          <div key={i} className="card animate-pulse">
-            <div className="h-4 bg-muted/20 rounded w-3/4 mb-2"></div>
-            <div className="h-3 bg-muted/20 rounded w-1/2"></div>
+          <div key={i} className="animate-pulse">
+            <div className="h-4 bg-black/10 dark:bg-white/10 rounded-md w-3/4 mb-2"></div>
+            <div className="h-3 bg-black/10 dark:bg-white/10 rounded-md w-1/2"></div>
           </div>
         ))}
       </div>
@@ -47,8 +48,8 @@ export default function TrendingComparisons({ limit = 6 }: TrendingComparisonsPr
 
   if (error || trending.length === 0) {
     return (
-      <div className="card-subtle text-center py-8">
-        <p className="text-secondary">
+      <div className="text-center py-8">
+        <p className={`${TEXT.secondary} ${TEXT.mutedMedium}`} style={{ fontFamily: FONTS.mono }}>
           {error || 'No trending comparisons available yet'}
         </p>
       </div>

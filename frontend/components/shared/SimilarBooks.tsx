@@ -1,5 +1,6 @@
 import type { SimilarBook } from '@/lib/types';
 import Link from 'next/link';
+import { FONTS, LETTER_SPACING, BORDERS, TEXT, monoUppercase } from '@/lib/brutalist-design';
 
 interface SimilarBooksProps {
   books: SimilarBook[];
@@ -11,9 +12,9 @@ export default function SimilarBooks({ books }: SimilarBooksProps): JSX.Element 
   }
 
   return (
-    <div className="mt-8 border-t border-border pt-8">
-      <h2 className="text-2xl font-semibold mb-4">Similar Books</h2>
-      <p className="text-muted mb-6 text-sm">
+    <div className={`mt-8 border-t ${BORDERS.subtle} pt-8`}>
+      <h2 className={`text-2xl font-bold mb-4 text-black dark:text-white ${monoUppercase}`} style={{ fontFamily: FONTS.mono, letterSpacing: LETTER_SPACING.wider }}>Similar Books</h2>
+      <p className={`${TEXT.secondary} ${TEXT.mutedMedium} mb-6`} style={{ fontFamily: FONTS.sans }}>
         Other books you might be interested in exploring
       </p>
 
@@ -22,10 +23,10 @@ export default function SimilarBooks({ books }: SimilarBooksProps): JSX.Element 
           <Link
             key={book.id}
             href={`/book/${book.slug}`}
-            className="group flex flex-col border border-border rounded-lg p-3 hover:shadow-lg hover:border-link/30 transition-all bg-surface"
+            className={`group flex flex-col border ${BORDERS.medium} rounded-md p-3 hover:border-black hover:dark:border-white transition-all bg-white dark:bg-black`}
           >
             {/* Book Cover */}
-            <div className="mb-3 aspect-[2/3] bg-muted/10 rounded overflow-hidden border border-border/50">
+            <div className={`mb-3 aspect-[2/3] bg-stone-50 dark:bg-stone-950 rounded-md overflow-hidden border ${BORDERS.medium}`}>
               {book.cover_url ? (
                 <img
                   src={book.cover_url}

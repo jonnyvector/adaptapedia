@@ -4,6 +4,7 @@ import Link from 'next/link';
 import { ModerationComment } from '@/lib/types';
 import { api } from '@/lib/api';
 import ModerationActions from './ModerationActions';
+import { FONTS, LETTER_SPACING, BORDERS, TEXT, monoUppercase } from '@/lib/brutalist-design';
 
 interface CommentReviewCardProps {
   comment: ModerationComment;
@@ -47,28 +48,29 @@ export default function CommentReviewCard({
   };
 
   return (
-    <div className="border border-gray-300 rounded-lg p-6 bg-white shadow-sm">
+    <div className={`border ${BORDERS.medium} rounded-md p-6 bg-white dark:bg-black`}>
       {/* Status Badge */}
       <div className="mb-4">
         <span
-          className={`inline-block px-3 py-1 rounded-full text-xs font-semibold ${
+          className={`inline-block px-3 py-1 rounded-md border ${BORDERS.solid} ${TEXT.metadata} font-bold ${monoUppercase} ${
             comment.status === 'PENDING'
-              ? 'bg-yellow-100 text-yellow-800'
-              : 'bg-blue-100 text-blue-800'
+              ? 'bg-amber-100 dark:bg-amber-950/30 text-amber-800 dark:text-amber-400 border-amber-600 dark:border-amber-400'
+              : 'bg-blue-100 dark:bg-blue-950/30 text-blue-800 dark:text-blue-400 border-blue-600 dark:border-blue-400'
           }`}
+          style={{ fontFamily: FONTS.mono, letterSpacing: LETTER_SPACING.wide }}
         >
           {comment.status}
         </span>
       </div>
 
       {/* Comment Context */}
-      <div className="mb-4 p-3 bg-gray-50 rounded border border-gray-200">
-        <div className="text-xs text-gray-600 mb-1">Comment on diff:</div>
-        <div className="text-sm font-medium mb-2">{comment.diff_item_claim}</div>
-        <div className="text-xs text-gray-600">
+      <div className={`mb-4 p-3 bg-stone-50 dark:bg-stone-950 rounded-md border ${BORDERS.medium}`}>
+        <div className={`${TEXT.metadata} ${TEXT.mutedMedium} mb-1 ${monoUppercase}`} style={{ fontFamily: FONTS.mono, letterSpacing: LETTER_SPACING.wide }}>Comment on diff:</div>
+        <div className={`${TEXT.secondary} font-bold mb-2 text-black dark:text-white`} style={{ fontFamily: FONTS.mono }}>{comment.diff_item_claim}</div>
+        <div className={`${TEXT.metadata} ${TEXT.mutedMedium}`} style={{ fontFamily: FONTS.mono }}>
           <Link
             href={`/compare/${comment.work_slug}/${comment.screen_work_slug}`}
-            className="text-blue-600 hover:underline"
+            className="text-black dark:text-white hover:opacity-70"
           >
             {comment.work_title} → {comment.screen_work_title}
           </Link>
@@ -78,23 +80,23 @@ export default function CommentReviewCard({
       {/* Comment Content */}
       <div className="mb-4">
         <div className="mb-2">
-          <span className="px-2 py-1 bg-purple-100 text-purple-800 text-xs font-medium rounded">
+          <span className={`px-2 py-1 bg-purple-100 dark:bg-purple-950/30 text-purple-800 dark:text-purple-400 border ${BORDERS.solid} border-purple-600 dark:border-purple-400 ${TEXT.metadata} font-bold rounded-md ${monoUppercase}`} style={{ fontFamily: FONTS.mono, letterSpacing: LETTER_SPACING.wide }}>
             Spoilers: {spoilerLabels[comment.spoiler_scope] || comment.spoiler_scope}
           </span>
         </div>
-        <div className="p-4 bg-gray-50 rounded border border-gray-200">
-          <p className="text-gray-700 whitespace-pre-wrap">{comment.body}</p>
+        <div className={`p-4 bg-stone-50 dark:bg-stone-950 rounded-md border ${BORDERS.medium}`}>
+          <p className={`${TEXT.secondary} text-black dark:text-white whitespace-pre-wrap`} style={{ fontFamily: FONTS.sans }}>{comment.body}</p>
         </div>
       </div>
 
       {/* Metadata */}
-      <div className="mb-4 text-sm text-gray-600 border-t border-gray-200 pt-3">
+      <div className={`mb-4 ${TEXT.secondary} ${TEXT.mutedMedium} border-t ${BORDERS.subtle} pt-3`} style={{ fontFamily: FONTS.mono }}>
         <div className="flex justify-between">
           <div>
             Created by{' '}
             <Link
               href={`/u/${comment.username}`}
-              className="font-medium text-blue-600 hover:underline"
+              className="font-bold text-black dark:text-white hover:opacity-70"
             >
               {comment.username}
             </Link>

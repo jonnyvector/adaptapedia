@@ -7,6 +7,7 @@ import DiffReviewCard from './DiffReviewCard';
 import CommentReviewCard from './CommentReviewCard';
 import LoadingSpinner from '@/components/ui/LoadingSpinner';
 import SkeletonCard from '@/components/ui/SkeletonCard';
+import { FONTS, LETTER_SPACING, BORDERS, TEXT, monoUppercase } from '@/lib/brutalist-design';
 
 type TabType = 'pending-diffs' | 'pending-comments' | 'flagged';
 type StatusFilter = 'PENDING' | 'FLAGGED' | 'ALL';
@@ -69,52 +70,55 @@ export default function ModQueue(): JSX.Element {
   return (
     <div className="max-w-6xl mx-auto p-4 sm:p-6">
       <div className="mb-4 sm:mb-6">
-        <h1 className="text-2xl sm:text-3xl font-bold mb-2">Moderation Queue</h1>
-        <p className="text-sm sm:text-base text-gray-600">
+        <h1 className={`text-2xl sm:text-3xl font-bold mb-2 text-black dark:text-white ${monoUppercase}`} style={{ fontFamily: FONTS.mono, letterSpacing: LETTER_SPACING.wider }}>Moderation Queue</h1>
+        <p className={`${TEXT.secondary} ${TEXT.mutedMedium}`} style={{ fontFamily: FONTS.sans }}>
           Review and moderate pending content submissions
         </p>
       </div>
 
       {/* Tabs */}
-      <div className="border-b border-gray-300 mb-4 sm:mb-6 overflow-x-auto">
+      <div className={`border-b ${BORDERS.medium} mb-4 sm:mb-6 overflow-x-auto`}>
         <div className="flex gap-2 sm:gap-4 min-w-max sm:min-w-0">
           <button
             onClick={() => setActiveTab('pending-diffs')}
-            className={`px-3 sm:px-4 py-2 sm:py-3 font-medium border-b-2 transition-colors whitespace-nowrap text-sm sm:text-base min-h-[44px] ${
+            className={`px-3 sm:px-4 py-2 sm:py-3 font-bold border-b-2 transition-colors whitespace-nowrap ${TEXT.secondary} min-h-[44px] ${monoUppercase} ${
               activeTab === 'pending-diffs'
-                ? 'border-blue-600 text-blue-600'
-                : 'border-transparent text-gray-600 hover:text-gray-900'
+                ? 'border-black dark:border-white text-black dark:text-white'
+                : 'border-transparent text-black/50 dark:text-white/50 hover:text-black hover:dark:text-white'
             }`}
+            style={{ fontFamily: FONTS.mono, letterSpacing: LETTER_SPACING.tight }}
           >
             Pending Diffs
             {activeTab === 'pending-diffs' && counts.diffs > 0 && (
-              <span className="ml-2 px-2 py-1 bg-blue-100 text-blue-800 rounded-full text-xs font-semibold">
+              <span className={`ml-2 px-2 py-1 bg-black dark:bg-white text-white dark:text-black rounded-md ${TEXT.metadata} font-bold border ${BORDERS.solid}`} style={{ fontFamily: FONTS.mono }}>
                 {counts.diffs}
               </span>
             )}
           </button>
           <button
             onClick={() => setActiveTab('pending-comments')}
-            className={`px-3 sm:px-4 py-2 sm:py-3 font-medium border-b-2 transition-colors whitespace-nowrap text-sm sm:text-base min-h-[44px] ${
+            className={`px-3 sm:px-4 py-2 sm:py-3 font-bold border-b-2 transition-colors whitespace-nowrap ${TEXT.secondary} min-h-[44px] ${monoUppercase} ${
               activeTab === 'pending-comments'
-                ? 'border-blue-600 text-blue-600'
-                : 'border-transparent text-gray-600 hover:text-gray-900'
+                ? 'border-black dark:border-white text-black dark:text-white'
+                : 'border-transparent text-black/50 dark:text-white/50 hover:text-black hover:dark:text-white'
             }`}
+            style={{ fontFamily: FONTS.mono, letterSpacing: LETTER_SPACING.tight }}
           >
             Pending Comments
             {activeTab === 'pending-comments' && counts.comments > 0 && (
-              <span className="ml-2 px-2 py-1 bg-blue-100 text-blue-800 rounded-full text-xs font-semibold">
+              <span className={`ml-2 px-2 py-1 bg-black dark:bg-white text-white dark:text-black rounded-md ${TEXT.metadata} font-bold border ${BORDERS.solid}`} style={{ fontFamily: FONTS.mono }}>
                 {counts.comments}
               </span>
             )}
           </button>
           <button
             onClick={() => setActiveTab('flagged')}
-            className={`px-3 sm:px-4 py-2 sm:py-3 font-medium border-b-2 transition-colors whitespace-nowrap text-sm sm:text-base min-h-[44px] ${
+            className={`px-3 sm:px-4 py-2 sm:py-3 font-bold border-b-2 transition-colors whitespace-nowrap ${TEXT.secondary} min-h-[44px] ${monoUppercase} ${
               activeTab === 'flagged'
-                ? 'border-blue-600 text-blue-600'
-                : 'border-transparent text-gray-600 hover:text-gray-900'
+                ? 'border-black dark:border-white text-black dark:text-white'
+                : 'border-transparent text-black/50 dark:text-white/50 hover:text-black hover:dark:text-white'
             }`}
+            style={{ fontFamily: FONTS.mono, letterSpacing: LETTER_SPACING.tight }}
           >
             Flagged Items
           </button>
@@ -124,13 +128,14 @@ export default function ModQueue(): JSX.Element {
       {/* Filter */}
       {activeTab !== 'flagged' && (
         <div className="mb-4 sm:mb-6 flex flex-col sm:flex-row sm:items-center gap-2 sm:gap-3">
-          <label className="text-sm font-medium text-gray-700">
+          <label className={`${TEXT.secondary} font-bold ${TEXT.mutedMedium} ${monoUppercase}`} style={{ fontFamily: FONTS.mono, letterSpacing: LETTER_SPACING.wide }}>
             Filter by status:
           </label>
           <select
             value={statusFilter}
             onChange={(e) => setStatusFilter(e.target.value as StatusFilter)}
-            className="px-3 py-3 text-base border border-gray-300 rounded-lg bg-white min-h-[44px]"
+            className={`px-3 py-3 ${TEXT.secondary} border ${BORDERS.medium} rounded-md bg-white dark:bg-black text-black dark:text-white min-h-[44px] focus:outline-none focus:border-black focus:dark:border-white`}
+            style={{ fontFamily: FONTS.mono }}
           >
             <option value="PENDING">Pending</option>
             <option value="FLAGGED">Flagged</option>
@@ -147,12 +152,13 @@ export default function ModQueue(): JSX.Element {
           <SkeletonCard variant="detailed" />
         </div>
       ) : error ? (
-        <div className="bg-red-50 border border-red-200 rounded-lg p-4 text-red-800">
-          <p className="font-medium text-sm sm:text-base">Error loading items</p>
-          <p className="text-xs sm:text-sm mt-1">{error}</p>
+        <div className={`bg-red-50 dark:bg-red-950/20 border ${BORDERS.medium} border-red-600 dark:border-red-400 rounded-md p-4 text-red-800 dark:text-red-400`}>
+          <p className={`font-bold ${TEXT.secondary}`} style={{ fontFamily: FONTS.mono }}>Error loading items</p>
+          <p className={`${TEXT.metadata} mt-1`} style={{ fontFamily: FONTS.mono }}>{error}</p>
           <button
             onClick={loadItems}
-            className="mt-3 px-4 py-3 bg-red-600 text-white rounded hover:bg-red-700 transition-colors min-h-[44px] text-sm sm:text-base"
+            className={`mt-3 px-4 py-3 bg-red-600 dark:bg-red-700 text-white rounded-md border ${BORDERS.solid} hover:opacity-90 transition-opacity min-h-[44px] ${TEXT.secondary} font-bold ${monoUppercase}`}
+            style={{ fontFamily: FONTS.mono, letterSpacing: LETTER_SPACING.tight }}
           >
             Retry
           </button>
@@ -163,12 +169,12 @@ export default function ModQueue(): JSX.Element {
           {(activeTab === 'pending-diffs' || activeTab === 'flagged') && (
             <div className="space-y-4 sm:space-y-6">
               {diffs.length === 0 ? (
-                <div className="text-center py-8 sm:py-12 border border-gray-300 rounded-lg bg-gray-50">
-                  <p className="text-gray-600 text-base sm:text-lg">
+                <div className={`text-center py-8 sm:py-12 border ${BORDERS.medium} rounded-md bg-stone-50 dark:bg-stone-950`}>
+                  <p className={`${TEXT.body} font-bold text-black dark:text-white`} style={{ fontFamily: FONTS.mono }}>
                     No {activeTab === 'flagged' ? 'flagged' : 'pending'} diffs to
                     review
                   </p>
-                  <p className="text-gray-500 text-xs sm:text-sm mt-2">
+                  <p className={`${TEXT.secondary} ${TEXT.mutedMedium} mt-2`} style={{ fontFamily: FONTS.sans }}>
                     The queue is empty. Great work!
                   </p>
                 </div>
@@ -188,11 +194,11 @@ export default function ModQueue(): JSX.Element {
           {activeTab === 'pending-comments' && (
             <div className="space-y-4 sm:space-y-6">
               {comments.length === 0 ? (
-                <div className="text-center py-8 sm:py-12 border border-gray-300 rounded-lg bg-gray-50">
-                  <p className="text-gray-600 text-base sm:text-lg">
+                <div className={`text-center py-8 sm:py-12 border ${BORDERS.medium} rounded-md bg-stone-50 dark:bg-stone-950`}>
+                  <p className={`${TEXT.body} font-bold text-black dark:text-white`} style={{ fontFamily: FONTS.mono }}>
                     No pending comments to review
                   </p>
-                  <p className="text-gray-500 text-xs sm:text-sm mt-2">
+                  <p className={`${TEXT.secondary} ${TEXT.mutedMedium} mt-2`} style={{ fontFamily: FONTS.sans }}>
                     The queue is empty. Great work!
                   </p>
                 </div>

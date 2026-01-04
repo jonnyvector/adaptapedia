@@ -3,6 +3,7 @@
 import type { SearchWithAdaptationsResponse, WorkWithAdaptations, ScreenWork } from '@/lib/types';
 import BookWithAdaptationsResult from './BookWithAdaptationsResult';
 import ScreenWorkResult from './ScreenWorkResult';
+import { FONTS, LETTER_SPACING, TEXT, monoUppercase } from '@/lib/brutalist-design';
 
 interface SearchResultsProps {
   query: string;
@@ -16,8 +17,8 @@ export default function SearchResults({
   if (!initialSearchData) {
     return (
       <div className="text-center py-12">
-        <p className="text-xl text-muted mb-2">No results found for &quot;{query}&quot;</p>
-        <p className="text-sm text-muted">
+        <p className={`${TEXT.body} font-bold mb-2 text-black dark:text-white`} style={{ fontFamily: FONTS.mono }}>No results found for &quot;{query}&quot;</p>
+        <p className={`${TEXT.secondary} ${TEXT.mutedMedium}`} style={{ fontFamily: FONTS.sans }}>
           Try adjusting your search terms or browse our catalog
         </p>
       </div>
@@ -29,8 +30,8 @@ export default function SearchResults({
   if (results.length === 0) {
     return (
       <div className="text-center py-12">
-        <p className="text-xl text-muted mb-2">No results found for &quot;{query}&quot;</p>
-        <p className="text-sm text-muted">
+        <p className={`${TEXT.body} font-bold mb-2 text-black dark:text-white`} style={{ fontFamily: FONTS.mono }}>No results found for &quot;{query}&quot;</p>
+        <p className={`${TEXT.secondary} ${TEXT.mutedMedium}`} style={{ fontFamily: FONTS.sans }}>
           Try adjusting your search terms or browse our catalog
         </p>
       </div>
@@ -41,17 +42,17 @@ export default function SearchResults({
     <div className="space-y-6 sm:space-y-8">
       {/* Results header */}
       <div className="flex items-baseline gap-2">
-        <h2 className="text-xl sm:text-2xl font-bold">
+        <h2 className={`text-xl sm:text-2xl font-bold text-black dark:text-white ${monoUppercase}`} style={{ fontFamily: FONTS.mono, letterSpacing: LETTER_SPACING.wider }}>
           {search_type === 'screen' ? 'Screen Adaptations' : 'Books & Adaptations'}
         </h2>
-        <span className="text-muted text-sm sm:text-base">
+        <span className={`${TEXT.secondary} ${TEXT.mutedMedium}`} style={{ fontFamily: FONTS.mono }}>
           ({results.length} {results.length === 1 ? 'result' : 'results'})
         </span>
       </div>
 
       {detected_year && (
-        <div className="text-sm text-muted">
-          Showing results for year: <span className="font-semibold">{detected_year}</span>
+        <div className={`${TEXT.secondary} ${TEXT.mutedMedium}`} style={{ fontFamily: FONTS.mono }}>
+          Showing results for year: <span className="font-bold text-black dark:text-white">{detected_year}</span>
         </div>
       )}
 
