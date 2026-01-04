@@ -90,7 +90,7 @@ export default function SpoilerControl({
   const currentConfig = getPreferenceConfig(currentPreference);
 
   return (
-    <div className="sticky top-0 z-10 bg-white dark:bg-black border-b border-black/20 dark:border-white/20 mb-6 mt-8">
+    <div className="sticky top-0 z-10 bg-stone-50 dark:bg-stone-950 border-b border-black/20 dark:border-white/20 mb-6 mt-8">
       <div className="max-w-6xl mx-auto px-4 py-3">
         {/* Segmented Control */}
         <div className="flex flex-col sm:flex-row sm:items-center gap-3 mb-2">
@@ -117,7 +117,7 @@ export default function SpoilerControl({
                     ${
                       isActive
                         ? `bg-black dark:bg-white ${BORDERS.solid} text-white dark:text-black`
-                        : `bg-white dark:bg-black ${BORDERS.medium} ${TEXT.mutedStrong} hover:${BORDERS.solid}`
+                        : `bg-stone-100 dark:bg-stone-900 ${BORDERS.medium} ${TEXT.mutedStrong} hover:${BORDERS.solid}`
                     }
                   `}
                   style={{ fontFamily: FONTS.mono, letterSpacing: LETTER_SPACING.normal }}
