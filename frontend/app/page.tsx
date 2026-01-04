@@ -456,7 +456,38 @@ export default async function Home(): Promise<JSX.Element> {
               <p className={`${TEXT.secondary} ${TEXT.mutedMedium} mb-4`} style={{ fontFamily: FONTS.mono }}>
                 Add the differences you noticed. Earn votes, build reputation, and help shape the consensus
               </p>
-              <div className={`flex flex-col gap-2 ${TEXT.secondary} ${TEXT.mutedMedium}`} style={{ fontFamily: FONTS.mono }}>
+
+              {/* Mini Add Diff Form Preview */}
+              <div className={`relative border ${BORDERS.medium} bg-stone-50 dark:bg-stone-950 p-3 mb-4`}>
+                <div className={`${TEXT.metadata} ${TEXT.mutedLight} uppercase tracking-wide font-semibold mb-3`} style={{ fontFamily: FONTS.mono }}>Preview</div>
+                <div className={`border ${BORDERS.medium} bg-white dark:bg-black p-3 space-y-2`}>
+                  <div>
+                    <label className={`block ${TEXT.metadata} font-bold ${TEXT.primary} mb-1 uppercase tracking-wider`} style={{ fontFamily: FONTS.mono }}>Difference</label>
+                    <div className={`border ${BORDERS.medium} px-2 py-1.5 ${TEXT.metadata} ${TEXT.mutedMedium} bg-stone-50 dark:bg-stone-950`} style={{ fontFamily: FONTS.mono }}>
+                      Enter what changed...
+                    </div>
+                  </div>
+                  <div className="grid grid-cols-2 gap-2">
+                    <div>
+                      <label className={`block ${TEXT.metadata} font-bold ${TEXT.primary} mb-1 uppercase tracking-wider text-[10px]`} style={{ fontFamily: FONTS.mono }}>Category</label>
+                      <div className={`border ${BORDERS.medium} px-1.5 py-1 text-[10px] ${TEXT.mutedMedium} bg-stone-50 dark:bg-stone-950 uppercase`} style={{ fontFamily: FONTS.mono }}>
+                        Character ▼
+                      </div>
+                    </div>
+                    <div>
+                      <label className={`block ${TEXT.metadata} font-bold ${TEXT.primary} mb-1 uppercase tracking-wider text-[10px]`} style={{ fontFamily: FONTS.mono }}>Spoiler</label>
+                      <div className={`border ${BORDERS.medium} px-1.5 py-1 text-[10px] ${TEXT.mutedMedium} bg-stone-50 dark:bg-stone-950 uppercase`} style={{ fontFamily: FONTS.mono }}>
+                        Safe ▼
+                      </div>
+                    </div>
+                  </div>
+                  <button className={`w-full px-2 py-1.5 ${TEXT.metadata} font-bold bg-black dark:bg-white text-white dark:text-black border ${BORDERS.solid} uppercase tracking-wider`} style={{ fontFamily: FONTS.mono }}>
+                    Submit
+                  </button>
+                </div>
+              </div>
+
+              <div className={`flex flex-col gap-2 ${TEXT.secondary} ${TEXT.mutedMedium} mb-4`} style={{ fontFamily: FONTS.mono }}>
                 <div className="flex items-center gap-2">
                   <svg className={`w-4 h-4 ${TEXT.primary} flex-shrink-0`} fill="currentColor" viewBox="0 0 20 20">
                     <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
