@@ -12,7 +12,7 @@ export default function Footer(): JSX.Element {
           {/* About Section */}
           <div>
             <h3 className={`font-bold text-base sm:text-lg mb-3 sm:mb-4 text-black dark:text-white ${monoUppercase}`} style={{ fontFamily: FONTS.mono, letterSpacing: LETTER_SPACING.wider }}>Book vs. Movie</h3>
-            <p className={`${TEXT.mutedMedium} ${TEXT.secondary} mb-4`} style={{ fontFamily: FONTS.sans }}>
+            <p className={`${TEXT.mutedMedium} ${TEXT.secondary} mb-4`} style={{ fontFamily: FONTS.mono }}>
               A community-driven database for comparing books and their film adaptations.
             </p>
           </div>
@@ -22,22 +22,22 @@ export default function Footer(): JSX.Element {
             <h4 className={`font-bold text-sm sm:text-base mb-3 sm:mb-4 text-black dark:text-white ${monoUppercase}`} style={{ fontFamily: FONTS.mono, letterSpacing: LETTER_SPACING.wide }}>Resources</h4>
             <ul className={`space-y-2 ${TEXT.secondary}`}>
               <li>
-                <Link href="/browse" className={`${TEXT.mutedMedium} hover:text-black hover:dark:text-white inline-block min-h-[28px] flex items-center transition-colors`} style={{ fontFamily: FONTS.sans }}>
+                <Link href="/browse" className={`${TEXT.mutedMedium} hover:text-black hover:dark:text-white inline-block min-h-[28px] flex items-center transition-colors`} style={{ fontFamily: FONTS.mono }}>
                   Browse by Genre
                 </Link>
               </li>
               <li>
-                <Link href="/about" className={`${TEXT.mutedMedium} hover:text-black hover:dark:text-white inline-block min-h-[28px] flex items-center transition-colors`} style={{ fontFamily: FONTS.sans }}>
+                <Link href="/about" className={`${TEXT.mutedMedium} hover:text-black hover:dark:text-white inline-block min-h-[28px] flex items-center transition-colors`} style={{ fontFamily: FONTS.mono }}>
                   About
                 </Link>
               </li>
               <li>
-                <Link href="/about/sources" className={`${TEXT.mutedMedium} hover:text-black hover:dark:text-white inline-block min-h-[28px] flex items-center transition-colors`} style={{ fontFamily: FONTS.sans }}>
+                <Link href="/about/sources" className={`${TEXT.mutedMedium} hover:text-black hover:dark:text-white inline-block min-h-[28px] flex items-center transition-colors`} style={{ fontFamily: FONTS.mono }}>
                   Data Sources
                 </Link>
               </li>
               <li>
-                <Link href="/about/guidelines" className={`${TEXT.mutedMedium} hover:text-black hover:dark:text-white inline-block min-h-[28px] flex items-center transition-colors`} style={{ fontFamily: FONTS.sans }}>
+                <Link href="/about/guidelines" className={`${TEXT.mutedMedium} hover:text-black hover:dark:text-white inline-block min-h-[28px] flex items-center transition-colors`} style={{ fontFamily: FONTS.mono }}>
                   Community Guidelines
                 </Link>
               </li>
@@ -54,7 +54,7 @@ export default function Footer(): JSX.Element {
                   target="_blank"
                   rel="noopener noreferrer"
                   className="hover:text-black hover:dark:text-white inline-block min-h-[28px] flex items-center gap-1 transition-colors"
-                  style={{ fontFamily: FONTS.sans }}
+                  style={{ fontFamily: FONTS.mono }}
                 >
                   GitHub Repository
                   <ArrowTopRightOnSquareIcon className="w-3 h-3 opacity-60" />

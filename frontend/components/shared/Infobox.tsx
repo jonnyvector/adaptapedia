@@ -39,7 +39,7 @@ export default function Infobox({
             <dt className={`${TEXT.metadata} ${TEXT.mutedMedium} font-bold ${monoUppercase}`} style={{ fontFamily: FONTS.mono, letterSpacing: LETTER_SPACING.wide }}>
               {item.label}
             </dt>
-            <dd className={`${TEXT.secondary} mt-1 text-black dark:text-white`} style={{ fontFamily: FONTS.sans }}>{item.value}</dd>
+            <dd className={`${TEXT.secondary} mt-1 text-black dark:text-white`} style={{ fontFamily: FONTS.mono }}>{item.value}</dd>
           </div>
         ))}
       </dl>

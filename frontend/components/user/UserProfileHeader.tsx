@@ -69,7 +69,7 @@ export default function UserProfileHeader({
             )}
           </div>
 
-          <div className={`${TEXT.secondary} ${TEXT.mutedMedium} mb-4`} style={{ fontFamily: FONTS.sans }}>
+          <div className={`${TEXT.secondary} ${TEXT.mutedMedium} mb-4`} style={{ fontFamily: FONTS.mono }}>
             Member since {formatDate(profile.date_joined)}
           </div>
         </div>

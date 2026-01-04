@@ -13,7 +13,7 @@ interface EmptyStateProps {
 export default function EmptyState({ message, action, className = '' }: EmptyStateProps): JSX.Element {
   return (
     <div className={`border ${BORDERS.medium} p-12 text-center ${className}`}>
-      <p className={`${TEXT.mutedMedium} mb-4`} style={{ fontFamily: FONTS.sans }}>{message}</p>
+      <p className={`${TEXT.mutedMedium} mb-4`} style={{ fontFamily: FONTS.mono }}>{message}</p>
       {action && (
         <Link href={action.href} className="text-black dark:text-white hover:opacity-70 transition-opacity font-bold" style={{ fontFamily: FONTS.mono }}>
           {action.label}

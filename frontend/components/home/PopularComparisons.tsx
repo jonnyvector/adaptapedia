@@ -206,10 +206,10 @@ export default function PopularComparisons() {
           </div>
 
           {/* Title */}
-          <div className={`${TEXT.secondary} font-bold line-clamp-2 mb-1 text-black dark:text-white group-hover:opacity-70 transition-opacity`} style={{ fontFamily: FONTS.sans }}>
+          <div className={`${TEXT.secondary} font-bold line-clamp-2 mb-1 text-black dark:text-white group-hover:opacity-70 transition-opacity`} style={{ fontFamily: FONTS.mono }}>
             {comparison.book.title}
           </div>
-          <div className={`${TEXT.metadata} ${TEXT.mutedMedium}`} style={{ fontFamily: FONTS.sans }}>
+          <div className={`${TEXT.metadata} ${TEXT.mutedMedium}`} style={{ fontFamily: FONTS.mono }}>
             {comparison.book.author}
           </div>
         </Link>

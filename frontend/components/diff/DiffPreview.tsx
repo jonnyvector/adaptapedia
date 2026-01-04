@@ -18,7 +18,7 @@ export default function DiffPreview({
 
   if (previewDiffs.length === 0) {
     return (
-      <div className={`${TEXT.secondary} ${TEXT.mutedMedium}`} style={{ fontFamily: FONTS.sans }}>
+      <div className={`${TEXT.secondary} ${TEXT.mutedMedium}`} style={{ fontFamily: FONTS.mono }}>
         No differences documented yet. Be the first to add one!
       </div>
     );

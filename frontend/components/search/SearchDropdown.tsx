@@ -112,11 +112,11 @@ export default function SearchDropdown({
                   </div>
                 )}
                 <div className="flex-1 min-w-0">
-                  <div className={`font-bold text-black dark:text-white truncate`} style={{ fontFamily: FONTS.sans }}>
+                  <div className={`font-bold text-black dark:text-white truncate`} style={{ fontFamily: FONTS.mono }}>
                     {work.title}
                   </div>
                   {work.author && (
-                    <div className={`${TEXT.secondary} ${TEXT.mutedMedium} truncate`} style={{ fontFamily: FONTS.sans }}>
+                    <div className={`${TEXT.secondary} ${TEXT.mutedMedium} truncate`} style={{ fontFamily: FONTS.mono }}>
                       by {work.author}
                     </div>
                   )}
@@ -155,10 +155,10 @@ export default function SearchDropdown({
                   </div>
                 )}
                 <div className="flex-1 min-w-0">
-                  <div className={`font-bold text-black dark:text-white truncate`} style={{ fontFamily: FONTS.sans }}>
+                  <div className={`font-bold text-black dark:text-white truncate`} style={{ fontFamily: FONTS.mono }}>
                     {screenWork.title}
                   </div>
-                  <div className={`${TEXT.secondary} ${TEXT.mutedMedium}`} style={{ fontFamily: FONTS.sans }}>
+                  <div className={`${TEXT.secondary} ${TEXT.mutedMedium}`} style={{ fontFamily: FONTS.mono }}>
                     {screenWork.type === 'MOVIE' ? 'Movie' : 'TV Series'}
                     {screenWork.year && ` • ${screenWork.year}`}
                   </div>

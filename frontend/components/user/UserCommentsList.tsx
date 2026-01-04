@@ -57,7 +57,7 @@ export default function UserCommentsList({
     return (
       <div className={`border ${BORDERS.medium} rounded-md p-12 text-center bg-stone-50 dark:bg-stone-950`}>
         <p className={`${TEXT.body} ${TEXT.mutedMedium} font-bold`} style={{ fontFamily: FONTS.mono }}>No comments posted yet</p>
-        <p className={`${TEXT.secondary} ${TEXT.mutedMedium} mt-2`} style={{ fontFamily: FONTS.sans }}>
+        <p className={`${TEXT.secondary} ${TEXT.mutedMedium} mt-2`} style={{ fontFamily: FONTS.mono }}>
           Join the discussion on diffs to share your insights
         </p>
       </div>
@@ -81,14 +81,14 @@ export default function UserCommentsList({
             >
               {comment.work_title} vs {comment.screen_work_title}
             </Link>
-            <div className={`${TEXT.secondary} ${TEXT.mutedMedium} mt-1`} style={{ fontFamily: FONTS.sans }}>
+            <div className={`${TEXT.secondary} ${TEXT.mutedMedium} mt-1`} style={{ fontFamily: FONTS.mono }}>
               Diff: {comment.diff_item_claim}
             </div>
           </div>
 
           {/* Comment body */}
           <div className="mb-3">
-            <p className={`${TEXT.secondary} leading-relaxed`} style={{ fontFamily: FONTS.sans }}>{comment.body}</p>
+            <p className={`${TEXT.secondary} leading-relaxed`} style={{ fontFamily: FONTS.mono }}>{comment.body}</p>
           </div>
 
           {/* Footer with spoiler badge and timestamp */}

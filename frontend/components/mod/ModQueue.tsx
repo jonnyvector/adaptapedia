@@ -71,7 +71,7 @@ export default function ModQueue(): JSX.Element {
     <div className="max-w-6xl mx-auto p-4 sm:p-6">
       <div className="mb-4 sm:mb-6">
         <h1 className={`text-2xl sm:text-3xl font-bold mb-2 text-black dark:text-white ${monoUppercase}`} style={{ fontFamily: FONTS.mono, letterSpacing: LETTER_SPACING.wider }}>Moderation Queue</h1>
-        <p className={`${TEXT.secondary} ${TEXT.mutedMedium}`} style={{ fontFamily: FONTS.sans }}>
+        <p className={`${TEXT.secondary} ${TEXT.mutedMedium}`} style={{ fontFamily: FONTS.mono }}>
           Review and moderate pending content submissions
         </p>
       </div>
@@ -174,7 +174,7 @@ export default function ModQueue(): JSX.Element {
                     No {activeTab === 'flagged' ? 'flagged' : 'pending'} diffs to
                     review
                   </p>
-                  <p className={`${TEXT.secondary} ${TEXT.mutedMedium} mt-2`} style={{ fontFamily: FONTS.sans }}>
+                  <p className={`${TEXT.secondary} ${TEXT.mutedMedium} mt-2`} style={{ fontFamily: FONTS.mono }}>
                     The queue is empty. Great work!
                   </p>
                 </div>
@@ -198,7 +198,7 @@ export default function ModQueue(): JSX.Element {
                   <p className={`${TEXT.body} font-bold text-black dark:text-white`} style={{ fontFamily: FONTS.mono }}>
                     No pending comments to review
                   </p>
-                  <p className={`${TEXT.secondary} ${TEXT.mutedMedium} mt-2`} style={{ fontFamily: FONTS.sans }}>
+                  <p className={`${TEXT.secondary} ${TEXT.mutedMedium} mt-2`} style={{ fontFamily: FONTS.mono }}>
                     The queue is empty. Great work!
                   </p>
                 </div>

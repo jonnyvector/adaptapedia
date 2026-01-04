@@ -42,7 +42,7 @@ export default function BookWithAdaptationsResult({ work }: BookWithAdaptationsR
             </Link>
             <div className="flex items-center gap-2 flex-wrap mt-1">
               {work.author && (
-                <span className={`${TEXT.secondary} ${TEXT.mutedMedium}`} style={{ fontFamily: FONTS.sans }}>by {work.author}</span>
+                <span className={`${TEXT.secondary} ${TEXT.mutedMedium}`} style={{ fontFamily: FONTS.mono }}>by {work.author}</span>
               )}
               {work.year && (
                 <span className={`${TEXT.secondary} ${TEXT.mutedMedium}`} style={{ fontFamily: FONTS.mono }}>({work.year})</span>
@@ -96,7 +96,7 @@ export default function BookWithAdaptationsResult({ work }: BookWithAdaptationsR
         )}
 
         {work.summary && (
-          <p className={`${TEXT.secondary} ${TEXT.mutedMedium} mt-3 line-clamp-2`} style={{ fontFamily: FONTS.sans }}>{work.summary}</p>
+          <p className={`${TEXT.secondary} ${TEXT.mutedMedium} mt-3 line-clamp-2`} style={{ fontFamily: FONTS.mono }}>{work.summary}</p>
         )}
       </div>
 
@@ -143,7 +143,7 @@ export default function BookWithAdaptationsResult({ work }: BookWithAdaptationsR
                         )}
                       </>
                     ) : (
-                      <span className={`${TEXT.metadata} ${TEXT.mutedMedium} italic`} style={{ fontFamily: FONTS.sans }}>No diffs yet</span>
+                      <span className={`${TEXT.metadata} ${TEXT.mutedMedium} italic`} style={{ fontFamily: FONTS.mono }}>No diffs yet</span>
                     )}
                     {adaptation.diff_count < 3 && adaptation.diff_count > 0 && (
                       <>
@@ -167,7 +167,7 @@ export default function BookWithAdaptationsResult({ work }: BookWithAdaptationsR
       {/* No adaptations fallback */}
       {work.adaptations.length === 0 && (
         <div className={`border-t ${BORDERS.subtle} pt-3`}>
-          <p className={`${TEXT.secondary} ${TEXT.mutedMedium} italic`} style={{ fontFamily: FONTS.sans }}>
+          <p className={`${TEXT.secondary} ${TEXT.mutedMedium} italic`} style={{ fontFamily: FONTS.mono }}>
             No adaptations found yet.{' '}
             <Link href={`/book/${work.slug}`} className="text-black dark:text-white hover:opacity-70" style={{ fontFamily: FONTS.mono }}>
               View book page

@@ -72,7 +72,7 @@ export default function UserDiffsList({
     return (
       <div className={`border ${BORDERS.medium} rounded-md p-12 text-center bg-stone-50 dark:bg-stone-950`}>
         <p className={`${TEXT.body} ${TEXT.mutedMedium} font-bold`} style={{ fontFamily: FONTS.mono }}>No diffs created yet</p>
-        <p className={`${TEXT.secondary} ${TEXT.mutedMedium} mt-2`} style={{ fontFamily: FONTS.sans }}>
+        <p className={`${TEXT.secondary} ${TEXT.mutedMedium} mt-2`} style={{ fontFamily: FONTS.mono }}>
           Start comparing books and screen adaptations to add your first diff
         </p>
       </div>
@@ -122,7 +122,7 @@ export default function UserDiffsList({
 
           {/* Detail */}
           {diff.detail && (
-            <p className={`${TEXT.secondary} ${TEXT.mutedMedium} mb-4 leading-relaxed`} style={{ fontFamily: FONTS.sans }}>
+            <p className={`${TEXT.secondary} ${TEXT.mutedMedium} mb-4 leading-relaxed`} style={{ fontFamily: FONTS.mono }}>
               {diff.detail}
             </p>
           )}

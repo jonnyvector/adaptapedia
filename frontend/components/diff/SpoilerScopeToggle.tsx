@@ -54,7 +54,7 @@ export default function SpoilerScopeToggle({
           </button>
         ))}
       </div>
-      <p className={`${TEXT.metadata} ${TEXT.mutedMedium} mt-2 hidden sm:block`} style={{ fontFamily: FONTS.sans }}>
+      <p className={`${TEXT.metadata} ${TEXT.mutedMedium} mt-2 hidden sm:block`} style={{ fontFamily: FONTS.mono }}>
         {scopes.find((s) => s.value === currentScope)?.description}
       </p>
     </div>

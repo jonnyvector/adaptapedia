@@ -197,10 +197,10 @@ export default function NotificationBell() {
                             }}
                             className="block"
                           >
-                            <div className={`${TEXT.secondary} font-bold text-black dark:text-white mb-1`} style={{ fontFamily: FONTS.sans }}>
+                            <div className={`${TEXT.secondary} font-bold text-black dark:text-white mb-1`} style={{ fontFamily: FONTS.mono }}>
                               {notification.title}
                             </div>
-                            <div className={`${TEXT.secondary} ${TEXT.mutedMedium} line-clamp-2`} style={{ fontFamily: FONTS.sans }}>
+                            <div className={`${TEXT.secondary} ${TEXT.mutedMedium} line-clamp-2`} style={{ fontFamily: FONTS.mono }}>
                               {notification.message}
                             </div>
                             <div className={`${TEXT.metadata} ${TEXT.mutedMedium} mt-1 ${monoUppercase}`} style={{ fontFamily: FONTS.mono, letterSpacing: LETTER_SPACING.wide }}>
@@ -209,10 +209,10 @@ export default function NotificationBell() {
                           </Link>
                         ) : (
                           <>
-                            <div className={`${TEXT.secondary} font-bold text-black dark:text-white mb-1`} style={{ fontFamily: FONTS.sans }}>
+                            <div className={`${TEXT.secondary} font-bold text-black dark:text-white mb-1`} style={{ fontFamily: FONTS.mono }}>
                               {notification.title}
                             </div>
-                            <div className={`${TEXT.secondary} ${TEXT.mutedMedium} line-clamp-2`} style={{ fontFamily: FONTS.sans }}>
+                            <div className={`${TEXT.secondary} ${TEXT.mutedMedium} line-clamp-2`} style={{ fontFamily: FONTS.mono }}>
                               {notification.message}
                             </div>
                             <div className={`${TEXT.metadata} ${TEXT.mutedMedium} mt-1 ${monoUppercase}`} style={{ fontFamily: FONTS.mono, letterSpacing: LETTER_SPACING.wide }}>

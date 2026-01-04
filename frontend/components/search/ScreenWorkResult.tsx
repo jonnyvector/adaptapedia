@@ -54,7 +54,7 @@ export default function ScreenWorkResult({
           </div>
 
           {screenWork.summary && (
-            <p className={`${TEXT.secondary} ${TEXT.mutedMedium} mt-1 line-clamp-2`} style={{ fontFamily: FONTS.sans }}>
+            <p className={`${TEXT.secondary} ${TEXT.mutedMedium} mt-1 line-clamp-2`} style={{ fontFamily: FONTS.mono }}>
               {screenWork.summary}
             </p>
           )}

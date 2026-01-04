@@ -9,6 +9,7 @@ import { api } from '@/lib/api';
 import { calculateVotePercentage } from '@/lib/vote-utils';
 import AdaptationSwitcher from './AdaptationSwitcher';
 import BookmarkButton from './BookmarkButton';
+import { FONTS } from '@/lib/brutalist-design';
 
 // Inject Google Fonts for brutalist minimal + nerdy typography
 if (typeof document !== 'undefined' && !document.querySelector('link[href*="Space+Grotesk"]')) {
@@ -333,7 +334,7 @@ export default function MatchupScoreboard({
       <div className="hidden md:block space-y-6">
         {/* Title - above the grid */}
         <div className="text-center space-y-1.5">
-          <h1 className="text-2xl md:text-3xl font-bold text-black dark:text-white" style={{ fontFamily: 'Space Grotesk, sans-serif' }}>
+          <h1 className="text-2xl md:text-3xl font-bold text-black dark:text-white" style={{ fontFamily: FONTS.mono }}>
             {work.title}
           </h1>
           {/* Community flavor */}
@@ -362,7 +363,7 @@ export default function MatchupScoreboard({
               </div>
             )}
             <div className="text-center space-y-1">
-              <div className="text-xs text-gray-900 dark:text-gray-100 font-medium" style={{ fontFamily: 'Space Grotesk, sans-serif' }}>{work.author}</div>
+              <div className="text-xs text-gray-900 dark:text-gray-100 font-medium" style={{ fontFamily: FONTS.mono }}>{work.author}</div>
               <div className="text-xs text-gray-600 dark:text-gray-400" style={{ fontFamily: 'JetBrains Mono, monospace' }}>({work.year})</div>
               {/* Archival metadata */}
               <div className="text-[10px] text-black/50 dark:text-white/50 uppercase tracking-wider pt-1" style={{ fontFamily: 'JetBrains Mono, monospace', letterSpacing: '0.08em' }}>
@@ -546,7 +547,7 @@ export default function MatchupScoreboard({
             </div>
           )}
           <div className="text-center space-y-1">
-            <div className="text-xs text-gray-900 dark:text-gray-100 font-medium" style={{ fontFamily: 'Space Grotesk, sans-serif' }}>{screenWork.director || screenWork.type}</div>
+            <div className="text-xs text-gray-900 dark:text-gray-100 font-medium" style={{ fontFamily: FONTS.mono }}>{screenWork.director || screenWork.type}</div>
             <div className="text-xs text-gray-600 dark:text-gray-400" style={{ fontFamily: 'JetBrains Mono, monospace' }}>({screenWork.year})</div>
             {/* Archival metadata */}
             <div className="text-[10px] text-black/50 dark:text-white/50 uppercase tracking-wider pt-1" style={{ fontFamily: 'JetBrains Mono, monospace', letterSpacing: '0.08em' }}>
@@ -562,7 +563,7 @@ export default function MatchupScoreboard({
       <div className="md:hidden space-y-4">
         {/* Title */}
         <div className="text-center space-y-2">
-          <h1 className="text-xl font-bold text-black dark:text-white" style={{ fontFamily: 'Space Grotesk, sans-serif' }}>
+          <h1 className="text-xl font-bold text-black dark:text-white" style={{ fontFamily: FONTS.mono }}>
             {work.title}
           </h1>
           {/* Community flavor - hide diff count if unknown */}

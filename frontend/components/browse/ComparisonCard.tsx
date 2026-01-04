@@ -111,13 +111,13 @@ export default function ComparisonCard({ comparison, showTrendingBadge = false }
       {/* Metadata */}
       <div className="p-4">
         {/* Title */}
-        <h3 className={`font-bold text-black dark:text-white group-hover:opacity-70 transition-opacity line-clamp-1 mb-1`} style={{ fontFamily: FONTS.sans }}>
+        <h3 className={`font-bold text-black dark:text-white group-hover:opacity-70 transition-opacity line-clamp-1 mb-1`} style={{ fontFamily: FONTS.mono }}>
           {work_title}
         </h3>
 
         {/* Author */}
         {work_author && (
-          <div className={`${TEXT.secondary} ${TEXT.mutedMedium} mb-2`} style={{ fontFamily: FONTS.sans }}>
+          <div className={`${TEXT.secondary} ${TEXT.mutedMedium} mb-2`} style={{ fontFamily: FONTS.mono }}>
             {work_author}
           </div>
         )}

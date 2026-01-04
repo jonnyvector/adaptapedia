@@ -54,7 +54,7 @@ export default function LoginForm({ redirectTo = '/' }: LoginFormProps): JSX.Ele
   return (
     <form onSubmit={handleSubmit} className="space-y-5 sm:space-y-6 w-full max-w-md">
       {error && (
-        <div className={`bg-red-50 dark:bg-red-950 border ${BORDERS.medium} border-red-500/40 dark:border-red-400/40 text-red-700 dark:text-red-300 px-3 sm:px-4 py-3 rounded-md text-sm sm:text-base`} style={{ fontFamily: FONTS.sans }}>
+        <div className={`bg-red-50 dark:bg-red-950 border ${BORDERS.medium} border-red-500/40 dark:border-red-400/40 text-red-700 dark:text-red-300 px-3 sm:px-4 py-3 rounded-md text-sm sm:text-base`} style={{ fontFamily: FONTS.mono }}>
           {error}
         </div>
       )}
@@ -103,7 +103,7 @@ export default function LoginForm({ redirectTo = '/' }: LoginFormProps): JSX.Ele
         {isSubmitting ? 'Logging in...' : 'Log In'}
       </button>
 
-      <p className={`text-center ${TEXT.secondary} ${TEXT.mutedMedium}`} style={{ fontFamily: FONTS.sans }}>
+      <p className={`text-center ${TEXT.secondary} ${TEXT.mutedMedium}`} style={{ fontFamily: FONTS.mono }}>
         Don&apos;t have an account?{' '}
         <Link href="/auth/signup" className="text-black dark:text-white hover:opacity-70 transition-opacity font-bold">
           Sign up

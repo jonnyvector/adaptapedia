@@ -256,7 +256,7 @@ export default function AddDiffForm({ work, screenWork, initialCategory }: AddDi
     <div className="max-w-2xl mx-auto p-4 sm:p-6">
       <div className="mb-4 sm:mb-6">
         <h1 className={`text-xl sm:text-2xl font-bold mb-2 text-black dark:text-white ${monoUppercase}`} style={{ fontFamily: FONTS.mono, letterSpacing: LETTER_SPACING.wider }}>Add New Difference</h1>
-        <p className={`${TEXT.secondary} ${TEXT.mutedMedium}`} style={{ fontFamily: FONTS.sans }}>
+        <p className={`${TEXT.secondary} ${TEXT.mutedMedium}`} style={{ fontFamily: FONTS.mono }}>
           Comparing <span className="font-semibold text-black dark:text-white">{work.title}</span> (book) and{' '}
           <span className="font-semibold text-black dark:text-white">{screenWork.title}</span> (
           {screenWork.type === 'MOVIE' ? 'movie' : 'TV series'})
@@ -291,7 +291,7 @@ export default function AddDiffForm({ work, screenWork, initialCategory }: AddDi
               </option>
             ))}
           </select>
-          <p className={`mt-1 ${TEXT.metadata} ${TEXT.mutedMedium}`} style={{ fontFamily: FONTS.sans }}>
+          <p className={`mt-1 ${TEXT.metadata} ${TEXT.mutedMedium}`} style={{ fontFamily: FONTS.mono }}>
             Choose the category that best describes this difference.
           </p>
         </div>
@@ -314,7 +314,7 @@ export default function AddDiffForm({ work, screenWork, initialCategory }: AddDi
             style={{ fontFamily: FONTS.mono, letterSpacing: LETTER_SPACING.normal }}
           />
           <div className="flex flex-col sm:flex-row sm:justify-between mt-1 gap-1">
-            <p className={`${TEXT.metadata} ${TEXT.mutedMedium}`} style={{ fontFamily: FONTS.sans }}>
+            <p className={`${TEXT.metadata} ${TEXT.mutedMedium}`} style={{ fontFamily: FONTS.mono }}>
               A brief statement describing the difference (10-200 characters).
             </p>
             <span
@@ -349,7 +349,7 @@ export default function AddDiffForm({ work, screenWork, initialCategory }: AddDi
             style={{ fontFamily: FONTS.mono, letterSpacing: LETTER_SPACING.normal }}
           />
           <div className="flex flex-col sm:flex-row sm:justify-between mt-1 gap-1">
-            <p className={`${TEXT.metadata} ${TEXT.mutedMedium}`} style={{ fontFamily: FONTS.sans }}>
+            <p className={`${TEXT.metadata} ${TEXT.mutedMedium}`} style={{ fontFamily: FONTS.mono }}>
               Optional: Provide more context or explanation (max 1000 characters).
             </p>
             <span className={`${TEXT.metadata} ${detailCharCount > 1000 ? 'text-red-600 dark:text-red-400' : TEXT.mutedMedium}`} style={{ fontFamily: FONTS.mono }}>
@@ -372,7 +372,7 @@ export default function AddDiffForm({ work, screenWork, initialCategory }: AddDi
             className={`w-full px-3 py-3 ${TEXT.secondary} bg-white dark:bg-black text-black dark:text-white border ${BORDERS.medium} rounded-md focus:outline-none focus:border-black dark:focus:border-white file:mr-4 file:py-2 file:px-4 file:rounded-md file:border-0 ${TEXT.metadata} file:font-bold file:bg-black/10 dark:file:bg-white/10 file:text-black dark:file:text-white hover:file:bg-black/20 hover:dark:file:bg-white/20 min-h-[44px]`}
             style={{ fontFamily: FONTS.mono }}
           />
-          <p className={`mt-1 ${TEXT.metadata} ${TEXT.mutedMedium}`} style={{ fontFamily: FONTS.sans }}>
+          <p className={`mt-1 ${TEXT.metadata} ${TEXT.mutedMedium}`} style={{ fontFamily: FONTS.mono }}>
             Optional: Add an image to illustrate the difference (max 5MB, JPEG/PNG/WebP).
           </p>
           {imagePreview && (
@@ -420,7 +420,7 @@ export default function AddDiffForm({ work, screenWork, initialCategory }: AddDi
                 />
                 <div className="flex-1">
                   <div className={`font-bold ${TEXT.secondary}`} style={{ fontFamily: FONTS.mono }}>{scope.label}</div>
-                  <div className={`${TEXT.metadata} ${TEXT.mutedMedium}`} style={{ fontFamily: FONTS.sans }}>{scope.description}</div>
+                  <div className={`${TEXT.metadata} ${TEXT.mutedMedium}`} style={{ fontFamily: FONTS.mono }}>{scope.description}</div>
                 </div>
               </label>
             ))}
@@ -436,7 +436,7 @@ export default function AddDiffForm({ work, screenWork, initialCategory }: AddDi
                 <span className={`${TEXT.metadata} ${TEXT.mutedMedium} font-bold ${monoUppercase}`} style={{ fontFamily: FONTS.mono, letterSpacing: LETTER_SPACING.wide }}>{formData.category || 'Category'}</span>
               </div>
               <p className="font-bold" style={{ fontFamily: FONTS.mono }}>{formData.claim}</p>
-              {formData.detail && <p className={`${TEXT.secondary} ${TEXT.mutedMedium}`} style={{ fontFamily: FONTS.sans }}>{formData.detail}</p>}
+              {formData.detail && <p className={`${TEXT.secondary} ${TEXT.mutedMedium}`} style={{ fontFamily: FONTS.mono }}>{formData.detail}</p>}
               <div className={`${TEXT.metadata} ${TEXT.mutedMedium}`} style={{ fontFamily: FONTS.mono }}>
                 Spoiler: {SPOILER_SCOPES.find((s) => s.value === formData.spoiler_scope)?.label}
               </div>

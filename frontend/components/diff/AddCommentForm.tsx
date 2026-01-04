@@ -190,7 +190,7 @@ export default function AddCommentForm({
             </button>
           ))}
         </div>
-        <p className={`${TEXT.metadata} ${TEXT.mutedMedium} mt-1`} style={{ fontFamily: FONTS.sans }}>
+        <p className={`${TEXT.metadata} ${TEXT.mutedMedium} mt-1`} style={{ fontFamily: FONTS.mono }}>
           {spoilerScopes.find((s) => s.value === spoilerScope)?.description}
         </p>
       </div>

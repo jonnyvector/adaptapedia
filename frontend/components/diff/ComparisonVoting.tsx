@@ -231,7 +231,7 @@ export default function ComparisonVoting({ work, screenWork, initialStats = null
       <div className="space-y-3">
         <div className="text-center">
           <h3 className={`${TEXT.secondary} font-bold text-black dark:text-white mb-1 ${monoUppercase}`} style={{ fontFamily: FONTS.mono, letterSpacing: LETTER_SPACING.wide }}>Which did you prefer?</h3>
-          <p className={`${TEXT.metadata} ${TEXT.mutedMedium}`} style={{ fontFamily: FONTS.sans }}>Vote on the adaptation</p>
+          <p className={`${TEXT.metadata} ${TEXT.mutedMedium}`} style={{ fontFamily: FONTS.mono }}>Vote on the adaptation</p>
         </div>
 
         {/* Primary Vote Buttons */}

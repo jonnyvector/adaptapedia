@@ -3,6 +3,7 @@ import { api } from '@/lib/api';
 import type { BrowseSections } from '@/lib/types';
 import ComparisonCard from '@/components/browse/ComparisonCard';
 import EmptyState from '@/components/ui/EmptyState';
+import { FONTS } from '@/lib/brutalist-design';
 
 export const metadata: Metadata = {
   title: 'Browse Comparisons - Book vs. Movie',
@@ -37,10 +38,10 @@ export default async function BrowsePage(): Promise<JSX.Element> {
       <div className="container py-8 md:py-12">
         {/* Header */}
         <div className="mb-12">
-          <h1 className="mb-3 text-4xl md:text-5xl font-bold">
+          <h1 className="mb-3 text-4xl md:text-5xl font-bold" style={{ fontFamily: FONTS.mono }}>
             Browse Comparisons
           </h1>
-          <p className="text-base sm:text-lg text-muted max-w-2xl">
+          <p className="text-base sm:text-lg text-muted max-w-2xl" style={{ fontFamily: FONTS.mono }}>
             Explore book-to-screen adaptations with community-documented differences.
             Click any comparison to see what changed.
           </p>
@@ -57,8 +58,8 @@ export default async function BrowsePage(): Promise<JSX.Element> {
             {sections.featured.length > 0 && (
               <section>
                 <div className="mb-6">
-                  <h2 className="text-3xl md:text-4xl font-bold mb-2">Featured</h2>
-                  <p className="text-muted">
+                  <h2 className="text-3xl md:text-4xl font-bold mb-2" style={{ fontFamily: FONTS.mono }}>Featured</h2>
+                  <p className="text-muted" style={{ fontFamily: FONTS.mono }}>
                     Top comparisons with the most engagement
                   </p>
                 </div>
@@ -74,8 +75,8 @@ export default async function BrowsePage(): Promise<JSX.Element> {
             {sections.recently_updated.length > 0 && (
               <section>
                 <div className="mb-6">
-                  <h2 className="text-3xl md:text-4xl font-bold mb-2">Recently Updated</h2>
-                  <p className="text-muted">
+                  <h2 className="text-3xl md:text-4xl font-bold mb-2" style={{ fontFamily: FONTS.mono }}>Recently Updated</h2>
+                  <p className="text-muted" style={{ fontFamily: FONTS.mono }}>
                     Fresh activity in the last 48 hours
                   </p>
                 </div>
@@ -91,8 +92,8 @@ export default async function BrowsePage(): Promise<JSX.Element> {
             {sections.most_documented.length > 0 && (
               <section>
                 <div className="mb-6">
-                  <h2 className="text-3xl md:text-4xl font-bold mb-2">Most Documented</h2>
-                  <p className="text-muted">
+                  <h2 className="text-3xl md:text-4xl font-bold mb-2" style={{ fontFamily: FONTS.mono }}>Most Documented</h2>
+                  <p className="text-muted" style={{ fontFamily: FONTS.mono }}>
                     Comprehensive coverage with the most differences
                   </p>
                 </div>
@@ -108,8 +109,8 @@ export default async function BrowsePage(): Promise<JSX.Element> {
             {sections.trending.length > 0 && (
               <section>
                 <div className="mb-6">
-                  <h2 className="text-3xl md:text-4xl font-bold mb-2">Trending This Week</h2>
-                  <p className="text-muted">
+                  <h2 className="text-3xl md:text-4xl font-bold mb-2" style={{ fontFamily: FONTS.mono }}>Trending This Week</h2>
+                  <p className="text-muted" style={{ fontFamily: FONTS.mono }}>
                     Most active comparisons in the last 7 days
                   </p>
                 </div>
@@ -125,8 +126,8 @@ export default async function BrowsePage(): Promise<JSX.Element> {
             {sections.all_comparisons.length > 0 && (
               <section>
                 <div className="mb-6">
-                  <h2 className="text-3xl md:text-4xl font-bold mb-2">All Comparisons</h2>
-                  <p className="text-muted">
+                  <h2 className="text-3xl md:text-4xl font-bold mb-2" style={{ fontFamily: FONTS.mono }}>All Comparisons</h2>
+                  <p className="text-muted" style={{ fontFamily: FONTS.mono }}>
                     Browse all available book-to-screen adaptations
                   </p>
                 </div>

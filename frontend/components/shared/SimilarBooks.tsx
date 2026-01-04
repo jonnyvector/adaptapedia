@@ -14,7 +14,7 @@ export default function SimilarBooks({ books }: SimilarBooksProps): JSX.Element 
   return (
     <div className={`mt-8 border-t ${BORDERS.subtle} pt-8`}>
       <h2 className={`text-2xl font-bold mb-4 text-black dark:text-white ${monoUppercase}`} style={{ fontFamily: FONTS.mono, letterSpacing: LETTER_SPACING.wider }}>Similar Books</h2>
-      <p className={`${TEXT.secondary} ${TEXT.mutedMedium} mb-6`} style={{ fontFamily: FONTS.sans }}>
+      <p className={`${TEXT.secondary} ${TEXT.mutedMedium} mb-6`} style={{ fontFamily: FONTS.mono }}>
         Other books you might be interested in exploring
       </p>
 

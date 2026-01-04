@@ -85,7 +85,7 @@ export default function CommentReviewCard({
           </span>
         </div>
         <div className={`p-4 bg-stone-50 dark:bg-stone-950 rounded-md border ${BORDERS.medium}`}>
-          <p className={`${TEXT.secondary} text-black dark:text-white whitespace-pre-wrap`} style={{ fontFamily: FONTS.sans }}>{comment.body}</p>
+          <p className={`${TEXT.secondary} text-black dark:text-white whitespace-pre-wrap`} style={{ fontFamily: FONTS.mono }}>{comment.body}</p>
         </div>
       </div>
 

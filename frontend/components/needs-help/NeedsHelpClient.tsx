@@ -123,7 +123,7 @@ export default function NeedsHelpClient() {
               <h2 className={`${TEXT.body} font-bold ${TEXT.primary} mb-1`} style={{ fontFamily: FONTS.mono, letterSpacing: LETTER_SPACING.normal }}>
                 HELP QUEUE: {queueCount} {queueCount === 1 ? 'COMPARISON NEEDS' : 'COMPARISONS NEED'} YOUR INPUT
               </h2>
-              <p className={`${TEXT.metadata} ${TEXT.mutedMedium}`} style={{ fontFamily: FONTS.sans }}>
+              <p className={`${TEXT.metadata} ${TEXT.mutedMedium}`} style={{ fontFamily: FONTS.mono }}>
                 Add comments and context to help the community vote accurately
               </p>
             </div>
@@ -139,8 +139,8 @@ export default function NeedsHelpClient() {
       <div className="mb-8">
         <div className="flex flex-col md:flex-row md:items-start md:justify-between gap-6 mb-6">
           <div>
-            <h1 className={`text-4xl md:text-5xl font-bold ${TEXT.primary} mb-2`} style={{ fontFamily: FONTS.sans }}>Help Queue</h1>
-            <p className={`${TEXT.body} ${TEXT.mutedMedium}`} style={{ fontFamily: FONTS.sans }}>
+            <h1 className={`text-4xl md:text-5xl font-bold ${TEXT.primary} mb-2`} style={{ fontFamily: FONTS.mono }}>Help Queue</h1>
+            <p className={`${TEXT.body} ${TEXT.mutedMedium}`} style={{ fontFamily: FONTS.mono }}>
               These differences need discussion. Add context so others can vote smarter.
             </p>
           </div>
@@ -243,10 +243,10 @@ export default function NeedsHelpClient() {
       {!hasAnyContent ? (
         <div className={`text-center py-12 bg-stone-50 dark:bg-stone-950 border ${BORDERS.medium} ${RADIUS.control}`}>
           <div className="text-4xl mb-4">✨</div>
-          <h2 className={`text-xl font-bold ${TEXT.primary} mb-2`} style={{ fontFamily: FONTS.sans }}>
+          <h2 className={`text-xl font-bold ${TEXT.primary} mb-2`} style={{ fontFamily: FONTS.mono }}>
             Everything's looking great!
           </h2>
-          <p className={`${TEXT.body} ${TEXT.mutedMedium}`} style={{ fontFamily: FONTS.sans }}>
+          <p className={`${TEXT.body} ${TEXT.mutedMedium}`} style={{ fontFamily: FONTS.mono }}>
             No comparisons currently need help. Check back later or explore other content.
           </p>
         </div>
@@ -270,7 +270,7 @@ export default function NeedsHelpClient() {
               </div>
             ) : (
               <div className={`text-center py-12 bg-stone-50 dark:bg-stone-950 border ${BORDERS.medium} ${RADIUS.control}`}>
-                <p className={`${TEXT.body} ${TEXT.mutedMedium}`} style={{ fontFamily: FONTS.sans }}>All comparisons have been skipped or reviewed.</p>
+                <p className={`${TEXT.body} ${TEXT.mutedMedium}`} style={{ fontFamily: FONTS.mono }}>All comparisons have been skipped or reviewed.</p>
               </div>
             )
           )}
@@ -292,7 +292,7 @@ export default function NeedsHelpClient() {
               </div>
             ) : (
               <div className={`text-center py-12 bg-stone-50 dark:bg-stone-950 border ${BORDERS.medium} ${RADIUS.control}`}>
-                <p className={`${TEXT.body} ${TEXT.mutedMedium}`} style={{ fontFamily: FONTS.sans }}>All comparisons have been skipped or reviewed.</p>
+                <p className={`${TEXT.body} ${TEXT.mutedMedium}`} style={{ fontFamily: FONTS.mono }}>All comparisons have been skipped or reviewed.</p>
               </div>
             )
           )}
@@ -311,7 +311,7 @@ export default function NeedsHelpClient() {
               </div>
             ) : (
               <div className={`text-center py-12 bg-stone-50 dark:bg-stone-950 border ${BORDERS.medium} ${RADIUS.control}`}>
-                <p className={`${TEXT.body} ${TEXT.mutedMedium}`} style={{ fontFamily: FONTS.sans }}>All comparisons have been skipped or reviewed.</p>
+                <p className={`${TEXT.body} ${TEXT.mutedMedium}`} style={{ fontFamily: FONTS.mono }}>All comparisons have been skipped or reviewed.</p>
               </div>
             )
           )}
@@ -392,10 +392,10 @@ function CompactComparisonCard({
               )}
             </div>
             <div className="flex-1 min-w-0">
-              <div className={`${TEXT.secondary} font-bold ${TEXT.primary} group-hover/link:underline transition-colors line-clamp-1`} style={{ fontFamily: FONTS.sans }}>
+              <div className={`${TEXT.secondary} font-bold ${TEXT.primary} group-hover/link:underline transition-colors line-clamp-1`} style={{ fontFamily: FONTS.mono }}>
                 {comparison.work_title}
               </div>
-              <div className={`${TEXT.metadata} ${TEXT.mutedMedium}`} style={{ fontFamily: FONTS.sans }}>BOOK{comparison.work_author && ` · ${comparison.work_author}`}</div>
+              <div className={`${TEXT.metadata} ${TEXT.mutedMedium}`} style={{ fontFamily: FONTS.mono }}>BOOK{comparison.work_author && ` · ${comparison.work_author}`}</div>
             </div>
           </div>
 
@@ -405,10 +405,10 @@ function CompactComparisonCard({
           {/* Screen side */}
           <div className="flex items-center gap-1.5 flex-1 min-w-0">
             <div className="flex-1 min-w-0 text-right">
-              <div className={`${TEXT.secondary} font-bold ${TEXT.primary} group-hover/link:underline transition-colors line-clamp-1`} style={{ fontFamily: FONTS.sans }}>
+              <div className={`${TEXT.secondary} font-bold ${TEXT.primary} group-hover/link:underline transition-colors line-clamp-1`} style={{ fontFamily: FONTS.mono }}>
                 {comparison.screen_work_title}
               </div>
-              <div className={`${TEXT.metadata} ${TEXT.mutedMedium}`} style={{ fontFamily: FONTS.sans }}>
+              <div className={`${TEXT.metadata} ${TEXT.mutedMedium}`} style={{ fontFamily: FONTS.mono }}>
                 {comparison.screen_work_type}{comparison.screen_work_year && ` · ${comparison.screen_work_year}`}
               </div>
             </div>
@@ -514,11 +514,11 @@ function ComparisonCard({ comparison }: { comparison: NeedsHelpComparison }) {
 
       {/* Content below */}
       <div className="p-4">
-        <h3 className={`font-bold ${TEXT.primary} mb-2 line-clamp-2`} style={{ fontFamily: FONTS.sans }}>
+        <h3 className={`font-bold ${TEXT.primary} mb-2 line-clamp-2`} style={{ fontFamily: FONTS.mono }}>
           {comparison.work_title}
         </h3>
         <p className={`${TEXT.secondary} ${TEXT.mutedMedium} mb-2 font-bold`} style={{ fontFamily: FONTS.mono }}>VS</p>
-        <p className={`${TEXT.secondary} ${TEXT.primary} mb-3 line-clamp-2`} style={{ fontFamily: FONTS.sans }}>
+        <p className={`${TEXT.secondary} ${TEXT.primary} mb-3 line-clamp-2`} style={{ fontFamily: FONTS.mono }}>
           {comparison.screen_work_title}
         </p>
         <div className="flex items-center gap-2">

@@ -109,7 +109,7 @@ export default function CompareHeader({
                 {work.title}
               </h1>
               {work.author && (
-                <p className={`${TEXT.secondary} ${TEXT.mutedMedium} mb-1`} style={{ fontFamily: FONTS.sans }}>by {work.author}</p>
+                <p className={`${TEXT.secondary} ${TEXT.mutedMedium} mb-1`} style={{ fontFamily: FONTS.mono }}>by {work.author}</p>
               )}
               {work.year && (
                 <p className={`${TEXT.metadata} ${TEXT.mutedMedium}`} style={{ fontFamily: FONTS.mono }}>{work.year}</p>

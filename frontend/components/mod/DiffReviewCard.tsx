@@ -104,7 +104,7 @@ export default function DiffReviewCard({
         </div>
         <h3 className={`${TEXT.body} font-bold mb-2 text-black dark:text-white`} style={{ fontFamily: FONTS.mono }}>{diff.claim}</h3>
         {diff.detail && (
-          <p className={`${TEXT.secondary} text-black dark:text-white whitespace-pre-wrap`} style={{ fontFamily: FONTS.sans }}>{diff.detail}</p>
+          <p className={`${TEXT.secondary} text-black dark:text-white whitespace-pre-wrap`} style={{ fontFamily: FONTS.mono }}>{diff.detail}</p>
         )}
       </div>
 

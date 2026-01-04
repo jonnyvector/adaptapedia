@@ -18,7 +18,7 @@ export default function SearchResults({
     return (
       <div className="text-center py-12">
         <p className={`${TEXT.body} font-bold mb-2 text-black dark:text-white`} style={{ fontFamily: FONTS.mono }}>No results found for &quot;{query}&quot;</p>
-        <p className={`${TEXT.secondary} ${TEXT.mutedMedium}`} style={{ fontFamily: FONTS.sans }}>
+        <p className={`${TEXT.secondary} ${TEXT.mutedMedium}`} style={{ fontFamily: FONTS.mono }}>
           Try adjusting your search terms or browse our catalog
         </p>
       </div>
@@ -31,7 +31,7 @@ export default function SearchResults({
     return (
       <div className="text-center py-12">
         <p className={`${TEXT.body} font-bold mb-2 text-black dark:text-white`} style={{ fontFamily: FONTS.mono }}>No results found for &quot;{query}&quot;</p>
-        <p className={`${TEXT.secondary} ${TEXT.mutedMedium}`} style={{ fontFamily: FONTS.sans }}>
+        <p className={`${TEXT.secondary} ${TEXT.mutedMedium}`} style={{ fontFamily: FONTS.mono }}>
           Try adjusting your search terms or browse our catalog
         </p>
       </div>

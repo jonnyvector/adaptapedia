@@ -91,7 +91,7 @@ export default function SignupForm({ redirectTo = '/' }: SignupFormProps): JSX.E
   return (
     <form onSubmit={handleSubmit} className="space-y-5 sm:space-y-6 w-full max-w-md">
       {errors.general && (
-        <div className={`bg-red-50 dark:bg-red-950 border ${BORDERS.medium} border-red-500/40 dark:border-red-400/40 text-red-700 dark:text-red-300 px-3 sm:px-4 py-3 rounded-md text-sm sm:text-base`} style={{ fontFamily: FONTS.sans }}>
+        <div className={`bg-red-50 dark:bg-red-950 border ${BORDERS.medium} border-red-500/40 dark:border-red-400/40 text-red-700 dark:text-red-300 px-3 sm:px-4 py-3 rounded-md text-sm sm:text-base`} style={{ fontFamily: FONTS.mono }}>
           {errors.general}
         </div>
       )}
@@ -189,7 +189,7 @@ export default function SignupForm({ redirectTo = '/' }: SignupFormProps): JSX.E
         {isSubmitting ? 'Creating account...' : 'Sign Up'}
       </button>
 
-      <p className={`text-center ${TEXT.secondary} ${TEXT.mutedMedium}`} style={{ fontFamily: FONTS.sans }}>
+      <p className={`text-center ${TEXT.secondary} ${TEXT.mutedMedium}`} style={{ fontFamily: FONTS.mono }}>
         Already have an account?{' '}
         <Link href="/auth/login" className="text-black dark:text-white hover:opacity-70 transition-opacity font-bold">
           Log in

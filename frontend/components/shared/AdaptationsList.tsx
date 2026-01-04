@@ -60,7 +60,7 @@ export default function AdaptationsList({
                       <span className={`${TEXT.secondary} ${TEXT.mutedMedium}`} style={{ fontFamily: FONTS.mono }}>{adaptation.year}</span>
                     )}
                   </div>
-                  <h3 className={`text-2xl font-bold text-black dark:text-white mb-1`} style={{ fontFamily: FONTS.sans }}>
+                  <h3 className={`text-2xl font-bold text-black dark:text-white mb-1`} style={{ fontFamily: FONTS.mono }}>
                     {adaptation.title}
                   </h3>
                   <span className={`${TEXT.metadata} ${TEXT.mutedMedium} ${monoUppercase}`} style={{ fontFamily: FONTS.mono, letterSpacing: LETTER_SPACING.wide }}>
@@ -70,13 +70,13 @@ export default function AdaptationsList({
 
                 {/* Summary */}
                 {adaptation.summary && (
-                  <p className={`${TEXT.secondary} ${TEXT.mutedMedium} mb-4 leading-relaxed line-clamp-3`} style={{ fontFamily: FONTS.sans }}>
+                  <p className={`${TEXT.secondary} ${TEXT.mutedMedium} mb-4 leading-relaxed line-clamp-3`} style={{ fontFamily: FONTS.mono }}>
                     {adaptation.summary}
                   </p>
                 )}
 
                 {/* Engagement Stats */}
-                <div className={`mb-4 ${TEXT.secondary} ${TEXT.mutedMedium}`} style={{ fontFamily: FONTS.sans }}>
+                <div className={`mb-4 ${TEXT.secondary} ${TEXT.mutedMedium}`} style={{ fontFamily: FONTS.mono }}>
                   {diffCount > 0 ? (
                     <span className="font-bold">
                       {diffCount} {diffCount === 1 ? 'difference' : 'differences'} documented

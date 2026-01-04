@@ -151,7 +151,7 @@ export default function ModerationActions({
             onChange={(e) => setRejectReason(e.target.value)}
             placeholder="Explain why this content is being rejected..."
             className={`w-full p-2 border ${BORDERS.medium} rounded-md mb-3 min-h-[80px] bg-white dark:bg-black text-black dark:text-white ${TEXT.secondary} focus:outline-none focus:border-black focus:dark:border-white`}
-            style={{ fontFamily: FONTS.sans }}
+            style={{ fontFamily: FONTS.mono }}
             disabled={isLoading}
           />
           <div className="flex gap-2">
