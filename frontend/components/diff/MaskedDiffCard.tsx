@@ -3,7 +3,7 @@
 import { useState } from 'react';
 import type { DiffItem, SpoilerScope } from '@/lib/types';
 import DiffItemCard from './DiffItemCard';
-import { BookOpenIcon, FilmIcon, ExclamationTriangleIcon, LockClosedIcon } from '@/components/ui/Icons';
+import { BookOpenIcon, FilmIcon, ExclamationTriangleIcon, LockClosedIcon, EyeIcon } from '@/components/ui/Icons';
 import { getSpoilerLabel } from '@/lib/badge-utils';
 import { FONTS, BORDERS, TEXT, RADIUS } from '@/lib/brutalist-design';
 
@@ -88,7 +88,7 @@ export default function MaskedDiffCard({
           style={{ fontFamily: FONTS.mono }}
           aria-label={`Reveal ${getSpoilerLabel(diff.spoiler_scope).toLowerCase()}`}
         >
-          <span className="text-lg" aria-hidden="true">👁️</span>
+          <EyeIcon className="w-5 h-5" />
           <span>Reveal Spoiler</span>
         </button>
       </div>
