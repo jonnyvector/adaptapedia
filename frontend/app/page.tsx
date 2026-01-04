@@ -318,8 +318,8 @@ export default async function Home(): Promise<JSX.Element> {
           {/* Step 1 */}
           <div className="relative">
             <div className="flex flex-col items-start text-left">
-              <div className={`mb-6 w-16 h-16 bg-black dark:bg-white border ${BORDERS.medium} flex items-center justify-center text-white dark:text-black text-2xl font-black`} style={{ fontFamily: FONTS.mono }}>
-                1
+              <div className={`mb-6 px-3 py-2 bg-black dark:bg-white border ${BORDERS.medium} inline-flex items-center justify-center text-white dark:text-black ${TEXT.metadata} font-black uppercase tracking-wider`} style={{ fontFamily: FONTS.mono, letterSpacing: '0.1em' }}>
+                Step 01
               </div>
               <h3 className={`text-2xl font-bold mb-3 ${TEXT.primary}`} style={{ fontFamily: FONTS.mono }}>Search</h3>
               <p className={`${TEXT.secondary} ${TEXT.mutedMedium} mb-4`} style={{ fontFamily: FONTS.mono }}>
@@ -384,8 +384,8 @@ export default async function Home(): Promise<JSX.Element> {
           {/* Step 2 */}
           <div className="relative">
             <div className="flex flex-col items-start text-left">
-              <div className={`mb-6 w-16 h-16 bg-black dark:bg-white border ${BORDERS.medium} flex items-center justify-center text-white dark:text-black text-2xl font-black`} style={{ fontFamily: FONTS.mono }}>
-                2
+              <div className={`mb-6 px-3 py-2 bg-black dark:bg-white border ${BORDERS.medium} inline-flex items-center justify-center text-white dark:text-black ${TEXT.metadata} font-black uppercase tracking-wider`} style={{ fontFamily: FONTS.mono, letterSpacing: '0.1em' }}>
+                Step 02
               </div>
               <h3 className={`text-2xl font-bold mb-3 ${TEXT.primary}`} style={{ fontFamily: FONTS.mono }}>Compare & Discuss</h3>
               <p className={`${TEXT.secondary} ${TEXT.mutedMedium} mb-4`} style={{ fontFamily: FONTS.mono }}>
@@ -450,8 +450,8 @@ export default async function Home(): Promise<JSX.Element> {
           {/* Step 3 */}
           <div className="relative">
             <div className="flex flex-col items-start text-left">
-              <div className={`mb-6 w-16 h-16 bg-black dark:bg-white border ${BORDERS.medium} flex items-center justify-center text-white dark:text-black text-2xl font-black`} style={{ fontFamily: FONTS.mono }}>
-                3
+              <div className={`mb-6 px-3 py-2 bg-black dark:bg-white border ${BORDERS.medium} inline-flex items-center justify-center text-white dark:text-black ${TEXT.metadata} font-black uppercase tracking-wider`} style={{ fontFamily: FONTS.mono, letterSpacing: '0.1em' }}>
+                Step 03
               </div>
               <h3 className={`text-2xl font-bold mb-3 ${TEXT.primary}`} style={{ fontFamily: FONTS.mono }}>Contribute</h3>
               <p className={`${TEXT.secondary} ${TEXT.mutedMedium} mb-4`} style={{ fontFamily: FONTS.mono }}>
