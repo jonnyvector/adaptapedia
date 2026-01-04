@@ -6,6 +6,7 @@ import { api } from '@/lib/api';
 import type { Vote, ApiResponse } from '@/lib/types';
 import UserVotesList from './UserVotesList';
 import LoadingSkeleton from '@/components/ui/LoadingSkeleton';
+import { FONTS, LETTER_SPACING, BORDERS, TEXT, monoUppercase } from '@/lib/brutalist-design';
 
 interface UserVotesSectionProps {
   username: string;
@@ -60,10 +61,10 @@ export default function UserVotesSection({
   return (
     <section>
       <div className="flex items-center justify-between mb-3 sm:mb-4">
-        <h2 className="text-xl sm:text-2xl font-semibold">
+        <h2 className={`text-xl sm:text-2xl font-bold text-black dark:text-white ${monoUppercase}`} style={{ fontFamily: FONTS.mono, letterSpacing: LETTER_SPACING.wider }}>
           Your Voting History
           {votesCount > 0 && (
-            <span className="text-sm sm:text-base text-muted ml-2">
+            <span className={`${TEXT.secondary} ${TEXT.mutedMedium} ml-2`} style={{ fontFamily: FONTS.mono }}>
               ({votesCount})
             </span>
           )}
@@ -79,8 +80,8 @@ export default function UserVotesSection({
       )}
 
       {error && !loading && (
-        <div className="border border-red-200 bg-red-50 rounded-lg p-6 text-center">
-          <p className="text-red-700">{error}</p>
+        <div className={`border ${BORDERS.solid} border-red-600 dark:border-red-400 bg-red-50 dark:bg-red-950/20 rounded-md p-6 text-center`}>
+          <p className={`text-red-700 dark:text-red-400`} style={{ fontFamily: FONTS.mono }}>{error}</p>
         </div>
       )}
 
@@ -88,7 +89,7 @@ export default function UserVotesSection({
 
       {hasMore && (
         <div className="mt-4 text-center">
-          <p className="text-xs sm:text-sm text-muted">
+          <p className={`${TEXT.metadata} ${TEXT.mutedMedium}`} style={{ fontFamily: FONTS.mono }}>
             Showing first 20 votes. Pagination coming soon.
           </p>
         </div>

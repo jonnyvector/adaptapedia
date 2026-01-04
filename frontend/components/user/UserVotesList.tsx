@@ -1,5 +1,6 @@
 import Link from 'next/link';
 import type { Vote } from '@/lib/types';
+import { FONTS, LETTER_SPACING, BORDERS, TEXT, monoUppercase } from '@/lib/brutalist-design';
 
 interface UserVotesListProps {
   votes: Vote[];
@@ -8,13 +9,13 @@ interface UserVotesListProps {
 function getVoteBadgeColor(vote: string): string {
   switch (vote) {
     case 'ACCURATE':
-      return 'bg-green-100 text-green-800 border-green-300';
+      return 'bg-green-100 dark:bg-green-950/30 text-green-800 dark:text-green-400 border-green-600 dark:border-green-400';
     case 'NEEDS_NUANCE':
-      return 'bg-yellow-100 text-yellow-800 border-yellow-300';
+      return 'bg-amber-100 dark:bg-amber-950/30 text-amber-800 dark:text-amber-400 border-amber-600 dark:border-amber-400';
     case 'DISAGREE':
-      return 'bg-red-100 text-red-800 border-red-300';
+      return 'bg-red-100 dark:bg-red-950/30 text-red-800 dark:text-red-400 border-red-600 dark:border-red-400';
     default:
-      return 'bg-gray-100 text-gray-800 border-gray-300';
+      return 'bg-stone-100 dark:bg-stone-900 text-black dark:text-white border-black/30 dark:border-white/30';
   }
 }
 
@@ -65,9 +66,9 @@ export default function UserVotesList({
 }: UserVotesListProps): JSX.Element {
   if (votes.length === 0) {
     return (
-      <div className="border border-border rounded-lg p-12 text-center">
-        <p className="text-muted text-lg">No votes cast yet</p>
-        <p className="text-muted text-sm mt-2">
+      <div className={`border ${BORDERS.medium} rounded-md p-12 text-center bg-stone-50 dark:bg-stone-950`}>
+        <p className={`${TEXT.body} ${TEXT.mutedMedium} font-bold`} style={{ fontFamily: FONTS.mono }}>No votes cast yet</p>
+        <p className={`${TEXT.secondary} ${TEXT.mutedMedium} mt-2`} style={{ fontFamily: FONTS.sans }}>
           Start voting on diffs to build your voting history
         </p>
       </div>
@@ -79,13 +80,14 @@ export default function UserVotesList({
       {votes.map((vote) => (
         <div
           key={vote.id}
-          className="border border-border rounded-lg p-5 hover:shadow-md transition-shadow bg-white"
+          className={`border ${BORDERS.medium} rounded-md p-5 hover:border-black hover:dark:border-white transition-colors bg-white dark:bg-black`}
         >
           {/* Header with comparison link */}
           <div className="mb-3">
             <Link
               href={`/compare/${vote.work_slug}/${vote.screen_work_slug}`}
-              className="text-sm text-link hover:underline font-medium"
+              className={`${TEXT.secondary} text-black dark:text-white hover:opacity-70 font-bold`}
+              style={{ fontFamily: FONTS.mono }}
             >
               {vote.work_title} vs {vote.screen_work_title}
             </Link>
@@ -93,15 +95,16 @@ export default function UserVotesList({
 
           {/* Diff claim */}
           <div className="flex items-start justify-between mb-3">
-            <h3 className="text-lg font-semibold flex-1">
+            <h3 className={`${TEXT.body} font-bold flex-1`} style={{ fontFamily: FONTS.mono }}>
               {vote.diff_item_claim}
             </h3>
             <div className="flex gap-2 ml-3">
               {vote.diff_item_category && (
                 <span
-                  className={`px-2 py-1 text-xs font-semibold rounded border ${getCategoryBadgeColor(
+                  className={`px-2 py-1 ${TEXT.metadata} font-bold rounded-md border ${BORDERS.solid} ${getCategoryBadgeColor(
                     vote.diff_item_category
-                  )}`}
+                  )} ${monoUppercase}`}
+                  style={{ fontFamily: FONTS.mono, letterSpacing: LETTER_SPACING.wide }}
                 >
                   {vote.diff_item_category}
                 </span>
@@ -110,25 +113,26 @@ export default function UserVotesList({
           </div>
 
           {/* Vote and meta info */}
-          <div className="flex items-center justify-between text-sm">
+          <div className={`flex items-center justify-between ${TEXT.secondary}`}>
             <div className="flex items-center gap-3">
-              <span className="text-muted">You voted:</span>
+              <span className={TEXT.mutedMedium} style={{ fontFamily: FONTS.mono }}>You voted:</span>
               <span
-                className={`px-3 py-1 text-xs font-semibold rounded border ${getVoteBadgeColor(
+                className={`px-3 py-1 ${TEXT.metadata} font-bold rounded-md border ${BORDERS.solid} ${getVoteBadgeColor(
                   vote.vote
                 )}`}
+                style={{ fontFamily: FONTS.mono }}
               >
                 {getVoteLabel(vote.vote)}
               </span>
             </div>
-            <div className="flex items-center gap-3 text-muted">
+            <div className={`flex items-center gap-3 ${TEXT.mutedMedium}`} style={{ fontFamily: FONTS.mono }}>
               {vote.created_by_username && (
                 <>
                   <span>
                     by{' '}
                     <Link
                       href={`/u/${vote.created_by_username}`}
-                      className="text-link hover:underline"
+                      className="text-black dark:text-white hover:opacity-70"
                     >
                       @{vote.created_by_username}
                     </Link>
