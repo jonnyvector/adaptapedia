@@ -121,7 +121,7 @@ export default async function Home(): Promise<JSX.Element> {
       </div>
 
       {/* Why Book vs. Movie - With separator */}
-      <div className={`relative bg-stone-50 dark:bg-stone-950 py-12 md:py-20 mt-8 border-y ${BORDERS.medium}`}>
+      <div className={`relative bg-white dark:bg-black py-12 md:py-20 mt-8 border-y ${BORDERS.medium}`}>
         <div className="container relative">
 
         {/* Features - Redesigned Grid */}
