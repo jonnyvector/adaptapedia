@@ -325,7 +325,36 @@ export default async function Home(): Promise<JSX.Element> {
               <p className={`${TEXT.secondary} ${TEXT.mutedMedium} mb-4`} style={{ fontFamily: FONTS.mono }}>
                 Find a book + adaptation fast — even if you type it wrong
               </p>
-              <div className={`flex flex-col gap-2 ${TEXT.secondary} ${TEXT.mutedMedium}`} style={{ fontFamily: FONTS.mono }}>
+              {/* Mini Search Results Preview */}
+              <div className={`relative border ${BORDERS.medium} bg-stone-50 dark:bg-stone-950 p-3 mb-4`}>
+                <div className={`${TEXT.metadata} ${TEXT.mutedLight} uppercase tracking-wide font-semibold mb-2`} style={{ fontFamily: FONTS.mono }}>Preview</div>
+                <div className="space-y-2">
+                  {/* Result 1 */}
+                  <div className={`flex items-center gap-2 p-2 border ${BORDERS.medium} bg-white dark:bg-black hover:border-black/50 hover:dark:border-white/50 transition-colors`}>
+                    <div className="flex gap-1">
+                      <div className={`w-6 h-9 bg-black/10 dark:bg-white/10 border ${BORDERS.medium}`}></div>
+                      <div className={`w-6 h-9 bg-black/10 dark:bg-white/10 border ${BORDERS.medium}`}></div>
+                    </div>
+                    <div className="flex-1 min-w-0">
+                      <div className={`${TEXT.metadata} font-bold ${TEXT.primary} truncate`} style={{ fontFamily: FONTS.mono }}>Dune</div>
+                      <div className={`text-[10px] ${TEXT.mutedMedium} uppercase tracking-wider`} style={{ fontFamily: FONTS.mono }}>24 diffs</div>
+                    </div>
+                  </div>
+                  {/* Result 2 */}
+                  <div className={`flex items-center gap-2 p-2 border ${BORDERS.medium} bg-white dark:bg-black hover:border-black/50 hover:dark:border-white/50 transition-colors`}>
+                    <div className="flex gap-1">
+                      <div className={`w-6 h-9 bg-black/10 dark:bg-white/10 border ${BORDERS.medium}`}></div>
+                      <div className={`w-6 h-9 bg-black/10 dark:bg-white/10 border ${BORDERS.medium}`}></div>
+                    </div>
+                    <div className="flex-1 min-w-0">
+                      <div className={`${TEXT.metadata} font-bold ${TEXT.primary} truncate`} style={{ fontFamily: FONTS.mono }}>The Shining</div>
+                      <div className={`text-[10px] ${TEXT.mutedMedium} uppercase tracking-wider`} style={{ fontFamily: FONTS.mono }}>18 diffs</div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div className={`flex flex-col gap-2 ${TEXT.secondary} ${TEXT.mutedMedium} mb-4`} style={{ fontFamily: FONTS.mono }}>
                 <div className="flex items-center gap-2">
                   <svg className={`w-4 h-4 ${TEXT.primary} flex-shrink-0`} fill="currentColor" viewBox="0 0 20 20">
                     <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
@@ -339,7 +368,8 @@ export default async function Home(): Promise<JSX.Element> {
                   <span className="uppercase tracking-wider">Genre & year filters</span>
                 </div>
               </div>
-              <div className="mt-4 w-full">
+
+              <div className="w-full">
                 <SearchBar placeholder="Try it: Dune, The Shining..." />
               </div>
             </div>
