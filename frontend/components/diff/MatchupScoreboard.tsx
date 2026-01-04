@@ -357,8 +357,8 @@ export default function MatchupScoreboard({
                   unoptimized
                 />
                 {/* Book stamp - bottom left, flush */}
-                <div className="absolute bottom-0 left-0 px-1.5 py-0.5 bg-white dark:bg-black">
-                  <span className="text-[10px] font-bold uppercase text-black dark:text-white" style={{ fontFamily: 'JetBrains Mono, monospace', letterSpacing: '0.15em' }}>BOOK</span>
+                <div className="absolute bottom-0 left-0 px-1.5 py-0.5 bg-black dark:bg-white">
+                  <span className="text-[10px] font-bold uppercase text-white dark:text-black" style={{ fontFamily: 'JetBrains Mono, monospace', letterSpacing: '0.15em' }}>BOOK</span>
                 </div>
               </div>
             )}
@@ -539,8 +539,8 @@ export default function MatchupScoreboard({
                 unoptimized
               />
               {/* Screen stamp - bottom right, flush */}
-              <div className="absolute bottom-0 right-0 px-1.5 py-0.5 bg-white dark:bg-black">
-                <span className="text-[10px] font-bold uppercase text-black dark:text-white" style={{ fontFamily: 'JetBrains Mono, monospace', letterSpacing: '0.15em' }}>
+              <div className="absolute bottom-0 right-0 px-1.5 py-0.5 bg-black dark:bg-white">
+                <span className="text-[10px] font-bold uppercase text-white dark:text-black" style={{ fontFamily: 'JetBrains Mono, monospace', letterSpacing: '0.15em' }}>
                   SCREEN
                 </span>
               </div>
@@ -586,8 +586,8 @@ export default function MatchupScoreboard({
                   unoptimized
                 />
                 {/* Book stamp - bottom left, flush */}
-                <div className="absolute bottom-0 left-0 px-1.5 py-0.5 bg-white dark:bg-black">
-                  <span className="text-[9px] font-bold uppercase text-black dark:text-white" style={{ fontFamily: 'JetBrains Mono, monospace', letterSpacing: '0.15em' }}>BOOK</span>
+                <div className="absolute bottom-0 left-0 px-1.5 py-0.5 bg-black dark:bg-white">
+                  <span className="text-[9px] font-bold uppercase text-white dark:text-black" style={{ fontFamily: 'JetBrains Mono, monospace', letterSpacing: '0.15em' }}>BOOK</span>
                 </div>
               </div>
             )}
@@ -608,8 +608,8 @@ export default function MatchupScoreboard({
                   unoptimized
                 />
                 {/* Screen stamp - bottom right, flush */}
-                <div className="absolute bottom-0 right-0 px-1.5 py-0.5 bg-white dark:bg-black">
-                  <span className="text-[9px] font-bold uppercase text-black dark:text-white" style={{ fontFamily: 'JetBrains Mono, monospace', letterSpacing: '0.15em' }}>
+                <div className="absolute bottom-0 right-0 px-1.5 py-0.5 bg-black dark:bg-white">
+                  <span className="text-[9px] font-bold uppercase text-white dark:text-black" style={{ fontFamily: 'JetBrains Mono, monospace', letterSpacing: '0.15em' }}>
                     SCREEN
                   </span>
                 </div>
