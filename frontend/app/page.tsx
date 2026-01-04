@@ -167,8 +167,8 @@ export default async function Home(): Promise<JSX.Element> {
                 </div>
 
                 {/* Mini vote control */}
-                <div className={`inline-flex items-stretch border ${BORDERS.medium} overflow-hidden ${RADIUS.control} ${TEXT.metadata}`}>
-                  <button className={`inline-flex items-center justify-center gap-1 px-2 py-0.5 font-bold bg-black dark:bg-white text-white dark:text-black uppercase tracking-wider`} style={{ fontFamily: FONTS.mono }}>
+                <div className={`inline-flex items-stretch border ${BORDERS.medium} ${RADIUS.control} ${TEXT.metadata}`}>
+                  <button className={`inline-flex items-center justify-center gap-1 px-2 py-0.5 font-bold bg-black dark:bg-white text-white dark:text-black uppercase tracking-wider rounded-l-lg`} style={{ fontFamily: FONTS.mono }}>
                     <span>↑</span>
                     <span>Accurate</span>
                     <span className="font-black">(21)</span>
@@ -180,7 +180,7 @@ export default async function Home(): Promise<JSX.Element> {
                     <span className="font-black">(2)</span>
                   </button>
                   <div className={`w-px border-r ${BORDERS.medium}`}></div>
-                  <button className={`inline-flex items-center justify-center gap-1 px-2 py-0.5 font-bold ${TEXT.mutedMedium} uppercase tracking-wider`} style={{ fontFamily: FONTS.mono }}>
+                  <button className={`inline-flex items-center justify-center gap-1 px-2 py-0.5 font-bold ${TEXT.mutedMedium} uppercase tracking-wider rounded-r-lg`} style={{ fontFamily: FONTS.mono }}>
                     <span className="opacity-50">↓</span>
                     <span>Disagree</span>
                     <span className="font-black">(1)</span>
@@ -211,8 +211,8 @@ export default async function Home(): Promise<JSX.Element> {
                 <div className="flex items-center justify-between mb-3">
                   <span className={`${TEXT.metadata} font-bold ${TEXT.mutedMedium} uppercase tracking-wide`} style={{ fontFamily: FONTS.mono }}>Spoiler Level</span>
                 </div>
-                <div className={`inline-flex items-stretch border ${BORDERS.medium} overflow-hidden ${RADIUS.control} w-full`}>
-                  <button className={`flex-1 inline-flex items-center justify-center gap-1.5 px-3 py-2 ${TEXT.metadata} font-bold bg-black dark:bg-white text-white dark:text-black uppercase tracking-wider`} style={{ fontFamily: FONTS.mono }}>
+                <div className={`inline-flex items-stretch border ${BORDERS.medium} ${RADIUS.control} w-full`}>
+                  <button className={`flex-1 inline-flex items-center justify-center gap-1.5 px-3 py-2 ${TEXT.metadata} font-bold bg-black dark:bg-white text-white dark:text-black uppercase tracking-wider rounded-l-lg`} style={{ fontFamily: FONTS.mono }}>
                     <span className={`inline-block w-2 h-2 border ${BORDERS.medium} bg-white dark:bg-black`}></span>
                     <span>Safe</span>
                   </button>
@@ -227,7 +227,7 @@ export default async function Home(): Promise<JSX.Element> {
                     <span>Screen</span>
                   </button>
                   <div className={`w-px border-r ${BORDERS.medium}`}></div>
-                  <button className={`flex-1 inline-flex items-center justify-center gap-1.5 px-3 py-2 ${TEXT.metadata} font-bold ${TEXT.mutedMedium} hover:bg-black/5 hover:dark:bg-white/5 transition-colors uppercase tracking-wider`} style={{ fontFamily: FONTS.mono }}>
+                  <button className={`flex-1 inline-flex items-center justify-center gap-1.5 px-3 py-2 ${TEXT.metadata} font-bold ${TEXT.mutedMedium} hover:bg-black/5 hover:dark:bg-white/5 transition-colors uppercase tracking-wider rounded-r-lg`} style={{ fontFamily: FONTS.mono }}>
                     <span className={`inline-block w-2 h-2 border ${BORDERS.medium} bg-black/20 dark:bg-white/20`}></span>
                     <span>All</span>
                   </button>
