@@ -6,6 +6,7 @@ import { useAuth } from '@/lib/auth-context';
 import type { Work, ScreenWork, ComparisonVoteStats } from '@/lib/types';
 import { api } from '@/lib/api';
 import { calculateVotePercentage } from '@/lib/vote-utils';
+import { FONTS, BORDERS, TEXT, RADIUS, COLORS } from '@/lib/brutalist-design';
 
 interface ScoreboardCompactProps {
   work: Work;
@@ -74,32 +75,32 @@ export default function ScoreboardCompact({
 
   if (loading) {
     return (
-      <div className="bg-white/5 border border-white/10 rounded-lg p-3">
-        <div className="text-xs text-white/50 animate-pulse">Loading...</div>
+      <div className={`bg-stone-50 dark:bg-stone-950 border ${BORDERS.medium} ${RADIUS.control} p-3`}>
+        <div className={`${TEXT.secondary} ${TEXT.mutedMedium} animate-pulse`} style={{ fontFamily: FONTS.mono }}>Loading...</div>
       </div>
     );
   }
 
   return (
-    <div className="bg-white/5 border border-white/10 rounded-lg p-3">
+    <div className={`bg-stone-50 dark:bg-stone-950 border ${BORDERS.medium} ${RADIUS.control} p-3`}>
       {/* Two-column layout: Stats | Vote */}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
         {/* Left: Community Stats */}
         <div>
-          <h3 className="text-xs font-medium text-white/50 uppercase tracking-wide mb-2">
+          <h3 className={`${TEXT.label} font-bold ${TEXT.mutedMedium} uppercase tracking-widest mb-2`} style={{ fontFamily: FONTS.mono }}>
             Community verdict
           </h3>
 
           {totalVotes === 0 ? (
             <div className="py-2">
-              <p className="text-sm text-white/60">No votes yet</p>
-              <p className="text-xs text-white/40 mt-1">Be the first</p>
+              <p className={`${TEXT.body} ${TEXT.mutedMedium}`} style={{ fontFamily: FONTS.mono }}>No votes yet</p>
+              <p className={`${TEXT.secondary} ${TEXT.mutedLight} mt-1`} style={{ fontFamily: FONTS.mono }}>Be the first</p>
             </div>
           ) : (
             <>
               {/* Low confidence warning */}
               {isLowConfidence && (
-                <div className="text-xs text-white/40 mb-2">
+                <div className={`${TEXT.secondary} ${TEXT.mutedLight} mb-2`} style={{ fontFamily: FONTS.mono }}>
                   Early votes ({totalVotes})
                 </div>
               )}
@@ -108,44 +109,44 @@ export default function ScoreboardCompact({
               {!isLowConfidence && (
                 <div className="flex items-center justify-between mb-2">
                   <div>
-                    <div className="text-xl font-bold text-white">{bookPct}%</div>
-                    <div className="text-xs text-white/40">Book</div>
+                    <div className={`text-xl font-bold`} style={{ fontFamily: FONTS.mono, color: COLORS.book }}>{bookPct}%</div>
+                    <div className={`${TEXT.secondary} ${TEXT.mutedLight} uppercase tracking-wider`} style={{ fontFamily: FONTS.mono }}>Book</div>
                   </div>
                   <div>
-                    <div className="text-xl font-bold text-white">{screenPct}%</div>
-                    <div className="text-xs text-white/40">Screen</div>
+                    <div className={`text-xl font-bold`} style={{ fontFamily: FONTS.mono, color: COLORS.screen }}>{screenPct}%</div>
+                    <div className={`${TEXT.secondary} ${TEXT.mutedLight} uppercase tracking-wider`} style={{ fontFamily: FONTS.mono }}>Screen</div>
                   </div>
                 </div>
               )}
 
               {/* Progress bar - always show but muted for low confidence */}
-              <div className={`relative h-1.5 bg-white/10 rounded-full overflow-hidden mb-2 ${isLowConfidence ? 'opacity-40' : ''}`}>
+              <div className={`relative h-1.5 bg-black/10 dark:bg-white/10 ${RADIUS.control} overflow-hidden mb-2 ${isLowConfidence ? 'opacity-40' : ''}`}>
                 <div
-                  className="absolute left-0 top-0 h-full bg-white/60 transition-all duration-500"
-                  style={{ width: `${bookPct}%` }}
+                  className="absolute left-0 top-0 h-full transition-all duration-500"
+                  style={{ width: `${bookPct}%`, backgroundColor: COLORS.book }}
                 />
                 <div
-                  className="absolute right-0 top-0 h-full bg-white/60 transition-all duration-500"
-                  style={{ width: `${screenPct}%` }}
+                  className="absolute right-0 top-0 h-full transition-all duration-500"
+                  style={{ width: `${screenPct}%`, backgroundColor: COLORS.screen }}
                 />
               </div>
 
               {/* Vote count - show for all */}
               {!isLowConfidence && (
-                <div className="text-xs text-white/40">
+                <div className={`${TEXT.secondary} ${TEXT.mutedLight}`} style={{ fontFamily: FONTS.mono }}>
                   {totalVotes} {totalVotes === 1 ? 'vote' : 'votes'}
                 </div>
               )}
 
               {/* Faithfulness - only if >= 10 votes */}
               {!isLowConfidence && stats && stats.faithfulness.average !== null && (
-                <div className="flex items-center justify-between text-xs border-t border-white/10 pt-2 mt-2">
-                  <span className="text-white/40">Faithfulness:</span>
+                <div className={`flex items-center justify-between ${TEXT.secondary} border-t ${BORDERS.subtle} pt-2 mt-2`}>
+                  <span className={TEXT.mutedLight} style={{ fontFamily: FONTS.mono }}>Faithfulness:</span>
                   <div className="flex items-baseline gap-1">
-                    <span className="text-sm font-semibold text-white">
+                    <span className={`${TEXT.body} font-bold ${TEXT.primary}`} style={{ fontFamily: FONTS.mono }}>
                       {stats.faithfulness.average.toFixed(1)}
                     </span>
-                    <span className="text-xs text-white/30">/5</span>
+                    <span className={`${TEXT.secondary} ${TEXT.mutedLight}`} style={{ fontFamily: FONTS.mono }}>/5</span>
                   </div>
                 </div>
               )}
@@ -155,47 +156,51 @@ export default function ScoreboardCompact({
 
         {/* Right: Your Vote - Segmented Control */}
         <div>
-          <h3 className="text-xs font-medium text-white/50 uppercase tracking-wide mb-2">
+          <h3 className={`${TEXT.label} font-bold ${TEXT.mutedMedium} uppercase tracking-widest mb-2`} style={{ fontFamily: FONTS.mono }}>
             Your take
           </h3>
 
           {!selectedPreference ? (
             <div className="space-y-2">
               {/* Segmented control */}
-              <div className="inline-flex bg-white/5 rounded-lg p-0.5 w-full">
+              <div className={`inline-flex border ${BORDERS.medium} ${RADIUS.control} p-0.5 w-full bg-white dark:bg-black`}>
                 <button
                   onClick={() => handlePreferenceClick('BOOK')}
                   disabled={isSubmitting}
-                  className="flex-1 px-3 py-2 text-sm font-medium text-white/70 hover:text-white hover:bg-white/10 rounded-md transition-colors disabled:opacity-50"
+                  className={`flex-1 px-3 py-2 ${TEXT.secondary} font-bold ${TEXT.mutedMedium} hover:bg-black hover:dark:bg-white hover:text-white hover:dark:text-black ${RADIUS.control} transition-all disabled:opacity-50 uppercase tracking-wider`}
+                  style={{ fontFamily: FONTS.mono }}
                 >
                   Book
                 </button>
                 <button
                   onClick={() => handlePreferenceClick('SCREEN')}
                   disabled={isSubmitting}
-                  className="flex-1 px-3 py-2 text-sm font-medium text-white/70 hover:text-white hover:bg-white/10 rounded-md transition-colors disabled:opacity-50"
+                  className={`flex-1 px-3 py-2 ${TEXT.secondary} font-bold ${TEXT.mutedMedium} hover:bg-black hover:dark:bg-white hover:text-white hover:dark:text-black ${RADIUS.control} transition-all disabled:opacity-50 uppercase tracking-wider`}
+                  style={{ fontFamily: FONTS.mono }}
                 >
                   Screen
                 </button>
                 <button
                   onClick={() => handlePreferenceClick('TIE')}
                   disabled={isSubmitting}
-                  className="flex-1 px-3 py-2 text-sm font-medium text-white/70 hover:text-white hover:bg-white/10 rounded-md transition-colors disabled:opacity-50"
+                  className={`flex-1 px-3 py-2 ${TEXT.secondary} font-bold ${TEXT.mutedMedium} hover:bg-black hover:dark:bg-white hover:text-white hover:dark:text-black ${RADIUS.control} transition-all disabled:opacity-50 uppercase tracking-wider`}
+                  style={{ fontFamily: FONTS.mono }}
                 >
                   Tie
                 </button>
               </div>
 
-              <p className="text-xs text-white/40">Pick your side</p>
+              <p className={`${TEXT.secondary} ${TEXT.mutedLight} uppercase tracking-wider`} style={{ fontFamily: FONTS.mono }}>Pick your side</p>
             </div>
           ) : (
             <div className="py-2">
-              <p className="text-sm text-white/60 mb-2">
+              <p className={`${TEXT.body} ${TEXT.mutedMedium} mb-2`} style={{ fontFamily: FONTS.mono }}>
                 ✓ {selectedPreference === 'BOOK' ? 'Book' : selectedPreference === 'SCREEN' ? 'Screen' : 'Tie'}
               </p>
               <button
                 onClick={() => setSelectedPreference(null)}
-                className="text-xs text-white/50 hover:text-white transition-colors"
+                className={`${TEXT.secondary} ${TEXT.mutedMedium} hover:text-black hover:dark:text-white transition-colors font-bold uppercase tracking-wider`}
+                style={{ fontFamily: FONTS.mono }}
               >
                 Change vote
               </button>

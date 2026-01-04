@@ -5,6 +5,7 @@ import { useRouter } from 'next/navigation';
 import { useAuth } from '@/lib/auth-context';
 import type { Work, ScreenWork } from '@/lib/types';
 import { BookOpenIcon, FilmIcon } from '@/components/ui/Icons';
+import { FONTS, BORDERS, TEXT, RADIUS } from '@/lib/brutalist-design';
 
 interface YourTakeVoteCardProps {
   work: Work;
@@ -70,8 +71,8 @@ export default function YourTakeVoteCard({
   };
 
   return (
-    <div className="bg-white dark:bg-surface border border-gray-200 dark:border-border rounded-xl p-6">
-      <h3 className="text-lg font-bold text-gray-900 dark:text-white mb-4">
+    <div className={`bg-stone-50 dark:bg-stone-950 border ${BORDERS.medium} p-6`}>
+      <h3 className={`${TEXT.body} font-bold text-black dark:text-white mb-4 uppercase tracking-widest`} style={{ fontFamily: FONTS.mono }}>
         Pick a Side
       </h3>
 
@@ -82,7 +83,8 @@ export default function YourTakeVoteCard({
             <button
               onClick={() => handlePreferenceClick('BOOK')}
               disabled={isSubmitting}
-              className="flex flex-col items-center justify-center gap-2 py-6 px-4 bg-blue-600 hover:bg-blue-700 text-white font-bold rounded-xl transition-all hover:-translate-y-0.5 active:translate-y-0 disabled:opacity-50 disabled:cursor-not-allowed shadow-lg hover:shadow-xl"
+              className={`flex flex-col items-center justify-center gap-2 py-6 px-4 border-2 ${BORDERS.solid} bg-transparent hover:bg-black hover:dark:bg-white hover:text-white hover:dark:text-black font-bold ${RADIUS.control} transition-all disabled:opacity-50 disabled:cursor-not-allowed text-black dark:text-white ${TEXT.secondary} uppercase tracking-widest`}
+              style={{ fontFamily: FONTS.mono }}
             >
               <BookOpenIcon className="w-8 h-8" />
               <span>Team Book</span>
@@ -90,7 +92,8 @@ export default function YourTakeVoteCard({
             <button
               onClick={() => handlePreferenceClick('SCREEN')}
               disabled={isSubmitting}
-              className="flex flex-col items-center justify-center gap-2 py-6 px-4 bg-purple-600 hover:bg-purple-700 text-white font-bold rounded-xl transition-all hover:-translate-y-0.5 active:translate-y-0 disabled:opacity-50 disabled:cursor-not-allowed shadow-lg hover:shadow-xl"
+              className={`flex flex-col items-center justify-center gap-2 py-6 px-4 border-2 ${BORDERS.solid} bg-transparent hover:bg-black hover:dark:bg-white hover:text-white hover:dark:text-black font-bold ${RADIUS.control} transition-all disabled:opacity-50 disabled:cursor-not-allowed text-black dark:text-white ${TEXT.secondary} uppercase tracking-widest`}
+              style={{ fontFamily: FONTS.mono }}
             >
               <FilmIcon className="w-8 h-8" />
               <span>Team Screen</span>
@@ -101,16 +104,18 @@ export default function YourTakeVoteCard({
           <button
             onClick={() => handlePreferenceClick('TIE')}
             disabled={isSubmitting}
-            className="w-full py-2 text-sm text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white transition-colors"
+            className={`w-full py-2 ${TEXT.secondary} ${TEXT.mutedMedium} hover:text-black hover:dark:text-white transition-colors uppercase tracking-wide`}
+            style={{ fontFamily: FONTS.mono }}
           >
             Both were equally good
           </button>
 
           {/* Primary CTA */}
-          <div className="mt-6 pt-6 border-t border-gray-200 dark:border-gray-700">
+          <div className={`mt-6 pt-6 border-t ${BORDERS.medium}`}>
             <button
               onClick={onAddDiff}
-              className="w-full py-3 px-4 bg-gray-100 dark:bg-gray-800 hover:bg-gray-200 dark:hover:bg-gray-700 text-gray-900 dark:text-white font-medium rounded-lg transition-colors"
+              className={`w-full py-3 px-4 border ${BORDERS.solid} bg-transparent hover:bg-black hover:dark:bg-white hover:text-white hover:dark:text-black text-black dark:text-white font-bold ${RADIUS.control} transition-all ${TEXT.secondary} uppercase tracking-widest`}
+              style={{ fontFamily: FONTS.mono }}
             >
               {diffCount === 0 ? 'Add the first difference' : 'Add a difference'}
             </button>
@@ -119,10 +124,10 @@ export default function YourTakeVoteCard({
       ) : showFaithfulness ? (
         // Faithfulness rating (optional, shown after vote)
         <div>
-          <p className="text-sm text-gray-600 dark:text-gray-400 mb-4">
+          <p className={`${TEXT.secondary} ${TEXT.mutedMedium} mb-4 uppercase tracking-wide`} style={{ fontFamily: FONTS.mono }}>
             Rate faithfulness (optional)
           </p>
-          <p className="text-xs text-gray-500 dark:text-gray-500 mb-4">
+          <p className={`${TEXT.label} ${TEXT.mutedLight} mb-4`} style={{ fontFamily: FONTS.mono }}>
             1 = Completely different · 5 = Nearly identical
           </p>
 
@@ -132,11 +137,12 @@ export default function YourTakeVoteCard({
               <button
                 key={rating}
                 onClick={() => setFaithfulness(rating)}
-                className={`w-12 h-12 rounded-full font-bold transition-all ${
+                className={`w-12 h-12 rounded-full font-bold transition-all border-2 ${
                   faithfulness === rating
-                    ? 'bg-blue-600 text-white scale-110'
-                    : 'bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-300 hover:bg-gray-300 dark:hover:bg-gray-600'
+                    ? `${BORDERS.solid} bg-black dark:bg-white text-white dark:text-black scale-110`
+                    : `${BORDERS.medium} bg-transparent text-black dark:text-white hover:${BORDERS.solid}`
                 }`}
+                style={{ fontFamily: FONTS.mono }}
               >
                 {rating}
               </button>
@@ -146,14 +152,16 @@ export default function YourTakeVoteCard({
           <button
             onClick={handleFaithfulnessSubmit}
             disabled={!faithfulness || isSubmitting}
-            className="w-full py-3 bg-blue-600 hover:bg-blue-700 text-white font-semibold rounded-lg transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+            className={`w-full py-3 border ${BORDERS.solid} bg-transparent hover:bg-black hover:dark:bg-white hover:text-white hover:dark:text-black text-black dark:text-white font-bold ${RADIUS.control} transition-colors disabled:opacity-50 disabled:cursor-not-allowed ${TEXT.secondary} uppercase tracking-widest`}
+            style={{ fontFamily: FONTS.mono }}
           >
             {isSubmitting ? 'Submitting...' : 'Submit rating'}
           </button>
 
           <button
             onClick={() => setShowFaithfulness(false)}
-            className="w-full mt-2 text-sm text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white"
+            className={`w-full mt-2 ${TEXT.secondary} ${TEXT.mutedMedium} hover:text-black hover:dark:text-white uppercase tracking-wide`}
+            style={{ fontFamily: FONTS.mono }}
           >
             Skip
           </button>
@@ -161,9 +169,9 @@ export default function YourTakeVoteCard({
       ) : (
         // After vote confirmation
         <div className="text-center py-4">
-          <p className="text-sm text-gray-600 dark:text-gray-400 mb-3">
+          <p className={`${TEXT.secondary} ${TEXT.mutedMedium} mb-3 uppercase tracking-wide`} style={{ fontFamily: FONTS.mono }}>
             ✓ Vote submitted:{' '}
-            <span className="font-semibold">
+            <span className="font-bold text-black dark:text-white">
               {selectedPreference === 'BOOK' ? 'Team Book' : selectedPreference === 'SCREEN' ? 'Team Screen' : 'Tie'}
             </span>
           </p>
@@ -171,16 +179,18 @@ export default function YourTakeVoteCard({
           {/* Optional: Rate faithfulness link */}
           <button
             onClick={() => setShowFaithfulness(true)}
-            className="text-sm text-blue-600 dark:text-blue-400 hover:underline mb-4"
+            className={`${TEXT.secondary} text-black dark:text-white hover:underline mb-4 uppercase tracking-wide`}
+            style={{ fontFamily: FONTS.mono }}
           >
             Rate faithfulness (optional)
           </button>
 
           {/* Primary CTA */}
-          <div className="pt-4 border-t border-gray-200 dark:border-gray-700">
+          <div className={`pt-4 border-t ${BORDERS.medium}`}>
             <button
               onClick={onAddDiff}
-              className="w-full py-3 px-4 bg-gray-100 dark:bg-gray-800 hover:bg-gray-200 dark:hover:bg-gray-700 text-gray-900 dark:text-white font-medium rounded-lg transition-colors"
+              className={`w-full py-3 px-4 border ${BORDERS.solid} bg-transparent hover:bg-black hover:dark:bg-white hover:text-white hover:dark:text-black text-black dark:text-white font-bold ${RADIUS.control} transition-colors ${TEXT.secondary} uppercase tracking-widest`}
+              style={{ fontFamily: FONTS.mono }}
             >
               {diffCount === 0 ? 'Add the first difference' : 'Add a difference'}
             </button>

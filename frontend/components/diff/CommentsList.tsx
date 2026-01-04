@@ -12,6 +12,7 @@ import LoadingSkeleton from '@/components/ui/LoadingSkeleton';
 import UserBadge from '@/components/user/UserBadge';
 import { getSpoilerBadgeColor, getSpoilerLabel } from '@/lib/badge-utils';
 import { getTimeSince } from '@/lib/date-utils';
+import { FONTS, BORDERS, TEXT, RADIUS } from '@/lib/brutalist-design';
 
 interface CommentsListProps {
   diffItemId: number;
@@ -124,25 +125,27 @@ function CommentItem({ comment, depth = 0, isLast = false, onReplyAdded }: Comme
           <div className="flex items-center gap-2 flex-wrap mb-1">
             <Link
               href={`/u/${comment.username}`}
-              className="text-sm font-medium text-foreground hover:text-link hover:underline"
+              className={`${TEXT.secondary} font-bold text-black dark:text-white hover:underline uppercase tracking-wide`}
+              style={{ fontFamily: FONTS.mono }}
             >
               {comment.username}
             </Link>
             {comment.top_badge && (
               <UserBadge badgeType={comment.top_badge.badge_type} size="sm" />
             )}
-            <span className="text-muted text-xs">•</span>
-            <span className="text-muted text-xs">
+            <span className={`${TEXT.mutedMedium} ${TEXT.label}`} style={{ fontFamily: FONTS.mono }}>•</span>
+            <span className={`${TEXT.mutedMedium} ${TEXT.label} uppercase tracking-wide`} style={{ fontFamily: FONTS.mono }}>
               {getTimeSince(comment.created_at)}
             </span>
             {/* Spoiler badge (only if not NONE) */}
             {comment.spoiler_scope !== 'NONE' && (
               <>
-                <span className="text-muted text-xs">•</span>
+                <span className={`${TEXT.mutedMedium} ${TEXT.label}`} style={{ fontFamily: FONTS.mono }}>•</span>
                 <span
-                  className={`px-2 py-0.5 text-xs font-mono rounded ${getSpoilerBadgeColor(
+                  className={`px-2 py-0.5 ${TEXT.label} ${RADIUS.control} ${getSpoilerBadgeColor(
                     comment.spoiler_scope
-                  )}`}
+                  )} uppercase tracking-widest font-bold`}
+                  style={{ fontFamily: FONTS.mono }}
                 >
                   {getSpoilerLabel(comment.spoiler_scope)}
                 </span>
@@ -151,7 +154,7 @@ function CommentItem({ comment, depth = 0, isLast = false, onReplyAdded }: Comme
           </div>
 
           {/* Comment body */}
-          <p className="text-sm text-foreground leading-relaxed whitespace-pre-wrap">
+          <p className={`${TEXT.body} text-black dark:text-white leading-relaxed whitespace-pre-wrap`} style={{ fontFamily: FONTS.mono }}>
             {displayBody}
           </p>
 
@@ -160,14 +163,16 @@ function CommentItem({ comment, depth = 0, isLast = false, onReplyAdded }: Comme
             {shouldTruncate && (
               <button
                 onClick={() => setIsExpanded(!isExpanded)}
-                className="text-xs text-link hover:underline"
+                className={`${TEXT.label} text-black dark:text-white hover:underline uppercase tracking-wide`}
+                style={{ fontFamily: FONTS.mono }}
               >
                 {isExpanded ? 'Show less' : 'Show more'}
               </button>
             )}
             <button
               onClick={handleReplyClick}
-              className="text-xs text-muted hover:text-link transition-colors"
+              className={`${TEXT.label} ${TEXT.mutedMedium} hover:text-black hover:dark:text-white transition-colors uppercase tracking-wide`}
+              style={{ fontFamily: FONTS.mono }}
             >
               Reply
             </button>
@@ -175,7 +180,7 @@ function CommentItem({ comment, depth = 0, isLast = false, onReplyAdded }: Comme
 
           {/* Reply form */}
           {showReplyForm && (
-            <div className="mt-3 p-3 border border-border rounded-md bg-surface2/30">
+            <div className={`mt-3 p-3 border ${BORDERS.medium} ${RADIUS.control} bg-white dark:bg-black`}>
               <AddCommentForm
                 diffItemId={comment.diff_item}
                 parentId={comment.id}
@@ -344,17 +349,17 @@ export default function CommentsList({
     <div className="space-y-4" id="comments">
       {/* Spoiler filter notice */}
       {hiddenCount > 0 && (
-        <div className="bg-yellow-50 dark:bg-yellow-900/20 border border-yellow-200 dark:border-yellow-800 rounded-lg p-3 transition-all duration-300">
+        <div className={`bg-stone-50 dark:bg-stone-950 border ${BORDERS.medium} ${RADIUS.control} p-3 transition-all duration-300`}>
           <div className="flex items-start gap-2">
-            <svg className="w-5 h-5 text-yellow-600 dark:text-yellow-500 flex-shrink-0 mt-0.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <svg className="w-5 h-5 text-black dark:text-white flex-shrink-0 mt-0.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
             </svg>
             <div className="flex-1">
-              <p className="text-sm font-medium text-yellow-800 dark:text-yellow-200">
+              <p className={`${TEXT.secondary} font-bold text-black dark:text-white uppercase tracking-wide`} style={{ fontFamily: FONTS.mono }}>
                 {hiddenCount} {hiddenCount === 1 ? 'comment is' : 'comments are'} hidden due to spoiler settings
               </p>
-              <p className="text-xs text-yellow-700 dark:text-yellow-300 mt-1">
-                Currently showing: <span className="font-semibold">{getSpoilerLabel(userSpoilerScope)}</span> comments.
+              <p className={`${TEXT.label} ${TEXT.mutedMedium} mt-1 uppercase tracking-wide`} style={{ fontFamily: FONTS.mono }}>
+                Currently showing: <span className="font-bold text-black dark:text-white">{getSpoilerLabel(userSpoilerScope)}</span> comments.
               </p>
               {onSpoilerPreferenceChange && currentSpoilerPreference && (
                 <div className="mt-2 flex gap-2">
@@ -362,19 +367,22 @@ export default function CommentsList({
                     <>
                       <button
                         onClick={() => onSpoilerPreferenceChange('BOOK_ALLOWED')}
-                        className="text-xs px-2 py-1 bg-yellow-600 dark:bg-yellow-700 text-white rounded hover:bg-yellow-700 dark:hover:bg-yellow-600 transition-colors"
+                        className={`${TEXT.label} px-2 py-1 border ${BORDERS.solid} bg-transparent hover:bg-black hover:dark:bg-white hover:text-white hover:dark:text-black text-black dark:text-white ${RADIUS.control} transition-colors uppercase tracking-widest font-bold`}
+                        style={{ fontFamily: FONTS.mono }}
                       >
                         Show Book Spoilers
                       </button>
                       <button
                         onClick={() => onSpoilerPreferenceChange('SCREEN_ALLOWED')}
-                        className="text-xs px-2 py-1 bg-yellow-600 dark:bg-yellow-700 text-white rounded hover:bg-yellow-700 dark:hover:bg-yellow-600 transition-colors"
+                        className={`${TEXT.label} px-2 py-1 border ${BORDERS.solid} bg-transparent hover:bg-black hover:dark:bg-white hover:text-white hover:dark:text-black text-black dark:text-white ${RADIUS.control} transition-colors uppercase tracking-widest font-bold`}
+                        style={{ fontFamily: FONTS.mono }}
                       >
                         Show Screen Spoilers
                       </button>
                       <button
                         onClick={() => onSpoilerPreferenceChange('FULL')}
-                        className="text-xs px-2 py-1 bg-yellow-600 dark:bg-yellow-700 text-white rounded hover:bg-yellow-700 dark:hover:bg-yellow-600 transition-colors"
+                        className={`${TEXT.label} px-2 py-1 border ${BORDERS.solid} bg-transparent hover:bg-black hover:dark:bg-white hover:text-white hover:dark:text-black text-black dark:text-white ${RADIUS.control} transition-colors uppercase tracking-widest font-bold`}
+                        style={{ fontFamily: FONTS.mono }}
                       >
                         Show All
                       </button>
@@ -383,7 +391,8 @@ export default function CommentsList({
                   {(currentSpoilerPreference === 'BOOK_ALLOWED' || currentSpoilerPreference === 'SCREEN_ALLOWED') && (
                     <button
                       onClick={() => onSpoilerPreferenceChange('FULL')}
-                      className="text-xs px-2 py-1 bg-yellow-600 dark:bg-yellow-700 text-white rounded hover:bg-yellow-700 dark:hover:bg-yellow-600 transition-colors"
+                      className={`${TEXT.label} px-2 py-1 border ${BORDERS.solid} bg-transparent hover:bg-black hover:dark:bg-white hover:text-white hover:dark:text-black text-black dark:text-white ${RADIUS.control} transition-colors uppercase tracking-widest font-bold`}
+                      style={{ fontFamily: FONTS.mono }}
                     >
                       Show All Spoilers
                     </button>
@@ -396,16 +405,17 @@ export default function CommentsList({
       )}
 
       {/* Add comment section */}
-      <div className="border-b border-border pb-4">
+      <div className={`border-b ${BORDERS.medium} pb-4`}>
         {!showAddForm ? (
           <button
             onClick={handleAddCommentClick}
-            className="text-link hover:underline text-sm font-medium"
+            className={`text-black dark:text-white hover:underline ${TEXT.secondary} font-bold uppercase tracking-wide`}
+            style={{ fontFamily: FONTS.mono }}
           >
             + Add a comment
           </button>
         ) : (
-          <div className="border border-border rounded-lg p-4 bg-surface">
+          <div className={`border ${BORDERS.medium} ${RADIUS.control} p-4 bg-stone-50 dark:bg-stone-950`}>
             <AddCommentForm
               diffItemId={diffItemId}
               onCommentAdded={handleCommentAdded}
@@ -418,7 +428,7 @@ export default function CommentsList({
       {/* Loading state */}
       {loading && (
         <div className="space-y-4" role="status" aria-live="polite" aria-busy="true">
-          <div className="py-3 border-b border-border">
+          <div className={`py-3 border-b ${BORDERS.medium}`}>
             <div className="flex items-center gap-2 mb-2">
               <LoadingSkeleton width="w-24" height="h-4" />
               <LoadingSkeleton width="w-2" height="h-2" variant="circular" />
@@ -426,7 +436,7 @@ export default function CommentsList({
             </div>
             <LoadingSkeleton width="w-full" height="h-16" />
           </div>
-          <div className="py-3 border-b border-border">
+          <div className={`py-3 border-b ${BORDERS.medium}`}>
             <div className="flex items-center gap-2 mb-2">
               <LoadingSkeleton width="w-28" height="h-4" />
               <LoadingSkeleton width="w-2" height="h-2" variant="circular" />
@@ -439,16 +449,16 @@ export default function CommentsList({
 
       {/* Error state */}
       {error && !loading && (
-        <div className="text-center py-4 text-sm text-danger">
+        <div className={`text-center py-4 ${TEXT.secondary} text-black dark:text-white uppercase tracking-wide font-bold`} style={{ fontFamily: FONTS.mono }}>
           {error}
         </div>
       )}
 
       {/* Empty state */}
       {!loading && !error && visibleComments.length === 0 && (
-        <div className="text-center py-6 text-sm text-muted">
-          <p className="mb-1">No comments yet</p>
-          <p className="text-xs">Be the first to share your thoughts!</p>
+        <div className="text-center py-6">
+          <p className={`mb-1 ${TEXT.secondary} ${TEXT.mutedMedium} uppercase tracking-wide`} style={{ fontFamily: FONTS.mono }}>No comments yet</p>
+          <p className={`${TEXT.label} ${TEXT.mutedLight} uppercase tracking-wide`} style={{ fontFamily: FONTS.mono }}>Be the first to share your thoughts!</p>
         </div>
       )}
 

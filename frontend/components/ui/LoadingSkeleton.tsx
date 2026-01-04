@@ -1,3 +1,5 @@
+import { RADIUS } from '@/lib/brutalist-design';
+
 interface LoadingSkeletonProps {
   width?: string;
   height?: string;
@@ -14,8 +16,8 @@ export default function LoadingSkeleton({
   const baseClasses = 'bg-black/10 dark:bg-white/10 animate-pulse';
 
   const variantClasses = {
-    text: 'rounded',
-    rectangular: 'rounded-md',
+    text: RADIUS.control,
+    rectangular: RADIUS.control,
     circular: 'rounded-full',
   };
 

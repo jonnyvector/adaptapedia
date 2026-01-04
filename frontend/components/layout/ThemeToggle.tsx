@@ -1,6 +1,7 @@
 'use client';
 
 import { useState, useEffect } from 'react';
+import { BORDERS, RADIUS } from '@/lib/brutalist-design';
 
 type Theme = 'light' | 'dark' | 'system';
 
@@ -66,7 +67,7 @@ export default function ThemeToggle(): JSX.Element {
   if (!mounted) {
     return (
       <button
-        className="px-2 py-2 flex items-center justify-center border-0 bg-transparent"
+        className={`px-2 py-1.5 flex items-center justify-center border ${BORDERS.subtle} bg-transparent ${RADIUS.control}`}
         aria-label="Toggle theme"
         disabled
       >
@@ -76,7 +77,7 @@ export default function ThemeToggle(): JSX.Element {
           viewBox="0 0 24 24"
           strokeWidth="1.5"
           stroke="currentColor"
-          className="w-5 h-5 opacity-0"
+          className="w-4 h-4 opacity-0"
           aria-hidden="true"
         >
           <path
@@ -94,7 +95,7 @@ export default function ThemeToggle(): JSX.Element {
   return (
     <button
       onClick={toggleTheme}
-      className="px-2 py-2 text-black dark:text-white hover:opacity-70 transition-opacity flex items-center justify-center border-0 bg-transparent"
+      className={`px-2 py-1.5 text-black dark:text-white hover:bg-black hover:dark:bg-white hover:text-white hover:dark:text-black transition-all flex items-center justify-center border ${BORDERS.subtle} bg-transparent ${RADIUS.control}`}
       aria-label={`Switch to ${displayTheme === 'light' ? 'dark' : 'light'} mode`}
       title={`Switch to ${displayTheme === 'light' ? 'dark' : 'light'} mode`}
     >
@@ -103,9 +104,9 @@ export default function ThemeToggle(): JSX.Element {
           xmlns="http://www.w3.org/2000/svg"
           fill="none"
           viewBox="0 0 24 24"
-          strokeWidth="1.5"
+          strokeWidth="2"
           stroke="currentColor"
-          className="w-5 h-5"
+          className="w-4 h-4"
           aria-hidden="true"
         >
           <path
@@ -119,9 +120,9 @@ export default function ThemeToggle(): JSX.Element {
           xmlns="http://www.w3.org/2000/svg"
           fill="none"
           viewBox="0 0 24 24"
-          strokeWidth="1.5"
+          strokeWidth="2"
           stroke="currentColor"
-          className="w-5 h-5"
+          className="w-4 h-4"
           aria-hidden="true"
         >
           <path

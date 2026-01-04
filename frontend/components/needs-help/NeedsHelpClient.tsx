@@ -6,6 +6,7 @@ import { useRouter } from 'next/navigation';
 import { api } from '@/lib/api';
 import type { NeedsHelpResponse, NeedsHelpComparison } from '@/lib/types';
 import LoadingSkeleton from '@/components/ui/LoadingSkeleton';
+import { FONTS, BORDERS, TEXT, RADIUS, LETTER_SPACING } from '@/lib/brutalist-design';
 
 type TabType = 'no_comments' | 'disputed' | 'needs_diffs';
 
@@ -84,8 +85,8 @@ export default function NeedsHelpClient() {
   if (error) {
     return (
       <div className="container py-8">
-        <div className="text-center py-12 bg-surface border border-border rounded-lg">
-          <p className="text-red-600 dark:text-red-400">{error}</p>
+        <div className={`text-center py-12 bg-stone-50 dark:bg-stone-950 border ${BORDERS.medium} ${RADIUS.control}`}>
+          <p className="text-red-600 dark:text-red-400 font-bold" style={{ fontFamily: FONTS.mono, letterSpacing: LETTER_SPACING.normal }}>{error}</p>
         </div>
       </div>
     );
@@ -116,19 +117,19 @@ export default function NeedsHelpClient() {
     <div className="container py-8">
       {/* Mission Bar */}
       {hasAnyContent && (
-        <div className="mb-6 bg-gradient-to-r from-link/5 to-purple/5 border border-link/20 rounded-lg p-4">
+        <div className={`mb-6 bg-stone-50 dark:bg-stone-950 border ${BORDERS.solid} ${RADIUS.control} p-4`}>
           <div className="flex items-center justify-between gap-4">
             <div className="flex-1">
-              <h2 className="text-sm font-semibold text-foreground mb-1">
-                Help Queue: {queueCount} {queueCount === 1 ? 'comparison needs' : 'comparisons need'} your input
+              <h2 className={`${TEXT.body} font-bold ${TEXT.primary} mb-1`} style={{ fontFamily: FONTS.mono, letterSpacing: LETTER_SPACING.normal }}>
+                HELP QUEUE: {queueCount} {queueCount === 1 ? 'COMPARISON NEEDS' : 'COMPARISONS NEED'} YOUR INPUT
               </h2>
-              <p className="text-xs text-muted">
+              <p className={`${TEXT.metadata} ${TEXT.mutedMedium}`} style={{ fontFamily: FONTS.sans }}>
                 Add comments and context to help the community vote accurately
               </p>
             </div>
             <div className="text-right">
-              <div className="text-2xl font-bold text-link">{queueCount}</div>
-              <div className="text-xs text-muted">{queueCount === 1 ? 'comparison' : 'comparisons'}</div>
+              <div className={`text-2xl font-bold ${TEXT.primary}`} style={{ fontFamily: FONTS.mono }}>{queueCount}</div>
+              <div className={`${TEXT.metadata} ${TEXT.mutedMedium}`} style={{ fontFamily: FONTS.mono, letterSpacing: LETTER_SPACING.wider }}>{queueCount === 1 ? 'COMPARISON' : 'COMPARISONS'}</div>
             </div>
           </div>
         </div>
@@ -138,8 +139,8 @@ export default function NeedsHelpClient() {
       <div className="mb-8">
         <div className="flex flex-col md:flex-row md:items-start md:justify-between gap-6 mb-6">
           <div>
-            <h1 className="text-4xl md:text-5xl font-bold text-foreground mb-2">Help Queue</h1>
-            <p className="text-muted text-lg">
+            <h1 className={`text-4xl md:text-5xl font-bold ${TEXT.primary} mb-2`} style={{ fontFamily: FONTS.sans }}>Help Queue</h1>
+            <p className={`${TEXT.body} ${TEXT.mutedMedium}`} style={{ fontFamily: FONTS.sans }}>
               These differences need discussion. Add context so others can vote smarter.
             </p>
           </div>
@@ -148,18 +149,20 @@ export default function NeedsHelpClient() {
             <div className="flex flex-col sm:flex-row gap-3">
               <button
                 onClick={handleReviewNext}
-                className="btn-primary btn-lg inline-flex items-center gap-2"
+                className={`border ${BORDERS.solid} bg-transparent hover:bg-black hover:dark:bg-white hover:text-white hover:dark:text-black font-bold transition-all ${TEXT.secondary} ${RADIUS.control} inline-flex items-center gap-2 px-4 py-2`}
+                style={{ fontFamily: FONTS.mono, letterSpacing: LETTER_SPACING.normal }}
               >
-                <svg className="icon-sm" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 7l5 5m0 0l-5 5m5-5H6" />
+                <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M13 7l5 5m0 0l-5 5m5-5H6" />
                 </svg>
-                Review Next
+                REVIEW NEXT
               </button>
               <Link
                 href="/browse"
-                className="btn-secondary btn-lg"
+                className={`border ${BORDERS.subtle} bg-transparent hover:border-black hover:dark:border-white font-bold transition-all ${TEXT.secondary} ${RADIUS.control} inline-flex items-center justify-center px-4 py-2`}
+                style={{ fontFamily: FONTS.mono, letterSpacing: LETTER_SPACING.normal }}
               >
-                Browse All
+                BROWSE ALL
               </Link>
             </div>
           )}
@@ -167,22 +170,23 @@ export default function NeedsHelpClient() {
 
         {/* Tabs */}
         {hasAnyContent && (
-          <div className="flex flex-wrap items-center gap-2 border-b border-border">
+          <div className={`flex flex-wrap items-center gap-2 border-b ${BORDERS.medium}`}>
             <button
               onClick={() => setActiveTab('no_comments')}
-              className={`px-4 py-2.5 text-sm font-medium border-b-2 transition-colors ${
+              className={`px-4 py-2.5 ${TEXT.secondary} font-bold border-b-2 transition-colors ${
                 activeTab === 'no_comments'
-                  ? 'border-link text-link'
-                  : 'border-transparent text-muted hover:text-foreground hover:border-border'
+                  ? `border-black dark:border-white ${TEXT.primary}`
+                  : `border-transparent ${TEXT.mutedMedium} hover:${TEXT.primary} hover:${BORDERS.medium}`
               }`}
+              style={{ fontFamily: FONTS.mono, letterSpacing: LETTER_SPACING.normal }}
             >
               <span className="flex items-center gap-2">
-                <svg className="icon-sm" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z" />
+                <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z" />
                 </svg>
-                Needs Discussion
+                NEEDS DISCUSSION
                 {filteredNoComments.length > 0 && (
-                  <span className="inline-flex items-center justify-center px-2 py-0.5 text-xs font-bold rounded-full bg-link/10 text-link">
+                  <span className={`inline-flex items-center justify-center px-2 py-0.5 ${TEXT.metadata} font-bold ${RADIUS.control} bg-black/10 dark:bg-white/10 ${TEXT.primary}`} style={{ fontFamily: FONTS.mono }}>
                     {filteredNoComments.length}
                   </span>
                 )}
@@ -191,19 +195,20 @@ export default function NeedsHelpClient() {
 
             <button
               onClick={() => setActiveTab('disputed')}
-              className={`px-4 py-2.5 text-sm font-medium border-b-2 transition-colors ${
+              className={`px-4 py-2.5 ${TEXT.secondary} font-bold border-b-2 transition-colors ${
                 activeTab === 'disputed'
-                  ? 'border-link text-link'
-                  : 'border-transparent text-muted hover:text-foreground hover:border-border'
+                  ? `border-black dark:border-white ${TEXT.primary}`
+                  : `border-transparent ${TEXT.mutedMedium} hover:${TEXT.primary} hover:${BORDERS.medium}`
               }`}
+              style={{ fontFamily: FONTS.mono, letterSpacing: LETTER_SPACING.normal }}
             >
               <span className="flex items-center gap-2">
-                <svg className="icon-sm" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 6l3 1m0 0l-3 9a5.002 5.002 0 006.001 0M6 7l3 9M6 7l6-2m6 2l3-1m-3 1l-3 9a5.002 5.002 0 006.001 0M18 7l3 9m-3-9l-6-2m0-2v2m0 16V5m0 16H9m3 0h3" />
+                <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M3 6l3 1m0 0l-3 9a5.002 5.002 0 006.001 0M6 7l3 9M6 7l6-2m6 2l3-1m-3 1l-3 9a5.002 5.002 0 006.001 0M18 7l3 9m-3-9l-6-2m0-2v2m0 16V5m0 16H9m3 0h3" />
                 </svg>
-                Contested
+                CONTESTED
                 {filteredDisputed.length > 0 && (
-                  <span className="inline-flex items-center justify-center px-2 py-0.5 text-xs font-bold rounded-full bg-rose-500/10 text-rose-500">
+                  <span className={`inline-flex items-center justify-center px-2 py-0.5 ${TEXT.metadata} font-bold ${RADIUS.control} bg-rose-500/10 text-rose-500`} style={{ fontFamily: FONTS.mono }}>
                     {filteredDisputed.length}
                   </span>
                 )}
@@ -212,19 +217,20 @@ export default function NeedsHelpClient() {
 
             <button
               onClick={() => setActiveTab('needs_diffs')}
-              className={`px-4 py-2.5 text-sm font-medium border-b-2 transition-colors ${
+              className={`px-4 py-2.5 ${TEXT.secondary} font-bold border-b-2 transition-colors ${
                 activeTab === 'needs_diffs'
-                  ? 'border-link text-link'
-                  : 'border-transparent text-muted hover:text-foreground hover:border-border'
+                  ? `border-black dark:border-white ${TEXT.primary}`
+                  : `border-transparent ${TEXT.mutedMedium} hover:${TEXT.primary} hover:${BORDERS.medium}`
               }`}
+              style={{ fontFamily: FONTS.mono, letterSpacing: LETTER_SPACING.normal }}
             >
               <span className="flex items-center gap-2">
-                <svg className="icon-sm" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
+                <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
                 </svg>
-                Needs Differences
+                NEEDS DIFFERENCES
                 {filteredNeedsDiffs.length > 0 && (
-                  <span className="inline-flex items-center justify-center px-2 py-0.5 text-xs font-bold rounded-full bg-amber-500/10 text-amber-500">
+                  <span className={`inline-flex items-center justify-center px-2 py-0.5 ${TEXT.metadata} font-bold ${RADIUS.control} bg-amber-500/10 text-amber-500`} style={{ fontFamily: FONTS.mono }}>
                     {filteredNeedsDiffs.length}
                   </span>
                 )}
@@ -235,12 +241,12 @@ export default function NeedsHelpClient() {
       </div>
 
       {!hasAnyContent ? (
-        <div className="text-center py-12 bg-surface border border-border rounded-lg">
+        <div className={`text-center py-12 bg-stone-50 dark:bg-stone-950 border ${BORDERS.medium} ${RADIUS.control}`}>
           <div className="text-4xl mb-4">✨</div>
-          <h2 className="text-xl font-semibold text-foreground mb-2">
+          <h2 className={`text-xl font-bold ${TEXT.primary} mb-2`} style={{ fontFamily: FONTS.sans }}>
             Everything's looking great!
           </h2>
-          <p className="text-muted">
+          <p className={`${TEXT.body} ${TEXT.mutedMedium}`} style={{ fontFamily: FONTS.sans }}>
             No comparisons currently need help. Check back later or explore other content.
           </p>
         </div>
@@ -250,8 +256,8 @@ export default function NeedsHelpClient() {
           {activeTab === 'no_comments' && (
             filteredNoComments.length > 0 ? (
               <div className="space-y-3">
-                <div className="text-sm text-muted mb-4">
-                  {filteredNoComments.length} {filteredNoComments.length === 1 ? 'comparison' : 'comparisons'} with diffs that need comments
+                <div className={`${TEXT.secondary} ${TEXT.mutedMedium} mb-4 font-bold`} style={{ fontFamily: FONTS.mono, letterSpacing: LETTER_SPACING.normal }}>
+                  {filteredNoComments.length} {filteredNoComments.length === 1 ? 'COMPARISON' : 'COMPARISONS'} WITH DIFFS THAT NEED COMMENTS
                 </div>
                 {filteredNoComments.map((comparison) => (
                   <CompactComparisonCard
@@ -263,8 +269,8 @@ export default function NeedsHelpClient() {
                 ))}
               </div>
             ) : (
-              <div className="text-center py-12 bg-surface border border-border rounded-lg">
-                <p className="text-muted">All comparisons have been skipped or reviewed.</p>
+              <div className={`text-center py-12 bg-stone-50 dark:bg-stone-950 border ${BORDERS.medium} ${RADIUS.control}`}>
+                <p className={`${TEXT.body} ${TEXT.mutedMedium}`} style={{ fontFamily: FONTS.sans }}>All comparisons have been skipped or reviewed.</p>
               </div>
             )
           )}
@@ -272,8 +278,8 @@ export default function NeedsHelpClient() {
           {activeTab === 'disputed' && (
             filteredDisputed.length > 0 ? (
               <div className="space-y-3">
-                <div className="text-sm text-muted mb-4">
-                  {filteredDisputed.length} {filteredDisputed.length === 1 ? 'comparison with' : 'comparisons with'} contested differences
+                <div className={`${TEXT.secondary} ${TEXT.mutedMedium} mb-4 font-bold`} style={{ fontFamily: FONTS.mono, letterSpacing: LETTER_SPACING.normal }}>
+                  {filteredDisputed.length} {filteredDisputed.length === 1 ? 'COMPARISON WITH' : 'COMPARISONS WITH'} CONTESTED DIFFERENCES
                 </div>
                 {filteredDisputed.map((comparison) => (
                   <CompactComparisonCard
@@ -285,8 +291,8 @@ export default function NeedsHelpClient() {
                 ))}
               </div>
             ) : (
-              <div className="text-center py-12 bg-surface border border-border rounded-lg">
-                <p className="text-muted">All comparisons have been skipped or reviewed.</p>
+              <div className={`text-center py-12 bg-stone-50 dark:bg-stone-950 border ${BORDERS.medium} ${RADIUS.control}`}>
+                <p className={`${TEXT.body} ${TEXT.mutedMedium}`} style={{ fontFamily: FONTS.sans }}>All comparisons have been skipped or reviewed.</p>
               </div>
             )
           )}
@@ -294,8 +300,8 @@ export default function NeedsHelpClient() {
           {activeTab === 'needs_diffs' && (
             filteredNeedsDiffs.length > 0 ? (
               <div>
-                <div className="text-sm text-muted mb-4">
-                  {filteredNeedsDiffs.length} {filteredNeedsDiffs.length === 1 ? 'comparison' : 'comparisons'} with fewer than 3 differences
+                <div className={`${TEXT.secondary} ${TEXT.mutedMedium} mb-4 font-bold`} style={{ fontFamily: FONTS.mono, letterSpacing: LETTER_SPACING.normal }}>
+                  {filteredNeedsDiffs.length} {filteredNeedsDiffs.length === 1 ? 'COMPARISON' : 'COMPARISONS'} WITH FEWER THAN 3 DIFFERENCES
                 </div>
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
                   {filteredNeedsDiffs.map((comparison) => (
@@ -304,8 +310,8 @@ export default function NeedsHelpClient() {
                 </div>
               </div>
             ) : (
-              <div className="text-center py-12 bg-surface border border-border rounded-lg">
-                <p className="text-muted">All comparisons have been skipped or reviewed.</p>
+              <div className={`text-center py-12 bg-stone-50 dark:bg-stone-950 border ${BORDERS.medium} ${RADIUS.control}`}>
+                <p className={`${TEXT.body} ${TEXT.mutedMedium}`} style={{ fontFamily: FONTS.sans }}>All comparisons have been skipped or reviewed.</p>
               </div>
             )
           )}
@@ -335,27 +341,27 @@ function CompactComparisonCard({
   // Determine reason chip
   const reasonChip = needType === 'no_comments'
     ? {
-        label: `${diffCount} ${diffCount === 1 ? 'diff needs' : 'diffs need'} comments`,
-        color: 'bg-link text-white',
+        label: `${diffCount} ${diffCount === 1 ? 'DIFF NEEDS' : 'DIFFS NEED'} COMMENTS`,
+        color: 'bg-black dark:bg-white text-white dark:text-black',
         icon: '💬'
       }
     : {
-        label: `${diffCount} ${diffCount === 1 ? 'diff is' : 'diffs are'} contested`,
+        label: `${diffCount} ${diffCount === 1 ? 'DIFF IS' : 'DIFFS ARE'} CONTESTED`,
         color: 'bg-rose-500 text-white',
         icon: '⚖️'
       };
 
   return (
-    <div className="group relative border border-border rounded-lg hover:border-link/50 hover:shadow-sm transition-all duration-200 bg-surface overflow-hidden">
+    <div className={`group relative border ${BORDERS.medium} ${RADIUS.control} hover:border-black hover:dark:border-white hover:shadow-sm transition-all duration-200 bg-stone-50 dark:bg-stone-950 overflow-hidden`}>
       {/* Left border indicator */}
       <div className={`absolute left-0 top-0 bottom-0 w-1 ${
-        needType === 'no_comments' ? 'bg-link' : 'bg-rose-500'
+        needType === 'no_comments' ? 'bg-black dark:bg-white' : 'bg-rose-500'
       }`} />
 
       <div className="p-3 pl-4">
         {/* Hero: Reason Chip with count */}
         <div className="mb-2">
-          <span className={`inline-flex items-center gap-1.5 px-3 py-1.5 text-sm font-bold rounded-md ${reasonChip.color} shadow-sm`}>
+          <span className={`inline-flex items-center gap-1.5 px-3 py-1.5 ${TEXT.secondary} font-bold ${RADIUS.control} ${reasonChip.color} shadow-sm`} style={{ fontFamily: FONTS.mono, letterSpacing: LETTER_SPACING.normal }}>
             <span>{reasonChip.icon}</span>
             {reasonChip.label}
           </span>
@@ -369,7 +375,7 @@ function CompactComparisonCard({
           {/* Book side */}
           <div className="flex items-center gap-1.5 flex-1 min-w-0">
             {/* Book cover thumbnail */}
-            <div className="w-9 h-12 rounded border border-border overflow-hidden bg-gradient-to-br from-orange-50 to-amber-50 dark:from-orange-950 dark:to-amber-950 flex-shrink-0 flex items-center justify-center shadow-sm group-hover/link:shadow transition-shadow">
+            <div className={`w-9 h-12 border ${BORDERS.medium} overflow-hidden bg-gradient-to-br from-orange-50 to-amber-50 dark:from-orange-950 dark:to-amber-950 flex-shrink-0 flex items-center justify-center shadow-sm group-hover/link:shadow transition-shadow`}>
               {comparison.cover_url ? (
                 <img
                   src={comparison.cover_url}
@@ -386,28 +392,28 @@ function CompactComparisonCard({
               )}
             </div>
             <div className="flex-1 min-w-0">
-              <div className="text-xs font-semibold text-foreground group-hover/link:text-link transition-colors line-clamp-1">
+              <div className={`${TEXT.secondary} font-bold ${TEXT.primary} group-hover/link:underline transition-colors line-clamp-1`} style={{ fontFamily: FONTS.sans }}>
                 {comparison.work_title}
               </div>
-              <div className="text-xs text-muted">Book{comparison.work_author && ` · ${comparison.work_author}`}</div>
+              <div className={`${TEXT.metadata} ${TEXT.mutedMedium}`} style={{ fontFamily: FONTS.sans }}>BOOK{comparison.work_author && ` · ${comparison.work_author}`}</div>
             </div>
           </div>
 
           {/* Arrow */}
-          <div className="text-muted text-sm flex-shrink-0">→</div>
+          <div className={`${TEXT.mutedMedium} text-sm flex-shrink-0`}>→</div>
 
           {/* Screen side */}
           <div className="flex items-center gap-1.5 flex-1 min-w-0">
             <div className="flex-1 min-w-0 text-right">
-              <div className="text-xs font-semibold text-foreground group-hover/link:text-link transition-colors line-clamp-1">
+              <div className={`${TEXT.secondary} font-bold ${TEXT.primary} group-hover/link:underline transition-colors line-clamp-1`} style={{ fontFamily: FONTS.sans }}>
                 {comparison.screen_work_title}
               </div>
-              <div className="text-xs text-muted">
+              <div className={`${TEXT.metadata} ${TEXT.mutedMedium}`} style={{ fontFamily: FONTS.sans }}>
                 {comparison.screen_work_type}{comparison.screen_work_year && ` · ${comparison.screen_work_year}`}
               </div>
             </div>
             {/* Screen poster thumbnail */}
-            <div className="w-9 h-12 rounded border border-border overflow-hidden bg-gradient-to-br from-purple-50 to-blue-50 dark:from-purple-950 dark:to-blue-950 flex-shrink-0 flex items-center justify-center shadow-sm group-hover/link:shadow transition-shadow">
+            <div className={`w-9 h-12 border ${BORDERS.medium} overflow-hidden bg-gradient-to-br from-purple-50 to-blue-50 dark:from-purple-950 dark:to-blue-950 flex-shrink-0 flex items-center justify-center shadow-sm group-hover/link:shadow transition-shadow`}>
               {comparison.poster_url ? (
                 <img
                   src={comparison.poster_url}
@@ -428,8 +434,8 @@ function CompactComparisonCard({
 
         {/* Stats row */}
         {comparison.total_votes !== undefined && comparison.total_votes > 0 && (
-          <div className="mb-3 text-xs text-muted">
-            {comparison.total_votes} total {comparison.total_votes === 1 ? 'vote' : 'votes'} across all diffs
+          <div className={`mb-3 ${TEXT.metadata} ${TEXT.mutedMedium} font-bold`} style={{ fontFamily: FONTS.mono, letterSpacing: LETTER_SPACING.wider }}>
+            {comparison.total_votes} TOTAL {comparison.total_votes === 1 ? 'VOTE' : 'VOTES'} ACROSS ALL DIFFS
           </div>
         )}
 
@@ -438,21 +444,23 @@ function CompactComparisonCard({
           <div className="flex items-center gap-2">
             <Link
               href={comparisonUrl}
-              className="btn btn-primary flex-1 text-center justify-center"
+              className={`border ${BORDERS.solid} bg-transparent hover:bg-black hover:dark:bg-white hover:text-white hover:dark:text-black font-bold transition-all ${TEXT.secondary} ${RADIUS.control} flex-1 text-center justify-center inline-flex items-center gap-2 px-3 py-2`}
+              style={{ fontFamily: FONTS.mono, letterSpacing: LETTER_SPACING.normal }}
               title="Review this comparison and add context to help others vote accurately"
             >
-              <svg className="icon-sm" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
+              <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                <path strokeLinecap="round" strokeLinejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                <path strokeLinecap="round" strokeLinejoin="round" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
               </svg>
-              Review comparison
+              REVIEW
             </Link>
             <button
               onClick={() => onSkip(comparison.work_id, comparison.screen_work_id)}
-              className="px-3 py-2 text-xs font-medium text-muted hover:text-foreground transition-colors"
+              className={`px-3 py-2 ${TEXT.metadata} font-bold ${TEXT.mutedMedium} hover:${TEXT.primary} transition-colors`}
+              style={{ fontFamily: FONTS.mono, letterSpacing: LETTER_SPACING.wider }}
               title="Not familiar with this comparison"
             >
-              Skip
+              SKIP
             </button>
           </div>
         </div>
@@ -466,11 +474,11 @@ function ComparisonCard({ comparison }: { comparison: NeedsHelpComparison }) {
   return (
     <Link
       href={`/compare/${comparison.work_slug}/${comparison.screen_work_slug}`}
-      className="block bg-surface border-2 border-border-strong rounded-lg overflow-hidden hover:border-link hover:shadow-lg transition-all shadow-md"
+      className={`block bg-stone-50 dark:bg-stone-950 border ${BORDERS.solid} ${RADIUS.control} overflow-hidden hover:border-black hover:dark:border-white hover:shadow-lg transition-all shadow-md`}
     >
       {/* Images at top */}
       <div className="flex h-48">
-        <div className="w-1/2 relative bg-bg-subtle">
+        <div className="w-1/2 relative bg-stone-100 dark:bg-stone-900">
           {comparison.cover_url ? (
             <img
               src={comparison.cover_url}
@@ -478,15 +486,15 @@ function ComparisonCard({ comparison }: { comparison: NeedsHelpComparison }) {
               className="w-full h-full object-cover"
             />
           ) : (
-            <div className="w-full h-full flex items-center justify-center text-muted">
+            <div className={`w-full h-full flex items-center justify-center ${TEXT.mutedMedium}`}>
               <span className="text-4xl">📖</span>
             </div>
           )}
-          <div className="absolute top-2 left-2 bg-surface px-2 py-1 rounded text-xs font-semibold">
+          <div className={`absolute top-2 left-2 bg-stone-50 dark:bg-stone-950 border ${BORDERS.medium} px-2 py-1 ${RADIUS.control} ${TEXT.metadata} font-bold`} style={{ fontFamily: FONTS.mono, letterSpacing: LETTER_SPACING.wider }}>
             BOOK
           </div>
         </div>
-        <div className="w-1/2 relative bg-bg-subtle">
+        <div className="w-1/2 relative bg-stone-100 dark:bg-stone-900">
           {comparison.poster_url ? (
             <img
               src={comparison.poster_url}
@@ -494,11 +502,11 @@ function ComparisonCard({ comparison }: { comparison: NeedsHelpComparison }) {
               className="w-full h-full object-cover"
             />
           ) : (
-            <div className="w-full h-full flex items-center justify-center text-muted">
+            <div className={`w-full h-full flex items-center justify-center ${TEXT.mutedMedium}`}>
               <span className="text-4xl">🎬</span>
             </div>
           )}
-          <div className="absolute top-2 right-2 bg-surface px-2 py-1 rounded text-xs font-semibold">
+          <div className={`absolute top-2 right-2 bg-stone-50 dark:bg-stone-950 border ${BORDERS.medium} px-2 py-1 ${RADIUS.control} ${TEXT.metadata} font-bold`} style={{ fontFamily: FONTS.mono, letterSpacing: LETTER_SPACING.wider }}>
             SCREEN
           </div>
         </div>
@@ -506,16 +514,16 @@ function ComparisonCard({ comparison }: { comparison: NeedsHelpComparison }) {
 
       {/* Content below */}
       <div className="p-4">
-        <h3 className="font-semibold text-foreground mb-2 line-clamp-2">
+        <h3 className={`font-bold ${TEXT.primary} mb-2 line-clamp-2`} style={{ fontFamily: FONTS.sans }}>
           {comparison.work_title}
         </h3>
-        <p className="text-sm text-muted mb-2">vs</p>
-        <p className="text-sm text-foreground mb-3 line-clamp-2">
+        <p className={`${TEXT.secondary} ${TEXT.mutedMedium} mb-2 font-bold`} style={{ fontFamily: FONTS.mono }}>VS</p>
+        <p className={`${TEXT.secondary} ${TEXT.primary} mb-3 line-clamp-2`} style={{ fontFamily: FONTS.sans }}>
           {comparison.screen_work_title}
         </p>
-        <div className="flex items-center gap-2 text-xs">
-          <span className="px-2 py-1 bg-surface2 text-muted rounded">
-            {comparison.diff_count || 0} {comparison.diff_count === 1 ? 'diff' : 'diffs'}
+        <div className="flex items-center gap-2">
+          <span className={`px-2 py-1 bg-stone-100 dark:bg-stone-900 border ${BORDERS.subtle} ${RADIUS.control} ${TEXT.metadata} ${TEXT.mutedMedium} font-bold`} style={{ fontFamily: FONTS.mono, letterSpacing: LETTER_SPACING.wider }}>
+            {comparison.diff_count || 0} {comparison.diff_count === 1 ? 'DIFF' : 'DIFFS'}
           </span>
         </div>
       </div>

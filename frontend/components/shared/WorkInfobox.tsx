@@ -1,6 +1,7 @@
 import type { Work } from '@/lib/types';
 import Infobox from './Infobox';
 import { ArrowTopRightOnSquareIcon } from '@/components/ui/Icons';
+import { COLORS } from '@/lib/brutalist-design';
 
 interface WorkInfoboxProps {
   work: Work;
@@ -40,7 +41,8 @@ export default function WorkInfobox({ work }: WorkInfoboxProps): JSX.Element {
           href={`https://www.wikidata.org/wiki/${work.wikidata_qid}`}
           target="_blank"
           rel="noopener noreferrer"
-          className="text-link hover:underline inline-flex items-center gap-1"
+          className="font-bold hover:underline inline-flex items-center gap-1"
+          style={{ color: COLORS.book }}
         >
           {work.wikidata_qid}
           <ArrowTopRightOnSquareIcon className="w-3 h-3" />
@@ -57,7 +59,8 @@ export default function WorkInfobox({ work }: WorkInfoboxProps): JSX.Element {
           href={`https://openlibrary.org/works/${work.openlibrary_work_id}`}
           target="_blank"
           rel="noopener noreferrer"
-          className="text-link hover:underline inline-flex items-center gap-1"
+          className="font-bold hover:underline inline-flex items-center gap-1"
+          style={{ color: COLORS.book }}
         >
           {work.openlibrary_work_id}
           <ArrowTopRightOnSquareIcon className="w-3 h-3" />

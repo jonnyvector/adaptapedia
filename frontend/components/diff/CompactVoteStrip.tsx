@@ -6,6 +6,7 @@ import { api } from '@/lib/api';
 import ComparisonVoting from './ComparisonVoting';
 import { BookOpenIcon, FilmIcon, InformationCircleIcon } from '@/components/ui/Icons';
 import { calculateVotePercentage } from '@/lib/vote-utils';
+import { FONTS, BORDERS, TEXT, RADIUS, COLORS } from '@/lib/brutalist-design';
 
 interface CompactVoteStripProps {
   work: Work;
@@ -56,8 +57,8 @@ export default function CompactVoteStrip({
 
   if (loading) {
     return (
-      <div className="bg-muted/5 rounded-md px-4 py-2.5 h-[44px] flex items-center">
-        <span className="text-sm text-muted animate-pulse">Loading voting data...</span>
+      <div className={`bg-stone-50 dark:bg-stone-950 ${RADIUS.control} px-4 py-2.5 h-[44px] flex items-center`}>
+        <span className={`${TEXT.body} ${TEXT.mutedMedium} animate-pulse`} style={{ fontFamily: FONTS.mono }}>Loading voting data...</span>
       </div>
     );
   }
@@ -78,7 +79,8 @@ export default function CompactVoteStrip({
             <button
               onClick={() => setIsExpanded(false)}
               aria-expanded="true"
-              className="text-sm text-link hover:text-link-hover transition-colors focus:outline-none focus:ring-2 focus:ring-link/50 rounded px-2 py-1"
+              className={`${TEXT.body} ${TEXT.primary} hover:underline transition-colors focus:outline-none focus:ring-2 focus:ring-black/50 focus:dark:ring-white/50 ${RADIUS.control} px-2 py-1 font-bold uppercase tracking-wider`}
+              style={{ fontFamily: FONTS.mono }}
             >
               Collapse
             </button>
@@ -99,9 +101,9 @@ export default function CompactVoteStrip({
           {/* Header Row */}
           <div className="flex items-center justify-between mb-3">
             <div className="flex items-baseline gap-2">
-              <span className="text-xs font-semibold text-muted uppercase tracking-wide">Which version did people prefer?</span>
+              <span className={`${TEXT.label} font-bold ${TEXT.mutedMedium} uppercase tracking-widest`} style={{ fontFamily: FONTS.mono }}>Which version did people prefer?</span>
               {hasLowSampleSize && (
-                <span className="inline-flex items-center text-xs px-2 py-0.5 rounded-full bg-amber-500/10 text-amber-700 dark:text-amber-400 border border-amber-500/20">
+                <span className={`inline-flex items-center ${TEXT.label} px-2 py-0.5 ${RADIUS.control} bg-amber-100 dark:bg-amber-900 text-amber-900 dark:text-amber-100 border ${BORDERS.medium} font-bold uppercase tracking-wider`} style={{ fontFamily: FONTS.mono }}>
                   Early votes
                 </span>
               )}
@@ -110,30 +112,31 @@ export default function CompactVoteStrip({
               onClick={() => setIsExpanded(true)}
               aria-expanded="false"
               aria-label={stats?.user_vote ? 'Edit your vote' : 'Vote now'}
-              className="text-sm font-medium text-link hover:text-link-hover transition-all duration-200 whitespace-nowrap focus:outline-none focus:ring-2 focus:ring-link/50 rounded px-3 py-1.5 border border-link/20 hover:border-link/40 hover:bg-link/5"
+              className={`${TEXT.body} font-bold ${TEXT.primary} hover:bg-black hover:dark:bg-white hover:text-white hover:dark:text-black transition-all duration-200 whitespace-nowrap focus:outline-none focus:ring-2 focus:ring-black/50 focus:dark:ring-white/50 ${RADIUS.control} px-3 py-1.5 border ${BORDERS.solid} uppercase tracking-wider`}
+              style={{ fontFamily: FONTS.mono }}
             >
               {stats?.user_vote ? 'Edit your vote' : 'Vote now'}
             </button>
           </div>
 
-          {/* Blue-tinted Meter Bar */}
-          <div className="relative h-12 bg-gray-200 dark:bg-gray-800 rounded-lg overflow-hidden mb-2.5 shadow-inner">
-            {/* Book segment - darker blue */}
+          {/* Meter Bar */}
+          <div className={`relative h-12 bg-stone-100 dark:bg-stone-900 border ${BORDERS.medium} ${RADIUS.control} overflow-hidden mb-2.5`}>
+            {/* Book segment */}
             <div
-              className="absolute left-0 top-0 h-full bg-blue-600 dark:bg-blue-500 transition-all duration-500"
-              style={{ width: `${bookPct}%` }}
+              className="absolute left-0 top-0 h-full transition-all duration-500"
+              style={{ width: `${bookPct}%`, backgroundColor: COLORS.book }}
               aria-label={`Book preference: ${bookPct}%`}
             />
-            {/* Screen segment - lighter blue */}
+            {/* Screen segment */}
             <div
-              className="absolute right-0 top-0 h-full bg-blue-400 dark:bg-blue-300 transition-all duration-500"
-              style={{ width: `${screenPct}%` }}
+              className="absolute right-0 top-0 h-full transition-all duration-500"
+              style={{ width: `${screenPct}%`, backgroundColor: COLORS.screen }}
               aria-label={`Screen preference: ${screenPct}%`}
             />
-            {/* Tie segment (if any) - neutral blue */}
+            {/* Tie segment (if any) */}
             {tiePct > 0 && (
               <div
-                className="absolute top-0 h-full bg-blue-300 dark:bg-blue-400 transition-all duration-500"
+                className={`absolute top-0 h-full bg-black/20 dark:bg-white/20 transition-all duration-500`}
                 style={{
                   left: `${bookPct}%`,
                   width: `${tiePct}%`
@@ -143,12 +146,12 @@ export default function CompactVoteStrip({
             )}
 
             {/* Percentages inside segments */}
-            <div className="absolute inset-0 flex items-center justify-between px-4 text-sm font-bold">
-              <div className={`flex items-center gap-2 transition-opacity ${bookPct > 12 ? 'opacity-100 text-white' : 'opacity-40 text-gray-400'}`}>
+            <div className={`absolute inset-0 flex items-center justify-between px-4 ${TEXT.body} font-bold uppercase tracking-wider`} style={{ fontFamily: FONTS.mono }}>
+              <div className={`flex items-center gap-2 transition-opacity ${bookPct > 12 ? 'opacity-100 text-white' : 'opacity-40 text-black/40 dark:text-white/40'}`}>
                 <BookOpenIcon className="w-4 h-4" />
                 <span>Book {bookPct}%</span>
               </div>
-              <div className={`flex items-center gap-2 transition-opacity ${screenPct > 12 ? 'opacity-100 text-white' : 'opacity-40 text-gray-400'}`}>
+              <div className={`flex items-center gap-2 transition-opacity ${screenPct > 12 ? 'opacity-100 text-white' : 'opacity-40 text-black/40 dark:text-white/40'}`}>
                 <span>Screen {screenPct}%</span>
                 <FilmIcon className="w-4 h-4" />
               </div>
@@ -156,41 +159,42 @@ export default function CompactVoteStrip({
           </div>
 
           {/* Stats Row - Compact */}
-          <div className="flex items-center justify-between text-xs text-muted">
+          <div className={`flex items-center justify-between ${TEXT.secondary} ${TEXT.mutedMedium}`} style={{ fontFamily: FONTS.mono }}>
             <div className="flex items-center gap-3">
               {stats && stats.faithfulness.average !== null && (
                 <div className="flex items-center gap-1.5 group relative">
-                  <span>Faithfulness:</span>
-                  <span className="text-lg font-black text-link">{stats.faithfulness.average.toFixed(1)}</span>
+                  <span className="uppercase tracking-wider">Faithfulness:</span>
+                  <span className={`text-lg font-black ${TEXT.primary}`}>{stats.faithfulness.average.toFixed(1)}</span>
                   <span>/5</span>
                   <button
-                    className="ml-0.5 text-muted hover:text-foreground transition-colors focus:outline-none"
+                    className={`ml-0.5 ${TEXT.mutedMedium} hover:text-black hover:dark:text-white transition-colors focus:outline-none`}
                     aria-label="Faithfulness explanation"
                   >
                     <InformationCircleIcon className="w-3.5 h-3.5" />
                   </button>
                   {/* Tooltip */}
                   <div className="absolute bottom-full left-0 mb-2 hidden group-hover:block group-focus-within:block z-50">
-                    <div className="bg-surface2 text-foreground text-xs rounded-lg px-3 py-2 shadow-lg border border-border whitespace-nowrap">
+                    <div className={`bg-white dark:bg-black ${TEXT.secondary} ${RADIUS.control} px-3 py-2 shadow-lg border ${BORDERS.medium} whitespace-nowrap`} style={{ fontFamily: FONTS.mono }}>
                       How closely the movie follows the book (community rating)
-                      <div className="absolute top-full left-4 w-2 h-2 bg-surface2 border-r border-b border-border transform rotate-45 -mt-1"></div>
+                      <div className={`absolute top-full left-4 w-2 h-2 bg-white dark:bg-black border-r border-b ${BORDERS.medium} transform rotate-45 -mt-1`}></div>
                     </div>
                   </div>
                 </div>
               )}
             </div>
-            <span>
+            <span className="uppercase tracking-wider">
               {totalVotes} {totalVotes === 1 ? 'vote' : 'votes'}
             </span>
           </div>
         </>
       ) : (
         <div className="text-center py-4">
-          <p className="text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Which did you prefer?</p>
-          <p className="text-xs text-gray-500 dark:text-gray-400 mb-3">Vote on the adaptation + rate faithfulness</p>
+          <p className={`${TEXT.body} font-bold ${TEXT.primary} mb-1`} style={{ fontFamily: FONTS.mono }}>Which did you prefer?</p>
+          <p className={`${TEXT.secondary} ${TEXT.mutedMedium} mb-3`} style={{ fontFamily: FONTS.mono }}>Vote on the adaptation + rate faithfulness</p>
           <button
             onClick={() => setIsExpanded(true)}
-            className="text-sm font-medium text-gray-700 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white transition-colors border border-gray-300 dark:border-border rounded-lg px-4 py-2 hover:bg-gray-50 dark:hover:bg-surface2"
+            className={`${TEXT.body} font-bold ${TEXT.primary} hover:bg-black hover:dark:bg-white hover:text-white hover:dark:text-black transition-all border ${BORDERS.solid} ${RADIUS.control} px-4 py-2 uppercase tracking-wider`}
+            style={{ fontFamily: FONTS.mono }}
           >
             Vote: Book vs Screen
           </button>

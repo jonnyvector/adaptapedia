@@ -4,6 +4,7 @@ import Image from 'next/image';
 import type { Work, ScreenWork } from '@/lib/types';
 import AdaptationSwitcher from './AdaptationSwitcher';
 import ScoreboardCompact from './ScoreboardCompact';
+import { FONTS, BORDERS, TEXT, RADIUS } from '@/lib/brutalist-design';
 
 interface CompactMatchupHeroProps {
   work: Work;
@@ -28,14 +29,14 @@ export default function CompactMatchupHero({
   const isEmpty = diffCount === 0;
 
   return (
-    <div className="relative rounded-2xl overflow-hidden mb-6 border border-white/10">
+    <div className={`relative overflow-hidden mb-6 border ${BORDERS.medium} bg-white dark:bg-black`}>
       {/* Split gradient background */}
       <div
-        className="absolute inset-0 opacity-40"
+        className="absolute inset-0 opacity-20 dark:opacity-10"
         style={{
           background: `
-            radial-gradient(ellipse at center, rgba(0,0,0,.15) 0%, rgba(0,0,0,.65) 70%, rgba(0,0,0,.85) 100%),
-            linear-gradient(90deg, ${bookAccent}33 0%, transparent 45%, transparent 55%, ${screenAccent}33 100%)
+            radial-gradient(ellipse at center, rgba(0,0,0,.05) 0%, rgba(0,0,0,.15) 70%, rgba(0,0,0,.25) 100%),
+            linear-gradient(90deg, ${bookAccent}15 0%, transparent 45%, transparent 55%, ${screenAccent}15 100%)
           `,
         }}
       />
@@ -48,10 +49,9 @@ export default function CompactMatchupHero({
           <div className="flex flex-col items-center gap-2">
             {work.cover_url && (
               <div
-                className="w-[160px] h-[240px] relative rounded-lg overflow-hidden bg-black/30"
+                className={`w-[160px] h-[240px] relative overflow-hidden bg-stone-100 dark:bg-stone-900 border ${BORDERS.medium}`}
                 style={{
-                  border: '1px solid rgba(255,255,255,.08)',
-                  boxShadow: '0 12px 30px rgba(0,0,0,.50)',
+                  boxShadow: '0 4px 8px rgba(0,0,0,.08)',
                 }}
               >
                 <Image
@@ -64,10 +64,10 @@ export default function CompactMatchupHero({
                 />
               </div>
             )}
-            <div className="text-xs text-white/40 uppercase tracking-wide">
+            <div className={`${TEXT.label} ${TEXT.mutedMedium} uppercase tracking-widest font-bold`} style={{ fontFamily: FONTS.mono }}>
               Book
             </div>
-            <div className="text-xs text-white/30 text-center">
+            <div className={`${TEXT.label} ${TEXT.mutedLight} text-center`} style={{ fontFamily: FONTS.mono }}>
               {work.author}<br/>({work.year})
             </div>
           </div>
@@ -76,10 +76,10 @@ export default function CompactMatchupHero({
           <div className="flex flex-col gap-3">
             {/* Title + Meta */}
             <div className="text-center">
-              <h1 className="text-2xl font-bold text-white mb-1">
+              <h1 className={`text-2xl font-bold ${TEXT.primary} mb-1`}>
                 {work.title}
               </h1>
-              <div className="text-xs text-white/40">
+              <div className={`${TEXT.label} ${TEXT.mutedLight} uppercase tracking-widest font-bold`} style={{ fontFamily: FONTS.mono }}>
                 {diffCount} {diffCount === 1 ? 'difference' : 'differences'} · {voteCount} {voteCount === 1 ? 'vote' : 'votes'}
               </div>
             </div>
@@ -94,12 +94,13 @@ export default function CompactMatchupHero({
             {/* Primary CTA */}
             {isEmpty ? (
               <div className="text-center">
-                <p className="text-xs text-white/50 mb-2">
+                <p className={`${TEXT.secondary} ${TEXT.mutedMedium} mb-2`} style={{ fontFamily: FONTS.mono }}>
                   No differences yet — help start this page
                 </p>
                 <button
                   onClick={onAddDiff}
-                  className="inline-flex items-center gap-2 px-5 py-2.5 bg-white text-gray-900 font-semibold rounded-lg hover:bg-white/90 transition-colors text-sm"
+                  className={`inline-flex items-center gap-2 px-5 py-2.5 border ${BORDERS.solid} bg-black dark:bg-white text-white dark:text-black font-bold ${RADIUS.control} hover:bg-transparent hover:text-black hover:dark:text-white transition-all ${TEXT.body} uppercase tracking-wider`}
+                  style={{ fontFamily: FONTS.mono }}
                 >
                   Add the first difference
                 </button>
@@ -108,7 +109,8 @@ export default function CompactMatchupHero({
               <div className="text-center">
                 <button
                   onClick={onAddDiff}
-                  className="inline-flex items-center gap-2 px-5 py-2.5 bg-white text-gray-900 font-semibold rounded-lg hover:bg-white/90 transition-colors text-sm"
+                  className={`inline-flex items-center gap-2 px-5 py-2.5 border ${BORDERS.solid} bg-black dark:bg-white text-white dark:text-black font-bold ${RADIUS.control} hover:bg-transparent hover:text-black hover:dark:text-white transition-all ${TEXT.body} uppercase tracking-wider`}
+                  style={{ fontFamily: FONTS.mono }}
                 >
                   Add a difference
                 </button>
@@ -120,10 +122,9 @@ export default function CompactMatchupHero({
           <div className="flex flex-col items-center gap-2">
             {screenWork.poster_url && (
               <div
-                className="w-[160px] h-[240px] relative rounded-lg overflow-hidden bg-black/30"
+                className={`w-[160px] h-[240px] relative overflow-hidden bg-stone-100 dark:bg-stone-900 border ${BORDERS.medium}`}
                 style={{
-                  border: '1px solid rgba(255,255,255,.08)',
-                  boxShadow: '0 12px 30px rgba(0,0,0,.50)',
+                  boxShadow: '0 4px 8px rgba(0,0,0,.08)',
                 }}
               >
                 <Image
@@ -136,10 +137,10 @@ export default function CompactMatchupHero({
                 />
               </div>
             )}
-            <div className="text-xs text-white/40 uppercase tracking-wide">
+            <div className={`${TEXT.label} ${TEXT.mutedMedium} uppercase tracking-widest font-bold`} style={{ fontFamily: FONTS.mono }}>
               {screenWork.type === 'MOVIE' ? 'Movie' : 'TV'}
             </div>
-            <div className="text-xs text-white/30 text-center">
+            <div className={`${TEXT.label} ${TEXT.mutedLight} text-center`} style={{ fontFamily: FONTS.mono }}>
               {screenWork.director || screenWork.type}<br/>({screenWork.year})
             </div>
             <div className="mt-1">
@@ -160,10 +161,10 @@ export default function CompactMatchupHero({
         <div className="md:hidden">
           {/* 1. Title + Meta */}
           <div className="text-center mb-3">
-            <h1 className="text-xl font-bold text-white mb-1">
+            <h1 className={`text-xl font-bold ${TEXT.primary} mb-1`}>
               {work.title}
             </h1>
-            <div className="text-xs text-white/40">
+            <div className={`${TEXT.label} ${TEXT.mutedLight} uppercase tracking-widest font-bold`} style={{ fontFamily: FONTS.mono }}>
               {diffCount} {diffCount === 1 ? 'diff' : 'diffs'} · {voteCount} {voteCount === 1 ? 'vote' : 'votes'}
             </div>
           </div>
@@ -174,10 +175,9 @@ export default function CompactMatchupHero({
             <div className="flex flex-col items-center gap-1.5">
               {work.cover_url && (
                 <div
-                  className="w-[100px] h-[150px] relative rounded-md overflow-hidden bg-black/30"
+                  className={`w-[100px] h-[150px] relative overflow-hidden bg-stone-100 dark:bg-stone-900 border ${BORDERS.medium}`}
                   style={{
-                    border: '1px solid rgba(255,255,255,.08)',
-                    boxShadow: '0 8px 20px rgba(0,0,0,.50)',
+                    boxShadow: '0 2px 4px rgba(0,0,0,.08)',
                   }}
                 >
                   <Image
@@ -190,17 +190,16 @@ export default function CompactMatchupHero({
                   />
                 </div>
               )}
-              <div className="text-xs text-white/40 uppercase">Book</div>
+              <div className={`${TEXT.label} ${TEXT.mutedMedium} uppercase tracking-widest font-bold`} style={{ fontFamily: FONTS.mono }}>Book</div>
             </div>
 
             {/* Screen */}
             <div className="flex flex-col items-center gap-1.5">
               {screenWork.poster_url && (
                 <div
-                  className="w-[100px] h-[150px] relative rounded-md overflow-hidden bg-black/30"
+                  className={`w-[100px] h-[150px] relative overflow-hidden bg-stone-100 dark:bg-stone-900 border ${BORDERS.medium}`}
                   style={{
-                    border: '1px solid rgba(255,255,255,.08)',
-                    boxShadow: '0 8px 20px rgba(0,0,0,.50)',
+                    boxShadow: '0 2px 4px rgba(0,0,0,.08)',
                   }}
                 >
                   <Image
@@ -213,7 +212,7 @@ export default function CompactMatchupHero({
                   />
                 </div>
               )}
-              <div className="text-xs text-white/40 uppercase">
+              <div className={`${TEXT.label} ${TEXT.mutedMedium} uppercase tracking-widest font-bold`} style={{ fontFamily: FONTS.mono }}>
                 {screenWork.type === 'MOVIE' ? 'Movie' : 'TV'}
               </div>
             </div>
@@ -242,13 +241,14 @@ export default function CompactMatchupHero({
           {/* 4. Primary CTA: Add difference */}
           <div className="text-center mt-3">
             {isEmpty && (
-              <p className="text-xs text-white/50 mb-2">
+              <p className={`${TEXT.secondary} ${TEXT.mutedMedium} mb-2`} style={{ fontFamily: FONTS.mono }}>
                 No differences yet — help start this page
               </p>
             )}
             <button
               onClick={onAddDiff}
-              className="w-full py-2.5 px-4 bg-white text-gray-900 font-semibold rounded-lg text-sm"
+              className={`w-full py-2.5 px-4 border ${BORDERS.solid} bg-black dark:bg-white text-white dark:text-black font-bold ${RADIUS.control} hover:bg-transparent hover:text-black hover:dark:text-white transition-all ${TEXT.body} uppercase tracking-wider`}
+              style={{ fontFamily: FONTS.mono }}
             >
               {isEmpty ? 'Add the first difference' : 'Add a difference'}
             </button>
