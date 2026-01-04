@@ -308,10 +308,10 @@ export default function GetItNowModule({ work, screenWork }: GetItNowModuleProps
       </div>
 
       {/* Affiliate Disclosure */}
-      <div className="mt-6 pt-4 border-t border-gray-200 dark:border-border">
-        <p className="text-xs text-gray-500 dark:text-gray-400 leading-relaxed">
+      <div className={`mt-6 pt-4 border-t ${BORDERS.subtle}`}>
+        <p className={`${TEXT.metadata} ${TEXT.mutedMedium}`} style={{ fontFamily: FONTS.mono }}>
           Links may earn us a commission.{' '}
-          <a href="/about#affiliate" className="text-blue-600 dark:text-blue-400 hover:underline">
+          <a href="/about#affiliate" className={`${TEXT.primary} hover:underline font-bold transition-colors`} style={{ fontFamily: FONTS.mono }}>
             Learn more
           </a>
         </p>
