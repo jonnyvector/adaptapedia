@@ -317,7 +317,7 @@ export default async function Home(): Promise<JSX.Element> {
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-6xl mx-auto">
           {/* Step 1 */}
           <div className="relative">
-            <div className="flex flex-col items-center text-center">
+            <div className="flex flex-col items-start text-left">
               <div className={`mb-6 w-16 h-16 bg-black dark:bg-white border ${BORDERS.medium} flex items-center justify-center text-white dark:text-black text-2xl font-black`} style={{ fontFamily: FONTS.mono }}>
                 1
               </div>
@@ -383,7 +383,7 @@ export default async function Home(): Promise<JSX.Element> {
 
           {/* Step 2 */}
           <div className="relative">
-            <div className="flex flex-col items-center text-center">
+            <div className="flex flex-col items-start text-left">
               <div className={`mb-6 w-16 h-16 bg-black dark:bg-white border ${BORDERS.medium} flex items-center justify-center text-white dark:text-black text-2xl font-black`} style={{ fontFamily: FONTS.mono }}>
                 2
               </div>
@@ -448,7 +448,7 @@ export default async function Home(): Promise<JSX.Element> {
 
           {/* Step 3 */}
           <div className="relative">
-            <div className="flex flex-col items-center text-center">
+            <div className="flex flex-col items-start text-left">
               <div className={`mb-6 w-16 h-16 bg-black dark:bg-white border ${BORDERS.medium} flex items-center justify-center text-white dark:text-black text-2xl font-black`} style={{ fontFamily: FONTS.mono }}>
                 3
               </div>
