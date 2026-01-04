@@ -121,7 +121,7 @@ export default function Header(): JSX.Element {
           {/* Logo/Home Link */}
           <Link
             href="/"
-            className={`text-xl sm:text-2xl font-bold text-black dark:text-white hover:${TEXT.mutedMedium} transition-colors flex-shrink-0 ${monoUppercase}`}
+            className={`text-xl sm:text-2xl font-bold text-black dark:text-white hover:opacity-70 transition-all flex-shrink-0 ${monoUppercase}`}
             style={{ fontFamily: FONTS.mono, letterSpacing: LETTER_SPACING.wider }}
             aria-label="Book vs. Movie Home"
           >

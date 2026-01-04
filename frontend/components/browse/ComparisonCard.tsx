@@ -53,14 +53,12 @@ export default function ComparisonCard({ comparison, showTrendingBadge = false }
           {/* Subtle dark overlay for consistency */}
           <div className="absolute inset-0 bg-black/10" />
           <div className="absolute inset-0 bg-gradient-to-r from-transparent to-black/20" />
-          {/* Year only - no BOOK chip */}
-          {work_year && (
-            <div className="absolute top-2 left-2 z-10">
-              <span className={`px-1.5 py-0.5 ${TEXT.metadata} font-bold bg-black/80 text-white ${monoUppercase}`} style={{ fontFamily: FONTS.mono, letterSpacing: LETTER_SPACING.wide }}>
-                {work_year}
-              </span>
-            </div>
-          )}
+          {/* BOOK label - bottom left, flush */}
+          <div className="absolute bottom-0 left-0 z-10">
+            <span className={`px-1.5 py-0.5 ${TEXT.metadata} font-bold bg-black text-white block ${monoUppercase}`} style={{ fontFamily: FONTS.mono, letterSpacing: LETTER_SPACING.wide }}>
+              BOOK
+            </span>
+          </div>
         </div>
 
         {/* Subtle seam divider */}
@@ -101,14 +99,12 @@ export default function ComparisonCard({ comparison, showTrendingBadge = false }
           {/* Subtle dark overlay for consistency */}
           <div className="absolute inset-0 bg-black/10" />
           <div className="absolute inset-0 bg-gradient-to-l from-transparent to-black/20" />
-          {/* Year only - no MOVIE/TV chip */}
-          {screen_work_year && (
-            <div className="absolute top-2 right-2 z-10">
-              <span className={`px-1.5 py-0.5 ${TEXT.metadata} font-bold bg-black/80 text-white ${monoUppercase}`} style={{ fontFamily: FONTS.mono, letterSpacing: LETTER_SPACING.wide }}>
-                {screen_work_year}
-              </span>
-            </div>
-          )}
+          {/* SCREEN label - bottom right, flush */}
+          <div className="absolute bottom-0 right-0 z-10">
+            <span className={`px-1.5 py-0.5 ${TEXT.metadata} font-bold bg-black text-white block ${monoUppercase}`} style={{ fontFamily: FONTS.mono, letterSpacing: LETTER_SPACING.wide }}>
+              SCREEN
+            </span>
+          </div>
         </div>
       </div>
 
