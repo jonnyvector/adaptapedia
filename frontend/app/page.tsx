@@ -317,16 +317,16 @@ export default async function Home(): Promise<JSX.Element> {
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-6xl mx-auto">
           {/* Step 1 */}
           <div className="relative">
-            <div className="flex flex-col items-center text-center">
+            <div className="flex flex-col items-center text-center h-full">
               <div className={`mb-6 px-3 py-2 bg-black dark:bg-white border ${BORDERS.medium} inline-flex items-center justify-center text-white dark:text-black ${TEXT.metadata} font-black uppercase tracking-wider`} style={{ fontFamily: FONTS.mono, letterSpacing: '0.1em' }}>
                 Step 01
               </div>
               <h3 className={`text-2xl font-bold mb-3 ${TEXT.primary}`} style={{ fontFamily: FONTS.mono }}>Search</h3>
-              <p className={`${TEXT.secondary} ${TEXT.mutedStrong} mb-4 leading-relaxed`} style={{ fontFamily: FONTS.mono }}>
+              <p className={`${TEXT.secondary} ${TEXT.mutedStrong} mb-6 leading-relaxed min-h-[60px]`} style={{ fontFamily: FONTS.mono }}>
                 Find a book + adaptation fast — even if you type it wrong
               </p>
 
-              <div className={`flex flex-col gap-2 ${TEXT.secondary} ${TEXT.mutedStrong} mb-4 w-full`} style={{ fontFamily: FONTS.mono }}>
+              <div className={`flex flex-col gap-2 ${TEXT.secondary} ${TEXT.mutedStrong} mb-6 w-full`} style={{ fontFamily: FONTS.mono }}>
                 <div className="flex items-center gap-2">
                   <svg className={`w-4 h-4 ${TEXT.primary} flex-shrink-0`} fill="currentColor" viewBox="0 0 20 20">
                     <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
@@ -342,7 +342,7 @@ export default async function Home(): Promise<JSX.Element> {
               </div>
 
               {/* Mini Search Results Preview */}
-              <div className={`relative border ${BORDERS.medium} bg-stone-50 dark:bg-stone-950 p-3 mb-4 w-full`}>
+              <div className={`relative border ${BORDERS.medium} bg-stone-50 dark:bg-stone-950 p-3 mb-6 w-full flex-grow flex flex-col justify-center`}>
                 <div className={`${TEXT.metadata} ${TEXT.mutedLight} uppercase tracking-wide font-semibold mb-2`} style={{ fontFamily: FONTS.mono }}>Preview</div>
                 <div className="space-y-2">
                   {/* Result 1 */}
@@ -378,16 +378,16 @@ export default async function Home(): Promise<JSX.Element> {
 
           {/* Step 2 */}
           <div className="relative">
-            <div className="flex flex-col items-center text-center">
+            <div className="flex flex-col items-center text-center h-full">
               <div className={`mb-6 px-3 py-2 bg-black dark:bg-white border ${BORDERS.medium} inline-flex items-center justify-center text-white dark:text-black ${TEXT.metadata} font-black uppercase tracking-wider`} style={{ fontFamily: FONTS.mono, letterSpacing: '0.1em' }}>
                 Step 02
               </div>
               <h3 className={`text-2xl font-bold mb-3 ${TEXT.primary}`} style={{ fontFamily: FONTS.mono }}>Compare & Discuss</h3>
-              <p className={`${TEXT.secondary} ${TEXT.mutedStrong} mb-4 leading-relaxed`} style={{ fontFamily: FONTS.mono }}>
+              <p className={`${TEXT.secondary} ${TEXT.mutedStrong} mb-6 leading-relaxed min-h-[60px]`} style={{ fontFamily: FONTS.mono }}>
                 Browse diffs by category, then jump into threads where fans debate what changed (spoiler-safe)
               </p>
 
-              <div className={`flex flex-col gap-2 ${TEXT.secondary} ${TEXT.mutedStrong} mb-4 w-full`} style={{ fontFamily: FONTS.mono }}>
+              <div className={`flex flex-col gap-2 ${TEXT.secondary} ${TEXT.mutedStrong} mb-6 w-full`} style={{ fontFamily: FONTS.mono }}>
                 <div className="flex items-center gap-2">
                   <svg className={`w-4 h-4 ${TEXT.primary} flex-shrink-0`} fill="currentColor" viewBox="0 0 20 20">
                     <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
@@ -403,7 +403,7 @@ export default async function Home(): Promise<JSX.Element> {
               </div>
 
               {/* Mini Diff Card Preview */}
-              <div className={`relative border ${BORDERS.medium} bg-stone-50 dark:bg-stone-950 p-3 mb-4 w-full`}>
+              <div className={`relative border ${BORDERS.medium} bg-stone-50 dark:bg-stone-950 p-3 mb-6 w-full flex-grow flex flex-col justify-center`}>
                 <div className={`${TEXT.metadata} ${TEXT.mutedLight} uppercase tracking-wide font-semibold mb-3`} style={{ fontFamily: FONTS.mono }}>Preview</div>
                 <div className={`border ${BORDERS.medium} bg-white dark:bg-black p-3`}>
                   <div className="mb-2">
@@ -439,16 +439,16 @@ export default async function Home(): Promise<JSX.Element> {
 
           {/* Step 3 */}
           <div className="relative">
-            <div className="flex flex-col items-center text-center">
+            <div className="flex flex-col items-center text-center h-full">
               <div className={`mb-6 px-3 py-2 bg-black dark:bg-white border ${BORDERS.medium} inline-flex items-center justify-center text-white dark:text-black ${TEXT.metadata} font-black uppercase tracking-wider`} style={{ fontFamily: FONTS.mono, letterSpacing: '0.1em' }}>
                 Step 03
               </div>
               <h3 className={`text-2xl font-bold mb-3 ${TEXT.primary}`} style={{ fontFamily: FONTS.mono }}>Contribute</h3>
-              <p className={`${TEXT.secondary} ${TEXT.mutedStrong} mb-4 leading-relaxed`} style={{ fontFamily: FONTS.mono }}>
+              <p className={`${TEXT.secondary} ${TEXT.mutedStrong} mb-6 leading-relaxed min-h-[60px]`} style={{ fontFamily: FONTS.mono }}>
                 Add the differences you noticed. Earn votes, build reputation, and help shape the consensus
               </p>
 
-              <div className={`flex flex-col gap-2 ${TEXT.secondary} ${TEXT.mutedStrong} mb-4 w-full`} style={{ fontFamily: FONTS.mono }}>
+              <div className={`flex flex-col gap-2 ${TEXT.secondary} ${TEXT.mutedStrong} mb-6 w-full`} style={{ fontFamily: FONTS.mono }}>
                 <div className="flex items-center gap-2">
                   <svg className={`w-4 h-4 ${TEXT.primary} flex-shrink-0`} fill="currentColor" viewBox="0 0 20 20">
                     <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
@@ -464,7 +464,7 @@ export default async function Home(): Promise<JSX.Element> {
               </div>
 
               {/* Mini Add Diff Form Preview */}
-              <div className={`relative border ${BORDERS.medium} bg-stone-50 dark:bg-stone-950 p-3 mb-4 w-full`}>
+              <div className={`relative border ${BORDERS.medium} bg-stone-50 dark:bg-stone-950 p-3 mb-6 w-full flex-grow flex flex-col justify-center`}>
                 <div className={`${TEXT.metadata} ${TEXT.mutedLight} uppercase tracking-wide font-semibold mb-3`} style={{ fontFamily: FONTS.mono }}>Preview</div>
                 <div className={`border ${BORDERS.medium} bg-white dark:bg-black p-3 space-y-2`}>
                   <div>
