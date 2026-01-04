@@ -37,14 +37,14 @@ export default function MaskedDiffCard({
   }
 
   return (
-    <div className={`border-2 border-amber-600 dark:border-amber-400 ${RADIUS.control} p-4 sm:p-5 bg-amber-50 dark:bg-amber-950/30 backdrop-blur-sm`}>
+    <div className={`border ${BORDERS.medium} p-4 sm:p-5 bg-stone-50 dark:bg-stone-950`}>
       {/* Warning Header */}
       <div className="flex items-start gap-3 mb-4">
-        <span className="text-3xl text-amber-700 dark:text-amber-400" aria-hidden="true">
+        <span className="text-3xl text-black dark:text-white" aria-hidden="true">
           {getSpoilerIcon(diff.spoiler_scope)}
         </span>
         <div className="flex-1">
-          <h3 className={`${TEXT.body} sm:text-base font-bold text-amber-700 dark:text-amber-400 flex items-center gap-2`} style={{ fontFamily: FONTS.mono }}>
+          <h3 className={`${TEXT.body} sm:text-base font-bold text-black dark:text-white flex items-center gap-2`} style={{ fontFamily: FONTS.mono }}>
             {getSpoilerLabel(diff.spoiler_scope)} Hidden
           </h3>
           <p className={`${TEXT.secondary} ${TEXT.mutedMedium} mt-1`} style={{ fontFamily: FONTS.mono }}>
@@ -62,7 +62,7 @@ export default function MaskedDiffCard({
       </div>
 
       {/* Blurred Preview */}
-      <div className={`relative mb-4 ${RADIUS.control} overflow-hidden`}>
+      <div className={`relative mb-4 overflow-hidden`}>
         <div className="absolute inset-0 backdrop-blur-xl bg-white/80 dark:bg-black/80 z-10 flex items-center justify-center">
           <div className="text-center px-4">
             <div className="mb-2 flex justify-center" aria-hidden="true">
@@ -84,7 +84,7 @@ export default function MaskedDiffCard({
         </p>
         <button
           onClick={() => setRevealed(true)}
-          className={`px-4 py-3 bg-amber-600 dark:bg-amber-500 text-white ${RADIUS.control} hover:bg-amber-700 hover:dark:bg-amber-600 transition-all font-bold ${TEXT.secondary} min-h-[48px] flex items-center justify-center gap-2 border ${BORDERS.solid}`}
+          className={`px-4 py-3 bg-black dark:bg-white text-white dark:text-black hover:opacity-80 transition-opacity font-bold ${TEXT.secondary} min-h-[48px] flex items-center justify-center gap-2 border ${BORDERS.solid} ${RADIUS.control}`}
           style={{ fontFamily: FONTS.mono }}
           aria-label={`Reveal ${getSpoilerLabel(diff.spoiler_scope).toLowerCase()}`}
         >
