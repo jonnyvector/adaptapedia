@@ -117,7 +117,7 @@ export default function SpoilerControl({
                     ${
                       isActive
                         ? `bg-black dark:bg-white ${BORDERS.solid} text-white dark:text-black`
-                        : `bg-stone-100 dark:bg-stone-900 ${BORDERS.medium} ${TEXT.mutedStrong} hover:${BORDERS.solid}`
+                        : `bg-stone-100 dark:bg-stone-900 ${BORDERS.medium} ${TEXT.mutedStrong} hover:border-black hover:dark:border-white`
                     }
                   `}
                   style={{ fontFamily: FONTS.mono, letterSpacing: LETTER_SPACING.normal }}
