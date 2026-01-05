@@ -197,12 +197,9 @@ export default function AddDiffForm({ work, screenWork, initialCategory }: AddDi
       // Scroll to top so user sees the success message
       window.scrollTo({ top: 0, behavior: 'smooth' });
 
-      // Force a data refresh before redirecting so the new diff appears
-      router.refresh();
-
-      // Redirect after brief delay
+      // Hard redirect after brief delay to force fresh data load
       setTimeout(() => {
-        router.push(`/compare/${work.slug}/${screenWork.slug}`);
+        window.location.href = `/compare/${work.slug}/${screenWork.slug}`;
       }, 1500);
     } catch (err) {
       if (err instanceof ApiError) {
