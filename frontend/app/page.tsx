@@ -120,14 +120,14 @@ export default async function Home(): Promise<JSX.Element> {
         </div>
       </div>
 
-      {/* Why Book vs. Movie - With separator */}
+      {/* Why Adaptapedia - With separator */}
       <div className={`relative bg-white dark:bg-black py-12 md:py-20 mt-8 border-y ${BORDERS.medium}`}>
         <div className="container relative">
 
         {/* Features - Redesigned Grid */}
         <div className="mb-16">
           <div className="text-center mb-8">
-            <h2 className={`text-3xl font-bold mb-2 ${TEXT.primary}`} style={{ fontFamily: FONTS.mono }}>Why Book vs. Movie?</h2>
+            <h2 className={`text-3xl font-bold mb-2 ${TEXT.primary}`} style={{ fontFamily: FONTS.mono }}>Why Adaptapedia?</h2>
             <p className={`${TEXT.mutedMedium} uppercase tracking-wider`} style={{ fontFamily: FONTS.mono }}>Built for fans who love to compare notes</p>
           </div>
 

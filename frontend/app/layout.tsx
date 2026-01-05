@@ -25,7 +25,7 @@ const jetbrainsMono = JetBrains_Mono({
 });
 
 export const metadata: Metadata = {
-  title: 'Book vs. Movie',
+  title: 'Adaptapedia',
   description: 'Compare books and their movie adaptations - community-powered database of differences',
 };
 

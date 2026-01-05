@@ -123,9 +123,9 @@ export default function Header(): JSX.Element {
             href="/"
             className={`text-xl sm:text-2xl font-bold text-black dark:text-white hover:text-black/70 hover:dark:text-white/70 transition-colors flex-shrink-0 ${monoUppercase}`}
             style={{ fontFamily: FONTS.mono, letterSpacing: LETTER_SPACING.wider }}
-            aria-label="Book vs. Movie Home"
+            aria-label="Adaptapedia Home"
           >
-            Book vs. Movie
+            Adaptapedia
           </Link>
 
           {/* Search Bar - Hidden on home and search pages */}

@@ -11,7 +11,7 @@ export default function Footer(): JSX.Element {
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6 sm:gap-8">
           {/* About Section */}
           <div>
-            <h3 className={`font-bold text-base sm:text-lg mb-3 sm:mb-4 text-black dark:text-white ${monoUppercase}`} style={{ fontFamily: FONTS.mono, letterSpacing: LETTER_SPACING.wider }}>Book vs. Movie</h3>
+            <h3 className={`font-bold text-base sm:text-lg mb-3 sm:mb-4 text-black dark:text-white ${monoUppercase}`} style={{ fontFamily: FONTS.mono, letterSpacing: LETTER_SPACING.wider }}>Adaptapedia</h3>
             <p className={`${TEXT.mutedMedium} ${TEXT.secondary} mb-4`} style={{ fontFamily: FONTS.mono }}>
               A community-driven database for comparing books and their film adaptations.
             </p>
@@ -61,7 +61,7 @@ export default function Footer(): JSX.Element {
                 </a>
               </li>
               <li className={`${TEXT.metadata} pt-4`} style={{ fontFamily: FONTS.mono }}>
-                &copy; {currentYear} Book vs. Movie
+                &copy; {currentYear} Adaptapedia
               </li>
             </ul>
           </div>
