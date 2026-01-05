@@ -326,7 +326,7 @@ export default async function Home(): Promise<JSX.Element> {
                 Find a book + adaptation fast — even if you type it wrong
               </p>
 
-              <div className={`flex flex-col gap-2 ${TEXT.secondary} ${TEXT.mutedStrong} mb-6 w-full min-h-[68px]`} style={{ fontFamily: FONTS.mono }}>
+              <div className={`flex flex-col gap-2 ${TEXT.secondary} ${TEXT.mutedStrong} mb-8 w-full min-h-[68px]`} style={{ fontFamily: FONTS.mono }}>
                 <div className="flex items-center gap-2">
                   <svg className={`w-4 h-4 ${TEXT.primary} flex-shrink-0`} fill="currentColor" viewBox="0 0 20 20">
                     <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
@@ -341,22 +341,7 @@ export default async function Home(): Promise<JSX.Element> {
                 </div>
               </div>
 
-              {/* Mini Search Results Preview */}
-              <div className={`relative border ${BORDERS.medium} bg-stone-50 dark:bg-stone-950 p-3 mb-6 w-full flex-grow flex flex-col justify-center`}>
-                <div className={`${TEXT.metadata} ${TEXT.mutedLight} uppercase tracking-wide font-semibold mb-3`} style={{ fontFamily: FONTS.mono }}>Preview</div>
-                <div className={`flex items-center gap-3 p-3 border ${BORDERS.medium} bg-white dark:bg-black`}>
-                  <div className="flex gap-2">
-                    <div className={`w-8 h-12 bg-black/10 dark:bg-white/10 border ${BORDERS.medium}`}></div>
-                    <div className={`w-8 h-12 bg-black/10 dark:bg-white/10 border ${BORDERS.medium}`}></div>
-                  </div>
-                  <div className="flex-1 min-w-0">
-                    <div className={`${TEXT.secondary} font-bold ${TEXT.primary} mb-1`} style={{ fontFamily: FONTS.mono }}>Dune</div>
-                    <div className={`${TEXT.metadata} ${TEXT.mutedMedium} uppercase tracking-wider`} style={{ fontFamily: FONTS.mono }}>24 diffs</div>
-                  </div>
-                </div>
-              </div>
-
-              <div className="w-full">
+              <div className="w-full flex-grow flex flex-col justify-center">
                 <SearchBar placeholder="Try it: Dune, The Shining..." />
               </div>
             </div>
