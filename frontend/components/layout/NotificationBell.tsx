@@ -4,7 +4,15 @@ import { useState, useEffect, useRef } from 'react';
 import Link from 'next/link';
 import { api } from '@/lib/api';
 import type { Notification } from '@/lib/types';
-import { BellIcon } from '@/components/ui/Icons';
+import {
+  BellIcon,
+  TrophyIcon,
+  StarIcon,
+  CheckIcon,
+  ChatBubbleIcon,
+  HandThumbUpIcon,
+  CheckCircleIcon
+} from '@/components/ui/Icons';
 import { FONTS, LETTER_SPACING, BORDERS, TEXT, monoUppercase } from '@/lib/brutalist-design';
 
 export default function NotificationBell() {
@@ -110,21 +118,22 @@ export default function NotificationBell() {
 
   // Get icon for notification type
   const getNotificationIcon = (type: string) => {
+    const iconClass = "w-6 h-6";
     switch (type) {
       case 'BADGE_EARNED':
-        return '🏅';
+        return <TrophyIcon className={iconClass} />;
       case 'REPUTATION_MILESTONE':
-        return '⭐';
+        return <StarIcon className={iconClass} />;
       case 'DIFF_CONSENSUS':
-        return '✓';
+        return <CheckIcon className={iconClass} />;
       case 'COMMENT_REPLY':
-        return '💬';
+        return <ChatBubbleIcon className={iconClass} />;
       case 'COMMENT_HELPFUL':
-        return '👍';
+        return <HandThumbUpIcon className={iconClass} />;
       case 'DIFF_VALIDATED':
-        return '✅';
+        return <CheckCircleIcon className={iconClass} />;
       default:
-        return '🔔';
+        return <BellIcon className={iconClass} />;
     }
   };
 
@@ -169,7 +178,9 @@ export default function NotificationBell() {
               <div className={`p-8 text-center ${TEXT.mutedMedium}`} style={{ fontFamily: FONTS.mono }}>Loading...</div>
             ) : notifications.length === 0 ? (
               <div className={`p-8 text-center ${TEXT.mutedMedium}`} style={{ fontFamily: FONTS.mono }}>
-                <div className="mb-2">🔔</div>
+                <div className="mb-2 flex justify-center">
+                  <BellIcon className="w-8 h-8" />
+                </div>
                 <div>No notifications yet</div>
               </div>
             ) : (
@@ -182,7 +193,7 @@ export default function NotificationBell() {
                     }`}
                   >
                     <div className="flex items-start gap-3">
-                      <div className="text-2xl flex-shrink-0">
+                      <div className="flex-shrink-0 text-black dark:text-white">
                         {getNotificationIcon(notification.notification_type)}
                       </div>
                       <div className="flex-1 min-w-0">
