@@ -80,10 +80,10 @@ export default function BookmarkButton({
       <button
         onClick={handleToggleBookmark}
         disabled={isLoading}
-        className={`inline-flex items-center justify-center border transition-colors px-2 py-1 ${
+        className={`inline-flex items-center justify-center transition-colors p-2 ${
           isBookmarked
-            ? `bg-black dark:bg-white ${BORDERS.solid} text-white dark:text-black`
-            : `bg-white dark:bg-black ${BORDERS.strongSubtle} text-black dark:text-white hover:${BORDERS.solid}`
+            ? `text-black dark:text-white`
+            : `text-black/60 dark:text-white/60 hover:text-black hover:dark:text-white`
         } ${isLoading ? 'opacity-50 cursor-not-allowed' : ''}`}
         style={{ fontFamily: FONTS.mono }}
         title={isBookmarked ? 'Remove from bookmarks' : 'Add to bookmarks'}
