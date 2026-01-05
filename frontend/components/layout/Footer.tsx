@@ -53,7 +53,7 @@ export default function Footer(): JSX.Element {
                   href="https://github.com/adaptapedia/adaptapedia"
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="hover:text-black hover:dark:text-white inline-block min-h-[28px] flex items-center gap-1 transition-colors"
+                  className={`${TEXT.mutedMedium} hover:text-black hover:dark:text-white inline-block min-h-[28px] flex items-center gap-1 transition-colors`}
                   style={{ fontFamily: FONTS.mono }}
                 >
                   GitHub Repository
