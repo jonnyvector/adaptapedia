@@ -194,6 +194,9 @@ export default function AddDiffForm({ work, screenWork, initialCategory }: AddDi
       setShowSuccess(true);
       setIsDirty(false);
 
+      // Scroll to top so user sees the success message
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+
       // Force a data refresh before redirecting so the new diff appears
       router.refresh();
 
