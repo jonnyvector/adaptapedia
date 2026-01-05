@@ -19,6 +19,7 @@ import type {
   SimilarBooksResponse,
   TrendingComparison,
   Vote,
+  VoteType,
   Comment,
   Bookmark,
   BookmarkCheckResponse,
@@ -446,6 +447,20 @@ export const api = {
     markAllAsRead: async (): Promise<{ message: string; count: number }> => {
       return fetchApi<{ message: string; count: number }>('/users/notifications/mark-all-read/', {
         method: 'POST',
+      });
+    },
+  },
+
+  votes: {
+    submit: async (diffId: number, data: { vote_type: VoteType }) => {
+      return fetchApi(`/diffs/items/${diffId}/vote/`, {
+        method: 'POST',
+        body: JSON.stringify({ vote: data.vote_type }),
+      });
+    },
+    delete: async (diffId: number) => {
+      return fetchApi(`/diffs/items/${diffId}/vote/`, {
+        method: 'DELETE',
       });
     },
   },
