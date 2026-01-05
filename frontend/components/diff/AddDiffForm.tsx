@@ -194,6 +194,9 @@ export default function AddDiffForm({ work, screenWork, initialCategory }: AddDi
       setShowSuccess(true);
       setIsDirty(false);
 
+      // Force a data refresh before redirecting so the new diff appears
+      router.refresh();
+
       // Redirect after brief delay
       setTimeout(() => {
         router.push(`/compare/${work.slug}/${screenWork.slug}`);

@@ -20,8 +20,7 @@ export async function createComment(
       parent: parentId,
     });
 
-    // Revalidate the comparison page to show new comment
-    revalidatePath('/compare/[book]/[screen]', 'page');
+    // No revalidation needed - component refetches comments after adding
 
     return { success: true, data: result };
   } catch (error) {

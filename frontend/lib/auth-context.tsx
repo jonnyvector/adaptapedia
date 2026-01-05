@@ -29,6 +29,11 @@ export function AuthProvider({ children }: { children: ReactNode }): JSX.Element
 
         if (storedUser && token) {
           setUser(JSON.parse(storedUser));
+
+          // Set auth cookie for server actions
+          const { setAuthCookie } = await import('@/app/actions/auth');
+          await setAuthCookie(token);
+
           // Validate token by fetching current user
           try {
             const currentUser = await api.auth.getCurrentUser();
@@ -37,6 +42,8 @@ export function AuthProvider({ children }: { children: ReactNode }): JSX.Element
           } catch (error) {
             // Token is invalid, clear everything
             tokenManager.clearToken();
+            const { clearAuthCookie } = await import('@/app/actions/auth');
+            await clearAuthCookie();
             setUser(null);
           }
         }
@@ -57,6 +64,11 @@ export function AuthProvider({ children }: { children: ReactNode }): JSX.Element
     tokenManager.setToken(response.access);
     localStorage.setItem('refreshToken', response.refresh);
     localStorage.setItem('user', JSON.stringify(response.user));
+
+    // Set auth cookie for server actions
+    const { setAuthCookie } = await import('@/app/actions/auth');
+    await setAuthCookie(response.access);
+
     setUser(response.user);
   };
 
@@ -65,6 +77,11 @@ export function AuthProvider({ children }: { children: ReactNode }): JSX.Element
     tokenManager.setToken(response.access);
     localStorage.setItem('refreshToken', response.refresh);
     localStorage.setItem('user', JSON.stringify(response.user));
+
+    // Set auth cookie for server actions
+    const { setAuthCookie } = await import('@/app/actions/auth');
+    await setAuthCookie(response.access);
+
     setUser(response.user);
   };
 
@@ -78,6 +95,11 @@ export function AuthProvider({ children }: { children: ReactNode }): JSX.Element
       console.error('Logout error:', error);
     } finally {
       tokenManager.clearToken();
+
+      // Clear auth cookie
+      const { clearAuthCookie } = await import('@/app/actions/auth');
+      await clearAuthCookie();
+
       setUser(null);
     }
   };

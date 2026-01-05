@@ -38,9 +38,8 @@ export async function submitVote(diffId: number, voteType: VoteType) {
 
     const result = await response.json();
 
-    // Revalidate the comparison page to show updated vote counts
-    // This will trigger a re-fetch of the page data
-    revalidatePath('/compare/[book]/[screen]', 'page');
+    // No revalidation needed - client-side optimistic updates handle UI changes
+    // Revalidating would overwrite the optimistic update with refetched data
 
     return { success: true, data: result };
   } catch (error) {
@@ -79,8 +78,7 @@ export async function deleteVote(diffId: number) {
       throw new Error(error.error || 'Failed to delete vote');
     }
 
-    // Revalidate to show vote removed
-    revalidatePath('/compare/[book]/[screen]', 'page');
+    // No revalidation needed - client-side optimistic updates handle UI changes
 
     return { success: true };
   } catch (error) {
