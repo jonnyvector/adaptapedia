@@ -18,8 +18,8 @@ export async function generateMetadata(
   const query = params.q || '';
 
   return {
-    title: query ? `Search: ${query} - Book vs. Movie` : 'Search - Book vs. Movie',
-    description: 'Search for books and movie adaptations in the Book vs. Movie database',
+    title: query ? `Search: ${query} - Adaptapedia` : 'Search - Adaptapedia',
+    description: 'Search for books and movie adaptations in the Adaptapedia database',
   };
 }
 

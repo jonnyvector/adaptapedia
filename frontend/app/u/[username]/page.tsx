@@ -14,8 +14,8 @@ export async function generateMetadata({ params }: UserProfilePageProps): Promis
   const { username } = params;
 
   return {
-    title: `${username} - Book vs. Movie`,
-    description: `View ${username}'s profile, contributions, and activity on Book vs. Movie`,
+    title: `${username} - Adaptapedia`,
+    description: `View ${username}'s profile, contributions, and activity on Adaptapedia`,
   };
 }
 

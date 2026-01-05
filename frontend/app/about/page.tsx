@@ -3,8 +3,8 @@ import type { Metadata } from 'next';
 import { ArrowTopRightOnSquareIcon } from '@/components/ui/Icons';
 
 export const metadata: Metadata = {
-  title: 'About Book vs. Movie',
-  description: 'Learn about Book vs. Movie, a community-driven database for comparing books and their film adaptations',
+  title: 'About Adaptapedia',
+  description: 'Learn about Adaptapedia, a community-driven database for comparing books and their film adaptations',
 };
 
 export default function AboutPage(): JSX.Element {
@@ -13,7 +13,7 @@ export default function AboutPage(): JSX.Element {
       <div className="max-w-4xl mx-auto">
         {/* Header */}
         <div className="mb-12 text-center">
-          <h1 className="text-4xl md:text-5xl font-bold mb-4">About Book vs. Movie</h1>
+          <h1 className="text-4xl md:text-5xl font-bold mb-4">About Adaptapedia</h1>
           <p className="text-xl text-muted mb-8">
             A community-driven database for comparing books and their film adaptations
           </p>
@@ -70,14 +70,14 @@ export default function AboutPage(): JSX.Element {
               </div>
             </div>
             <p className="text-lg mb-4">
-              Book vs. Movie exists to document and explore how stories transform when they move from
+              Adaptapedia exists to document and explore how stories transform when they move from
               page to screen. We believe in the value of both books and their adaptations, and our
               goal is to help readers and viewers understand the creative choices, changes, and
               differences that occur in the adaptation process.
             </p>
             <p className="text-lg text-muted">
               Whether you're deciding what to read or watch next, or simply curious about how
-              your favorite stories changed in translation, Book vs. Movie is here to help.
+              your favorite stories changed in translation, Adaptapedia is here to help.
             </p>
           </div>
         </section>
@@ -246,7 +246,7 @@ export default function AboutPage(): JSX.Element {
                 <div>
                   <h3 className="text-xl font-semibold mb-3">Community-Driven</h3>
                   <p className="text-muted mb-4">
-                    Book vs. Movie relies on contributions from readers and viewers like you. Our
+                    Adaptapedia relies on contributions from readers and viewers like you. Our
                     community helps by:
                   </p>
                   <ul className="space-y-2 text-muted ml-6 list-disc">
@@ -301,7 +301,7 @@ export default function AboutPage(): JSX.Element {
               <h2 className="text-2xl font-semibold">Open Source</h2>
             </div>
             <p className="text-lg text-muted mb-4">
-              Book vs. Movie is an open-source project. You can view our code, report issues,
+              Adaptapedia is an open-source project. You can view our code, report issues,
               or contribute to the project on GitHub.
             </p>
             <a
@@ -337,7 +337,7 @@ export default function AboutPage(): JSX.Element {
                   <div>
                     <h3 className="font-semibold text-lg mb-2">Data Sources & Attribution</h3>
                     <p className="text-sm text-muted">
-                      Learn about the open data sources that power Book vs. Movie
+                      Learn about the open data sources that power Adaptapedia
                     </p>
                   </div>
                 </div>
@@ -355,7 +355,7 @@ export default function AboutPage(): JSX.Element {
                   <div>
                     <h3 className="font-semibold text-lg mb-2">Community Guidelines</h3>
                     <p className="text-sm text-muted">
-                      Understand how to contribute effectively to Book vs. Movie
+                      Understand how to contribute effectively to Adaptapedia
                     </p>
                   </div>
                 </div>

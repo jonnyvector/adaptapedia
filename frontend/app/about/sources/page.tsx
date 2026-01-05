@@ -3,8 +3,8 @@ import type { Metadata } from 'next';
 import { ArrowTopRightOnSquareIcon } from '@/components/ui/Icons';
 
 export const metadata: Metadata = {
-  title: 'Data Sources & Attribution - Book vs. Movie',
-  description: 'Learn about the open data sources that power Book vs. Movie, including TMDb, Wikidata, and Open Library',
+  title: 'Data Sources & Attribution - Adaptapedia',
+  description: 'Learn about the open data sources that power Adaptapedia, including TMDb, Wikidata, and Open Library',
 };
 
 export default function DataSourcesPage(): JSX.Element {

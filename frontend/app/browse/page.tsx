@@ -6,7 +6,7 @@ import EmptyState from '@/components/ui/EmptyState';
 import { FONTS } from '@/lib/brutalist-design';
 
 export const metadata: Metadata = {
-  title: 'Browse Comparisons - Book vs. Movie',
+  title: 'Browse Comparisons - Adaptapedia',
   description: 'Explore book-to-movie comparisons with documented differences',
 };
 

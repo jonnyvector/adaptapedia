@@ -2,8 +2,8 @@ import Link from 'next/link';
 import type { Metadata } from 'next';
 
 export const metadata: Metadata = {
-  title: 'Community Guidelines - Book vs. Movie',
-  description: 'Guidelines for contributing to Book vs. Movie',
+  title: 'Community Guidelines - Adaptapedia',
+  description: 'Guidelines for contributing to Adaptapedia',
 };
 
 export default function GuidelinesPage(): JSX.Element {

@@ -12,7 +12,7 @@ function SignupPageContent(): JSX.Element {
   return (
     <AuthPageWrapper
       title="Create an account"
-      subtitle="Join the Book vs. Movie community"
+      subtitle="Join the Adaptapedia community"
     >
       <SignupForm redirectTo={redirectTo} />
     </AuthPageWrapper>

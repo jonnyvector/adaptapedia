@@ -12,7 +12,7 @@ function LoginPageContent(): JSX.Element {
   return (
     <AuthPageWrapper
       title="Welcome back"
-      subtitle="Log in to your Book vs. Movie account"
+      subtitle="Log in to your Adaptapedia account"
     >
       <LoginForm redirectTo={redirectTo} />
     </AuthPageWrapper>

@@ -19,7 +19,7 @@ export async function generateMetadata({ params }: GenrePageProps): Promise<Meta
   const genreName = decodeURIComponent(genre);
 
   return {
-    title: `${genreName} Adaptations - Browse by Genre - Book vs. Movie`,
+    title: `${genreName} Adaptations - Browse by Genre - Adaptapedia`,
     description: `Browse ${genreName.toLowerCase()} book-to-movie comparisons`,
   };
 }
