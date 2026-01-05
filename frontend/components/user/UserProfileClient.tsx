@@ -232,63 +232,66 @@ export default function UserProfileClient({ profile }: UserProfileClientProps): 
                 <div>
                   {/* Ordering Controls */}
                   <div className="mb-4 flex items-center gap-2">
-                    <span className="text-sm text-muted">Sort by:</span>
+                    <span className={`${TEXT.secondary} ${TEXT.mutedMedium} uppercase tracking-wider`} style={{ fontFamily: FONTS.mono }}>Sort by:</span>
                     <button
                       onClick={() => setOrdering('newest')}
-                      className={`text-sm px-3 py-1 rounded-md ${
+                      className={`${TEXT.secondary} px-3 py-1 ${RADIUS.control} font-bold ${monoUppercase} transition-colors ${
                         ordering === 'newest'
-                          ? 'bg-link text-white'
-                          : 'text-muted hover:text-foreground border border-border'
+                          ? `bg-black dark:bg-white text-white dark:text-black border ${BORDERS.solid}`
+                          : `${TEXT.mutedStrong} hover:text-black hover:dark:text-white border ${BORDERS.medium}`
                       }`}
+                      style={{ fontFamily: FONTS.mono, letterSpacing: LETTER_SPACING.tight }}
                     >
                       Newest
                     </button>
                     <button
                       onClick={() => setOrdering('most_votes')}
-                      className={`text-sm px-3 py-1 rounded-md ${
+                      className={`${TEXT.secondary} px-3 py-1 ${RADIUS.control} font-bold ${monoUppercase} transition-colors ${
                         ordering === 'most_votes'
-                          ? 'bg-link text-white'
-                          : 'text-muted hover:text-foreground border border-border'
+                          ? `bg-black dark:bg-white text-white dark:text-black border ${BORDERS.solid}`
+                          : `${TEXT.mutedStrong} hover:text-black hover:dark:text-white border ${BORDERS.medium}`
                       }`}
+                      style={{ fontFamily: FONTS.mono, letterSpacing: LETTER_SPACING.tight }}
                     >
                       Most Votes
                     </button>
                   </div>
 
                   {diffs.length === 0 ? (
-                    <div className="text-center py-8 text-muted">No diffs created yet</div>
+                    <div className={`text-center py-8 ${TEXT.mutedMedium} uppercase tracking-wider`} style={{ fontFamily: FONTS.mono }}>No diffs created yet</div>
                   ) : (
                     <div className="space-y-4">
                       {diffs.map((diff) => (
-                        <div key={diff.id} className="border border-border rounded-lg p-4 hover:bg-surface2 transition-colors">
+                        <div key={diff.id} className={`border ${BORDERS.medium} ${RADIUS.control} p-4 hover:bg-stone-50 hover:dark:bg-stone-950 transition-colors`}>
                           <div className="flex items-start justify-between mb-2">
                             <div className="flex-1">
                               <Link
                                 href={`/compare/${diff.work_slug}/${diff.screen_work_slug}`}
-                                className="text-link hover:underline font-medium"
+                                className={`text-black dark:text-white hover:underline font-bold`}
+                                style={{ fontFamily: FONTS.mono }}
                               >
                                 {diff.work_title} / {diff.screen_work_title}
                               </Link>
-                              <span className="ml-2 text-xs px-2 py-1 rounded-full bg-surface2 text-muted">
+                              <span className={`ml-2 ${TEXT.metadata} px-2 py-1 border ${BORDERS.subtle} ${RADIUS.control} ${TEXT.mutedStrong} font-bold ${monoUppercase}`} style={{ fontFamily: FONTS.mono, letterSpacing: LETTER_SPACING.wide }}>
                                 {diff.category}
                               </span>
                             </div>
-                            <span className="text-xs text-muted whitespace-nowrap ml-4">
+                            <span className={`${TEXT.metadata} ${TEXT.mutedMedium} whitespace-nowrap ml-4 uppercase tracking-wider`} style={{ fontFamily: FONTS.mono }}>
                               {formatDate(diff.created_at)}
                             </span>
                           </div>
-                          <p className="text-foreground mb-2">{diff.claim}</p>
+                          <p className={`text-black dark:text-white mb-2`} style={{ fontFamily: FONTS.mono }}>{diff.claim}</p>
                           {diff.detail && (
-                            <p className="text-sm text-muted mb-2">{diff.detail}</p>
+                            <p className={`${TEXT.secondary} ${TEXT.mutedMedium} mb-2`} style={{ fontFamily: FONTS.mono }}>{diff.detail}</p>
                           )}
-                          <div className="flex items-center gap-4 text-sm text-muted">
+                          <div className={`flex items-center gap-4 ${TEXT.secondary} ${TEXT.mutedMedium}`} style={{ fontFamily: FONTS.mono }}>
                             <span className="flex items-center gap-1">
-                              <span className="text-green-600 dark:text-green-400">↑{diff.vote_counts.accurate}</span>
-                              <span className="text-yellow-600 dark:text-yellow-400">~{diff.vote_counts.needs_nuance}</span>
-                              <span className="text-red-600 dark:text-red-400">↓{diff.vote_counts.disagree}</span>
+                              <span className="text-black dark:text-white">↑{diff.vote_counts.accurate}</span>
+                              <span className="text-black/60 dark:text-white/60">~{diff.vote_counts.needs_nuance}</span>
+                              <span className="text-black/40 dark:text-white/40">↓{diff.vote_counts.disagree}</span>
                             </span>
                             {diff.spoiler_scope !== 'NONE' && (
-                              <span className="text-xs px-2 py-1 rounded-full bg-yellow-100 text-yellow-800 dark:bg-yellow-900 dark:text-yellow-200">
+                              <span className={`${TEXT.metadata} px-2 py-1 border ${BORDERS.medium} ${RADIUS.control} bg-white dark:bg-black text-black dark:text-white font-bold ${monoUppercase}`} style={{ fontFamily: FONTS.mono, letterSpacing: LETTER_SPACING.wide }}>
                                 Spoilers: {diff.spoiler_scope.replace(/_/g, ' ').toLowerCase()}
                               </span>
                             )}
@@ -304,44 +307,46 @@ export default function UserProfileClient({ profile }: UserProfileClientProps): 
               {activeTab === 'votes' && isOwnProfile && (
                 <div>
                   {votes.length === 0 ? (
-                    <div className="text-center py-8 text-muted">No votes cast yet</div>
+                    <div className={`text-center py-8 ${TEXT.mutedMedium} uppercase tracking-wider`} style={{ fontFamily: FONTS.mono }}>No votes cast yet</div>
                   ) : (
                     <div className="space-y-4">
                       {votes.map((vote) => (
-                        <div key={vote.id} className="border border-border rounded-lg p-4 hover:bg-surface2 transition-colors">
+                        <div key={vote.id} className={`border ${BORDERS.medium} ${RADIUS.control} p-4 hover:bg-stone-50 hover:dark:bg-stone-950 transition-colors`}>
                           <div className="flex items-start justify-between mb-2">
                             <div className="flex-1">
                               <Link
                                 href={`/compare/${vote.work_slug}/${vote.screen_work_slug}`}
-                                className="text-link hover:underline font-medium"
+                                className={`text-black dark:text-white hover:underline font-bold`}
+                                style={{ fontFamily: FONTS.mono }}
                               >
                                 {vote.work_title} / {vote.screen_work_title}
                               </Link>
-                              <span className="ml-2 text-xs px-2 py-1 rounded-full bg-surface2 text-muted">
+                              <span className={`ml-2 ${TEXT.metadata} px-2 py-1 border ${BORDERS.subtle} ${RADIUS.control} ${TEXT.mutedStrong} font-bold ${monoUppercase}`} style={{ fontFamily: FONTS.mono, letterSpacing: LETTER_SPACING.wide }}>
                                 {vote.diff_item_category}
                               </span>
                             </div>
-                            <span className="text-xs text-muted whitespace-nowrap ml-4">
+                            <span className={`${TEXT.metadata} ${TEXT.mutedMedium} whitespace-nowrap ml-4 uppercase tracking-wider`} style={{ fontFamily: FONTS.mono }}>
                               {formatDate(vote.created_at)}
                             </span>
                           </div>
-                          <p className="text-sm text-muted mb-2">"{vote.diff_item_claim}"</p>
+                          <p className={`${TEXT.secondary} ${TEXT.mutedMedium} mb-2`} style={{ fontFamily: FONTS.mono }}>"{vote.diff_item_claim}"</p>
                           <div className="flex items-center gap-2">
-                            <span className="text-sm font-medium">Your vote:</span>
+                            <span className={`${TEXT.secondary} font-bold uppercase tracking-wider`} style={{ fontFamily: FONTS.mono }}>Your vote:</span>
                             <span
-                              className={`text-sm px-2 py-1 rounded-full ${
+                              className={`${TEXT.secondary} px-2 py-1 border ${BORDERS.solid} ${RADIUS.control} font-bold ${monoUppercase} ${
                                 vote.vote === 'ACCURATE'
-                                  ? 'bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200'
+                                  ? 'bg-black dark:bg-white text-white dark:text-black'
                                   : vote.vote === 'NEEDS_NUANCE'
-                                  ? 'bg-yellow-100 text-yellow-800 dark:bg-yellow-900 dark:text-yellow-200'
-                                  : 'bg-red-100 text-red-800 dark:bg-red-900 dark:text-red-200'
+                                  ? 'bg-black/60 dark:bg-white/60 text-white dark:text-black'
+                                  : 'bg-black/40 dark:bg-white/40 text-white dark:text-black'
                               }`}
+                              style={{ fontFamily: FONTS.mono, letterSpacing: LETTER_SPACING.tight }}
                             >
                               {vote.vote === 'ACCURATE' ? 'Accurate' : vote.vote === 'NEEDS_NUANCE' ? 'Needs Nuance' : 'Disagree'}
                             </span>
                             {vote.created_by_username && (
-                              <span className="text-sm text-muted">
-                                by <Link href={`/u/${vote.created_by_username}`} className="text-link hover:underline">{vote.created_by_username}</Link>
+                              <span className={`${TEXT.secondary} ${TEXT.mutedMedium}`} style={{ fontFamily: FONTS.mono }}>
+                                by <Link href={`/u/${vote.created_by_username}`} className={`text-black dark:text-white hover:underline font-bold`} style={{ fontFamily: FONTS.mono }}>{vote.created_by_username}</Link>
                               </span>
                             )}
                           </div>
@@ -356,29 +361,30 @@ export default function UserProfileClient({ profile }: UserProfileClientProps): 
               {activeTab === 'comments' && (
                 <div>
                   {comments.length === 0 ? (
-                    <div className="text-center py-8 text-muted">No comments posted yet</div>
+                    <div className={`text-center py-8 ${TEXT.mutedMedium} uppercase tracking-wider`} style={{ fontFamily: FONTS.mono }}>No comments posted yet</div>
                   ) : (
                     <div className="space-y-4">
                       {comments.map((comment) => (
-                        <div key={comment.id} className="border border-border rounded-lg p-4 hover:bg-surface2 transition-colors">
+                        <div key={comment.id} className={`border ${BORDERS.medium} ${RADIUS.control} p-4 hover:bg-stone-50 hover:dark:bg-stone-950 transition-colors`}>
                           <div className="flex items-start justify-between mb-2">
                             <div className="flex-1">
                               <Link
                                 href={`/compare/${comment.work_slug}/${comment.screen_work_slug}`}
-                                className="text-link hover:underline font-medium"
+                                className={`text-black dark:text-white hover:underline font-bold`}
+                                style={{ fontFamily: FONTS.mono }}
                               >
                                 {comment.work_title} / {comment.screen_work_title}
                               </Link>
                             </div>
-                            <span className="text-xs text-muted whitespace-nowrap ml-4">
+                            <span className={`${TEXT.metadata} ${TEXT.mutedMedium} whitespace-nowrap ml-4 uppercase tracking-wider`} style={{ fontFamily: FONTS.mono }}>
                               {formatDate(comment.created_at)}
                             </span>
                           </div>
-                          <p className="text-sm text-muted mb-2">On: "{comment.diff_item_claim}"</p>
-                          <p className="text-foreground">{comment.body}</p>
+                          <p className={`${TEXT.secondary} ${TEXT.mutedMedium} mb-2`} style={{ fontFamily: FONTS.mono }}>On: "{comment.diff_item_claim}"</p>
+                          <p className={`text-black dark:text-white`} style={{ fontFamily: FONTS.mono }}>{comment.body}</p>
                           {comment.spoiler_scope !== 'NONE' && (
                             <div className="mt-2">
-                              <span className="text-xs px-2 py-1 rounded-full bg-yellow-100 text-yellow-800 dark:bg-yellow-900 dark:text-yellow-200">
+                              <span className={`${TEXT.metadata} px-2 py-1 border ${BORDERS.medium} ${RADIUS.control} bg-white dark:bg-black text-black dark:text-white font-bold ${monoUppercase}`} style={{ fontFamily: FONTS.mono, letterSpacing: LETTER_SPACING.wide }}>
                                 Spoilers: {comment.spoiler_scope.replace(/_/g, ' ').toLowerCase()}
                               </span>
                             </div>
