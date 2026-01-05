@@ -6,7 +6,8 @@ import { api } from '@/lib/api';
 import type { UserProfile, DiffItem, Vote, Comment, ApiResponse } from '@/lib/types';
 import Link from 'next/link';
 import ReputationProgress from './ReputationProgress';
-import { FONTS, LETTER_SPACING, BORDERS, TEXT, monoUppercase } from '@/lib/brutalist-design';
+import { FONTS, LETTER_SPACING, BORDERS, TEXT, monoUppercase, RADIUS } from '@/lib/brutalist-design';
+import { TrophyIcon } from '@/components/ui/Icons';
 
 interface UserProfileClientProps {
   profile: UserProfile;
@@ -79,44 +80,18 @@ export default function UserProfileClient({ profile }: UserProfileClientProps): 
     return role.replace(/_/g, ' ').toLowerCase().replace(/\b\w/g, l => l.toUpperCase());
   };
 
-  const getBadgeIcon = (badgeType: string): string => {
-    const iconMap: Record<string, string> = {
-      // Milestone badges
-      'FIRST_VOTE': '🗳️',
-      'FIRST_COMMENT': '💬',
-      'FIRST_DIFF': '✍️',
-      'VOTER_10': '🎯',
-      'VOTER_50': '🏆',
-      'VOTER_100': '👑',
-      'COMMENTER_10': '💭',
-      'COMMENTER_50': '🗨️',
-      'COMMENTER_100': '📣',
-      'CONTRIBUTOR_10': '📝',
-      'CONTRIBUTOR_50': '📚',
-      'CONTRIBUTOR_100': '🏅',
-      // Quality badges
-      'WELL_SOURCED': '📖',
-      'HIGH_ACCURACY': '✓',
-      'CONSENSUS_BUILDER': '🤝',
-      // Special badges
-      'EARLY_ADOPTER': '🌟',
-      'WEEKLY_STREAK_7': '🔥',
-    };
-    return iconMap[badgeType] || '🏆';
-  };
-
   return (
     <div className="container py-8">
       {/* Profile Header */}
-      <div className="bg-surface border border-border rounded-lg p-6 mb-6">
+      <div className={`bg-white dark:bg-black border ${BORDERS.medium} ${RADIUS.control} p-6 mb-6`}>
         <div className="flex items-start justify-between mb-4">
           <div>
-            <h1 className="text-3xl font-bold text-foreground mb-2">{profile.username}</h1>
+            <h1 className={`text-3xl font-bold text-black dark:text-white mb-2 ${monoUppercase}`} style={{ fontFamily: FONTS.mono, letterSpacing: LETTER_SPACING.wider }}>{profile.username}</h1>
             <div className="flex items-center gap-2">
-              <span className={`text-xs px-2 py-1 rounded-full ${getRoleBadgeColor(profile.role)}`}>
+              <span className={`${TEXT.metadata} px-2 py-1 border ${BORDERS.subtle} ${RADIUS.control} ${getRoleBadgeColor(profile.role)} font-bold ${monoUppercase}`} style={{ fontFamily: FONTS.mono, letterSpacing: LETTER_SPACING.wide }}>
                 {formatRoleLabel(profile.role)}
               </span>
-              <span className="text-sm text-muted">
+              <span className={`${TEXT.secondary} ${TEXT.mutedMedium} uppercase tracking-wider`} style={{ fontFamily: FONTS.mono }}>
                 Joined {formatDate(profile.date_joined)}
               </span>
             </div>
@@ -126,16 +101,16 @@ export default function UserProfileClient({ profile }: UserProfileClientProps): 
         {/* Badges Section */}
         {profile.badges && profile.badges.length > 0 && (
           <div className="mt-6">
-            <h2 className="text-lg font-semibold text-foreground mb-3">Badges</h2>
+            <h2 className={`${TEXT.body} font-bold text-black dark:text-white mb-3 ${monoUppercase}`} style={{ fontFamily: FONTS.mono, letterSpacing: LETTER_SPACING.wide }}>Badges</h2>
             <div className="flex flex-wrap gap-2">
               {profile.badges.map((badge) => (
                 <div
                   key={badge.id}
-                  className="bg-gradient-to-br from-yellow-50 to-yellow-100 dark:from-yellow-900/30 dark:to-yellow-800/30 border border-yellow-300 dark:border-yellow-700 rounded-lg px-3 py-2 flex items-center gap-2"
+                  className={`bg-white dark:bg-black border ${BORDERS.solid} ${RADIUS.control} px-3 py-2 flex items-center gap-2`}
                   title={`Earned ${formatDate(badge.earned_at)}`}
                 >
-                  <span className="text-xl">{getBadgeIcon(badge.badge_type)}</span>
-                  <span className="text-sm font-medium text-foreground">
+                  <TrophyIcon className="w-4 h-4" />
+                  <span className={`${TEXT.secondary} font-bold text-black dark:text-white uppercase tracking-wider`} style={{ fontFamily: FONTS.mono }}>
                     {badge.badge_display}
                   </span>
                 </div>
@@ -146,21 +121,21 @@ export default function UserProfileClient({ profile }: UserProfileClientProps): 
 
         {/* Stats Grid */}
         <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mt-6">
-          <div className="bg-surface2 p-4 rounded-lg">
-            <div className="text-2xl font-bold text-foreground">{profile.diffs_count}</div>
-            <div className="text-sm text-muted">Diffs Created</div>
+          <div className={`bg-stone-50 dark:bg-stone-950 border ${BORDERS.medium} ${RADIUS.control} p-4`}>
+            <div className={`text-2xl font-bold text-black dark:text-white`} style={{ fontFamily: FONTS.mono }}>{profile.diffs_count}</div>
+            <div className={`${TEXT.secondary} ${TEXT.mutedMedium} uppercase tracking-wider`} style={{ fontFamily: FONTS.mono }}>Diffs Created</div>
           </div>
-          <div className="bg-surface2 p-4 rounded-lg">
-            <div className="text-2xl font-bold text-foreground">{profile.votes_count}</div>
-            <div className="text-sm text-muted">Votes Cast</div>
+          <div className={`bg-stone-50 dark:bg-stone-950 border ${BORDERS.medium} ${RADIUS.control} p-4`}>
+            <div className={`text-2xl font-bold text-black dark:text-white`} style={{ fontFamily: FONTS.mono }}>{profile.votes_count}</div>
+            <div className={`${TEXT.secondary} ${TEXT.mutedMedium} uppercase tracking-wider`} style={{ fontFamily: FONTS.mono }}>Votes Cast</div>
           </div>
-          <div className="bg-surface2 p-4 rounded-lg">
-            <div className="text-2xl font-bold text-foreground">{profile.comments_count}</div>
-            <div className="text-sm text-muted">Comments</div>
+          <div className={`bg-stone-50 dark:bg-stone-950 border ${BORDERS.medium} ${RADIUS.control} p-4`}>
+            <div className={`text-2xl font-bold text-black dark:text-white`} style={{ fontFamily: FONTS.mono }}>{profile.comments_count}</div>
+            <div className={`${TEXT.secondary} ${TEXT.mutedMedium} uppercase tracking-wider`} style={{ fontFamily: FONTS.mono }}>Comments</div>
           </div>
-          <div className="bg-surface2 p-4 rounded-lg">
-            <div className="text-2xl font-bold text-link">{profile.reputation_score}</div>
-            <div className="text-sm text-muted">Reputation</div>
+          <div className={`bg-stone-50 dark:bg-stone-950 border ${BORDERS.medium} ${RADIUS.control} p-4`}>
+            <div className={`text-2xl font-bold text-black dark:text-white`} style={{ fontFamily: FONTS.mono }}>{profile.reputation_score}</div>
+            <div className={`${TEXT.secondary} ${TEXT.mutedMedium} uppercase tracking-wider`} style={{ fontFamily: FONTS.mono }}>Reputation</div>
           </div>
         </div>
 
@@ -168,27 +143,27 @@ export default function UserProfileClient({ profile }: UserProfileClientProps): 
         {profile.stats && (
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mt-4">
             {profile.stats.accuracy_rate !== undefined && (
-              <div className="bg-surface2 p-4 rounded-lg">
-                <div className="text-xl font-bold text-green-600 dark:text-green-400">
+              <div className={`bg-stone-50 dark:bg-stone-950 border ${BORDERS.medium} ${RADIUS.control} p-4`}>
+                <div className={`text-xl font-bold text-black dark:text-white`} style={{ fontFamily: FONTS.mono }}>
                   {profile.stats.accuracy_rate}%
                 </div>
-                <div className="text-sm text-muted">Accuracy Rate</div>
+                <div className={`${TEXT.secondary} ${TEXT.mutedMedium} uppercase tracking-wider`} style={{ fontFamily: FONTS.mono }}>Accuracy Rate</div>
               </div>
             )}
             {profile.stats.helpful_comments_count !== undefined && (
-              <div className="bg-surface2 p-4 rounded-lg">
-                <div className="text-xl font-bold text-foreground">
+              <div className={`bg-stone-50 dark:bg-stone-950 border ${BORDERS.medium} ${RADIUS.control} p-4`}>
+                <div className={`text-xl font-bold text-black dark:text-white`} style={{ fontFamily: FONTS.mono }}>
                   {profile.stats.helpful_comments_count}
                 </div>
-                <div className="text-sm text-muted">Helpful Comments</div>
+                <div className={`${TEXT.secondary} ${TEXT.mutedMedium} uppercase tracking-wider`} style={{ fontFamily: FONTS.mono }}>Helpful Comments</div>
               </div>
             )}
             {profile.stats.sources_added_count !== undefined && (
-              <div className="bg-surface2 p-4 rounded-lg">
-                <div className="text-xl font-bold text-foreground">
+              <div className={`bg-stone-50 dark:bg-stone-950 border ${BORDERS.medium} ${RADIUS.control} p-4`}>
+                <div className={`text-xl font-bold text-black dark:text-white`} style={{ fontFamily: FONTS.mono }}>
                   {profile.stats.sources_added_count}
                 </div>
-                <div className="text-sm text-muted">Sources Added</div>
+                <div className={`${TEXT.secondary} ${TEXT.mutedMedium} uppercase tracking-wider`} style={{ fontFamily: FONTS.mono }}>Sources Added</div>
               </div>
             )}
           </div>
@@ -203,38 +178,41 @@ export default function UserProfileClient({ profile }: UserProfileClientProps): 
       )}
 
       {/* Activity Tabs */}
-      <div className="bg-surface border border-border rounded-lg">
-        <div className="border-b border-border">
+      <div className={`bg-white dark:bg-black border ${BORDERS.medium} ${RADIUS.control}`}>
+        <div className={`border-b ${BORDERS.medium}`}>
           <div className="flex gap-1 p-1">
             <button
               onClick={() => setActiveTab('diffs')}
-              className={`px-4 py-2 rounded-md text-sm font-medium transition-colors ${
+              className={`px-4 py-2 ${RADIUS.control} ${TEXT.secondary} font-bold transition-colors ${monoUppercase} ${
                 activeTab === 'diffs'
-                  ? 'bg-surface2 text-foreground'
-                  : 'text-muted hover:text-foreground hover:bg-surface2/50'
+                  ? `bg-black dark:bg-white text-white dark:text-black border ${BORDERS.solid}`
+                  : `${TEXT.mutedStrong} hover:text-black hover:dark:text-white border ${BORDERS.subtle}`
               }`}
+              style={{ fontFamily: FONTS.mono, letterSpacing: LETTER_SPACING.tight }}
             >
               Diffs ({profile.diffs_count})
             </button>
             {isOwnProfile && (
               <button
                 onClick={() => setActiveTab('votes')}
-                className={`px-4 py-2 rounded-md text-sm font-medium transition-colors ${
+                className={`px-4 py-2 ${RADIUS.control} ${TEXT.secondary} font-bold transition-colors ${monoUppercase} ${
                   activeTab === 'votes'
-                    ? 'bg-surface2 text-foreground'
-                    : 'text-muted hover:text-foreground hover:bg-surface2/50'
+                    ? `bg-black dark:bg-white text-white dark:text-black border ${BORDERS.solid}`
+                    : `${TEXT.mutedStrong} hover:text-black hover:dark:text-white border ${BORDERS.subtle}`
                 }`}
+                style={{ fontFamily: FONTS.mono, letterSpacing: LETTER_SPACING.tight }}
               >
                 Voting History ({profile.votes_count})
               </button>
             )}
             <button
               onClick={() => setActiveTab('comments')}
-              className={`px-4 py-2 rounded-md text-sm font-medium transition-colors ${
+              className={`px-4 py-2 ${RADIUS.control} ${TEXT.secondary} font-bold transition-colors ${monoUppercase} ${
                 activeTab === 'comments'
-                  ? 'bg-surface2 text-foreground'
-                  : 'text-muted hover:text-foreground hover:bg-surface2/50'
+                  ? `bg-black dark:bg-white text-white dark:text-black border ${BORDERS.solid}`
+                  : `${TEXT.mutedStrong} hover:text-black hover:dark:text-white border ${BORDERS.subtle}`
               }`}
+              style={{ fontFamily: FONTS.mono, letterSpacing: LETTER_SPACING.tight }}
             >
               Comments ({profile.comments_count})
             </button>
@@ -244,9 +222,9 @@ export default function UserProfileClient({ profile }: UserProfileClientProps): 
         {/* Tab Content */}
         <div className="p-6">
           {loading ? (
-            <div className="text-center py-8 text-muted">Loading...</div>
+            <div className={`text-center py-8 ${TEXT.mutedMedium} uppercase tracking-wider`} style={{ fontFamily: FONTS.mono }}>Loading...</div>
           ) : error ? (
-            <div className="text-center py-8 text-red-600 dark:text-red-400">{error}</div>
+            <div className={`text-center py-8 text-red-600 dark:text-red-400`} style={{ fontFamily: FONTS.mono }}>{error}</div>
           ) : (
             <>
               {/* Diffs Tab */}
