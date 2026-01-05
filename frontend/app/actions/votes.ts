@@ -1,8 +1,10 @@
 'use server';
 
 import { revalidatePath } from 'next/cache';
-import { api } from '@/lib/api';
+import { cookies } from 'next/headers';
 import type { VoteType } from '@/lib/types';
+
+const API_BASE_URL = process.env.API_URL || 'http://backend:8000/api';
 
 /**
  * Submit a vote on a diff item
@@ -10,7 +12,31 @@ import type { VoteType } from '@/lib/types';
  */
 export async function submitVote(diffId: number, voteType: VoteType) {
   try {
-    const result = await api.votes.submit(diffId, { vote_type: voteType });
+    const cookieStore = await cookies();
+    const accessToken = cookieStore.get('accessToken')?.value;
+
+    if (!accessToken) {
+      return {
+        success: false,
+        error: 'Authentication required'
+      };
+    }
+
+    const response = await fetch(`${API_BASE_URL}/diffs/items/${diffId}/vote/`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${accessToken}`,
+      },
+      body: JSON.stringify({ vote: voteType }),
+    });
+
+    if (!response.ok) {
+      const error = await response.json().catch(() => ({ error: 'Request failed' }));
+      throw new Error(error.error || 'Failed to submit vote');
+    }
+
+    const result = await response.json();
 
     // Revalidate the comparison page to show updated vote counts
     // This will trigger a re-fetch of the page data
@@ -31,7 +57,27 @@ export async function submitVote(diffId: number, voteType: VoteType) {
  */
 export async function deleteVote(diffId: number) {
   try {
-    await api.votes.delete(diffId);
+    const cookieStore = await cookies();
+    const accessToken = cookieStore.get('accessToken')?.value;
+
+    if (!accessToken) {
+      return {
+        success: false,
+        error: 'Authentication required'
+      };
+    }
+
+    const response = await fetch(`${API_BASE_URL}/diffs/items/${diffId}/vote/`, {
+      method: 'DELETE',
+      headers: {
+        'Authorization': `Bearer ${accessToken}`,
+      },
+    });
+
+    if (!response.ok) {
+      const error = await response.json().catch(() => ({ error: 'Request failed' }));
+      throw new Error(error.error || 'Failed to delete vote');
+    }
 
     // Revalidate to show vote removed
     revalidatePath('/compare/[book]/[screen]', 'page');
