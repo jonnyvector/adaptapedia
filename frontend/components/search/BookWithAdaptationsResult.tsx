@@ -55,12 +55,12 @@ export default function BookWithAdaptationsResult({ work }: BookWithAdaptationsR
             </div>
           </div>
           {work.cover_url && (
-            <div className={`relative w-16 h-24 flex-shrink-0 border ${BORDERS.medium} rounded-md overflow-hidden`}>
+            <div className={`relative w-24 h-36 sm:w-32 sm:h-48 flex-shrink-0 border ${BORDERS.medium} rounded-md overflow-hidden`}>
               <Image
                 src={work.cover_url}
                 alt={`${work.title} cover`}
                 fill
-                sizes="64px"
+                sizes="(max-width: 640px) 96px, 128px"
                 className="object-cover"
                 unoptimized
               />
