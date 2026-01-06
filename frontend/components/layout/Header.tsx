@@ -11,6 +11,7 @@ import SearchDropdown from '@/components/search/SearchDropdown';
 import { api } from '@/lib/api';
 import type { SearchWithAdaptationsResponse } from '@/lib/types';
 import { FONTS, LETTER_SPACING, BORDERS, TEXT, monoUppercase } from '@/lib/brutalist-design';
+import { XMarkIcon } from '@/components/ui/Icons';
 
 export default function Header(): JSX.Element {
   const router = useRouter();
@@ -131,7 +132,7 @@ export default function Header(): JSX.Element {
           {/* Search Bar - Hidden on home and search pages */}
           {!isHomePage && !isSearchPage && (
             <div className="hidden md:flex flex-1 max-w-md mx-4 relative" ref={desktopSearchRef}>
-              <form onSubmit={handleSearch} className="w-full">
+              <form onSubmit={handleSearch} className="w-full relative">
                 <input
                   type="search"
                   value={searchQuery}
@@ -142,10 +143,24 @@ export default function Header(): JSX.Element {
                     }
                   }}
                   placeholder="SEARCH BOOKS..."
-                  className={`w-full px-3 py-2 ${TEXT.body} bg-white dark:bg-black text-black dark:text-white border ${BORDERS.medium} rounded-md focus:outline-none focus:border-black focus:dark:border-white placeholder:${TEXT.mutedLight} placeholder:uppercase min-h-[40px]`}
+                  className={`w-full px-3 py-2 pr-10 ${TEXT.body} bg-white dark:bg-black text-black dark:text-white border ${BORDERS.medium} rounded-md focus:outline-none focus:border-black focus:dark:border-white placeholder:${TEXT.mutedLight} placeholder:uppercase min-h-[40px]`}
                   style={{ fontFamily: FONTS.mono, letterSpacing: LETTER_SPACING.normal }}
                   aria-label="Search"
                 />
+                {searchQuery && (
+                  <button
+                    type="button"
+                    onClick={() => {
+                      setSearchQuery('');
+                      setShowDropdown(false);
+                      setSearchResults(null);
+                    }}
+                    className="absolute right-2 top-1/2 -translate-y-1/2 p-1 text-black/40 dark:text-white/40 hover:text-black hover:dark:text-white transition-colors"
+                    aria-label="Clear search"
+                  >
+                    <XMarkIcon className="w-5 h-5" />
+                  </button>
+                )}
               </form>
 
               {/* Dropdown results */}
@@ -178,15 +193,6 @@ export default function Header(): JSX.Element {
               style={{ fontFamily: FONTS.mono, letterSpacing: LETTER_SPACING.wide }}
             >
               Catalog
-            </Link>
-
-            {/* Contribute Link */}
-            <Link
-              href="/contribute"
-              className={`hidden sm:inline ${TEXT.label} px-2 py-2 ${TEXT.mutedStrong} hover:text-black hover:dark:text-white transition-colors min-h-[40px] flex items-center font-bold ${monoUppercase}`}
-              style={{ fontFamily: FONTS.mono, letterSpacing: LETTER_SPACING.wide }}
-            >
-              Contribute
             </Link>
 
             {/* Needs Help Link */}

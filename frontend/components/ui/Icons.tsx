@@ -47,6 +47,26 @@ export function FilmIcon({ className = "w-6 h-6" }: IconProps) {
   );
 }
 
+export function XMarkIcon({ className = "w-6 h-6" }: IconProps) {
+  return (
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      fill="none"
+      viewBox="0 0 24 24"
+      strokeWidth="1.5"
+      stroke="currentColor"
+      className={className}
+      aria-hidden="true"
+    >
+      <path
+        strokeLinecap="round"
+        strokeLinejoin="round"
+        d="M6 18 18 6M6 6l12 12"
+      />
+    </svg>
+  );
+}
+
 export function ExclamationTriangleIcon({ className = "w-6 h-6" }: IconProps) {
   return (
     <svg

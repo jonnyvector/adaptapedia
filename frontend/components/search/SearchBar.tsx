@@ -155,10 +155,10 @@ export default function SearchBar({
           <button
             type="button"
             onClick={handleClear}
-            className={`absolute right-4 top-1/2 -translate-y-1/2 ${TEXT.mutedMedium} hover:text-black hover:dark:text-white transition-colors w-5 h-5 flex items-center justify-center`}
+            className="absolute right-4 top-1/2 -translate-y-1/2 p-1 text-black/40 dark:text-white/40 hover:text-black hover:dark:text-white transition-colors"
             aria-label="Clear search"
           >
-            <XIcon className="w-4 h-4" />
+            <XIcon className="w-5 h-5" />
           </button>
         )}
         {isSearching && (
