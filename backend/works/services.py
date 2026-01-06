@@ -202,31 +202,64 @@ class SearchService:
         Search for works with their ranked adaptations.
 
         Returns tuple of (Work queryset with ranked_adaptations, total_count).
-        Uses fuzzy matching with PostgreSQL trigrams for typo tolerance.
+        Uses intelligent ranking with exact match, starts-with, whole-word, and fuzzy matching.
+
+        Ranking priority:
+        1. Exact title match (100 pts)
+        2. Title starts with query (70 pts)
+        3. Whole word in title (50 pts)
+        4. Title contains query (30 pts)
+        5. Author matches (60% of title scores: 60, 42, 30, 18 pts)
+        6. Summary contains (10 pts)
+        7. Popularity boost from adaptation count (+2 pts per adaptation)
         """
         from django.contrib.postgres.search import TrigramSimilarity
         from django.db.models import Case, When, IntegerField, Value, Max
 
-        # First try exact/contains matches
-        exact_matches = Work.objects.filter(
+        # Escape special regex characters in query
+        escaped_query = re.escape(query)
+
+        # Search with improved ranking
+        search_results = Work.objects.filter(
             Q(title__icontains=query) | Q(author__icontains=query) | Q(summary__icontains=query)
         ).annotate(
+            # Count adaptations for popularity boost
+            adaptation_count=Count('adaptations', distinct=True),
+            # Hierarchical relevance ranking
             relevance_rank=Case(
-                When(title__icontains=query, then=Value(3)),
-                When(author__icontains=query, then=Value(2)),
-                When(summary__icontains=query, then=Value(1)),
+                # Title matches (highest priority)
+                When(title__iexact=query, then=Value(100)),  # Exact: "It" = "It"
+                When(title__istartswith=query + ' ', then=Value(70)),  # Starts: "It Ends with Us"
+                When(title__iregex=rf'\b{escaped_query}\b', then=Value(50)),  # Whole word: "The It Crowd"
+                When(title__icontains=query, then=Value(30)),  # Contains: "Spitfire Grill"
+
+                # Author matches (60% of title scores)
+                When(author__iexact=query, then=Value(60)),
+                When(author__istartswith=query + ' ', then=Value(42)),
+                When(author__iregex=rf'\b{escaped_query}\b', then=Value(30)),
+                When(author__icontains=query, then=Value(18)),
+
+                # Summary match (lowest priority)
+                When(summary__icontains=query, then=Value(10)),
+
                 default=Value(0),
+                output_field=IntegerField()
+            ),
+            # Final score = relevance + popularity boost
+            final_score=ExpressionWrapper(
+                F('relevance_rank') + (F('adaptation_count') * 2),
                 output_field=IntegerField()
             )
         )
 
-        # If we have good exact matches, return those
-        if exact_matches.count() >= 3:
-            total_count = exact_matches.count()
-            works = exact_matches.order_by('-relevance_rank', '-created_at')[:limit]
+        # If we have good matches, return those
+        if search_results.count() >= 3:
+            total_count = search_results.count()
+            works = search_results.order_by('-final_score', '-created_at')[:limit]
         else:
-            # Use fuzzy matching with trigrams
+            # Use fuzzy matching with trigrams for typo tolerance
             fuzzy_matches = Work.objects.annotate(
+                adaptation_count=Count('adaptations', distinct=True),
                 title_similarity=TrigramSimilarity('title', query),
                 author_similarity=TrigramSimilarity('author', query),
                 # Calculate max similarity across fields
@@ -237,9 +270,14 @@ class SearchService:
                         output_field=FloatField()
                     )
                 ),
+                # Boost score with adaptation count
+                final_score=ExpressionWrapper(
+                    (F('max_similarity') * 100) + (F('adaptation_count') * 2),
+                    output_field=FloatField()
+                )
             ).filter(
                 Q(title_similarity__gte=0.2) | Q(author_similarity__gte=0.2)
-            ).order_by('-max_similarity', '-created_at')
+            ).order_by('-final_score', '-created_at')
 
             total_count = fuzzy_matches.count()
             works = fuzzy_matches[:limit]
@@ -256,33 +294,61 @@ class SearchService:
         Search for screen works directly (for screen-first searches).
 
         If year is provided, filter by year.
-        Uses fuzzy matching for typo tolerance.
+        Uses intelligent ranking with exact match, starts-with, whole-word, and fuzzy matching.
+
+        Ranking priority:
+        1. Exact title match (100 pts)
+        2. Title starts with query (70 pts)
+        3. Whole word in title (50 pts)
+        4. Title contains query (30 pts)
+        5. Summary contains (10 pts)
+        6. TMDb popularity boost
         """
         from django.contrib.postgres.search import TrigramSimilarity
         from django.db.models import Case, When, IntegerField, Value
 
-        # First try exact/contains matches
+        # Escape special regex characters in query
+        escaped_query = re.escape(query)
+
+        # Build filters
         filters = Q(title__icontains=query) | Q(summary__icontains=query)
 
         if year:
             filters &= Q(year=year)
 
-        exact_matches = ScreenWork.objects.filter(filters).annotate(
+        # Search with improved ranking
+        search_results = ScreenWork.objects.filter(filters).annotate(
             relevance_rank=Case(
-                When(title__icontains=query, then=Value(2)),
-                When(summary__icontains=query, then=Value(1)),
+                # Title matches (highest priority)
+                When(title__iexact=query, then=Value(100)),
+                When(title__istartswith=query + ' ', then=Value(70)),
+                When(title__iregex=rf'\b{escaped_query}\b', then=Value(50)),
+                When(title__icontains=query, then=Value(30)),
+
+                # Summary match
+                When(summary__icontains=query, then=Value(10)),
+
                 default=Value(0),
                 output_field=IntegerField()
+            ),
+            # Final score = relevance + (tmdb_popularity / 10) for slight boost
+            final_score=ExpressionWrapper(
+                F('relevance_rank') + (F('tmdb_popularity') / 10.0),
+                output_field=FloatField()
             )
         )
 
-        # If we have good exact matches, return those
-        if exact_matches.count() >= 3:
-            works = exact_matches.order_by('-relevance_rank', '-tmdb_popularity', '-year')[:limit]
+        # If we have good matches, return those
+        if search_results.count() >= 3:
+            works = search_results.order_by('-final_score', '-year')[:limit]
         else:
-            # Use fuzzy matching
+            # Use fuzzy matching with trigrams
             query_obj = ScreenWork.objects.annotate(
                 title_similarity=TrigramSimilarity('title', query),
+                final_score=ExpressionWrapper(
+                    (F('title_similarity') * 100) + (F('tmdb_popularity') / 10.0),
+                    output_field=FloatField()
+                )
             ).filter(
                 title_similarity__gte=0.2
             )
@@ -290,6 +356,6 @@ class SearchService:
             if year:
                 query_obj = query_obj.filter(year=year)
 
-            works = query_obj.order_by('-title_similarity', '-tmdb_popularity', '-year')[:limit]
+            works = query_obj.order_by('-final_score', '-year')[:limit]
 
         return works
