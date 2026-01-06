@@ -1330,3 +1330,13 @@ pre code {
   border-bottom-left-radius: var(--thread-radius);
   z-index: 3;
 }
+
+/* ═══════════════════════════════════════════════════════════
+   SEARCH INPUT CUSTOMIZATION
+   ═══════════════════════════════════════════════════════════ */
+
+/* Hide the default browser blue X button on search inputs */
+input[type="search"]::-webkit-search-cancel-button {
+  display: none;
+  -webkit-appearance: none;
+}

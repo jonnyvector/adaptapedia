@@ -34,8 +34,8 @@ export default function BookWithAdaptationsResult({ work }: BookWithAdaptationsR
   return (
     <div className={`border ${BORDERS.medium} rounded-md p-4 hover:border-black hover:dark:border-white transition-colors bg-white dark:bg-black`}>
       {/* Book Info */}
-      <div className="mb-3">
-        <div className="flex items-start justify-between gap-3">
+      <div>
+        <div className="flex items-start justify-between gap-4">
           <div className="flex-1 min-w-0">
             <Link href={`/book/${work.slug}`} className="text-black dark:text-white hover:opacity-70">
               <h3 className={`${TEXT.body} font-bold truncate`} style={{ fontFamily: FONTS.mono }}>{work.title}</h3>
@@ -53,6 +53,33 @@ export default function BookWithAdaptationsResult({ work }: BookWithAdaptationsR
                 </span>
               )}
             </div>
+
+            {/* Primary CTA - Best Match - moved up to be directly under title */}
+            {bestMatch && (
+              <div className="mt-3">
+                <Link
+                  href={`/compare/${work.slug}/${bestMatch.slug}`}
+                  className="block w-full sm:w-auto"
+                >
+                  <button className={`w-full sm:w-auto px-6 py-3 bg-black dark:bg-white text-white dark:text-black font-bold rounded-md border ${BORDERS.solid} hover:opacity-90 transition-opacity ${TEXT.secondary} ${monoUppercase}`} style={{ fontFamily: FONTS.mono, letterSpacing: LETTER_SPACING.tight }}>
+                    Compare with {bestMatch.title} ({bestMatch.year} {bestMatch.type === 'MOVIE' ? 'Movie' : 'TV Series'})
+                  </button>
+                </Link>
+
+                {/* Secondary expand option */}
+                {otherAdaptations.length > 0 && (
+                  <div className="mt-2">
+                    <button
+                      onClick={() => setShowAllAdaptations(!showAllAdaptations)}
+                      className={`${TEXT.secondary} ${TEXT.mutedMedium} hover:text-black hover:dark:text-white transition-colors`}
+                      style={{ fontFamily: FONTS.mono }}
+                    >
+                      or view {otherAdaptations.length} other adaptation{otherAdaptations.length !== 1 ? 's' : ''} {showAllAdaptations ? '▴' : '▾'}
+                    </button>
+                  </div>
+                )}
+              </div>
+            )}
           </div>
           {work.cover_url && (
             <div className={`relative w-24 h-36 sm:w-32 sm:h-48 flex-shrink-0 border ${BORDERS.medium} rounded-md overflow-hidden`}>
@@ -67,33 +94,6 @@ export default function BookWithAdaptationsResult({ work }: BookWithAdaptationsR
             </div>
           )}
         </div>
-
-        {/* Primary CTA - Best Match */}
-        {bestMatch && (
-          <div className="mt-3">
-            <Link
-              href={`/compare/${work.slug}/${bestMatch.slug}`}
-              className="block w-full sm:w-auto"
-            >
-              <button className={`w-full sm:w-auto px-6 py-3 bg-black dark:bg-white text-white dark:text-black font-bold rounded-md border ${BORDERS.solid} hover:opacity-90 transition-opacity ${TEXT.secondary} ${monoUppercase}`} style={{ fontFamily: FONTS.mono, letterSpacing: LETTER_SPACING.tight }}>
-                Compare with {bestMatch.title} ({bestMatch.year} {bestMatch.type === 'MOVIE' ? 'Movie' : 'TV Series'})
-              </button>
-            </Link>
-
-            {/* Secondary expand option */}
-            {otherAdaptations.length > 0 && (
-              <div className="mt-2">
-                <button
-                  onClick={() => setShowAllAdaptations(!showAllAdaptations)}
-                  className={`${TEXT.secondary} ${TEXT.mutedMedium} hover:text-black hover:dark:text-white transition-colors`}
-                  style={{ fontFamily: FONTS.mono }}
-                >
-                  or view {otherAdaptations.length} other adaptation{otherAdaptations.length !== 1 ? 's' : ''} {showAllAdaptations ? '▴' : '▾'}
-                </button>
-              </div>
-            )}
-          </div>
-        )}
 
         {work.summary && (
           <p className={`${TEXT.secondary} ${TEXT.mutedMedium} mt-3 line-clamp-2`} style={{ fontFamily: FONTS.mono }}>{work.summary}</p>
