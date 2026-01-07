@@ -14,11 +14,7 @@ export async function createComment(
   parentId?: number
 ) {
   try {
-    const result = await api.comments.create(diffItemId, {
-      content,
-      spoiler_scope: spoilerScope,
-      parent: parentId,
-    });
+    const result = await api.comments.create(diffItemId, content, spoilerScope, parentId);
 
     // No revalidation needed - component refetches comments after adding
 
