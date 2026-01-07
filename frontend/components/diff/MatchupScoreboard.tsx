@@ -243,7 +243,7 @@ export default function MatchupScoreboard({
         <div className="text-center text-[10px] text-black/60 dark:text-white/60 font-bold uppercase tracking-widest" style={{ fontFamily: 'JetBrains Mono, monospace', letterSpacing: '0.12em' }}>
           {currentRating ? 'Your faithfulness rating' : 'Rate faithfulness (optional)'}
         </div>
-        <div className="flex justify-center gap-1.5">
+        <div className="flex justify-center gap-1.5 px-2">
           {[1, 2, 3, 4, 5].map((rating) => (
             <button
               key={rating}
@@ -806,13 +806,13 @@ export default function MatchupScoreboard({
                 <div className="text-[9px] uppercase tracking-widest text-black/60 dark:text-white/60 text-center" style={{ fontFamily: 'JetBrains Mono, monospace', letterSpacing: '0.12em' }}>
                   RATE (OPTIONAL)
                 </div>
-                <div className="flex justify-center gap-1.5">
+                <div className="flex justify-center gap-1 px-1">
                   {[1, 2, 3, 4, 5].map((rating) => (
                     <button
                       key={rating}
                       onClick={() => handleFaithfulnessRate(rating)}
                       disabled={isSubmitting}
-                      className="w-8 h-8 border border-black/20 dark:border-white/20 bg-transparent text-black dark:text-white font-bold text-xs transition-all disabled:opacity-50 hover:bg-black hover:dark:bg-white hover:text-white hover:dark:text-black rounded-md"
+                      className="flex-1 h-9 border border-black/20 dark:border-white/20 bg-transparent text-black dark:text-white font-bold text-xs transition-all disabled:opacity-50 hover:bg-black hover:dark:bg-white hover:text-white hover:dark:text-black rounded-md"
                       style={{
                         fontFamily: 'JetBrains Mono, monospace'
                       }}
