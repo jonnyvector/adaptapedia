@@ -171,7 +171,7 @@ export default async function ScreenWorkPage({
 
   return (
     <main className="min-h-screen">
-      <div className="max-w-6xl mx-auto p-6">
+      <div className="container">
         {/* Header */}
         <div className="mb-8">
           <div className="mb-2">

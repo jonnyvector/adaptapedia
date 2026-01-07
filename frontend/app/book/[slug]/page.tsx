@@ -111,7 +111,7 @@ export default async function WorkPage({ params }: PageProps): Promise<JSX.Eleme
 
   return (
     <main className="min-h-screen">
-      <div className="max-w-6xl mx-auto p-6">
+      <div className="container">
         {/* Header Section */}
         <div className="mb-8">
           <div className="mb-6">

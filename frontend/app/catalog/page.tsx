@@ -71,7 +71,7 @@ export default async function CatalogPage({
   const data = await getCatalogData(sort, order, filter);
 
   return (
-    <div className="container px-4 sm:px-6 py-8 md:py-16 font-mono">
+    <div className="container py-8 md:py-16 font-mono">
       <div className="mb-6 md:mb-8">
         <h1
           className={`text-3xl sm:text-4xl md:text-6xl font-black mb-4 md:mb-6 tracking-tight ${TEXT.primary}`}

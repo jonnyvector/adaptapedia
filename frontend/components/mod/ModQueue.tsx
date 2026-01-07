@@ -68,7 +68,7 @@ export default function ModQueue(): JSX.Element {
   const counts = getPendingCounts();
 
   return (
-    <div className="max-w-6xl mx-auto p-4 sm:p-6">
+    <div className="container">
       <div className="mb-4 sm:mb-6">
         <h1 className={`text-2xl sm:text-3xl font-bold mb-2 text-black dark:text-white ${monoUppercase}`} style={{ fontFamily: FONTS.mono, letterSpacing: LETTER_SPACING.wider }}>Moderation Queue</h1>
         <p className={`${TEXT.secondary} ${TEXT.mutedMedium}`} style={{ fontFamily: FONTS.mono }}>

@@ -8,6 +8,13 @@ const config: Config = {
     './app/**/*.{js,ts,jsx,tsx,mdx}',
   ],
   theme: {
+    container: {
+      center: true,
+      padding: {
+        DEFAULT: '1rem',  // 16px on mobile
+        sm: '1.5rem',     // 24px on sm+
+      },
+    },
     extend: {
       fontFamily: {
         mono: ['var(--font-jetbrains-mono)', 'monospace'],

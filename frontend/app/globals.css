@@ -968,17 +968,6 @@ hr {
    LAYOUT
    ═══════════════════════════════════════════════════════════ */
 
-.container {
-  max-width: 1200px;
-  margin: 0 auto;
-  padding: 0 20px;
-}
-
-.container-narrow {
-  max-width: 800px;
-  margin: 0 auto;
-  padding: 0 20px;
-}
 
 /* ═══════════════════════════════════════════════════════════
    ACCESSIBILITY
@@ -1362,14 +1351,6 @@ input[type="search"]::-webkit-search-cancel-button {
     letter-spacing: -0.01em;
   }
 
-  /* Container padding */
-  .container {
-    padding: 0 16px;
-  }
-
-  .container-narrow {
-    padding: 0 16px;
-  }
 
   /* Cards */
   .card {

@@ -38,7 +38,7 @@ export default async function BrowsePage(): Promise<JSX.Element> {
 
   return (
     <main className="min-h-screen font-mono">
-      <div className="container px-4 sm:px-6 py-8 md:py-16">
+      <div className="container py-8 md:py-16">
         {/* Header */}
         <div className="mb-8 md:mb-12">
           <h1

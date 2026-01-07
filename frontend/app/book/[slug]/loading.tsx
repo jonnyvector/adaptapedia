@@ -1,7 +1,7 @@
 export default function Loading(): JSX.Element {
   return (
     <main className="min-h-screen">
-      <div className="max-w-6xl mx-auto p-6">
+      <div className="container">
         {/* Header Skeleton */}
         <div className="mb-8">
           <div className="mb-6">

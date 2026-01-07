@@ -91,7 +91,7 @@ export default function SpoilerControl({
 
   return (
     <div className="sticky top-0 z-10 bg-white dark:bg-black border-b border-black/20 dark:border-white/20 mb-4 sm:mb-6 mt-6 sm:mt-8">
-      <div className="max-w-6xl mx-auto px-3 sm:px-4 py-2 sm:py-3">
+      <div className="container py-2 sm:py-3">
         {/* Segmented Control */}
         <div className="flex flex-col sm:flex-row sm:items-center gap-2 sm:gap-3 mb-1 sm:mb-2">
           {/* Label - Hidden on mobile */}

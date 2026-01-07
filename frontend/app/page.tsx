@@ -36,7 +36,7 @@ export default async function Home(): Promise<JSX.Element> {
     <main className="flex-1 bg-white dark:bg-black">
       {/* Hero Section - Search-focused */}
       <div className="relative py-12 md:py-20 mb-8 md:mb-12">
-        <div className="container px-4 sm:px-6">
+        <div className="container">
           <div className="max-w-4xl mx-auto text-center">
             {/* Clean, focused headline */}
             <h1 className="text-4xl sm:text-5xl md:text-7xl font-black mb-4 md:mb-6 leading-[1.1] tracking-tight" style={{ fontFamily: FONTS.mono }}>
@@ -97,7 +97,7 @@ export default async function Home(): Promise<JSX.Element> {
       </div>
 
       {/* Featured Comparisons */}
-      <div className="container px-4 sm:px-6 py-8 md:py-16">
+      <div className="container py-8 md:py-16">
         <div className="mb-6 md:mb-12">
           <div className="text-center mb-4">
             <h2 className={`text-2xl sm:text-3xl md:text-4xl font-bold mb-2 md:mb-3 tracking-tight ${TEXT.primary}`} style={{ fontFamily: FONTS.mono }}>Popular comparisons</h2>
@@ -128,7 +128,7 @@ export default async function Home(): Promise<JSX.Element> {
 
       {/* Why Adaptapedia - With separator */}
       <div className={`relative bg-white dark:bg-black py-8 md:py-20 mt-6 md:mt-8 border-y ${BORDERS.medium}`}>
-        <div className="container px-4 sm:px-6 relative">
+        <div className="container relative">
 
         {/* Features - Redesigned Grid */}
         <div className="mb-8 md:mb-16">

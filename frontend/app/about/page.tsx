@@ -14,7 +14,7 @@ export const metadata: Metadata = {
 export default function AboutPage(): JSX.Element {
   return (
     <main className="min-h-screen bg-white dark:bg-black font-mono">
-      <div className="container px-4 sm:px-6 py-8 md:py-16">
+      <div className="container py-8 md:py-16">
         <div className="max-w-4xl mx-auto">
           {/* Header */}
           <div className="mb-8 md:mb-16 text-center">
