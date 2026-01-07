@@ -90,19 +90,19 @@ export default function SpoilerControl({
   const currentConfig = getPreferenceConfig(currentPreference);
 
   return (
-    <div className="sticky top-0 z-10 bg-white dark:bg-black border-b border-black/20 dark:border-white/20 mb-6 mt-8">
-      <div className="max-w-6xl mx-auto px-4 py-3">
+    <div className="sticky top-0 z-10 bg-white dark:bg-black border-b border-black/20 dark:border-white/20 mb-4 sm:mb-6 mt-6 sm:mt-8">
+      <div className="max-w-6xl mx-auto px-3 sm:px-4 py-2 sm:py-3">
         {/* Segmented Control */}
-        <div className="flex flex-col sm:flex-row sm:items-center gap-3 mb-2">
-          {/* Label */}
-          <div className="flex items-center gap-2">
+        <div className="flex flex-col sm:flex-row sm:items-center gap-2 sm:gap-3 mb-1 sm:mb-2">
+          {/* Label - Hidden on mobile */}
+          <div className="hidden sm:flex items-center gap-2">
             <span className={`${TEXT.label} ${monoUppercase} ${TEXT.mutedMedium}`} style={{ fontFamily: FONTS.mono, letterSpacing: LETTER_SPACING.wider }}>
               Spoiler Level
             </span>
           </div>
 
           {/* Segmented Control Pills */}
-          <div className="inline-flex flex-wrap items-center gap-1.5 sm:gap-2">
+          <div className="flex items-center gap-1 sm:gap-2 w-full sm:w-auto">
             {preferences.map((pref) => {
               const isActive = currentPreference === pref.value;
               const Icon = pref.icon;
@@ -111,9 +111,9 @@ export default function SpoilerControl({
                   key={pref.value}
                   onClick={() => onPreferenceChange(pref.value)}
                   className={`
-                    relative px-2 sm:px-4 py-1.5 rounded-md ${TEXT.label} font-bold
+                    relative flex-1 sm:flex-initial px-2 sm:px-4 py-1 sm:py-1.5 rounded-md ${TEXT.label} font-bold
                     transition-all
-                    flex items-center gap-1 sm:gap-1.5 whitespace-nowrap border
+                    flex items-center justify-center gap-0.5 sm:gap-1.5 whitespace-nowrap border
                     ${
                       isActive
                         ? `bg-black dark:bg-white ${BORDERS.solid} text-white dark:text-black`
@@ -125,8 +125,8 @@ export default function SpoilerControl({
                   aria-pressed={isActive}
                   aria-label={`${pref.label}: ${pref.description}`}
                 >
-                  <Icon className="w-3.5 h-3.5" aria-hidden="true" />
-                  <span className="uppercase">{pref.label}</span>
+                  <Icon className="w-3 h-3 sm:w-3.5 sm:h-3.5 hidden sm:block" aria-hidden="true" />
+                  <span className="uppercase text-[9px] sm:text-[10px]">{pref.label}</span>
                 </button>
               );
             })}
@@ -134,7 +134,7 @@ export default function SpoilerControl({
 
           {/* Status Badge - Hidden count feedback */}
           {visibleCount !== undefined && hiddenCount !== undefined && (
-            <div className={`${TEXT.label} ${TEXT.mutedMedium}`} style={{ fontFamily: FONTS.mono, letterSpacing: LETTER_SPACING.wider }}>
+            <div className={`${TEXT.label} ${TEXT.mutedMedium} text-center sm:text-left`} style={{ fontFamily: FONTS.mono, letterSpacing: LETTER_SPACING.wider }}>
               <span className="hidden sm:inline">·</span>{' '}
               <span className="font-bold text-black dark:text-white">{visibleCount}</span> shown
               {hiddenCount > 0 && (
@@ -149,7 +149,7 @@ export default function SpoilerControl({
 
         {/* Compact stats line */}
         {(consensusAccuracy !== undefined || topCategories.length > 0) && (
-          <div className={`${TEXT.metadata} ${TEXT.mutedLight} flex items-center leading-none`} style={{ fontFamily: FONTS.mono, letterSpacing: LETTER_SPACING.normal }}>
+          <div className={`${TEXT.metadata} ${TEXT.mutedLight} flex flex-wrap items-center gap-1 leading-none text-center sm:text-left`} style={{ fontFamily: FONTS.mono, letterSpacing: LETTER_SPACING.normal }}>
             {consensusAccuracy !== undefined && consensusAccuracy > 0 && (
               <>
                 <span>{Math.round(consensusAccuracy)}% accurate</span>
@@ -158,10 +158,10 @@ export default function SpoilerControl({
             {topCategories.length > 0 && (
               <>
                 {consensusAccuracy !== undefined && consensusAccuracy > 0 && (
-                  <span className="mx-1.5">·</span>
+                  <span className="hidden sm:inline">·</span>
                 )}
-                <span>Top:</span>
-                {topCategories.map((cat, index) => (
+                <span className="hidden sm:inline">Top:</span>
+                {topCategories.slice(0, 2).map((cat, index) => (
                   <span key={cat.category}>
                     {index > 0 && <span>,</span>} {cat.category} ({cat.count})
                   </span>
