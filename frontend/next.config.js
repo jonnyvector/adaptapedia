@@ -2,16 +2,6 @@
 const nextConfig = {
   reactStrictMode: true,
   output: 'standalone', // Required for Docker production builds
-
-  // Temporarily disable type checking and linting during build for faster deployment
-  // TODO: Fix TypeScript errors and re-enable
-  typescript: {
-    ignoreBuildErrors: true,
-  },
-  eslint: {
-    ignoreDuringBuilds: true,
-  },
-
   images: {
     domains: [
       'covers.openlibrary.org',
