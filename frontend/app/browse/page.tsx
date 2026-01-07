@@ -38,18 +38,18 @@ export default async function BrowsePage(): Promise<JSX.Element> {
 
   return (
     <main className="min-h-screen font-mono">
-      <div className="container py-12 md:py-16">
+      <div className="container px-4 sm:px-6 py-8 md:py-16">
         {/* Header */}
-        <div className="mb-12">
+        <div className="mb-8 md:mb-12">
           <h1
-            className={`text-4xl md:text-6xl font-black mb-6 tracking-tight ${TEXT.primary}`}
-           
+            className={`text-3xl sm:text-4xl md:text-6xl font-black mb-4 md:mb-6 tracking-tight ${TEXT.primary}`}
+
           >
             Browse Comparisons
           </h1>
           <p
-            className={`text-xl ${TEXT.mutedMedium} max-w-2xl`}
-           
+            className={`text-base sm:text-lg md:text-xl ${TEXT.mutedMedium} max-w-2xl`}
+
           >
             Explore book-to-screen adaptations with community-documented differences.
             Click any comparison to see what changed.
@@ -62,17 +62,17 @@ export default async function BrowsePage(): Promise<JSX.Element> {
             action={{ label: "← Back to Home", href: "/" }}
           />
         ) : (
-          <div className="space-y-12 sm:space-y-16">
+          <div className="space-y-8 sm:space-y-12 md:space-y-16">
             {/* Featured Section */}
             {sections.featured.length > 0 && (
               <section>
-                <div className="mb-6">
-                  <h2 className="text-3xl md:text-4xl font-bold mb-2">Featured</h2>
-                  <p className="text-muted">
+                <div className="mb-4 sm:mb-6">
+                  <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold mb-1 sm:mb-2">Featured</h2>
+                  <p className="text-muted text-sm sm:text-base">
                     Top comparisons with the most engagement
                   </p>
                 </div>
-                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 sm:gap-6">
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-3 sm:gap-4 md:gap-6">
                   {sections.featured.map((comparison) => (
                     <ComparisonCard key={`${comparison.work_id}-${comparison.screen_work_id}`} comparison={comparison} />
                   ))}
@@ -83,9 +83,9 @@ export default async function BrowsePage(): Promise<JSX.Element> {
             {/* Recently Updated */}
             {sections.recently_updated.length > 0 && (
               <section>
-                <div className="mb-6">
-                  <h2 className="text-3xl md:text-4xl font-bold mb-2">Recently Updated</h2>
-                  <p className="text-muted">
+                <div className="mb-4 sm:mb-6">
+                  <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold mb-1 sm:mb-2">Recently Updated</h2>
+                  <p className="text-muted text-sm sm:text-base">
                     Fresh activity in the last 48 hours
                   </p>
                 </div>
@@ -100,9 +100,9 @@ export default async function BrowsePage(): Promise<JSX.Element> {
             {/* Most Documented */}
             {sections.most_documented.length > 0 && (
               <section>
-                <div className="mb-6">
-                  <h2 className="text-3xl md:text-4xl font-bold mb-2">Most Documented</h2>
-                  <p className="text-muted">
+                <div className="mb-4 sm:mb-6">
+                  <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold mb-1 sm:mb-2">Most Documented</h2>
+                  <p className="text-muted text-sm sm:text-base">
                     Comprehensive coverage with the most differences
                   </p>
                 </div>
@@ -117,9 +117,9 @@ export default async function BrowsePage(): Promise<JSX.Element> {
             {/* Trending */}
             {sections.trending.length > 0 && (
               <section>
-                <div className="mb-6">
-                  <h2 className="text-3xl md:text-4xl font-bold mb-2">Trending This Week</h2>
-                  <p className="text-muted">
+                <div className="mb-4 sm:mb-6">
+                  <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold mb-1 sm:mb-2">Trending This Week</h2>
+                  <p className="text-muted text-sm sm:text-base">
                     Most active comparisons in the last 7 days
                   </p>
                 </div>
@@ -134,9 +134,9 @@ export default async function BrowsePage(): Promise<JSX.Element> {
             {/* All Comparisons */}
             {sections.all_comparisons.length > 0 && (
               <section>
-                <div className="mb-6">
-                  <h2 className="text-3xl md:text-4xl font-bold mb-2">All Comparisons</h2>
-                  <p className="text-muted">
+                <div className="mb-4 sm:mb-6">
+                  <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold mb-1 sm:mb-2">All Comparisons</h2>
+                  <p className="text-muted text-sm sm:text-base">
                     Browse all available book-to-screen adaptations
                   </p>
                 </div>

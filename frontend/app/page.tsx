@@ -35,11 +35,11 @@ export default async function Home(): Promise<JSX.Element> {
   return (
     <main className="flex-1 bg-white dark:bg-black">
       {/* Hero Section - Search-focused */}
-      <div className="relative py-16 md:py-20 mb-12">
-        <div className="container">
+      <div className="relative py-12 md:py-20 mb-8 md:mb-12">
+        <div className="container px-4 sm:px-6">
           <div className="max-w-4xl mx-auto text-center">
             {/* Clean, focused headline */}
-            <h1 className="text-5xl md:text-7xl font-black mb-6 leading-[1.1] tracking-tight" style={{ fontFamily: FONTS.mono }}>
+            <h1 className="text-4xl sm:text-5xl md:text-7xl font-black mb-4 md:mb-6 leading-[1.1] tracking-tight" style={{ fontFamily: FONTS.mono }}>
               <span className={TEXT.primary}>
                 Spot the change.
               </span>
@@ -47,7 +47,7 @@ export default async function Home(): Promise<JSX.Element> {
               Post the diff.
             </h1>
 
-            <p className={`text-xl md:text-2xl ${TEXT.mutedMedium} max-w-2xl mx-auto mb-8 leading-relaxed`} style={{ fontFamily: FONTS.mono }}>
+            <p className={`text-lg sm:text-xl md:text-2xl ${TEXT.mutedMedium} max-w-2xl mx-auto mb-6 md:mb-8 leading-relaxed px-4`} style={{ fontFamily: FONTS.mono }}>
               Adaptapedia is where fans log, vote on, and discuss what changed from book to screen — with spoiler controls so everyone can participate safely.
             </p>
 
@@ -97,19 +97,19 @@ export default async function Home(): Promise<JSX.Element> {
       </div>
 
       {/* Featured Comparisons */}
-      <div className="container py-12 md:py-16">
-        <div className="mb-8 md:mb-12">
+      <div className="container px-4 sm:px-6 py-8 md:py-16">
+        <div className="mb-6 md:mb-12">
           <div className="text-center mb-4">
-            <h2 className={`text-3xl md:text-4xl font-bold mb-3 tracking-tight ${TEXT.primary}`} style={{ fontFamily: FONTS.mono }}>Popular comparisons</h2>
-            <p className={`text-base md:text-lg ${TEXT.mutedMedium} uppercase tracking-wider`} style={{ fontFamily: FONTS.mono }}>Explore the differences between beloved books and their adaptations</p>
+            <h2 className={`text-2xl sm:text-3xl md:text-4xl font-bold mb-2 md:mb-3 tracking-tight ${TEXT.primary}`} style={{ fontFamily: FONTS.mono }}>Popular comparisons</h2>
+            <p className={`text-sm sm:text-base md:text-lg ${TEXT.mutedMedium} uppercase tracking-wider px-4`} style={{ fontFamily: FONTS.mono }}>Explore the differences between beloved books and their adaptations</p>
           </div>
           <div className="text-center md:text-right">
-            <Link href="/browse" className={`${TEXT.secondary} ${TEXT.primary} hover:underline font-bold transition-colors uppercase tracking-wider`} style={{ fontFamily: FONTS.mono }}>
+            <Link href="/browse" className={`${TEXT.secondary} ${TEXT.primary} hover:underline font-bold transition-colors uppercase tracking-wider text-sm sm:text-base`} style={{ fontFamily: FONTS.mono }}>
               Browse all →
             </Link>
           </div>
         </div>
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4">
           {featuredComparisons.length > 0 ? (
             featuredComparisons.map((comparison) => (
               <ComparisonCard
@@ -127,20 +127,20 @@ export default async function Home(): Promise<JSX.Element> {
       </div>
 
       {/* Why Adaptapedia - With separator */}
-      <div className={`relative bg-white dark:bg-black py-12 md:py-20 mt-8 border-y ${BORDERS.medium}`}>
-        <div className="container relative">
+      <div className={`relative bg-white dark:bg-black py-8 md:py-20 mt-6 md:mt-8 border-y ${BORDERS.medium}`}>
+        <div className="container px-4 sm:px-6 relative">
 
         {/* Features - Redesigned Grid */}
-        <div className="mb-16">
-          <div className="text-center mb-8">
-            <h2 className={`text-3xl font-bold mb-2 ${TEXT.primary}`} style={{ fontFamily: FONTS.mono }}>Why Adaptapedia?</h2>
-            <p className={`${TEXT.mutedMedium} uppercase tracking-wider`} style={{ fontFamily: FONTS.mono }}>Built for fans who love to compare notes</p>
+        <div className="mb-8 md:mb-16">
+          <div className="text-center mb-6 md:mb-8">
+            <h2 className={`text-2xl sm:text-3xl font-bold mb-2 ${TEXT.primary}`} style={{ fontFamily: FONTS.mono }}>Why Adaptapedia?</h2>
+            <p className={`${TEXT.mutedMedium} uppercase tracking-wider text-sm sm:text-base px-4`} style={{ fontFamily: FONTS.mono }}>Built for fans who love to compare notes</p>
           </div>
 
           {/* Balanced grid layout */}
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6 max-w-6xl mx-auto">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-6 max-w-6xl mx-auto">
             {/* Card 1 - Structured Comparisons */}
-            <div className={`bg-white dark:bg-black border ${BORDERS.medium} p-8 relative overflow-hidden hover:border-black/50 hover:dark:border-white/50 transition-colors`}>
+            <div className={`bg-white dark:bg-black border ${BORDERS.medium} p-4 sm:p-6 md:p-8 relative overflow-hidden hover:border-black/50 hover:dark:border-white/50 transition-colors`}>
               <div className={`mb-6 inline-flex items-center justify-center w-16 h-16 bg-black dark:bg-white border ${BORDERS.medium} transition-transform`}>
                 <svg className="w-8 h-8 text-white dark:text-black" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-3 7h3m-3 4h3m-6-4h.01M9 16h.01" />

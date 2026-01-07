@@ -14,38 +14,38 @@ export const metadata: Metadata = {
 export default function AboutPage(): JSX.Element {
   return (
     <main className="min-h-screen bg-white dark:bg-black font-mono">
-      <div className="container py-12 md:py-16">
+      <div className="container px-4 sm:px-6 py-8 md:py-16">
         <div className="max-w-4xl mx-auto">
           {/* Header */}
-          <div className="mb-16 text-center">
+          <div className="mb-8 md:mb-16 text-center">
             <h1
-              className={`text-4xl md:text-6xl font-black mb-6 tracking-tight ${TEXT.primary}`}
-             
+              className={`text-3xl sm:text-4xl md:text-6xl font-black mb-4 md:mb-6 tracking-tight ${TEXT.primary}`}
+
             >
               About Adaptapedia
             </h1>
             <p
-              className={`text-xl ${TEXT.mutedMedium} mb-12 max-w-2xl mx-auto`}
-             
+              className={`text-base sm:text-lg md:text-xl ${TEXT.mutedMedium} mb-8 md:mb-12 max-w-2xl mx-auto px-4`}
+
             >
               A community-driven database for comparing books and their film adaptations
             </p>
 
             {/* Stats */}
-            <div className={`flex items-center justify-center gap-6 mb-10 ${TEXT.secondary} ${TEXT.mutedMedium}`}>
-              <div className="flex items-center gap-1.5">
-                <div className={`text-3xl font-black ${TEXT.primary}`}>2,185</div>
-                <span className={monoUppercase}>books</span>
+            <div className={`flex flex-wrap items-center justify-center gap-3 sm:gap-6 mb-6 md:mb-10 ${TEXT.secondary} ${TEXT.mutedMedium}`}>
+              <div className="flex items-center gap-1">
+                <div className={`text-2xl sm:text-3xl font-black ${TEXT.primary}`}>2,185</div>
+                <span className={`${monoUppercase} text-xs sm:text-sm`}>books</span>
               </div>
-              <div className="w-1 h-1 bg-black/20 dark:bg-white/20"></div>
-              <div className="flex items-center gap-1.5">
-                <div className={`text-3xl font-black ${TEXT.primary}`}>3,417</div>
-                <span className={monoUppercase}>adaptations</span>
+              <div className="w-1 h-1 bg-black/20 dark:bg-white/20 hidden sm:block"></div>
+              <div className="flex items-center gap-1">
+                <div className={`text-2xl sm:text-3xl font-black ${TEXT.primary}`}>3,417</div>
+                <span className={`${monoUppercase} text-xs sm:text-sm`}>adaptations</span>
               </div>
-              <div className="w-1 h-1 bg-black/20 dark:bg-white/20"></div>
-              <div className="flex items-center gap-1.5">
-                <div className={`text-3xl font-black ${TEXT.primary}`}>12.8K</div>
-                <span className={monoUppercase}>differences</span>
+              <div className="w-1 h-1 bg-black/20 dark:bg-white/20 hidden sm:block"></div>
+              <div className="flex items-center gap-1">
+                <div className={`text-2xl sm:text-3xl font-black ${TEXT.primary}`}>12.8K</div>
+                <span className={`${monoUppercase} text-xs sm:text-sm`}>differences</span>
               </div>
             </div>
 
@@ -53,7 +53,7 @@ export default function AboutPage(): JSX.Element {
             <div className="flex justify-center items-center">
               <Link
                 href="/search"
-                className={`px-6 py-3 border ${BORDERS.solid} bg-black dark:bg-white text-white dark:text-black hover:bg-white hover:dark:bg-black hover:text-black hover:dark:text-white font-bold transition-all ${TEXT.body} ${monoUppercase} rounded-md`}
+                className={`px-4 py-2 sm:px-6 sm:py-3 border ${BORDERS.solid} bg-black dark:bg-white text-white dark:text-black hover:bg-white hover:dark:bg-black hover:text-black hover:dark:text-white font-bold transition-all ${TEXT.body} ${monoUppercase} rounded-md`}
                
               >
                 Start exploring
@@ -62,14 +62,14 @@ export default function AboutPage(): JSX.Element {
           </div>
 
           {/* Mission Statement */}
-          <section className="mb-16">
+          <section className="mb-8 md:mb-16">
             <h2
-              className={`text-3xl md:text-4xl font-bold mb-8 tracking-tight ${TEXT.primary}`}
+              className={`text-2xl sm:text-3xl md:text-4xl font-bold mb-4 md:mb-8 tracking-tight ${TEXT.primary}`}
              
             >
               Our Mission
             </h2>
-            <div className={`border ${BORDERS.medium} p-8 md:p-10 bg-white dark:bg-black`}>
+            <div className={`border ${BORDERS.medium} p-4 sm:p-6 md:p-10 bg-white dark:bg-black`}>
               <p className={`${TEXT.body} mb-4 leading-relaxed`}>
                 Adaptapedia exists to document and explore how stories transform when they move from
                 page to screen. We believe in the value of both books and their adaptations, and our
@@ -84,9 +84,9 @@ export default function AboutPage(): JSX.Element {
           </section>
 
           {/* How It Works */}
-          <section className="mb-16">
+          <section className="mb-8 md:mb-16">
             <h2
-              className={`text-3xl md:text-4xl font-bold mb-8 tracking-tight ${TEXT.primary}`}
+              className={`text-2xl sm:text-3xl md:text-4xl font-bold mb-4 md:mb-8 tracking-tight ${TEXT.primary}`}
              
             >
               How It Works
@@ -319,9 +319,9 @@ export default function AboutPage(): JSX.Element {
           </section>
 
           {/* Open Source */}
-          <section className="mb-16">
+          <section className="mb-8 md:mb-16">
             <h2
-              className={`text-3xl md:text-4xl font-bold mb-8 tracking-tight ${TEXT.primary}`}
+              className={`text-2xl sm:text-3xl md:text-4xl font-bold mb-4 md:mb-8 tracking-tight ${TEXT.primary}`}
              
             >
               Open Source
