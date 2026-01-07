@@ -23,8 +23,12 @@ COPY . /app/
 # Create staticfiles directory
 RUN mkdir -p /app/staticfiles
 
+# Copy entrypoint script
+COPY entrypoint.sh /app/entrypoint.sh
+RUN chmod +x /app/entrypoint.sh
+
 # Expose port
 EXPOSE 8000
 
-# Default command (can be overridden in docker-compose)
-CMD ["gunicorn", "adaptapedia.wsgi:application", "--bind", "0.0.0.0:8000"]
+# Use entrypoint script to run migrations before starting server
+ENTRYPOINT ["/app/entrypoint.sh"]
