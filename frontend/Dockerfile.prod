@@ -54,11 +54,11 @@ RUN chown -R nextjs:nodejs /app
 # Switch to non-root user
 USER nextjs
 
-# Expose port
+# Expose port (Railway will set PORT dynamically)
 EXPOSE 3000
 
 # Set environment variables for runtime
-ENV PORT=3000
+# Don't hardcode PORT - let Railway set it
 ENV HOSTNAME="0.0.0.0"
 
 # Start the application
