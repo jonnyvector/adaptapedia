@@ -44,8 +44,11 @@ export default function RootLayout({
                 const saved = localStorage.getItem('adaptapedia-theme');
                 if (saved === 'dark' || saved === 'light') {
                   document.documentElement.setAttribute('data-theme', saved);
+                } else {
+                  // saved is 'system' or null - check system preference
+                  const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+                  document.documentElement.setAttribute('data-theme', prefersDark ? 'dark' : 'light');
                 }
-                // If saved is 'system' or null, don't set attribute - let CSS media query handle it
               })();
             `,
           }}
