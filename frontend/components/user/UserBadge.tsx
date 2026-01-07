@@ -18,16 +18,18 @@ const getBadgeIcon = (badgeType: BadgeType): string => {
     VOTER_100: '👑',
     COMMENTER_10: '💭',
     COMMENTER_50: '🗨️',
-    CONTRIBUTOR_10: '📝',
-    CONTRIBUTOR_50: '📚',
-    CONTRIBUTOR_100: '🏅',
+    DIFF_CREATOR_5: '📝',
+    DIFF_CREATOR_25: '📚',
     // Quality badges
     WELL_SOURCED: '📖',
     HIGH_ACCURACY: '✓',
     CONSENSUS_BUILDER: '🤝',
+    EDITOR: '✏️',
+    HELPFUL_COMMENTER: '👍',
     // Special badges
     EARLY_ADOPTER: '🌟',
-    WEEKLY_STREAK_7: '🔥',
+    ACTIVE_CONTRIBUTOR: '🔥',
+    WEEKLY_CONTRIBUTOR: '📅',
   };
   return iconMap[badgeType] || '🏆';
 };

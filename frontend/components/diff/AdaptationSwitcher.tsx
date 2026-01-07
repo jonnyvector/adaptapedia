@@ -102,7 +102,7 @@ export default function AdaptationSwitcher({
 
   // Don't render switcher if loading or only one adaptation
   if (loading || otherAdaptations.length === 0) {
-    return null;
+    return <></>;
   }
 
   return (

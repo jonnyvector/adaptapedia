@@ -29,6 +29,8 @@ export interface Work {
   wikidata_qid?: string;
   openlibrary_work_id?: string;
   cover_url?: string;
+  dominant_color?: string;
+  publisher?: string;
   average_rating?: number;
   ratings_count?: number;
   created_at: string;
@@ -67,6 +69,8 @@ export interface ScreenWork {
   backdrop_path?: string;
   dominant_color?: string;
   director?: string;
+  runtime?: number;
+  studio?: string;
   average_rating?: number;
   ratings_count?: number;
   primary_genre?: string;
@@ -177,6 +181,13 @@ export interface UserProfile {
   votes_count: number;
   comments_count: number;
   reputation_score: number;
+  badges?: UserBadge[];
+  stats?: {
+    total_votes: number;
+    total_comments: number;
+    total_diffs: number;
+    [key: string]: number;
+  };
 }
 
 export interface AuthResponse {
