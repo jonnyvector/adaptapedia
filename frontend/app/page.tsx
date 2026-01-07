@@ -173,24 +173,18 @@ export default async function Home(): Promise<JSX.Element> {
                 </div>
 
                 {/* Mini vote control */}
-                <div className={`flex flex-wrap items-center gap-1 text-[7px] sm:text-[9px]`}>
-                  <button className={`inline-flex items-center justify-center gap-0.5 px-1 py-0.5 font-bold bg-black dark:bg-white text-white dark:text-black border ${BORDERS.solid} rounded uppercase tracking-wide whitespace-nowrap`} style={{ fontFamily: FONTS.mono }}>
-                    <span>↑</span>
-                    <span className="hidden sm:inline">Accurate</span>
-                    <span className="sm:hidden">Acc</span>
-                    <span className="font-black">(21)</span>
+                <div className={`flex items-center gap-1 text-[8px] sm:text-[9px]`}>
+                  <button className={`inline-flex items-center justify-center gap-0.5 px-1.5 py-0.5 font-bold bg-black dark:bg-white text-white dark:text-black border ${BORDERS.solid} rounded uppercase tracking-wide`} style={{ fontFamily: FONTS.mono }}>
+                    <span>↑ Acc</span>
+                    <span className="hidden sm:inline">urate</span>
                   </button>
-                  <button className={`inline-flex items-center justify-center gap-0.5 px-1 py-0.5 font-bold ${TEXT.mutedStrong} border ${BORDERS.medium} rounded uppercase tracking-wide whitespace-nowrap`} style={{ fontFamily: FONTS.mono }}>
-                    <span>~</span>
-                    <span className="hidden sm:inline">Nuance</span>
-                    <span className="sm:hidden">Nua</span>
-                    <span className="font-black">(2)</span>
+                  <button className={`inline-flex items-center justify-center gap-0.5 px-1.5 py-0.5 font-bold ${TEXT.mutedStrong} border ${BORDERS.medium} rounded uppercase tracking-wide`} style={{ fontFamily: FONTS.mono }}>
+                    <span>~ Nua</span>
+                    <span className="hidden sm:inline">nce</span>
                   </button>
-                  <button className={`inline-flex items-center justify-center gap-0.5 px-1 py-0.5 font-bold ${TEXT.mutedStrong} border ${BORDERS.medium} rounded uppercase tracking-wide whitespace-nowrap`} style={{ fontFamily: FONTS.mono }}>
-                    <span>↓</span>
-                    <span className="hidden sm:inline">Disagree</span>
-                    <span className="sm:hidden">Dis</span>
-                    <span className="font-black">(1)</span>
+                  <button className={`inline-flex items-center justify-center gap-0.5 px-1.5 py-0.5 font-bold ${TEXT.mutedStrong} border ${BORDERS.medium} rounded uppercase tracking-wide`} style={{ fontFamily: FONTS.mono }}>
+                    <span>↓ Dis</span>
+                    <span className="hidden sm:inline">agree</span>
                   </button>
                 </div>
               </div>
@@ -218,22 +212,18 @@ export default async function Home(): Promise<JSX.Element> {
                 <div className="flex items-center justify-between mb-2 sm:mb-3">
                   <span className={`${TEXT.metadata} font-bold ${TEXT.mutedMedium} uppercase tracking-wide`} style={{ fontFamily: FONTS.mono }}>Spoiler Level</span>
                 </div>
-                <div className={`flex items-center gap-1 sm:gap-1.5 w-full text-[7px] sm:text-[9px]`}>
-                  <button className={`flex-1 inline-flex items-center justify-center gap-0.5 sm:gap-1 px-0.5 sm:px-1 py-0.5 font-bold bg-black dark:bg-white text-white dark:text-black border ${BORDERS.solid} rounded uppercase tracking-wide min-w-0`} style={{ fontFamily: FONTS.mono }}>
-                    <span className={`hidden sm:inline-block w-1.5 h-1.5 border ${BORDERS.medium} bg-white dark:bg-black flex-shrink-0`}></span>
-                    <span className="truncate">Safe</span>
+                <div className={`grid grid-cols-4 gap-1 w-full text-[8px] sm:text-[9px]`}>
+                  <button className={`inline-flex items-center justify-center px-1 py-1 font-bold bg-black dark:bg-white text-white dark:text-black border ${BORDERS.solid} rounded uppercase tracking-wide`} style={{ fontFamily: FONTS.mono }}>
+                    Safe
                   </button>
-                  <button className={`flex-1 inline-flex items-center justify-center gap-0.5 sm:gap-1 px-0.5 sm:px-1 py-0.5 font-bold ${TEXT.mutedStrong} border ${BORDERS.medium} rounded uppercase tracking-wide min-w-0`} style={{ fontFamily: FONTS.mono }}>
-                    <span className={`hidden sm:inline-block w-1.5 h-1.5 border ${BORDERS.medium} bg-black/20 dark:bg-white/20 flex-shrink-0`}></span>
-                    <span className="truncate">Book</span>
+                  <button className={`inline-flex items-center justify-center px-1 py-1 font-bold ${TEXT.mutedStrong} border ${BORDERS.medium} rounded uppercase tracking-wide`} style={{ fontFamily: FONTS.mono }}>
+                    Book
                   </button>
-                  <button className={`flex-1 inline-flex items-center justify-center gap-0.5 sm:gap-1 px-0.5 sm:px-1 py-0.5 font-bold ${TEXT.mutedStrong} border ${BORDERS.medium} rounded uppercase tracking-wide min-w-0`} style={{ fontFamily: FONTS.mono }}>
-                    <span className={`hidden sm:inline-block w-1.5 h-1.5 border ${BORDERS.medium} bg-black/20 dark:bg-white/20 flex-shrink-0`}></span>
-                    <span className="truncate">Screen</span>
+                  <button className={`inline-flex items-center justify-center px-1 py-1 font-bold ${TEXT.mutedStrong} border ${BORDERS.medium} rounded uppercase tracking-wide`} style={{ fontFamily: FONTS.mono }}>
+                    Scrn
                   </button>
-                  <button className={`flex-1 inline-flex items-center justify-center gap-0.5 sm:gap-1 px-0.5 sm:px-1 py-0.5 font-bold ${TEXT.mutedStrong} border ${BORDERS.medium} rounded uppercase tracking-wide min-w-0`} style={{ fontFamily: FONTS.mono }}>
-                    <span className={`hidden sm:inline-block w-1.5 h-1.5 border ${BORDERS.medium} bg-black/20 dark:bg-white/20 flex-shrink-0`}></span>
-                    <span className="truncate">All</span>
+                  <button className={`inline-flex items-center justify-center px-1 py-1 font-bold ${TEXT.mutedStrong} border ${BORDERS.medium} rounded uppercase tracking-wide`} style={{ fontFamily: FONTS.mono }}>
+                    All
                   </button>
                 </div>
                 <div className={`${TEXT.metadata} ${TEXT.mutedMedium} mt-3 space-y-1`} style={{ fontFamily: FONTS.mono }}>
