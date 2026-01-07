@@ -6,7 +6,7 @@ import { api } from '@/lib/api';
 import type { BrowseSections } from '@/lib/types';
 import ComparisonCard from '@/components/browse/ComparisonCard';
 import EmptyState from '@/components/ui/EmptyState';
-import { FONTS } from '@/lib/brutalist-design';
+import { FONTS, TEXT } from '@/lib/brutalist-design';
 
 export const metadata: Metadata = {
   title: 'Browse Comparisons - Adaptapedia',
@@ -37,14 +37,20 @@ export default async function BrowsePage(): Promise<JSX.Element> {
     sections.all_comparisons.length > 0;
 
   return (
-    <main className="min-h-screen">
-      <div className="container py-8 md:py-12">
+    <main className="min-h-screen font-mono">
+      <div className="container py-12 md:py-16">
         {/* Header */}
         <div className="mb-12">
-          <h1 className="mb-3 text-4xl md:text-5xl font-bold" style={{ fontFamily: FONTS.mono }}>
+          <h1
+            className={`text-4xl md:text-6xl font-black mb-6 tracking-tight ${TEXT.primary}`}
+           
+          >
             Browse Comparisons
           </h1>
-          <p className="text-base sm:text-lg text-muted max-w-2xl" style={{ fontFamily: FONTS.mono }}>
+          <p
+            className={`text-xl ${TEXT.mutedMedium} max-w-2xl`}
+           
+          >
             Explore book-to-screen adaptations with community-documented differences.
             Click any comparison to see what changed.
           </p>
@@ -61,8 +67,8 @@ export default async function BrowsePage(): Promise<JSX.Element> {
             {sections.featured.length > 0 && (
               <section>
                 <div className="mb-6">
-                  <h2 className="text-3xl md:text-4xl font-bold mb-2" style={{ fontFamily: FONTS.mono }}>Featured</h2>
-                  <p className="text-muted" style={{ fontFamily: FONTS.mono }}>
+                  <h2 className="text-3xl md:text-4xl font-bold mb-2">Featured</h2>
+                  <p className="text-muted">
                     Top comparisons with the most engagement
                   </p>
                 </div>
@@ -78,8 +84,8 @@ export default async function BrowsePage(): Promise<JSX.Element> {
             {sections.recently_updated.length > 0 && (
               <section>
                 <div className="mb-6">
-                  <h2 className="text-3xl md:text-4xl font-bold mb-2" style={{ fontFamily: FONTS.mono }}>Recently Updated</h2>
-                  <p className="text-muted" style={{ fontFamily: FONTS.mono }}>
+                  <h2 className="text-3xl md:text-4xl font-bold mb-2">Recently Updated</h2>
+                  <p className="text-muted">
                     Fresh activity in the last 48 hours
                   </p>
                 </div>
@@ -95,8 +101,8 @@ export default async function BrowsePage(): Promise<JSX.Element> {
             {sections.most_documented.length > 0 && (
               <section>
                 <div className="mb-6">
-                  <h2 className="text-3xl md:text-4xl font-bold mb-2" style={{ fontFamily: FONTS.mono }}>Most Documented</h2>
-                  <p className="text-muted" style={{ fontFamily: FONTS.mono }}>
+                  <h2 className="text-3xl md:text-4xl font-bold mb-2">Most Documented</h2>
+                  <p className="text-muted">
                     Comprehensive coverage with the most differences
                   </p>
                 </div>
@@ -112,8 +118,8 @@ export default async function BrowsePage(): Promise<JSX.Element> {
             {sections.trending.length > 0 && (
               <section>
                 <div className="mb-6">
-                  <h2 className="text-3xl md:text-4xl font-bold mb-2" style={{ fontFamily: FONTS.mono }}>Trending This Week</h2>
-                  <p className="text-muted" style={{ fontFamily: FONTS.mono }}>
+                  <h2 className="text-3xl md:text-4xl font-bold mb-2">Trending This Week</h2>
+                  <p className="text-muted">
                     Most active comparisons in the last 7 days
                   </p>
                 </div>
@@ -129,8 +135,8 @@ export default async function BrowsePage(): Promise<JSX.Element> {
             {sections.all_comparisons.length > 0 && (
               <section>
                 <div className="mb-6">
-                  <h2 className="text-3xl md:text-4xl font-bold mb-2" style={{ fontFamily: FONTS.mono }}>All Comparisons</h2>
-                  <p className="text-muted" style={{ fontFamily: FONTS.mono }}>
+                  <h2 className="text-3xl md:text-4xl font-bold mb-2">All Comparisons</h2>
+                  <p className="text-muted">
                     Browse all available book-to-screen adaptations
                   </p>
                 </div>

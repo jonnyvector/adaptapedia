@@ -9,6 +9,9 @@ const config: Config = {
   ],
   theme: {
     extend: {
+      fontFamily: {
+        mono: ['var(--font-jetbrains-mono)', 'monospace'],
+      },
       colors: {
         background: 'var(--bg)',
         foreground: 'var(--text)',

@@ -177,11 +177,11 @@ function HeaderContent(): JSX.Element {
           )}
 
           {/* Navigation & Actions */}
-          <nav className="flex items-center gap-1">
+          <nav className="flex items-center gap-1" style={{ alignItems: 'center' }}>
             {/* Main Navigation Links */}
             <Link
               href="/browse"
-              className={`hidden sm:inline ${TEXT.label} px-2 py-2 ${TEXT.mutedStrong} hover:text-black hover:dark:text-white transition-colors min-h-[40px] flex items-center font-bold ${monoUppercase}`}
+              className={`hidden sm:inline ${TEXT.label} px-2 py-1.5 ${TEXT.mutedStrong} hover:text-black hover:dark:text-white transition-colors flex items-center font-bold ${monoUppercase}`}
               style={{ fontFamily: FONTS.mono, letterSpacing: LETTER_SPACING.wide }}
             >
               Browse
@@ -190,26 +190,17 @@ function HeaderContent(): JSX.Element {
             {/* Catalog Link */}
             <Link
               href="/catalog"
-              className={`hidden sm:inline ${TEXT.label} px-2 py-2 ${TEXT.mutedStrong} hover:text-black hover:dark:text-white transition-colors min-h-[40px] flex items-center font-bold ${monoUppercase}`}
+              className={`hidden sm:inline ${TEXT.label} px-2 py-1.5 ${TEXT.mutedStrong} hover:text-black hover:dark:text-white transition-colors flex items-center font-bold ${monoUppercase}`}
               style={{ fontFamily: FONTS.mono, letterSpacing: LETTER_SPACING.wide }}
             >
               Catalog
-            </Link>
-
-            {/* Needs Help Link */}
-            <Link
-              href="/needs-help"
-              className={`hidden sm:inline ${TEXT.label} px-2 py-2 ${TEXT.mutedStrong} hover:text-black hover:dark:text-white transition-colors min-h-[40px] flex items-center font-bold ${monoUppercase}`}
-              style={{ fontFamily: FONTS.mono, letterSpacing: LETTER_SPACING.wide }}
-            >
-              Needs Help
             </Link>
 
             {/* Moderator Queue Link */}
             {isModerator && (
               <Link
                 href="/mod/queue"
-                className={`hidden sm:inline ${TEXT.label} px-2 py-2 ${TEXT.mutedStrong} hover:text-black hover:dark:text-white transition-colors min-h-[40px] flex items-center font-bold ${monoUppercase}`}
+                className={`hidden sm:inline ${TEXT.label} px-2 py-1.5 ${TEXT.mutedStrong} hover:text-black hover:dark:text-white transition-colors flex items-center font-bold ${monoUppercase}`}
                 style={{ fontFamily: FONTS.mono, letterSpacing: LETTER_SPACING.wide }}
                 title="Moderation Queue"
               >
@@ -220,7 +211,7 @@ function HeaderContent(): JSX.Element {
             {/* About Link */}
             <Link
               href="/about"
-              className={`hidden sm:inline ${TEXT.label} px-2 py-2 ${TEXT.mutedStrong} hover:text-black hover:dark:text-white transition-colors min-h-[40px] flex items-center font-bold ${monoUppercase}`}
+              className={`hidden sm:inline ${TEXT.label} px-2 py-1.5 ${TEXT.mutedStrong} hover:text-black hover:dark:text-white transition-colors flex items-center font-bold ${monoUppercase}`}
               style={{ fontFamily: FONTS.mono, letterSpacing: LETTER_SPACING.wide }}
             >
               About
@@ -263,7 +254,7 @@ function HeaderContent(): JSX.Element {
             ) : (
               <Link
                 href="/auth/login"
-                className={`px-3 py-1.5 border ${BORDERS.solid} bg-black dark:bg-white text-white dark:text-black hover:bg-white hover:dark:bg-black hover:text-black hover:dark:text-white font-bold transition-all ${TEXT.label} rounded-md ${monoUppercase}`}
+                className={`px-3 py-1.5 border ${BORDERS.solid} bg-black dark:bg-white text-white dark:text-black hover:bg-white hover:dark:bg-black hover:text-black hover:dark:text-white font-bold transition-all ${TEXT.label} rounded-md ${monoUppercase} flex items-center`}
                 style={{ fontFamily: FONTS.mono, letterSpacing: LETTER_SPACING.tight }}
               >
                 Login

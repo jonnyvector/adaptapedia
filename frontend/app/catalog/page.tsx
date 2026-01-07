@@ -3,6 +3,7 @@ import { Metadata } from 'next';
 // Force dynamic rendering - page uses client components with useSearchParams
 export const dynamic = 'force-dynamic';
 import CatalogClient from './CatalogClient';
+import { FONTS, TEXT } from '@/lib/brutalist-design';
 
 export const metadata: Metadata = {
   title: 'Full Catalog | Adaptapedia',
@@ -70,10 +71,18 @@ export default async function CatalogPage({
   const data = await getCatalogData(sort, order, filter);
 
   return (
-    <div className="container py-8">
+    <div className="container py-12 md:py-16 font-mono">
       <div className="mb-8">
-        <h1 className="text-4xl font-bold mb-3">Full Catalog</h1>
-        <p className="text-lg text-muted">
+        <h1
+          className={`text-4xl md:text-6xl font-black mb-6 tracking-tight ${TEXT.primary}`}
+         
+        >
+          Full Catalog
+        </h1>
+        <p
+          className={`text-xl ${TEXT.mutedMedium}`}
+         
+        >
           Browse all {data.count} books and their screen adaptations
         </p>
       </div>

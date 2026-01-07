@@ -4,6 +4,7 @@ import { useState, useMemo } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
 import { FilmIcon, TvIcon } from '@/components/ui/Icons';
+import { FONTS, LETTER_SPACING, BORDERS, TEXT, monoUppercase } from '@/lib/brutalist-design';
 
 interface CatalogBook {
   id: number;
@@ -113,29 +114,31 @@ export default function CatalogClient({
   const withoutCovers = initialData.results.filter((b) => !b.cover_url).length;
 
   return (
-    <div>
+    <div className="font-mono">
       {/* Filters and Search */}
-      <div className="card p-6 mb-8">
+      <div className={`border ${BORDERS.medium} p-6 mb-8 bg-white dark:bg-black`}>
         <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
           {/* Search */}
           <div>
-            <label className="block text-sm font-medium mb-2">Search</label>
+            <label className={`block ${TEXT.metadata} font-bold mb-2 ${monoUppercase}`}>Search</label>
             <input
               type="text"
               placeholder="Search books..."
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
-              className="input w-full"
+              className={`w-full px-3 py-2 ${TEXT.body} border ${BORDERS.medium} bg-white dark:bg-black text-black dark:text-white focus:outline-none focus:ring-0 focus:border-black focus:dark:border-white`}
+             
             />
           </div>
 
           {/* Sort By */}
           <div>
-            <label className="block text-sm font-medium mb-2">Sort By</label>
+            <label className={`block ${TEXT.metadata} font-bold mb-2 ${monoUppercase}`}>Sort By</label>
             <select
               value={sortBy}
               onChange={(e) => setSortBy(e.target.value)}
-              className="input w-full"
+              className={`w-full px-3 py-2 ${TEXT.body} border ${BORDERS.medium} bg-white dark:bg-black text-black dark:text-white focus:outline-none focus:ring-0 focus:border-black focus:dark:border-white`}
+             
             >
               <option value="title">Title</option>
               <option value="year">Year</option>
@@ -145,11 +148,12 @@ export default function CatalogClient({
 
           {/* Order */}
           <div>
-            <label className="block text-sm font-medium mb-2">Order</label>
+            <label className={`block ${TEXT.metadata} font-bold mb-2 ${monoUppercase}`}>Order</label>
             <select
               value={order}
               onChange={(e) => setOrder(e.target.value)}
-              className="input w-full"
+              className={`w-full px-3 py-2 ${TEXT.body} border ${BORDERS.medium} bg-white dark:bg-black text-black dark:text-white focus:outline-none focus:ring-0 focus:border-black focus:dark:border-white`}
+             
             >
               <option value="asc">Ascending</option>
               <option value="desc">Descending</option>
@@ -158,11 +162,12 @@ export default function CatalogClient({
 
           {/* Filter */}
           <div>
-            <label className="block text-sm font-medium mb-2">Filter</label>
+            <label className={`block ${TEXT.metadata} font-bold mb-2 ${monoUppercase}`}>Filter</label>
             <select
               value={filter}
               onChange={(e) => setFilter(e.target.value)}
-              className="input w-full"
+              className={`w-full px-3 py-2 ${TEXT.body} border ${BORDERS.medium} bg-white dark:bg-black text-black dark:text-white focus:outline-none focus:ring-0 focus:border-black focus:dark:border-white`}
+             
             >
               <option value="all">All ({initialData.count})</option>
               <option value="with-covers">With Covers ({withCovers})</option>
@@ -171,18 +176,19 @@ export default function CatalogClient({
           </div>
         </div>
 
-        <div className="mt-4 text-sm text-muted">
+        <div className={`mt-4 ${TEXT.secondary} ${TEXT.mutedMedium}`}>
           Showing {filteredBooks.length} of {initialData.count} books
         </div>
       </div>
 
       {/* Alphabetical Index */}
-      <div className="mb-6 flex flex-wrap gap-2">
+      <div className="mb-8 flex flex-wrap gap-2">
         {sortedLetters.map((letter) => (
           <a
             key={letter}
             href={`#${letter}`}
-            className="px-3 py-1 rounded bg-surface2 hover:bg-primary hover:text-white transition-colors text-sm font-medium"
+            className={`px-3 py-1.5 border ${BORDERS.medium} bg-white dark:bg-black hover:bg-black hover:dark:bg-white hover:text-white hover:dark:text-black transition-colors ${TEXT.body} ${TEXT.primary} font-bold ${monoUppercase}`}
+           
           >
             {letter}
           </a>
@@ -191,17 +197,20 @@ export default function CatalogClient({
 
       {/* Books grouped by letter */}
       {sortedLetters.map((letter) => (
-        <div key={letter} id={letter} className="mb-12">
-          <h2 className="text-3xl font-bold mb-6 pb-2 border-b border-border">
+        <div key={letter} id={letter} className="mb-16">
+          <h2
+            className={`text-4xl font-black mb-6 pb-3 border-b ${BORDERS.medium} tracking-tight ${TEXT.primary}`}
+           
+          >
             {letter}
           </h2>
 
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             {groupedBooks[letter].map((book) => (
-              <div key={book.id} className="card p-4 hover:shadow-lg transition-shadow">
+              <div key={book.id} className={`border ${BORDERS.medium} p-4 hover:border-black hover:dark:border-white transition-colors bg-white dark:bg-black`}>
                 <div className="flex gap-4">
                   {/* Book Cover */}
-                  <div className="flex-shrink-0 w-24 h-36 bg-surface2 rounded overflow-hidden relative">
+                  <div className={`flex-shrink-0 w-24 h-36 bg-stone-50 dark:bg-stone-950 border ${BORDERS.subtle} overflow-hidden relative`}>
                     {book.cover_url ? (
                       <Image
                         src={book.cover_url}
@@ -211,7 +220,7 @@ export default function CatalogClient({
                         sizes="96px"
                       />
                     ) : (
-                      <div className="w-full h-full flex items-center justify-center text-xs text-muted text-center p-2">
+                      <div className={`w-full h-full flex items-center justify-center ${TEXT.metadata} ${TEXT.mutedMedium} text-center p-2 ${monoUppercase}`}>
                         No Cover
                       </div>
                     )}
@@ -219,23 +228,23 @@ export default function CatalogClient({
 
                   {/* Book Info */}
                   <div className="flex-1 min-w-0">
-                    <h3 className="font-bold mb-1 leading-tight">
+                    <h3 className={`font-bold mb-1 leading-tight ${TEXT.body}`}>
                       <Link
                         href={`/book/${book.slug}`}
-                        className="hover:text-link transition-colors"
+                        className={`${TEXT.primary} hover:underline transition-colors`}
                       >
                         {book.title}
                       </Link>
                     </h3>
                     {book.author && (
-                      <p className="text-sm text-muted mb-1">{book.author}</p>
+                      <p className={`${TEXT.secondary} ${TEXT.mutedMedium} mb-1`}>{book.author}</p>
                     )}
-                    <p className="text-xs text-muted mb-3">{book.year}</p>
+                    <p className={`${TEXT.metadata} ${TEXT.mutedMedium} mb-3 ${monoUppercase}`}>{book.year}</p>
 
                     {/* Adaptations */}
                     {book.adaptation_count > 0 ? (
-                      <div className="space-y-1">
-                        <p className="text-xs font-semibold text-muted uppercase tracking-wide">
+                      <div className="space-y-1.5">
+                        <p className={`${TEXT.metadata} font-bold ${TEXT.mutedMedium} ${monoUppercase}`}>
                           {book.adaptation_count} Adaptation
                           {book.adaptation_count > 1 ? 's' : ''}
                         </p>
@@ -244,7 +253,8 @@ export default function CatalogClient({
                             <Link
                               key={adaptation.id}
                               href={`/compare/${book.slug}/${adaptation.slug}`}
-                              className="flex items-center gap-1.5 text-xs text-link hover:underline"
+                              className={`flex items-center gap-1.5 ${TEXT.secondary} ${TEXT.primary} hover:underline`}
+                             
                             >
                               {adaptation.type === 'MOVIE' ? (
                                 <FilmIcon className="w-3.5 h-3.5 flex-shrink-0" />
@@ -255,14 +265,14 @@ export default function CatalogClient({
                             </Link>
                           ))}
                           {book.adaptations.length > 3 && (
-                            <p className="text-xs text-muted">
+                            <p className={`${TEXT.secondary} ${TEXT.mutedMedium}`}>
                               +{book.adaptations.length - 3} more
                             </p>
                           )}
                         </div>
                       </div>
                     ) : (
-                      <p className="text-xs text-muted italic">No adaptations yet</p>
+                      <p className={`${TEXT.secondary} ${TEXT.mutedMedium}`}>No adaptations yet</p>
                     )}
                   </div>
                 </div>
@@ -273,7 +283,7 @@ export default function CatalogClient({
       ))}
 
       {filteredBooks.length === 0 && (
-        <div className="text-center py-12 text-muted">
+        <div className={`text-center py-12 ${TEXT.mutedMedium}`}>
           <p>No books found matching your search.</p>
         </div>
       )}
