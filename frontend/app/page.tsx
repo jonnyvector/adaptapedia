@@ -11,7 +11,8 @@ export const dynamic = 'force-dynamic';
 
 async function getFeaturedComparisons(): Promise<BrowseComparison[]> {
   try {
-    const res = await fetch('http://backend:8000/api/diffs/items/browse/', {
+    const API_URL = process.env.API_URL || 'http://localhost:8000/api';
+    const res = await fetch(`${API_URL}/diffs/items/browse/`, {
       next: { revalidate: 900 }, // Cache for 15 minutes
     });
 

@@ -38,9 +38,10 @@ async function getCatalogData(
   filter: string = 'all'
 ): Promise<CatalogResponse> {
   try {
+    const API_URL = process.env.API_URL || 'http://localhost:8000/api';
     const params = new URLSearchParams({ sort, order, filter });
     const res = await fetch(
-      `http://backend:8000/api/works/catalog/?${params}`,
+      `${API_URL}/works/catalog/?${params}`,
       {
         next: { revalidate: 3600 }, // Cache for 1 hour
       }
