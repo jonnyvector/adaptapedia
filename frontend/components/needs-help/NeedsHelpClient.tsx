@@ -159,7 +159,7 @@ export default function NeedsHelpClient() {
               </button>
               <Link
                 href="/browse"
-                className={`border ${BORDERS.subtle} bg-transparent hover:border-black hover:dark:border-white font-bold transition-all ${TEXT.secondary} ${RADIUS.control} inline-flex items-center justify-center px-4 py-2`}
+                className={`border ${BORDERS.subtle} bg-transparent text-black dark:text-white hover:border-black hover:dark:border-white font-bold transition-all ${TEXT.secondary} ${RADIUS.control} inline-flex items-center justify-center px-4 py-2`}
                 style={{ fontFamily: FONTS.mono, letterSpacing: LETTER_SPACING.normal }}
               >
                 BROWSE ALL
@@ -353,12 +353,7 @@ function CompactComparisonCard({
 
   return (
     <div className={`group relative border ${BORDERS.medium} ${RADIUS.control} hover:border-black hover:dark:border-white hover:shadow-sm transition-all duration-200 bg-stone-50 dark:bg-stone-950 overflow-hidden`}>
-      {/* Left border indicator */}
-      <div className={`absolute left-0 top-0 bottom-0 w-1 ${
-        needType === 'no_comments' ? 'bg-black dark:bg-white' : 'bg-rose-500'
-      }`} />
-
-      <div className="p-3 pl-4">
+      <div className="p-3">
         {/* Hero: Reason Chip with count */}
         <div className="mb-2">
           <span className={`inline-flex items-center gap-1.5 px-3 py-1.5 ${TEXT.secondary} font-bold ${RADIUS.control} ${reasonChip.color} shadow-sm`} style={{ fontFamily: FONTS.mono, letterSpacing: LETTER_SPACING.normal }}>
@@ -444,7 +439,7 @@ function CompactComparisonCard({
           <div className="flex items-center gap-2">
             <Link
               href={comparisonUrl}
-              className={`border ${BORDERS.solid} bg-transparent hover:bg-black hover:dark:bg-white hover:text-white hover:dark:text-black font-bold transition-all ${TEXT.secondary} ${RADIUS.control} flex-1 text-center justify-center inline-flex items-center gap-2 px-3 py-2`}
+              className={`border ${BORDERS.solid} bg-transparent text-black dark:text-white hover:bg-black hover:dark:bg-white hover:text-white hover:dark:text-black font-bold transition-all ${TEXT.secondary} ${RADIUS.control} flex-1 text-center justify-center inline-flex items-center gap-2 px-3 py-2`}
               style={{ fontFamily: FONTS.mono, letterSpacing: LETTER_SPACING.normal }}
               title="Review this comparison and add context to help others vote accurately"
             >

@@ -63,7 +63,7 @@ export default function MaskedDiffCard({
 
       {/* Blurred Preview */}
       <div className={`relative mb-4 overflow-hidden`}>
-        <div className="absolute inset-0 backdrop-blur-xl bg-stone-50/95 dark:bg-stone-950/95 z-10 flex items-center justify-center">
+        <div className="absolute inset-0 backdrop-blur-xl bg-stone-50 dark:bg-stone-950 z-10 flex items-center justify-center">
           <div className="text-center px-4">
             <div className="mb-2 flex justify-center" aria-hidden="true">
               <LockClosedIcon className={`w-12 h-12 ${TEXT.mutedMedium}`} />
@@ -71,7 +71,7 @@ export default function MaskedDiffCard({
             <p className={`${TEXT.secondary} font-bold ${TEXT.mutedMedium}`} style={{ fontFamily: FONTS.mono }}>Content Hidden</p>
           </div>
         </div>
-        <div className="filter blur-md select-none pointer-events-none p-4 bg-stone-100 dark:bg-stone-900" aria-hidden="true">
+        <div className="filter blur-md select-none pointer-events-none p-4 bg-stone-50 dark:bg-stone-950" aria-hidden="true">
           <h3 className={`text-base font-bold mb-2`} style={{ fontFamily: FONTS.mono }}>{diff.claim}</h3>
           {diff.detail && <p className={`${TEXT.secondary} ${TEXT.mutedMedium}`} style={{ fontFamily: FONTS.mono }}>{diff.detail.slice(0, 100)}...</p>}
         </div>

@@ -147,7 +147,7 @@ export default function SearchBar({
           }}
           placeholder={placeholder}
           autoFocus={autoFocus}
-          className={`w-full !pl-14 !pr-12 !py-3 sm:!py-3.5 ${TEXT.body} border ${BORDERS.medium} rounded-md focus:outline-none focus:border-black focus:dark:border-white bg-white dark:bg-black text-black dark:text-white placeholder:${TEXT.mutedLight}`}
+          className={`w-full !pl-14 !pr-12 !py-3 sm:!py-3.5 ${TEXT.body} border ${BORDERS.medium} rounded-md focus:outline-none focus:ring-0 focus:border-black focus:dark:border-white bg-white dark:bg-black text-black dark:text-white placeholder:${TEXT.mutedLight}`}
           style={{ fontFamily: FONTS.mono, letterSpacing: LETTER_SPACING.normal }}
           aria-label="Search"
         />

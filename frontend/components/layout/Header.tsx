@@ -143,7 +143,7 @@ export default function Header(): JSX.Element {
                     }
                   }}
                   placeholder="SEARCH BOOKS..."
-                  className={`w-full px-3 py-2 pr-10 ${TEXT.body} bg-white dark:bg-black text-black dark:text-white border ${BORDERS.medium} rounded-md focus:outline-none focus:border-black focus:dark:border-white placeholder:${TEXT.mutedLight} placeholder:uppercase min-h-[40px]`}
+                  className={`w-full px-3 py-2 pr-10 ${TEXT.body} bg-white dark:bg-black text-black dark:text-white border ${BORDERS.medium} rounded-md focus:outline-none focus:ring-0 focus:border-black focus:dark:border-white placeholder:${TEXT.mutedLight} placeholder:uppercase min-h-[40px]`}
                   style={{ fontFamily: FONTS.mono, letterSpacing: LETTER_SPACING.normal }}
                   aria-label="Search"
                 />
@@ -284,7 +284,7 @@ export default function Header(): JSX.Element {
                 onChange={(e) => setSearchQuery(e.target.value)}
                 onFocus={() => searchQuery.length >= 2 && setShowDropdown(true)}
                 placeholder="SEARCH BOOKS..."
-                className={`w-full px-3 py-2 ${TEXT.body} bg-white dark:bg-black text-black dark:text-white border ${BORDERS.medium} rounded-md focus:outline-none focus:border-black focus:dark:border-white placeholder:${TEXT.mutedLight} placeholder:uppercase min-h-[40px]`}
+                className={`w-full px-3 py-2 ${TEXT.body} bg-white dark:bg-black text-black dark:text-white border ${BORDERS.medium} rounded-md focus:outline-none focus:ring-0 focus:border-black focus:dark:border-white placeholder:${TEXT.mutedLight} placeholder:uppercase min-h-[40px]`}
                 style={{ fontFamily: FONTS.mono, letterSpacing: LETTER_SPACING.normal }}
                 aria-label="Search"
               />
