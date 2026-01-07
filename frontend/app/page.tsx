@@ -98,14 +98,16 @@ export default async function Home(): Promise<JSX.Element> {
 
       {/* Featured Comparisons */}
       <div className="container py-12 md:py-16">
-        <div className="mb-8 md:mb-12 flex items-end justify-between">
-          <div className="text-center flex-1">
+        <div className="mb-8 md:mb-12">
+          <div className="text-center mb-4">
             <h2 className={`text-3xl md:text-4xl font-bold mb-3 tracking-tight ${TEXT.primary}`} style={{ fontFamily: FONTS.mono }}>Popular comparisons</h2>
-            <p className={`text-lg ${TEXT.mutedMedium} uppercase tracking-wider`} style={{ fontFamily: FONTS.mono }}>Explore the differences between beloved books and their adaptations</p>
+            <p className={`text-base md:text-lg ${TEXT.mutedMedium} uppercase tracking-wider`} style={{ fontFamily: FONTS.mono }}>Explore the differences between beloved books and their adaptations</p>
           </div>
-          <Link href="/browse" className={`${TEXT.secondary} ${TEXT.primary} hover:underline font-bold transition-colors whitespace-nowrap uppercase tracking-wider`} style={{ fontFamily: FONTS.mono }}>
-            Browse all →
-          </Link>
+          <div className="text-center md:text-right">
+            <Link href="/browse" className={`${TEXT.secondary} ${TEXT.primary} hover:underline font-bold transition-colors uppercase tracking-wider`} style={{ fontFamily: FONTS.mono }}>
+              Browse all →
+            </Link>
+          </div>
         </div>
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
           {featuredComparisons.length > 0 ? (
