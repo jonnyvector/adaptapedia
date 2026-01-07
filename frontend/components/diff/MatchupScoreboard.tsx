@@ -321,7 +321,7 @@ export default function MatchupScoreboard({
   }
 
   return (
-    <div className="relative bg-white dark:bg-black border-0 sm:border sm:border-black/30 sm:dark:border-white/30 p-2 sm:p-6 md:p-10 overflow-visible">
+    <div className="relative bg-white dark:bg-black border-0 sm:border sm:border-black/30 sm:dark:border-white/30 p-0 sm:p-6 md:p-10 overflow-visible">
       {/* Bookmark button - top-right corner of hero */}
       <div className="absolute top-3 right-3 z-10">
         <BookmarkButton workId={workId} screenWorkId={screenWorkId} />
