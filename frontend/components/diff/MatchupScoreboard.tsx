@@ -307,7 +307,7 @@ export default function MatchupScoreboard({
   const renderArchiveHeader = () => (
     <div className="relative border-b border-black/10 dark:border-white/10 pb-2 mb-1">
       <div className="text-[10px] uppercase tracking-widest text-black/60 dark:text-white/60 text-center" style={{ fontFamily: 'JetBrains Mono, monospace', letterSpacing: '0.15em' }}>
-        ARCHIVE CARD • {work.year} • {work.author.split(' ').pop()?.toUpperCase()}
+        ARCHIVE CARD • {work.year} • {work.author?.split(' ').pop()?.toUpperCase()}
       </div>
     </div>
   );
