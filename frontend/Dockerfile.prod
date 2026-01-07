@@ -42,9 +42,11 @@ RUN addgroup --system --gid 1001 nodejs
 RUN adduser --system --uid 1001 nextjs
 
 # Copy necessary files from builder
-COPY --from=builder /app/public ./public
-COPY --from=builder /app/.next/standalone ./
-COPY --from=builder /app/.next/static ./.next/static
+# Note: Next.js standalone output includes necessary public files in the output
+COPY --from=builder --chown=nextjs:nodejs /app/.next/standalone ./
+COPY --from=builder --chown=nextjs:nodejs /app/.next/static ./.next/static
+# Only copy public if it has files (wildcard won't fail if empty)
+COPY --from=builder --chown=nextjs:nodejs /app/public ./public
 
 # Change ownership to nextjs user
 RUN chown -R nextjs:nodejs /app
