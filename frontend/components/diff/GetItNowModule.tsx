@@ -85,9 +85,9 @@ export default function GetItNowModule({ work, screenWork }: GetItNowModuleProps
       case 'bookshop':
         return `https://bookshop.org/search?keywords=${encodeURIComponent(work.title)}`;
       case 'amazon-print':
-        return `https://www.amazon.com/s?k=${encodeURIComponent(work.title)}&tag=YOUR_AFFILIATE_ID`;
+        return `https://www.amazon.com/s?k=${encodeURIComponent(work.title)}&tag=adaptapedia-20`;
       case 'kindle':
-        return `https://www.amazon.com/s?k=${encodeURIComponent(work.title)}&i=digital-text&tag=YOUR_AFFILIATE_ID`;
+        return `https://www.amazon.com/s?k=${encodeURIComponent(work.title)}&i=digital-text&tag=adaptapedia-20`;
       case 'audible':
         return `https://www.audible.com/search?keywords=${encodeURIComponent(work.title)}`;
       default:
