@@ -1,5 +1,8 @@
 'use client';
 
+// Force dynamic rendering - page uses client components with useSearchParams
+export const dynamic = 'force-dynamic';
+
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { useAuth } from '@/lib/auth-context';

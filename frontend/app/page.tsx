@@ -6,6 +6,9 @@ import PopularComparisons from '@/components/home/PopularComparisons';
 import type { BrowseComparison } from '@/lib/types';
 import { FONTS, BORDERS, TEXT, RADIUS } from '@/lib/brutalist-design';
 
+// Force dynamic rendering - page uses client components with useSearchParams
+export const dynamic = 'force-dynamic';
+
 async function getFeaturedComparisons(): Promise<BrowseComparison[]> {
   try {
     const res = await fetch('http://backend:8000/api/diffs/items/browse/', {

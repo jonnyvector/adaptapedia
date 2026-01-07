@@ -1,4 +1,7 @@
 import { Metadata } from 'next';
+
+// Force dynamic rendering - page uses client components with useSearchParams
+export const dynamic = 'force-dynamic';
 import CatalogClient from './CatalogClient';
 
 export const metadata: Metadata = {

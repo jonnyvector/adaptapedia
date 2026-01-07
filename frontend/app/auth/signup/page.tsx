@@ -1,5 +1,8 @@
 'use client';
 
+// Force dynamic rendering - page uses client components with useSearchParams
+export const dynamic = 'force-dynamic';
+
 import { Suspense } from 'react';
 import { useSearchParams } from 'next/navigation';
 import SignupForm from '@/components/auth/SignupForm';

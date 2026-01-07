@@ -1,4 +1,7 @@
 import { Metadata } from 'next';
+
+// Force dynamic rendering - page uses client components with useSearchParams
+export const dynamic = 'force-dynamic';
 import { api } from '@/lib/api';
 import type { BrowseSections } from '@/lib/types';
 import ComparisonCard from '@/components/browse/ComparisonCard';
