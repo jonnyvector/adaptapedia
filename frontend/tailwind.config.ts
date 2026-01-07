@@ -14,6 +14,9 @@ const config: Config = {
         DEFAULT: '1rem',  // 16px on mobile
         sm: '1.5rem',     // 24px on sm+
       },
+      screens: {
+        '2xl': '1152px',  // max-w-6xl equivalent
+      },
     },
     extend: {
       fontFamily: {
