@@ -43,7 +43,7 @@ export default function ComparisonCard({ comparison, showTrendingBadge = false }
             <img
               src={cover_url}
               alt={work_title}
-              className="absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+              className="absolute inset-0 w-full h-full object-cover"
             />
           ) : (
             <div className="absolute inset-0 flex items-center justify-center bg-surface2 text-muted text-xs">
@@ -89,7 +89,7 @@ export default function ComparisonCard({ comparison, showTrendingBadge = false }
             <img
               src={poster_url}
               alt={screen_work_title}
-              className="absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+              className="absolute inset-0 w-full h-full object-cover"
             />
           ) : (
             <div className="absolute inset-0 flex items-center justify-center bg-surface2 text-muted text-xs">
