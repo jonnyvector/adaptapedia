@@ -2,6 +2,13 @@
 const nextConfig = {
   reactStrictMode: true,
   output: 'standalone', // Required for Docker production builds
+
+  // Skip static page generation during build (pages render on-demand)
+  // This prevents build-time API calls that fail when backend isn't available
+  experimental: {
+    missingSuspenseWithCSRBailout: false,
+  },
+
   images: {
     domains: [
       'covers.openlibrary.org',
