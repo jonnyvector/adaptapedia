@@ -1,5 +1,6 @@
 'use client';
 
+import { Suspense } from 'react';
 import Link from 'next/link';
 import { useRouter, usePathname, useSearchParams } from 'next/navigation';
 import { useState, useEffect, useRef } from 'react';
@@ -13,7 +14,7 @@ import type { SearchWithAdaptationsResponse } from '@/lib/types';
 import { FONTS, LETTER_SPACING, BORDERS, TEXT, monoUppercase } from '@/lib/brutalist-design';
 import { XMarkIcon } from '@/components/ui/Icons';
 
-export default function Header(): JSX.Element {
+function HeaderContent(): JSX.Element {
   const router = useRouter();
   const pathname = usePathname();
   const searchParams = useSearchParams();
@@ -303,5 +304,23 @@ export default function Header(): JSX.Element {
         )}
       </div>
     </header>
+  );
+}
+
+export default function Header(): JSX.Element {
+  return (
+    <Suspense fallback={
+      <header className="w-full border-b-2 border-black dark:border-white bg-white dark:bg-black">
+        <div className="container mx-auto px-4 py-3">
+          <div className="flex items-center justify-between">
+            <Link href="/" className={`text-xl font-bold ${monoUppercase}`} style={{ fontFamily: FONTS.mono, letterSpacing: LETTER_SPACING.wider }}>
+              ADAPTAPEDIA
+            </Link>
+          </div>
+        </div>
+      </header>
+    }>
+      <HeaderContent />
+    </Suspense>
   );
 }

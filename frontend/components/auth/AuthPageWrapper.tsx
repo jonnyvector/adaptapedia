@@ -1,5 +1,6 @@
 'use client';
 
+import { Suspense } from 'react';
 import { useSearchParams } from 'next/navigation';
 import { useAuth } from '@/lib/auth-context';
 import { FONTS, LETTER_SPACING, TEXT, monoUppercase } from '@/lib/brutalist-design';
@@ -10,7 +11,7 @@ interface AuthPageWrapperProps {
   children: React.ReactNode;
 }
 
-export default function AuthPageWrapper({ title, subtitle, children }: AuthPageWrapperProps): JSX.Element {
+function AuthPageContent({ title, subtitle, children }: AuthPageWrapperProps): JSX.Element {
   const searchParams = useSearchParams();
   const { isAuthenticated } = useAuth();
   const redirectTo = searchParams.get('redirect') || searchParams.get('returnUrl') || '/';
@@ -35,5 +36,17 @@ export default function AuthPageWrapper({ title, subtitle, children }: AuthPageW
         {children}
       </div>
     </div>
+  );
+}
+
+export default function AuthPageWrapper(props: AuthPageWrapperProps): JSX.Element {
+  return (
+    <Suspense fallback={
+      <div className="min-h-screen flex items-center justify-center">
+        <p className={`${TEXT.mutedMedium}`} style={{ fontFamily: FONTS.mono }}>Loading...</p>
+      </div>
+    }>
+      <AuthPageContent {...props} />
+    </Suspense>
   );
 }

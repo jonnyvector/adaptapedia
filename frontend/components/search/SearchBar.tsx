@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect, useCallback, FormEvent, useRef } from 'react';
+import { Suspense, useState, useEffect, useCallback, FormEvent, useRef } from 'react';
 import { useRouter, useSearchParams, usePathname } from 'next/navigation';
 import { SearchIcon, XIcon } from './icons';
 import SearchDropdown from './SearchDropdown';
@@ -14,7 +14,7 @@ interface SearchBarProps {
   autoFocus?: boolean;
 }
 
-export default function SearchBar({
+function SearchBarContent({
   defaultValue = '',
   placeholder = 'Search books and adaptations...',
   autoFocus = false,
@@ -178,5 +178,25 @@ export default function SearchBar({
         )}
       </div>
     </form>
+  );
+}
+
+export default function SearchBar(props: SearchBarProps): JSX.Element {
+  return (
+    <Suspense fallback={
+      <form className="relative w-full" role="search">
+        <div className="relative">
+          <input
+            type="search"
+            placeholder={props.placeholder || 'Search books and adaptations...'}
+            disabled
+            className={`w-full !pl-14 !pr-12 !py-3 sm:!py-3.5 ${TEXT.body} border ${BORDERS.medium} rounded-md bg-white dark:bg-black text-black dark:text-white placeholder:${TEXT.mutedLight}`}
+            style={{ fontFamily: FONTS.mono, letterSpacing: LETTER_SPACING.normal }}
+          />
+        </div>
+      </form>
+    }>
+      <SearchBarContent {...props} />
+    </Suspense>
   );
 }
