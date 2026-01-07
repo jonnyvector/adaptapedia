@@ -254,7 +254,7 @@ function HeaderContent(): JSX.Element {
             ) : (
               <Link
                 href="/auth/login"
-                className={`px-2 py-0.5 sm:px-3 sm:py-1.5 border ${BORDERS.solid} bg-black dark:bg-white text-white dark:text-black hover:bg-white hover:dark:bg-black hover:text-black hover:dark:text-white font-bold transition-all ${TEXT.label} rounded-md ${monoUppercase} flex items-center`}
+                className={`px-2.5 py-1 sm:px-3 sm:py-1.5 border ${BORDERS.solid} bg-black dark:bg-white text-white dark:text-black hover:bg-white hover:dark:bg-black hover:text-black hover:dark:text-white font-bold transition-all ${TEXT.label} rounded-md ${monoUppercase} flex items-center`}
                 style={{ fontFamily: FONTS.mono, letterSpacing: LETTER_SPACING.tight }}
               >
                 Login
