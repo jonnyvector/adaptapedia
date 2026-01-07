@@ -11,7 +11,9 @@ export async function submitComparisonVote(
   workId: number,
   screenWorkId: number,
   preference: PreferenceChoice,
-  faithfulnessRating?: number | null
+  faithfulnessRating?: number | null,
+  hasReadBook: boolean = true,
+  hasWatchedAdaptation: boolean = true
 ) {
   try {
     const result = await api.comparisonVotes.submit({
@@ -19,6 +21,8 @@ export async function submitComparisonVote(
       screen_work: screenWorkId,
       preference,
       faithfulness_rating: faithfulnessRating || undefined,
+      has_read_book: hasReadBook,
+      has_watched_adaptation: hasWatchedAdaptation,
     });
 
     // Revalidate the comparison page to show updated stats
