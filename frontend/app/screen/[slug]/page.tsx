@@ -221,7 +221,7 @@ export default async function ScreenWorkPage({
                 <div className="space-y-6">
                   {adaptations.map((adaptation) => {
                     const book = adaptation.work_detail;
-                    const diffCount = adaptation.totalDiffCount || 0;
+                    const diffCount = adaptation.diffs?.length || 0;
                     const compareUrl = `/compare/${book.slug}/${screenWork.slug}`;
 
                     return (
