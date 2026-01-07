@@ -321,7 +321,7 @@ export default function MatchupScoreboard({
   }
 
   return (
-    <div className="relative bg-white dark:bg-black border border-black/30 dark:border-white/30 p-4 sm:p-6 md:p-10 overflow-visible">
+    <div className="relative bg-white dark:bg-black border border-black/30 dark:border-white/30 p-2 sm:p-6 md:p-10 overflow-visible">
       {/* Bookmark button - top-right corner of hero */}
       <div className="absolute top-3 right-3 z-10">
         <BookmarkButton workId={workId} screenWorkId={screenWorkId} />
@@ -623,7 +623,7 @@ export default function MatchupScoreboard({
 
         {/* MODULE 1: Community bar - shows if votes exist */}
         {hasVotes && (
-          <div className="border border-black/20 dark:border-white/20 bg-stone-50 dark:bg-stone-950 p-3 space-y-2">
+          <div className="border border-black/20 dark:border-white/20 bg-stone-50 dark:bg-stone-950 p-2 sm:p-3 space-y-2">
             {/* Community label */}
             <div className="text-[9px] uppercase tracking-widest text-black/60 dark:text-white/60" style={{ fontFamily: 'JetBrains Mono, monospace', letterSpacing: '0.12em' }}>
               COMMUNITY
@@ -659,7 +659,7 @@ export default function MatchupScoreboard({
         )}
 
         {/* MODULE 2: Action module - vote + faithfulness */}
-        <div className="border border-black/20 dark:border-white/20 bg-stone-50 dark:bg-stone-950 p-3 space-y-3">
+        <div className="border border-black/20 dark:border-white/20 bg-stone-50 dark:bg-stone-950 p-2 sm:p-3 space-y-3">
           {/* Vote section */}
           {!userVote && !showEditVote ? (
             <div className="space-y-1.5">
