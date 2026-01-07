@@ -284,7 +284,7 @@ export default function DiffItemCard({
 
         {!showError && (
           <div
-            className="inline-flex items-stretch gap-2 rounded-md overflow-hidden"
+            className="inline-flex flex-wrap items-stretch gap-1.5 sm:gap-2 rounded-md overflow-hidden"
             role="group"
             aria-label="Vote on this difference"
             title="Choose one: Accurate / Nuance / Disagree"
@@ -292,7 +292,7 @@ export default function DiffItemCard({
             <button
               onClick={() => handleVote('ACCURATE')}
               disabled={isVoting}
-              className={`inline-flex items-center justify-center gap-1.5 px-3 py-1.5 ${TEXT.metadata} font-bold border rounded-md transition-all ${
+              className={`inline-flex items-center justify-center gap-1 px-2 py-1.5 sm:gap-1.5 sm:px-3 ${TEXT.metadata} font-bold border rounded-md transition-all ${
                 userVote === 'ACCURATE'
                   ? `bg-black dark:bg-white ${BORDERS.solid} text-white dark:text-black`
                   : `bg-white dark:bg-black ${BORDERS.medium} ${TEXT.mutedStrong} hover:border-black dark:hover:border-white`
@@ -310,7 +310,7 @@ export default function DiffItemCard({
             <button
               onClick={() => handleVote('NEEDS_NUANCE')}
               disabled={isVoting}
-              className={`inline-flex items-center justify-center gap-1.5 px-3 py-1.5 ${TEXT.metadata} font-bold border rounded-md transition-all ${
+              className={`inline-flex items-center justify-center gap-1 px-2 py-1.5 sm:gap-1.5 sm:px-3 ${TEXT.metadata} font-bold border rounded-md transition-all ${
                 userVote === 'NEEDS_NUANCE'
                   ? `bg-black dark:bg-white ${BORDERS.solid} text-white dark:text-black`
                   : `bg-white dark:bg-black ${BORDERS.medium} ${TEXT.mutedStrong} hover:border-black dark:hover:border-white`
@@ -328,7 +328,7 @@ export default function DiffItemCard({
             <button
               onClick={() => handleVote('DISAGREE')}
               disabled={isVoting}
-              className={`inline-flex items-center justify-center gap-1.5 px-3 py-1.5 ${TEXT.metadata} font-bold border rounded-md transition-all ${
+              className={`inline-flex items-center justify-center gap-1 px-2 py-1.5 sm:gap-1.5 sm:px-3 ${TEXT.metadata} font-bold border rounded-md transition-all ${
                 userVote === 'DISAGREE'
                   ? `bg-black dark:bg-white ${BORDERS.solid} text-white dark:text-black`
                   : `bg-white dark:bg-black ${BORDERS.medium} ${TEXT.mutedStrong} hover:border-black dark:hover:border-white`

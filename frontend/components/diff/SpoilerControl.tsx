@@ -102,7 +102,7 @@ export default function SpoilerControl({
           </div>
 
           {/* Segmented Control Pills */}
-          <div className="inline-flex items-center gap-2">
+          <div className="inline-flex flex-wrap items-center gap-1.5 sm:gap-2">
             {preferences.map((pref) => {
               const isActive = currentPreference === pref.value;
               const Icon = pref.icon;
@@ -111,9 +111,9 @@ export default function SpoilerControl({
                   key={pref.value}
                   onClick={() => onPreferenceChange(pref.value)}
                   className={`
-                    relative px-3 sm:px-4 py-1.5 rounded-md ${TEXT.label} font-bold
+                    relative px-2 sm:px-4 py-1.5 rounded-md ${TEXT.label} font-bold
                     transition-all
-                    flex items-center gap-1.5 whitespace-nowrap border
+                    flex items-center gap-1 sm:gap-1.5 whitespace-nowrap border
                     ${
                       isActive
                         ? `bg-black dark:bg-white ${BORDERS.solid} text-white dark:text-black`
