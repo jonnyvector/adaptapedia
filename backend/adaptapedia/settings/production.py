@@ -13,16 +13,18 @@ CORS_ALLOW_CREDENTIALS = True
 # Use base middleware (disable cache middleware until Redis is verified)
 # MIDDLEWARE is inherited from base.py
 
-# Security settings
-SECURE_SSL_REDIRECT = True
+# Security settings (Railway handles SSL at edge, so disable SSL redirect)
+SECURE_SSL_REDIRECT = False  # Railway handles HTTPS
+SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')  # Trust Railway's proxy headers
 SESSION_COOKIE_SECURE = True
 CSRF_COOKIE_SECURE = True
 SECURE_BROWSER_XSS_FILTER = True
 SECURE_CONTENT_TYPE_NOSNIFF = True
 X_FRAME_OPTIONS = 'DENY'
-SECURE_HSTS_SECONDS = 31536000
-SECURE_HSTS_INCLUDE_SUBDOMAINS = True
-SECURE_HSTS_PRELOAD = True
+# HSTS disabled to avoid redirect loops with Railway's edge SSL
+# SECURE_HSTS_SECONDS = 31536000
+# SECURE_HSTS_INCLUDE_SUBDOMAINS = True
+# SECURE_HSTS_PRELOAD = True
 
 # Logging
 LOGGING = {
