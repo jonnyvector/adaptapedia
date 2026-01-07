@@ -72,23 +72,23 @@ export default async function Home(): Promise<JSX.Element> {
 
             {/* Simplified stats - inline proof */}
             <div className="flex flex-col items-center justify-center gap-3">
-              <div className={`flex items-center gap-6 ${TEXT.secondary} ${TEXT.mutedMedium}`} style={{ fontFamily: FONTS.mono }}>
-                <div className="flex items-center gap-1.5">
+              <div className={`flex flex-wrap items-center justify-center gap-3 sm:gap-6 ${TEXT.secondary} ${TEXT.mutedMedium}`} style={{ fontFamily: FONTS.mono }}>
+                <div className="flex items-center gap-1">
                   <div className={`text-lg font-black ${TEXT.primary}`}>2,185</div>
-                  <span className="uppercase tracking-wider">books</span>
+                  <span className="uppercase tracking-wider text-xs sm:text-sm">books</span>
                 </div>
-                <div className="w-1 h-1 bg-black/20 dark:bg-white/20"></div>
-                <div className="flex items-center gap-1.5">
+                <div className="w-1 h-1 bg-black/20 dark:bg-white/20 hidden sm:block"></div>
+                <div className="flex items-center gap-1">
                   <div className={`text-lg font-black ${TEXT.primary}`}>3,417</div>
-                  <span className="uppercase tracking-wider">adaptations</span>
+                  <span className="uppercase tracking-wider text-xs sm:text-sm">adaptations</span>
                 </div>
-                <div className="w-1 h-1 bg-black/20 dark:bg-white/20"></div>
-                <div className="flex items-center gap-1.5">
+                <div className="w-1 h-1 bg-black/20 dark:bg-white/20 hidden sm:block"></div>
+                <div className="flex items-center gap-1">
                   <div className={`text-lg font-black ${TEXT.primary}`}>12.8K</div>
-                  <span className="uppercase tracking-wider">differences</span>
+                  <span className="uppercase tracking-wider text-xs sm:text-sm">differences</span>
                 </div>
               </div>
-              <p className={`${TEXT.secondary} ${TEXT.mutedMedium} uppercase tracking-wider`} style={{ fontFamily: FONTS.mono }}>
+              <p className={`${TEXT.secondary} ${TEXT.mutedMedium} uppercase tracking-wider text-center px-4`} style={{ fontFamily: FONTS.mono }}>
                 Thousands of works are indexed — the community fills in the diffs.
               </p>
             </div>
