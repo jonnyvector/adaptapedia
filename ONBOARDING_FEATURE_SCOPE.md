@@ -5,10 +5,10 @@ Create a guided onboarding flow for new users (both social auth and traditional 
 
 ## User Flow
 
-### Step 1: Username Selection
+### Step 1: Username Selection (REQUIRED)
 **Trigger:** After successful authentication (social or traditional signup)
-- **For Social Auth:** User completes OAuth but hasn't chosen a username yet
-- **For Traditional Signup:** Optional - can be integrated into signup or post-signup
+- **For Social Auth:** User is created with temporary username (`google_<id>`, `facebook_<id>`), MUST choose real username before proceeding
+- **For Traditional Signup:** Username already chosen during signup, this step is skipped
 
 **UI/UX:**
 ```
@@ -26,6 +26,8 @@ Create a guided onboarding flow for new users (both social auth and traditional 
 │                                         │
 │  ✓ Available                           │
 │  ✗ Username already taken              │
+│  ✗ Username contains profanity         │
+│  ✗ Username is reserved                │
 │                                         │
 │          [Continue →]                   │
 └─────────────────────────────────────────┘
@@ -39,21 +41,26 @@ Create a guided onboarding flow for new users (both social auth and traditional 
 - Validation rules:
   - 3-20 characters
   - Alphanumeric + underscores only
-  - Case-insensitive uniqueness check
-- Skip button for social auth users who want to keep suggested username
+  - Case-insensitive uniqueness check (DB-level constraint)
+  - Reserved username blocklist (admin, support, moderator, api, adaptapedia, etc.)
+  - Basic profanity filter
+- NO skip button - username is required
 
 **Technical Requirements:**
-- New API endpoint: `POST /api/users/check-username/` (returns `{available: boolean, suggestions?: string[]}`)
+- API endpoint: `POST /api/users/me/username/check/` (requires auth, returns `{available: boolean, suggestions?: string[], error?: string}`)
+- API endpoint: `POST /api/users/me/username/` (requires auth, sets username)
 - Username generation service on backend
 - Debounced API calls (300ms delay)
+- Race condition handling: catch `IntegrityError` on username save
+- Rate limiting: 10 requests/minute per user
 
-### Step 2: Interest Quiz
+### Step 2: Interest Quiz (OPTIONAL - Skippable)
 **UI/UX:**
 ```
 ┌─────────────────────────────────────────┐
 │  Tell us what you like (2/3)           │
 │                                         │
-│  What genres interest you? (Select all)│
+│  What genres interest you? (Optional)  │
 │                                         │
 │  [✓] Fiction    [ ] Non-Fiction        │
 │  [✓] Fantasy    [ ] Mystery            │
@@ -66,12 +73,17 @@ Create a guided onboarding flow for new users (both social auth and traditional 
 │  ( ) Both equally                      │
 │  (•) Adaptations more than books       │
 │                                         │
-│     [← Back]        [Continue →]       │
+│  What interests you most?              │
+│  (•) Point out differences             │
+│  ( ) Discuss with others               │
+│  ( ) Just exploring                    │
+│                                         │
+│  [Skip]    [← Back]      [Continue →]  │
 └─────────────────────────────────────────┘
 ```
 
 **Questions:**
-1. **Genre Selection** (multi-select)
+1. **Genre Selection** (multi-select, OPTIONAL - minimum 0)
    - Fiction, Non-Fiction, Fantasy, Mystery, Sci-Fi, Romance, Horror, Biography, Drama, Historical, Thriller, Comedy
 
 2. **Preference Scale** (single-select)
@@ -79,48 +91,54 @@ Create a guided onboarding flow for new users (both social auth and traditional 
    - "I enjoy both equally"
    - "I prefer watching over reading"
 
-3. **Contribution Interest** (single-select)
-   - "I want to add new comparisons"
-   - "I want to point out differences"
-   - "I want to discuss with others"
-   - "I just want to explore"
+3. **Contribution Interest** (single-select) - CRITICAL for step 3 algorithm
+   - "Point out differences" → `ADD_DIFFS`
+   - "Discuss with others" → `DISCUSS`
+   - "Just exploring" → `EXPLORE`
 
 **Technical Requirements:**
 - New model: `UserPreferences`
   ```python
   class UserPreferences(models.Model):
       user = models.OneToOneField(User, on_delete=models.CASCADE, related_name='preferences')
-      genres = models.JSONField(default=list)  # List of genre strings
-      book_vs_screen = models.CharField(max_length=20)  # books/equal/screen
-      contribution_interest = models.CharField(max_length=50)
+      genres = ArrayField(models.CharField(max_length=50), default=list, blank=True)  # Postgres ArrayField
+      book_vs_screen = models.CharField(max_length=20, blank=True)  # books/equal/screen
+      contribution_interest = models.CharField(max_length=50, blank=True)
       completed_at = models.DateTimeField(auto_now_add=True)
-  ```
-- API endpoint: `POST /api/users/preferences/` (creates preferences)
-- Frontend: Multi-step form with progress indicator
 
-### Step 3: Suggested Comparisons
+      class Meta:
+          indexes = [
+              GinIndex(fields=['genres']),  # For efficient overlap queries
+          ]
+  ```
+- API endpoint: `POST /api/users/me/preferences/` (creates/updates preferences)
+- Frontend: Multi-step form with progress indicator
+- Skip button redirects to step 3 with default suggestions
+
+### Step 3: Suggested Comparisons (OPTIONAL - Skippable)
 **UI/UX:**
 ```
 ┌─────────────────────────────────────────┐
 │  Explore these comparisons (3/3)       │
 │                                         │
-│  Based on your interests:              │
+│  Perfect for adding differences:       │
+│  (or "Great for discussion:" / "Top picks:")
 │                                         │
 │  ┌───────────────────────────────────┐ │
 │  │ 📖 The Hunger Games → 🎬 Movie    │ │
-│  │ Fantasy • 1,234 differences       │ │
+│  │ Fantasy • 12 differences          │ │
 │  │ [Explore →]                       │ │
 │  └───────────────────────────────────┘ │
 │                                         │
 │  ┌───────────────────────────────────┐ │
 │  │ 📖 Harry Potter → 🎬 Series       │ │
-│  │ Fantasy • 3,456 differences       │ │
+│  │ Fantasy • 34 differences          │ │
 │  │ [Explore →]                       │ │
 │  └───────────────────────────────────┘ │
 │                                         │
 │  ┌───────────────────────────────────┐ │
 │  │ 📖 Normal People → 📺 Show        │ │
-│  │ Romance • 234 differences         │ │
+│  │ Romance • 23 differences          │ │
 │  │ [Explore →]                       │ │
 │  └───────────────────────────────────┘ │
 │                                         │
@@ -129,25 +147,20 @@ Create a guided onboarding flow for new users (both social auth and traditional 
 ```
 
 **Features:**
-- Show 3-5 comparisons based on:
-  - Selected genres
-  - Popular comparisons (high diff count + votes)
-  - Comparisons that need contributions (low diff count)
+- Show 3-5 comparisons based on **contribution intent** from Step 2:
+  - `ADD_DIFFS`: Show "needs help" (5-20 published diffs, popular titles)
+  - `DISCUSS`: Show high comment activity + recent activity
+  - `EXPLORE` or no preference: Show popular comparisons (30-100 diffs, high votes)
+- Filter by selected genres (if any)
+- Show default "Top picks" if user skipped Step 2
 - Each card links directly to comparison page
 - "Skip" button to go straight to homepage
 
 **Technical Requirements:**
-- New API endpoint: `GET /api/users/suggested-comparisons/` (uses preferences)
-- Algorithm:
-  ```python
-  def get_suggested_comparisons(user_preferences):
-      # 1. Filter works by genre preferences
-      # 2. Prioritize comparisons with:
-      #    - High engagement (votes + comments)
-      #    - Medium diff count (not empty, not overwhelming)
-      #    - Recent activity
-      # 3. Return 5 comparisons
-  ```
+- API endpoint: `GET /api/users/me/suggested-comparisons/` (uses preferences if available)
+- Intent-based ranking algorithm (see below)
+- Only show comparisons with **published, approved diffs** (no drafts/pending moderation)
+- Cache suggestions per intent+genre combo (15 minutes)
 - Track onboarding completion in user model
 
 ## Database Schema Changes
@@ -156,74 +169,202 @@ Create a guided onboarding flow for new users (both social auth and traditional 
 
 **UserPreferences**
 ```python
+from django.contrib.postgres.fields import ArrayField
+from django.contrib.postgres.indexes import GinIndex
+
 class UserPreferences(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE, related_name='preferences')
-    genres = models.JSONField(default=list)  # ["Fantasy", "Sci-Fi", "Romance"]
-    book_vs_screen = models.CharField(max_length=20, choices=[
-        ('BOOKS', 'Prefer Books'),
-        ('EQUAL', 'Enjoy Both Equally'),
-        ('SCREEN', 'Prefer Adaptations'),
-    ])
-    contribution_interest = models.CharField(max_length=50, choices=[
-        ('ADD_COMPARISONS', 'Add new comparisons'),
-        ('ADD_DIFFS', 'Point out differences'),
-        ('DISCUSS', 'Discuss with others'),
-        ('EXPLORE', 'Just exploring'),
-    ])
+    genres = ArrayField(
+        models.CharField(max_length=50),
+        default=list,
+        blank=True,
+        help_text="List of genre preferences"
+    )
+    book_vs_screen = models.CharField(
+        max_length=20,
+        blank=True,
+        choices=[
+            ('BOOKS', 'Prefer Books'),
+            ('EQUAL', 'Enjoy Both Equally'),
+            ('SCREEN', 'Prefer Adaptations'),
+        ]
+    )
+    contribution_interest = models.CharField(
+        max_length=50,
+        blank=True,
+        choices=[
+            ('ADD_DIFFS', 'Point out differences'),
+            ('DISCUSS', 'Discuss with others'),
+            ('EXPLORE', 'Just exploring'),
+        ]
+    )
     completed_at = models.DateTimeField(auto_now_add=True)
 
     class Meta:
         verbose_name_plural = "User preferences"
+        indexes = [
+            GinIndex(fields=['genres']),  # Efficient genre overlap queries
+        ]
+```
+
+**Reserved Usernames**
+```python
+# In users/constants.py or similar
+RESERVED_USERNAMES = {
+    'admin', 'administrator', 'support', 'moderator', 'mod',
+    'adaptapedia', 'api', 'root', 'system', 'null', 'undefined',
+    'me', 'user', 'users', 'account', 'accounts', 'settings',
+    'help', 'about', 'contact', 'privacy', 'terms', 'login',
+    'logout', 'signup', 'register', 'auth', 'oauth',
+}
+
+# Basic profanity filter (expand as needed)
+PROFANITY_BLOCKLIST = {
+    # Add common profanity - keep minimal for v1
+}
 ```
 
 ### Modified Models
 
 **User Model Updates**
 ```python
+from django.db.models.functions import Lower
+
 class User(AbstractUser):
     # ... existing fields ...
+
+    # Onboarding tracking
     onboarding_completed = models.BooleanField(default=False)
-    onboarding_step = models.IntegerField(default=0)  # 0=not started, 1=username, 2=quiz, 3=suggestions, 4=complete
+    onboarding_started_at = models.DateTimeField(null=True, blank=True)
+    onboarding_completed_at = models.DateTimeField(null=True, blank=True)
+    onboarding_step = models.IntegerField(
+        default=0,
+        choices=[
+            (0, 'Not Started'),
+            (1, 'Username Selection'),
+            (2, 'Interest Quiz'),
+            (3, 'Suggested Comparisons'),
+            (4, 'Complete'),
+        ]
+    )
+
+    class Meta:
+        constraints = [
+            models.UniqueConstraint(
+                Lower('username'),
+                name='unique_lower_username',
+                violation_error_message='Username already exists (case-insensitive)'
+            ),
+        ]
+        indexes = [
+            models.Index(fields=['username']),  # For lookups
+        ]
+```
+
+**Social Auth Integration**
+```python
+# When creating user from social auth, generate temporary username
+def generate_temp_username(provider, uid):
+    """Generate temporary username for social auth users."""
+    return f"{provider}_{uid[:8]}"  # e.g., "google_abc12345"
+
+# In social auth signal handler
+from allauth.socialaccount.signals import pre_social_login
+
+@receiver(pre_social_login)
+def populate_temp_username(sender, request, sociallogin, **kwargs):
+    if sociallogin.is_existing:
+        return
+
+    # Generate temporary username
+    user = sociallogin.user
+    if not user.username or user.username.startswith(sociallogin.account.provider):
+        user.username = generate_temp_username(
+            sociallogin.account.provider,
+            sociallogin.account.uid
+        )
 ```
 
 ## API Endpoints
 
+All onboarding endpoints use the `/api/users/me/` pattern for security and simplicity.
+
+### Current User Info
+```
+GET /api/users/me/
+Headers: Authorization: Bearer <token>
+Response: {
+  id: number,
+  username: string,
+  email: string,
+  onboarding_completed: boolean,
+  onboarding_step: number,
+  preferences?: {
+    genres: string[],
+    book_vs_screen: string,
+    contribution_interest: string
+  }
+}
+```
+
 ### Username Management
 ```
-POST /api/users/check-username/
+POST /api/users/me/username/check/
+Headers: Authorization: Bearer <token>
 Body: { username: string }
 Response: {
   available: boolean,
   suggestions?: string[],
-  error?: string
+  error?: string  // "reserved", "profanity", "invalid_format", "taken"
 }
+
+Rate Limit: 10 requests/minute per user
 ```
 
 ```
-POST /api/users/set-username/
+POST /api/users/me/username/
+Headers: Authorization: Bearer <token>
 Body: { username: string }
 Response: {
   success: boolean,
   user: UserSerializer
 }
+Error Responses:
+  - 400: { error: "Username validation failed", detail: "..." }
+  - 409: { error: "Username already taken" }  // Race condition caught
+
+Implementation Notes:
+- Validate against reserved usernames
+- Validate against profanity filter
+- Validate format (3-20 chars, alphanumeric + underscores)
+- Catch IntegrityError and return 409 for race conditions
+- Update onboarding_step to 2 on success
 ```
 
 ### Preferences
 ```
-POST /api/users/preferences/
+POST /api/users/me/preferences/
+Headers: Authorization: Bearer <token>
 Body: {
-  genres: string[],
-  book_vs_screen: string,
-  contribution_interest: string
+  genres: string[],  // Optional, can be empty array
+  book_vs_screen: string,  // Optional
+  contribution_interest: string  // Optional but recommended
 }
 Response: {
   success: boolean,
   preferences: UserPreferencesSerializer
 }
+
+Implementation Notes:
+- Validate genres against allowed list
+- Create or update UserPreferences (upsert)
+- Update onboarding_step to 3 on success
 ```
 
+### Suggested Comparisons
 ```
-GET /api/users/suggested-comparisons/
+GET /api/users/me/suggested-comparisons/
+Headers: Authorization: Bearer <token>
 Response: {
   comparisons: [
     {
@@ -233,21 +374,37 @@ Response: {
       screen_work_title: string,
       genres: string[],
       diff_count: number,
-      vote_count: number
+      vote_count: number,
+      comment_count: number
     }
-  ]
+  ],
+  intent: string  // "needs_help", "discussion", "popular"
 }
+
+Implementation Notes:
+- Use preferences.contribution_interest to determine algorithm
+- Filter by preferences.genres if available
+- Fallback to "popular" if no preferences
+- Cache results per (intent, genres) combo for 15 minutes
 ```
 
 ### Onboarding Progress
 ```
-PATCH /api/users/onboarding-progress/
-Body: { step: number }
+PATCH /api/users/me/
+Headers: Authorization: Bearer <token>
+Body: {
+  onboarding_step?: number,
+  onboarding_completed?: boolean
+}
 Response: {
   success: boolean,
-  current_step: number,
-  completed: boolean
+  onboarding_step: number,
+  onboarding_completed: boolean
 }
+
+Implementation Notes:
+- Set onboarding_completed_at when onboarding_completed=true
+- Set onboarding_started_at on first step if null
 ```
 
 ## Frontend Components
@@ -285,9 +442,18 @@ OAuth → Backend callback → Frontend /auth/social-callback → Store tokens �
 
 **New:**
 ```
-OAuth → Backend callback → Frontend /auth/social-callback → Store tokens →
-  IF (!user.onboarding_completed) → Redirect to /onboarding
-  ELSE → Redirect to /
+1. OAuth → Google/Facebook
+2. Backend callback:
+   - Create user with temp username (e.g., "google_abc12345")
+   - Set onboarding_completed = False
+   - Set onboarding_step = 1 (username required)
+   - Generate JWT tokens
+3. Frontend /auth/social-callback:
+   - Store tokens
+   - Fetch user data (GET /api/users/me/)
+   - IF (username starts with provider_) → Redirect to /onboarding (step 1 - username)
+   - ELSE IF (!onboarding_completed) → Redirect to /onboarding (resume)
+   - ELSE → Redirect to /
 ```
 
 ### Traditional Signup Flow
@@ -298,9 +464,25 @@ Signup form → API call → Store tokens → Redirect to /
 
 **New:**
 ```
-Signup form → API call → Store tokens →
-  IF (!user.onboarding_completed) → Redirect to /onboarding
-  ELSE → Redirect to /
+1. Signup form (includes username, email, password)
+2. API call:
+   - Create user with chosen username
+   - Set onboarding_completed = False
+   - Set onboarding_step = 2 (username already set, skip to quiz)
+3. Frontend:
+   - Store tokens
+   - Redirect to /onboarding (step 2 - quiz)
+   - User can skip quiz and suggestions if they want
+
+Note: Traditional signup users already have username, so step 1 is automatically complete.
+```
+
+### Homepage Access
+**New persistent banner:**
+```
+IF (user.isAuthenticated && !user.onboarding_completed):
+  Show banner: "Complete your profile to get personalized recommendations [Continue setup →]"
+  Link to /onboarding (resumes at current step)
 ```
 
 ## Username Generation Logic
@@ -343,46 +525,81 @@ def generate_username_suggestions(base_name=None, count=5):
 
 ## Comparison Recommendation Algorithm
 
-### Ranking Factors
+### Intent-Based Ranking
 ```python
-def get_suggested_comparisons(user_preferences, limit=5):
-    """Get personalized comparison suggestions."""
+def get_suggested_comparisons(user_preferences=None, limit=5):
+    """Get personalized comparison suggestions based on user intent."""
 
-    # Start with all comparisons that have diffs
-    comparisons = get_comparisons_with_diffs()
+    # Determine intent
+    intent = user_preferences.contribution_interest if user_preferences else 'EXPLORE'
+
+    # Start with comparisons that have published, approved diffs only
+    comparisons = get_comparisons_with_published_diffs()
 
     # Filter by genre if preferences exist
-    if user_preferences.genres:
+    if user_preferences and user_preferences.genres:
         comparisons = comparisons.filter(
             Q(work__genres__overlap=user_preferences.genres) |
             Q(screen_work__genres__overlap=user_preferences.genres)
         )
 
-    # Score each comparison
+    # Score based on intent
     scored_comparisons = []
     for comp in comparisons:
         score = 0
+        diff_count = comp.published_diff_count
 
-        # Factor 1: Diff count (sweet spot: 10-50 diffs)
-        diff_count = comp.diff_count
-        if 10 <= diff_count <= 50:
-            score += 10
-        elif 5 <= diff_count < 10:
-            score += 5
-        elif diff_count > 50:
-            score += 3
+        if intent == 'ADD_DIFFS':
+            # Show "needs help" - low-to-medium diffs on popular titles
+            if 5 <= diff_count <= 20:
+                score += 20  # Sweet spot for contribution
+            elif diff_count < 5:
+                score += 10  # Really needs help
+            else:
+                score += 2   # Already well-covered
 
-        # Factor 2: Recent activity (diffs added in last 30 days)
-        recent_diffs = comp.diffs.filter(created_at__gte=timezone.now() - timedelta(days=30)).count()
-        score += min(recent_diffs, 10)
+            # Boost popular titles (users know them)
+            score += min(comp.view_count / 100, 15)
 
-        # Factor 3: Vote engagement
-        total_votes = comp.total_vote_count
-        score += min(total_votes / 10, 15)
+        elif intent == 'DISCUSS':
+            # Show high comment activity + recent discussions
+            score += min(comp.comment_count / 5, 20)
 
-        # Factor 4: Genre match bonus
-        genre_overlap = set(comp.work.genres or []) & set(user_preferences.genres or [])
-        score += len(genre_overlap) * 5
+            # Boost recent comment activity
+            recent_comments = comp.comments.filter(
+                created_at__gte=timezone.now() - timedelta(days=7)
+            ).count()
+            score += min(recent_comments * 2, 15)
+
+            # Medium diff count (enough content to discuss)
+            if 10 <= diff_count <= 100:
+                score += 10
+
+        else:  # EXPLORE or no preference
+            # Show popular, well-developed comparisons
+            if 30 <= diff_count <= 100:
+                score += 20  # Well-developed
+            elif 20 <= diff_count < 30:
+                score += 15
+            else:
+                score += 5
+
+            # Vote engagement matters for "explore"
+            score += min(comp.total_vote_count / 10, 15)
+
+            # Recent activity indicates interesting content
+            recent_diffs = comp.diffs.filter(
+                created_at__gte=timezone.now() - timedelta(days=30)
+            ).count()
+            score += min(recent_diffs, 10)
+
+        # Genre match bonus (applies to all intents)
+        if user_preferences and user_preferences.genres:
+            genre_overlap = (
+                set(comp.work.genres or []) &
+                set(user_preferences.genres or [])
+            )
+            score += len(genre_overlap) * 5
 
         scored_comparisons.append((comp, score))
 
@@ -394,28 +611,59 @@ def get_suggested_comparisons(user_preferences, limit=5):
 ## Testing Requirements
 
 ### Backend Tests
-- `test_username_availability_check`
-- `test_username_generation_unique`
-- `test_username_validation_rules`
-- `test_preferences_creation`
-- `test_suggested_comparisons_genre_filter`
-- `test_suggested_comparisons_scoring`
-- `test_onboarding_progress_tracking`
+
+**Username Management:**
+- `test_username_availability_check` - Basic availability check
+- `test_username_case_insensitive_uniqueness` - "User" and "user" both taken
+- `test_username_reserved_words` - Reject reserved usernames
+- `test_username_profanity_filter` - Reject profane usernames
+- `test_username_format_validation` - Length, characters, etc.
+- `test_username_generation_unique` - Generated suggestions are unique
+- **`test_username_concurrent_creation`** - Two users try to set same username simultaneously (race condition)
+- `test_username_integrity_error_handling` - IntegrityError returns clean 409 response
+
+**Permissions:**
+- **`test_username_endpoints_require_auth`** - Unauthenticated requests rejected
+- **`test_cannot_modify_other_user_data`** - Can only access /me/ endpoints for self
+
+**Preferences:**
+- `test_preferences_creation` - Create new preferences
+- `test_preferences_update` - Update existing preferences (upsert)
+- `test_preferences_genre_validation` - Invalid genres rejected
+- `test_preferences_optional_fields` - Can save with empty genres
+
+**Suggestions:**
+- `test_suggested_comparisons_add_diffs_intent` - Shows "needs help" comparisons
+- `test_suggested_comparisons_discuss_intent` - Shows high comment activity
+- `test_suggested_comparisons_explore_intent` - Shows popular comparisons
+- `test_suggested_comparisons_genre_filter` - Filters by user genres
+- `test_suggested_comparisons_no_preferences` - Works with no preferences (fallback)
+- `test_suggested_comparisons_only_published` - Never shows draft/pending diffs
+
+**Onboarding Flow:**
+- `test_onboarding_progress_tracking` - Step progression works
+- `test_onboarding_timestamps` - started_at and completed_at set correctly
+- `test_social_auth_temp_username` - Temp username generated on social login
 
 ### Frontend Tests
-- `test_username_step_validation`
-- `test_username_step_suggestions`
-- `test_quiz_step_navigation`
-- `test_quiz_step_validation`
-- `test_suggestions_step_display`
-- `test_onboarding_progress_indicator`
-- `test_onboarding_skip_functionality`
+- `test_username_step_validation` - Client-side validation
+- `test_username_step_suggestions` - Shows and applies suggestions
+- `test_username_step_debounce` - API calls debounced
+- `test_username_step_required` - Cannot skip
+- `test_quiz_step_navigation` - Back/forward navigation
+- `test_quiz_step_optional` - Can skip quiz
+- `test_quiz_step_genre_multiselect` - Multiple genres selectable
+- `test_suggestions_step_display` - Shows intent-based comparisons
+- `test_suggestions_step_optional` - Can skip suggestions
+- `test_onboarding_progress_indicator` - 1/3, 2/3, 3/3 display
+- `test_onboarding_exit_resume` - Can exit and resume later
 
 ### E2E Tests
-- `test_full_onboarding_flow_social_auth`
-- `test_full_onboarding_flow_traditional_signup`
-- `test_onboarding_resume_after_exit`
-- `test_onboarding_suggestions_clickthrough`
+- `test_full_onboarding_flow_social_auth` - Complete flow from OAuth to homepage
+- `test_full_onboarding_flow_traditional_signup` - Username already set, skip step 1
+- `test_onboarding_resume_after_exit` - Exit on step 2, resume on step 2
+- `test_onboarding_username_race_condition` - Two tabs try same username
+- `test_onboarding_suggestions_clickthrough` - Click suggestion → comparison page
 
 ## Security Considerations
 
@@ -508,12 +756,20 @@ def get_suggested_comparisons(user_preferences, limit=5):
 
 ## Success Metrics
 
-1. **Completion Rate:** % of users who complete full onboarding
-2. **Step Drop-off:** % who exit at each step
+### Onboarding Completion
+1. **Completion Rate:** % of users who complete full onboarding (target: >70%)
+2. **Step Drop-off:** % who exit at each step (identify friction points)
 3. **Username Generation:** % who use suggested vs custom username
-4. **Suggestion Engagement:** % who click through to suggested comparisons
-5. **Contribution Rate:** % of onboarded users who add diffs within 7 days
-6. **Time to First Contribution:** Average time from signup to first diff
+4. **Quiz Completion:** % who complete quiz vs skip (measures engagement)
+5. **Suggestion Engagement:** % who click through to suggested comparisons (target: >40%)
+
+### User Activation
+6. **Time to First Click:** Average time from signup to first comparison click
+7. **Time to First Vote:** Average time from signup to first vote (key activation metric)
+8. **Time to First Comment:** Average time from signup to first comment
+9. **Time to First Diff:** Average time from signup to first diff contribution
+10. **7-Day Contribution Rate:** % of onboarded users who add diffs within 7 days (target: >15%)
+11. **7-Day Return Rate:** % of onboarded users who return within 7 days (retention)
 
 ## Future Enhancements
 
@@ -535,17 +791,219 @@ def get_suggested_comparisons(user_preferences, limit=5):
    - Points for contribution milestones
    - Leaderboard by genre
 
-## Open Questions
+## Decisions Made
 
-1. Should username be required for social auth users, or allow them to use display name initially?
-2. Should we force onboarding completion, or allow skipping entirely?
-3. What's the minimum number of genres a user must select (0, 1, or 3+)?
-4. Should we show comparisons that need help (low diff count) or popular ones (high engagement)?
-5. Should onboarding be a modal overlay or dedicated page?
+### Originally Open Questions - Now Resolved
+
+1. **Should username be required for social auth users?**
+   - ✅ **YES** - Username is required. Social auth users get temp username (`google_123`) and MUST choose real one in step 1.
+
+2. **Should we force onboarding completion?**
+   - ✅ **Partial** - Username is REQUIRED (step 1). Quiz and suggestions are OPTIONAL (can skip).
+   - Show persistent banner if incomplete, but don't block site access.
+
+3. **What's the minimum number of genres a user must select?**
+   - ✅ **0** - Genres are completely optional. Can select none, some, or many.
+
+4. **Should we show comparisons that need help or popular ones?**
+   - ✅ **Both, based on intent:**
+     - `ADD_DIFFS` intent → Show "needs help" (5-20 diffs, popular titles)
+     - `DISCUSS` intent → Show high comment activity
+     - `EXPLORE` intent → Show popular, well-developed comparisons (30-100 diffs)
+
+5. **Should onboarding be a modal overlay or dedicated page?**
+   - ✅ **Dedicated page** (`/onboarding`) - More reliable, easier to test, clearer focus.
+   - Can render modal-like UI inside the page if desired.
+
+## v1 Implementation Checklist
+
+This checklist maps directly to implementation tasks. Each task should be a separate commit (or small PR).
+
+### Phase 1: Database & Backend Foundation (2-3 days)
+
+**Database Schema:**
+- [ ] Create `users/constants.py` with `RESERVED_USERNAMES` and `PROFANITY_BLOCKLIST`
+- [ ] Update `User` model:
+  - [ ] Add `onboarding_completed`, `onboarding_started_at`, `onboarding_completed_at`, `onboarding_step`
+  - [ ] Add `UniqueConstraint(Lower('username'))` for case-insensitive uniqueness
+  - [ ] Add index on username field
+- [ ] Create `UserPreferences` model:
+  - [ ] Use `ArrayField` for genres
+  - [ ] Add `GinIndex` on genres field
+  - [ ] All fields optional except `user` foreign key
+- [ ] Create and run migrations
+- [ ] Test migrations are reversible (`migrate <app> zero`)
+
+**Username Validation Service:**
+- [ ] Create `users/services/username_service.py`
+- [ ] Implement `validate_username(username)` - format, length, reserved, profanity
+- [ ] Implement `check_username_availability(username)` - case-insensitive check
+- [ ] Implement `generate_username_suggestions(base_name=None, count=5)`
+- [ ] Implement `generate_temp_username(provider, uid)` for social auth
+- [ ] Write unit tests for all validation logic
+
+**Social Auth Integration:**
+- [ ] Update social auth signal handler to create temp usernames
+- [ ] Test social login creates user with `google_<uid>` format
+- [ ] Test `onboarding_step = 1` and `onboarding_completed = False` on social signup
+
+### Phase 2: API Endpoints (2 days)
+
+**Username Endpoints:**
+- [ ] `POST /api/users/me/username/check/`
+  - [ ] Require authentication
+  - [ ] Validate username format
+  - [ ] Check availability (case-insensitive)
+  - [ ] Return suggestions
+  - [ ] Add rate limiting (10/min per user)
+  - [ ] Write tests (including concurrency test)
+- [ ] `POST /api/users/me/username/`
+  - [ ] Require authentication
+  - [ ] Validate username (all rules)
+  - [ ] Catch `IntegrityError` and return 409 on race condition
+  - [ ] Update `onboarding_step` to 2 on success
+  - [ ] Write tests (including race condition test)
+
+**Preferences Endpoints:**
+- [ ] `POST /api/users/me/preferences/`
+  - [ ] Require authentication
+  - [ ] Validate genres against allowed list
+  - [ ] Upsert preferences (update if exists, create if not)
+  - [ ] Update `onboarding_step` to 3 on success
+  - [ ] Write tests
+
+**Suggestions Endpoint:**
+- [ ] `GET /api/users/me/suggested-comparisons/`
+  - [ ] Require authentication
+  - [ ] Implement intent-based ranking algorithm
+  - [ ] Filter by genres if available
+  - [ ] Only return published/approved diffs
+  - [ ] Cache results (15 minutes per intent+genre combo)
+  - [ ] Write tests for all three intents
+
+**User Info Endpoint:**
+- [ ] Update `GET /api/users/me/`
+  - [ ] Include `onboarding_completed`, `onboarding_step`
+  - [ ] Include nested `preferences` if exists
+- [ ] `PATCH /api/users/me/`
+  - [ ] Allow updating `onboarding_step`, `onboarding_completed`
+  - [ ] Set timestamps appropriately
+
+### Phase 3: Frontend Components (2-3 days)
+
+**Shared Components:**
+- [ ] Create `components/onboarding/OnboardingLayout.tsx`
+  - [ ] Progress indicator (1/3, 2/3, 3/3)
+  - [ ] Back/Continue navigation
+  - [ ] Brutalist styling consistent with site
+- [ ] Create `components/onboarding/ProgressIndicator.tsx`
+
+**Step 1: Username:**
+- [ ] Create `components/onboarding/UsernameStep.tsx`
+  - [ ] Input field with real-time validation
+  - [ ] Debounced API calls (300ms)
+  - [ ] Display suggestions (clickable)
+  - [ ] Display validation errors (reserved, profanity, format, taken)
+  - [ ] Loading states
+  - [ ] No skip button (required)
+- [ ] Write component tests
+
+**Step 2: Quiz:**
+- [ ] Create `components/onboarding/QuizStep.tsx`
+  - [ ] Genre multi-select (checkboxes)
+  - [ ] Preference radio buttons
+  - [ ] Contribution intent radio buttons
+  - [ ] Skip button
+  - [ ] Back/Continue navigation
+- [ ] Write component tests
+
+**Step 3: Suggestions:**
+- [ ] Create `components/onboarding/SuggestionsStep.tsx`
+  - [ ] Fetch suggestions from API
+  - [ ] Display 3-5 comparison cards
+  - [ ] Intent-based heading ("Perfect for adding differences" / "Great for discussion" / "Top picks")
+  - [ ] Each card links to comparison page
+  - [ ] Skip button → "Get Started!" completes onboarding
+- [ ] Write component tests
+
+**Main Page:**
+- [ ] Create `app/onboarding/page.tsx`
+  - [ ] Check current step from user data
+  - [ ] Render appropriate step component
+  - [ ] Handle step transitions
+  - [ ] OnboardingContext for state management
+  - [ ] Handle "exit and resume" flow
+- [ ] Add loading state while fetching user data
+
+### Phase 4: Integration (1-2 days)
+
+**Social Auth Flow:**
+- [ ] Update `app/auth/social-callback/page.tsx`
+  - [ ] Check if username is temp (`username.startsWith('google_')`)
+  - [ ] Redirect to `/onboarding` if temp username or `!onboarding_completed`
+  - [ ] Redirect to `/` if onboarding complete
+
+**Traditional Signup Flow:**
+- [ ] Update `components/auth/SignupForm.tsx`
+  - [ ] After signup success, redirect to `/onboarding` (step 2, since username exists)
+  - [ ] NOT to homepage
+
+**Persistent Banner:**
+- [ ] Update `components/layout/Header.tsx` or similar
+  - [ ] Show banner if `user.isAuthenticated && !user.onboarding_completed`
+  - [ ] Banner text: "Complete your profile to get personalized recommendations"
+  - [ ] Click → `/onboarding` (resumes at current step)
+  - [ ] Dismissible (but shows again on next page load until completed)
+
+**API Client:**
+- [ ] Add onboarding endpoints to `lib/api.ts`:
+  - [ ] `users.me.getInfo()`
+  - [ ] `users.me.checkUsername(username)`
+  - [ ] `users.me.setUsername(username)`
+  - [ ] `users.me.setPreferences(preferences)`
+  - [ ] `users.me.getSuggestedComparisons()`
+  - [ ] `users.me.updateOnboarding(data)`
+
+### Phase 5: Testing & Polish (1 day)
+
+**E2E Tests:**
+- [ ] `test_full_onboarding_flow_social_auth`
+  - [ ] OAuth login → username step → quiz → suggestions → homepage
+  - [ ] Verify onboarding_completed = true
+- [ ] `test_full_onboarding_flow_traditional_signup`
+  - [ ] Signup → quiz (skip username) → suggestions → homepage
+- [ ] `test_onboarding_resume_after_exit`
+  - [ ] Exit on step 2 → click banner → resume on step 2
+- [ ] `test_username_race_condition`
+  - [ ] Two tabs try to set same username → one succeeds, one fails gracefully
+
+**Polish:**
+- [ ] Loading states on all async operations
+- [ ] Error states with retry options
+- [ ] Smooth transitions between steps
+- [ ] Mobile responsive design (test on small screens)
+- [ ] Keyboard navigation (tab order, enter to submit)
+- [ ] ARIA labels for accessibility
+- [ ] Empty states (e.g., no suggestions available)
+
+**Documentation:**
+- [ ] Add onboarding flow diagram to docs
+- [ ] Update API documentation
+- [ ] Add inline code comments for complex logic
+
+### Post-Launch Monitoring
+
+- [ ] Set up analytics tracking for all metrics
+- [ ] Monitor completion rates by step
+- [ ] Track time-to-activation metrics
+- [ ] A/B test intent-based suggestions vs generic
+- [ ] Gather user feedback via optional survey at end
 
 ## Next Steps
 
-1. Review and approve scope
-2. Create database migration for UserPreferences model
-3. Implement Phase 1 (Username Step)
-4. Iterate based on user feedback
+1. ✅ Scope approved
+2. Create feature branch: `feature/user-onboarding`
+3. Start with Phase 1 (Database & Backend Foundation)
+4. Daily commits with clear messages
+5. Create PR after Phase 3 or 4 for review
+6. Iterate based on feedback
