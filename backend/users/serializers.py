@@ -2,7 +2,7 @@
 from rest_framework import serializers
 from django.contrib.auth.password_validation import validate_password
 from django.db.models import Count, Q
-from .models import User, Bookmark, UserBadge, ReputationEvent, Notification
+from .models import User, Bookmark, UserBadge, ReputationEvent, Notification, UserPreferences
 
 
 class UserSerializer(serializers.ModelSerializer):
@@ -200,8 +200,21 @@ class LoginSerializer(serializers.Serializer):
     )
 
 
+class UserPreferencesSerializer(serializers.ModelSerializer):
+    """Serializer for UserPreferences model."""
+
+    class Meta:
+        """Meta options for UserPreferencesSerializer."""
+
+        model = UserPreferences
+        fields = ['genres', 'book_vs_screen', 'contribution_interest', 'completed_at']
+        read_only_fields = ['completed_at']
+
+
 class UserDetailSerializer(serializers.ModelSerializer):
     """Serializer for authenticated user details."""
+
+    preferences = UserPreferencesSerializer(read_only=True)
 
     class Meta:
         """Meta options for UserDetailSerializer."""
@@ -215,8 +228,12 @@ class UserDetailSerializer(serializers.ModelSerializer):
             'reputation_points',
             'spoiler_preference',
             'date_joined',
+            'onboarding_completed',
+            'onboarding_step',
+            'onboarding_started_at',
+            'preferences',
         ]
-        read_only_fields = ['id', 'role', 'reputation_points', 'date_joined']
+        read_only_fields = ['id', 'role', 'reputation_points', 'date_joined', 'onboarding_started_at']
 
 
 class BookmarkSerializer(serializers.ModelSerializer):

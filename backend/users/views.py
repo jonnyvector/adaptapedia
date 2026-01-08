@@ -2,11 +2,13 @@
 from rest_framework import viewsets, permissions, decorators, response, status
 from rest_framework.views import APIView
 from rest_framework.pagination import PageNumberPagination
+from rest_framework.throttling import UserRateThrottle
 from rest_framework_simplejwt.tokens import RefreshToken
 from django.contrib.auth import authenticate
-from django.db import models
+from django.db import models, IntegrityError
 from django.shortcuts import get_object_or_404
-from .models import User, Bookmark, Notification
+from django.utils import timezone
+from .models import User, Bookmark, Notification, UserPreferences
 from .serializers import (
     UserSerializer,
     UserProfileSerializer,
@@ -15,6 +17,7 @@ from .serializers import (
     UserDetailSerializer,
     BookmarkSerializer,
     NotificationSerializer,
+    UserPreferencesSerializer,
 )
 
 
@@ -382,3 +385,221 @@ class NotificationViewSet(viewsets.ReadOnlyModelViewSet):
             {'message': f'{count} notifications marked as read', 'count': count},
             status=status.HTTP_200_OK
         )
+
+
+# Onboarding Views
+
+class UsernameCheckThrottle(UserRateThrottle):
+    """Rate limit for username checks."""
+
+    rate = '10/min'
+
+
+@decorators.api_view(['POST'])
+@decorators.permission_classes([permissions.IsAuthenticated])
+@decorators.throttle_classes([UsernameCheckThrottle])
+def check_username(request):
+    """
+    Check username availability and return suggestions.
+
+    POST /api/users/me/username/check/
+    Body: { "username": "desired_username" }
+    """
+    from .services.username_service import (
+        validate_username,
+        check_username_availability,
+        generate_username_suggestions,
+    )
+
+    username = request.data.get('username', '').strip()
+
+    if not username:
+        return response.Response(
+            {'error': 'Username is required'},
+            status=status.HTTP_400_BAD_REQUEST
+        )
+
+    # Validate username
+    is_valid, error_code = validate_username(username)
+
+    if not is_valid:
+        error_messages = {
+            'invalid_format': 'Invalid username format',
+            'reserved': 'Username is reserved',
+            'profanity': 'Username contains inappropriate content',
+        }
+        return response.Response({
+            'available': False,
+            'error': error_code,
+            'message': error_messages.get(error_code, 'Invalid username'),
+            'suggestions': generate_username_suggestions(username, count=5)
+        })
+
+    # Check availability
+    available = check_username_availability(username)
+
+    return response.Response({
+        'available': available,
+        'suggestions': [] if available else generate_username_suggestions(username, count=5)
+    })
+
+
+@decorators.api_view(['POST'])
+@decorators.permission_classes([permissions.IsAuthenticated])
+def set_username(request):
+    """
+    Set username for current user.
+
+    POST /api/users/me/username/
+    Body: { "username": "chosen_username" }
+    """
+    from .services.username_service import (
+        validate_username,
+        check_username_availability,
+    )
+
+    username = request.data.get('username', '').strip()
+    user = request.user
+
+    if not username:
+        return response.Response(
+            {'error': 'Username is required'},
+            status=status.HTTP_400_BAD_REQUEST
+        )
+
+    # Validate username
+    is_valid, error_code = validate_username(username)
+    if not is_valid:
+        return response.Response(
+            {'error': 'Username validation failed', 'detail': error_code},
+            status=status.HTTP_400_BAD_REQUEST
+        )
+
+    # Check availability
+    if not check_username_availability(username):
+        return response.Response(
+            {'error': 'Username already taken'},
+            status=status.HTTP_409_CONFLICT
+        )
+
+    # Set username and update onboarding state
+    try:
+        user.username = username
+        if user.onboarding_step < 2:
+            user.onboarding_step = 2
+        if not user.onboarding_started_at:
+            user.onboarding_started_at = timezone.now()
+        user.save()
+    except IntegrityError:
+        # Race condition: username was taken between check and save
+        return response.Response(
+            {'error': 'Username already taken'},
+            status=status.HTTP_409_CONFLICT
+        )
+
+    serializer = UserDetailSerializer(user)
+    return response.Response({
+        'success': True,
+        'user': serializer.data
+    })
+
+
+@decorators.api_view(['POST'])
+@decorators.permission_classes([permissions.IsAuthenticated])
+def set_preferences(request):
+    """
+    Create or update user preferences.
+
+    POST /api/users/me/preferences/
+    Body: {
+        "genres": ["Fantasy", "Sci-Fi"],
+        "book_vs_screen": "EQUAL",
+        "contribution_interest": "ADD_DIFFS"
+    }
+    """
+    user = request.user
+
+    # Get or create preferences
+    preferences, created = UserPreferences.objects.get_or_create(user=user)
+
+    serializer = UserPreferencesSerializer(preferences, data=request.data, partial=True)
+    if serializer.is_valid():
+        serializer.save()
+
+        # Update onboarding state
+        if user.onboarding_step < 3:
+            user.onboarding_step = 3
+            user.save()
+
+        return response.Response({
+            'success': True,
+            'preferences': serializer.data
+        })
+
+    return response.Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+
+@decorators.api_view(['GET'])
+@decorators.permission_classes([permissions.IsAuthenticated])
+def suggested_comparisons(request):
+    """
+    Get personalized comparison suggestions based on user preferences.
+
+    GET /api/users/me/suggested-comparisons/
+    """
+    user = request.user
+
+    # Get user preferences if they exist
+    try:
+        preferences = user.preferences
+    except UserPreferences.DoesNotExist:
+        preferences = None
+
+    # TODO: Implement intent-based ranking algorithm
+    # For now, return mock data structure
+
+    intent = preferences.contribution_interest if preferences else 'EXPLORE'
+
+    return response.Response({
+        'comparisons': [],  # Will be implemented with actual comparison data
+        'intent': intent
+    })
+
+
+@decorators.api_view(['PATCH'])
+@decorators.permission_classes([permissions.IsAuthenticated])
+def update_onboarding(request):
+    """
+    Update onboarding progress.
+
+    PATCH /api/users/me/onboarding/
+    Body: {
+        "onboarding_step": 3,
+        "onboarding_completed": true
+    }
+    """
+    user = request.user
+
+    if 'onboarding_step' in request.data:
+        user.onboarding_step = int(request.data['onboarding_step'])
+
+    if 'onboarding_completed' in request.data:
+        # Convert to boolean (handles string 'true'/'false' from some clients)
+        completed = request.data['onboarding_completed']
+        if isinstance(completed, str):
+            user.onboarding_completed = completed.lower() in ('true', '1', 'yes')
+        else:
+            user.onboarding_completed = bool(completed)
+        if user.onboarding_completed and not user.onboarding_completed_at:
+            user.onboarding_completed_at = timezone.now()
+
+    if not user.onboarding_started_at:
+        user.onboarding_started_at = timezone.now()
+
+    user.save()
+
+    return response.Response({
+        'success': True,
+        'onboarding_step': user.onboarding_step,
+        'onboarding_completed': user.onboarding_completed
+    })

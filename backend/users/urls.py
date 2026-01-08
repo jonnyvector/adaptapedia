@@ -9,6 +9,11 @@ from .views import (
     CurrentUserView,
     BookmarkViewSet,
     NotificationViewSet,
+    check_username,
+    set_username,
+    set_preferences,
+    suggested_comparisons,
+    update_onboarding,
 )
 
 # Router for users (at /api/users/<username>)
@@ -29,6 +34,12 @@ urlpatterns = [
     path('login/', LoginView.as_view(), name='login'),
     path('logout/', LogoutView.as_view(), name='logout'),
     path('me/', CurrentUserView.as_view(), name='current-user'),
+    # Onboarding endpoints
+    path('me/username/check/', check_username, name='check-username'),
+    path('me/username/', set_username, name='set-username'),
+    path('me/preferences/', set_preferences, name='set-preferences'),
+    path('me/suggested-comparisons/', suggested_comparisons, name='suggested-comparisons'),
+    path('me/onboarding/', update_onboarding, name='update-onboarding'),
     # Notification endpoints
     path('', include(notification_router.urls)),
     # Bookmark endpoints (must come before user router to avoid conflicts)

@@ -160,6 +160,9 @@ export interface User {
   reputation_points: number;
   spoiler_preference: string;
   date_joined: string;
+  onboarding_completed?: boolean;
+  onboarding_step?: number;
+  preferences?: UserPreferences;
   permissions?: {
     can_edit_diffs: boolean;
     can_merge_diffs: boolean;
@@ -541,4 +544,31 @@ export interface NeedsHelpResponse {
   needs_differences: NeedsHelpComparison[];
   most_disputed: NeedsHelpComparison[];
   no_comments: NeedsHelpComparison[];
+}
+
+// Onboarding types
+
+export interface UserPreferences {
+  genres: string[];
+  book_vs_screen: 'BOOKS' | 'EQUAL' | 'SCREEN';
+  contribution_interest: 'ADD_DIFFS' | 'DISCUSS' | 'EXPLORE';
+  completed_at?: string;
+}
+
+export interface UsernameCheckResponse {
+  available: boolean;
+  suggestions?: string[];
+  error?: string;
+  message?: string;
+}
+
+export interface SuggestedComparison {
+  work_slug: string;
+  work_title: string;
+  screen_work_slug: string;
+  screen_work_title: string;
+  genres: string[];
+  diff_count: number;
+  vote_count: number;
+  comment_count: number;
 }
