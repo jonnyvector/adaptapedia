@@ -20,6 +20,11 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('api/token/', TokenObtainPairView.as_view(), name='token_obtain_pair'),
     path('api/token/refresh/', TokenRefreshView.as_view(), name='token_refresh'),
+    # Social authentication
+    path('api/auth/', include('dj_rest_auth.urls')),
+    path('api/auth/registration/', include('dj_rest_auth.registration.urls')),
+    path('api/auth/social/', include('allauth.socialaccount.urls')),
+    # App endpoints
     path('api/works/', include('works.urls')),
     path('api/screen/', include('screen.urls')),
     path('api/diffs/', include('diffs.urls')),
