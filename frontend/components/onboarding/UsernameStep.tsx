@@ -77,11 +77,19 @@ export default function UsernameStep({ onComplete }: UsernameStepProps): JSX.Ele
       </p>
 
       <div className="mb-4">
+        <label htmlFor="username-input" className="sr-only">
+          Username
+        </label>
         <input
+          id="username-input"
           type="text"
           value={username}
           onChange={(e) => setUsername(e.target.value)}
           placeholder="Enter username"
+          aria-label="Choose your username"
+          aria-describedby="username-feedback"
+          aria-invalid={!!error}
+          aria-required="true"
           className={`w-full px-4 py-3 ${TEXT.body} border ${
             error
               ? 'border-red-500 dark:border-red-400'
@@ -92,20 +100,30 @@ export default function UsernameStep({ onComplete }: UsernameStepProps): JSX.Ele
           style={{ fontFamily: FONTS.mono }}
         />
 
-        <div className="mt-2 min-h-[24px] flex items-center gap-2">
-          {checking && <LoadingSpinner size="sm" />}
+        <div
+          id="username-feedback"
+          className="mt-2 min-h-[24px] flex items-center gap-2"
+          aria-live="polite"
+          aria-atomic="true"
+        >
+          {checking && (
+            <div className="flex items-center gap-2">
+              <LoadingSpinner size="sm" />
+              <span className="text-sm" style={{ fontFamily: FONTS.mono }}>Checking availability...</span>
+            </div>
+          )}
           {!checking && error && (
-            <p className="text-sm text-red-600 dark:text-red-400" style={{ fontFamily: FONTS.mono }}>
+            <p className="text-sm text-red-600 dark:text-red-400" role="alert" style={{ fontFamily: FONTS.mono }}>
               ✗ {error}
             </p>
           )}
           {!checking && checkResult?.available && (
-            <p className="text-sm text-green-600 dark:text-green-400" style={{ fontFamily: FONTS.mono }}>
+            <p className="text-sm text-green-600 dark:text-green-400" role="status" style={{ fontFamily: FONTS.mono }}>
               ✓ Available
             </p>
           )}
           {!checking && checkResult && !checkResult.available && checkResult.message && (
-            <p className="text-sm text-red-600 dark:text-red-400" style={{ fontFamily: FONTS.mono }}>
+            <p className="text-sm text-red-600 dark:text-red-400" role="alert" style={{ fontFamily: FONTS.mono }}>
               ✗ {checkResult.message}
             </p>
           )}

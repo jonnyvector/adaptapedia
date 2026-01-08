@@ -27,6 +27,9 @@ export default function Toast({ message, type = 'success', duration = 4000, onCl
 
   return (
     <div
+      role="alert"
+      aria-live="assertive"
+      aria-atomic="true"
       className={`fixed bottom-4 right-4 z-50 flex items-center gap-3 px-4 py-3 bg-black dark:bg-white border ${BORDERS.solid} rounded-md animate-slide-in-up`}
       style={{
         animation: 'slideInUp 0.3s ease-out',
@@ -34,7 +37,7 @@ export default function Toast({ message, type = 'success', duration = 4000, onCl
         width: 'auto',
       }}
     >
-      <div className="flex items-center justify-center font-bold flex-shrink-0 text-white dark:text-black">
+      <div className="flex items-center justify-center font-bold flex-shrink-0 text-white dark:text-black" aria-hidden="true">
         {icon}
       </div>
       <div className="flex-1 min-w-0">
@@ -43,7 +46,7 @@ export default function Toast({ message, type = 'success', duration = 4000, onCl
       <button
         onClick={onClose}
         className="flex-shrink-0 text-white/80 dark:text-black/80 hover:text-white hover:dark:text-black transition-colors"
-        aria-label="Close"
+        aria-label="Close notification"
       >
         <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />

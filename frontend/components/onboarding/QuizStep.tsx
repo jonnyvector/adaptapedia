@@ -36,82 +36,100 @@ export default function QuizStep({ onComplete, onSkip }: QuizStepProps): JSX.Ele
       </h2>
 
       {/* Genres */}
-      <div className="mb-8">
-        <label className={`block ${TEXT.secondary} font-bold mb-3 ${monoUppercase}`} style={{ fontFamily: FONTS.mono }}>
+      <fieldset className="mb-8">
+        <legend className={`block ${TEXT.secondary} font-bold mb-3 ${monoUppercase}`} style={{ fontFamily: FONTS.mono }}>
           What genres interest you? (Optional)
-        </label>
-        <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
-          {GENRE_OPTIONS.map((genre) => (
-            <button
-              key={genre}
-              onClick={() => toggleGenre(genre)}
-              className={`px-4 py-3 border ${BORDERS.medium} rounded-md font-bold transition-colors ${
-                selectedGenres.includes(genre)
-                  ? 'bg-black dark:bg-white text-white dark:text-black border-black dark:border-white'
-                  : 'bg-white dark:bg-black hover:bg-gray-100 hover:dark:bg-gray-900'
-              }`}
-              style={{ fontFamily: FONTS.mono }}
-            >
-              {selectedGenres.includes(genre) && '✓ '}
-              {genre}
-            </button>
-          ))}
+        </legend>
+        <div className="grid grid-cols-2 sm:grid-cols-3 gap-3" role="group" aria-label="Genre selection">
+          {GENRE_OPTIONS.map((genre) => {
+            const isSelected = selectedGenres.includes(genre);
+            return (
+              <button
+                key={genre}
+                type="button"
+                role="checkbox"
+                aria-checked={isSelected}
+                onClick={() => toggleGenre(genre)}
+                className={`px-4 py-3 border ${BORDERS.medium} rounded-md font-bold transition-colors ${
+                  isSelected
+                    ? 'bg-black dark:bg-white text-white dark:text-black border-black dark:border-white'
+                    : 'bg-white dark:bg-black hover:bg-gray-100 hover:dark:bg-gray-900'
+                }`}
+                style={{ fontFamily: FONTS.mono }}
+              >
+                <span aria-hidden="true">{isSelected && '✓ '}</span>
+                {genre}
+              </button>
+            );
+          })}
         </div>
-      </div>
+      </fieldset>
 
       {/* Book vs Screen */}
-      <div className="mb-8">
-        <label className={`block ${TEXT.secondary} font-bold mb-3 ${monoUppercase}`} style={{ fontFamily: FONTS.mono }}>
+      <fieldset className="mb-8">
+        <legend className={`block ${TEXT.secondary} font-bold mb-3 ${monoUppercase}`} style={{ fontFamily: FONTS.mono }}>
           What do you prefer?
-        </label>
-        <div className="space-y-2">
+        </legend>
+        <div className="space-y-2" role="radiogroup" aria-label="Book versus screen preference">
           {[
             { value: 'BOOKS' as const, label: 'I love books more than adaptations' },
             { value: 'EQUAL' as const, label: 'I enjoy both equally' },
             { value: 'SCREEN' as const, label: 'I prefer watching over reading' },
-          ].map(({ value, label }) => (
-            <button
-              key={value}
-              onClick={() => setBookVsScreen(value)}
-              className={`w-full px-4 py-3 border ${BORDERS.medium} rounded-md text-left font-bold transition-colors ${
-                bookVsScreen === value
-                  ? 'bg-black dark:bg-white text-white dark:text-black border-black dark:border-white'
-                  : 'bg-white dark:bg-black hover:bg-gray-100 hover:dark:bg-gray-900'
-              }`}
-              style={{ fontFamily: FONTS.mono }}
-            >
-              {bookVsScreen === value && '• '}{label}
-            </button>
-          ))}
+          ].map(({ value, label }) => {
+            const isSelected = bookVsScreen === value;
+            return (
+              <button
+                key={value}
+                type="button"
+                role="radio"
+                aria-checked={isSelected}
+                onClick={() => setBookVsScreen(value)}
+                className={`w-full px-4 py-3 border ${BORDERS.medium} rounded-md text-left font-bold transition-colors ${
+                  isSelected
+                    ? 'bg-black dark:bg-white text-white dark:text-black border-black dark:border-white'
+                    : 'bg-white dark:bg-black hover:bg-gray-100 hover:dark:bg-gray-900'
+                }`}
+                style={{ fontFamily: FONTS.mono }}
+              >
+                <span aria-hidden="true">{isSelected && '• '}</span>{label}
+              </button>
+            );
+          })}
         </div>
-      </div>
+      </fieldset>
 
       {/* Contribution Interest */}
-      <div className="mb-8">
-        <label className={`block ${TEXT.secondary} font-bold mb-3 ${monoUppercase}`} style={{ fontFamily: FONTS.mono }}>
+      <fieldset className="mb-8">
+        <legend className={`block ${TEXT.secondary} font-bold mb-3 ${monoUppercase}`} style={{ fontFamily: FONTS.mono }}>
           What interests you most?
-        </label>
-        <div className="space-y-2">
+        </legend>
+        <div className="space-y-2" role="radiogroup" aria-label="Contribution interest">
           {[
             { value: 'ADD_DIFFS' as const, label: 'Point out differences' },
             { value: 'DISCUSS' as const, label: 'Discuss with others' },
             { value: 'EXPLORE' as const, label: 'Just exploring' },
-          ].map(({ value, label }) => (
-            <button
-              key={value}
-              onClick={() => setContributionInterest(value)}
-              className={`w-full px-4 py-3 border ${BORDERS.medium} rounded-md text-left font-bold transition-colors ${
-                contributionInterest === value
-                  ? 'bg-black dark:bg-white text-white dark:text-black border-black dark:border-white'
-                  : 'bg-white dark:bg-black hover:bg-gray-100 hover:dark:bg-gray-900'
-              }`}
-              style={{ fontFamily: FONTS.mono }}
-            >
-              {contributionInterest === value && '• '}{label}
-            </button>
-          ))}
+          ].map(({ value, label }) => {
+            const isSelected = contributionInterest === value;
+            return (
+              <button
+                key={value}
+                type="button"
+                role="radio"
+                aria-checked={isSelected}
+                onClick={() => setContributionInterest(value)}
+                className={`w-full px-4 py-3 border ${BORDERS.medium} rounded-md text-left font-bold transition-colors ${
+                  isSelected
+                    ? 'bg-black dark:bg-white text-white dark:text-black border-black dark:border-white'
+                    : 'bg-white dark:bg-black hover:bg-gray-100 hover:dark:bg-gray-900'
+                }`}
+                style={{ fontFamily: FONTS.mono }}
+              >
+                <span aria-hidden="true">{isSelected && '• '}</span>{label}
+              </button>
+            );
+          })}
         </div>
-      </div>
+      </fieldset>
 
       <div className="flex gap-3">
         <button

@@ -107,10 +107,34 @@ async function fetchApi<T>(
 
   if (!response.ok) {
     const error = await response.json().catch(() => ({ error: 'Unknown error' }));
+
+    // Don't log 401 errors for /users/me/ - these are expected for expired tokens
+    const shouldLog = !(response.status === 401 && url.includes('/users/me'));
+    if (shouldLog) {
+      console.error('API Error:', {
+        url,
+        status: response.status,
+        error,
+      });
+    }
+
+    // Handle validation errors (400) with field-level errors
+    if (response.status === 400 && !error.error && typeof error === 'object') {
+      // Check if this looks like DRF validation errors {field: [messages]}
+      const hasFieldErrors = Object.values(error).some(val => Array.isArray(val));
+      if (hasFieldErrors) {
+        throw new ApiError(
+          'Validation failed',
+          response.status,
+          error // Pass field errors as detail
+        );
+      }
+    }
+
     throw new ApiError(
-      error.error || 'Request failed',
+      error.error || error.detail || 'Request failed',
       response.status,
-      error.detail
+      error.detail || error
     );
   }
 

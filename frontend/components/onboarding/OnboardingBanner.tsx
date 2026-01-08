@@ -1,34 +1,24 @@
 'use client';
 
-import { useEffect, useState } from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { FONTS, BORDERS, TEXT, monoUppercase } from '@/lib/brutalist-design';
-import { api } from '@/lib/api';
+import { useAuth } from '@/lib/auth-context';
 
 export default function OnboardingBanner(): JSX.Element | null {
-  const [showBanner, setShowBanner] = useState(false);
+  const { user, isAuthenticated, isLoading } = useAuth();
   const pathname = usePathname();
 
-  useEffect(() => {
-    async function checkOnboarding() {
-      try {
-        const user = await api.auth.getCurrentUser();
-        // Show banner if user is authenticated and onboarding not complete
-        // Don't show on onboarding page itself or auth pages
-        if (user && !user.onboarding_completed && !pathname.startsWith('/onboarding') && !pathname.startsWith('/auth')) {
-          setShowBanner(true);
-        }
-      } catch (err) {
-        // User not authenticated or error - don't show banner
-        setShowBanner(false);
-      }
-    }
-
-    checkOnboarding();
-  }, [pathname]);
-
-  if (!showBanner) {
+  // Don't show banner while loading, if not authenticated, if onboarding is complete,
+  // or if on onboarding/auth pages
+  if (
+    isLoading ||
+    !isAuthenticated ||
+    !user ||
+    user.onboarding_completed ||
+    pathname.startsWith('/onboarding') ||
+    pathname.startsWith('/auth')
+  ) {
     return null;
   }
 

@@ -40,8 +40,11 @@ export function AuthProvider({ children }: { children: ReactNode }): JSX.Element
             setUser(currentUser);
             localStorage.setItem('user', JSON.stringify(currentUser));
           } catch (error) {
-            // Token is invalid, clear everything
+            // Token is invalid (expired or revoked), silently clear everything
+            // Don't log this as it's expected behavior for expired sessions
             tokenManager.clearToken();
+            localStorage.removeItem('refreshToken');
+            localStorage.removeItem('user');
             const { clearAuthCookie } = await import('@/app/actions/auth');
             await clearAuthCookie();
             setUser(null);

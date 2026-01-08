@@ -3,7 +3,7 @@ from typing import Optional, List, Dict, Any
 from django.db import transaction
 from django.db.models import Count, Q, Avg, F
 from django.utils import timezone
-from .models import (
+from ..models import (
     User, UserBadge, ReputationEvent, Notification,
     BadgeType, ReputationEventType, NotificationType
 )

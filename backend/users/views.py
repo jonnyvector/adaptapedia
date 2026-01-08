@@ -354,14 +354,12 @@ class NotificationViewSet(viewsets.ReadOnlyModelViewSet):
     @decorators.action(detail=False, methods=['get'], url_path='unread-count')
     def unread_count(self, request):
         """Get count of unread notifications."""
-        from users.services import NotificationService
-        count = NotificationService.get_unread_count(request.user)
+        count = Notification.objects.filter(user=request.user, is_read=False).count()
         return response.Response({'count': count}, status=status.HTTP_200_OK)
 
     @decorators.action(detail=True, methods=['post'], url_path='mark-read')
     def mark_read(self, request, pk=None):
         """Mark a notification as read."""
-        from users.services import NotificationService
         notification = self.get_object()
 
         # Ensure user owns this notification
@@ -371,16 +369,14 @@ class NotificationViewSet(viewsets.ReadOnlyModelViewSet):
                 status=status.HTTP_403_FORBIDDEN
             )
 
-        success = NotificationService.mark_as_read(notification.id)
-        if success:
-            return response.Response({'message': 'Notification marked as read'}, status=status.HTTP_200_OK)
-        return response.Response({'error': 'Failed to mark as read'}, status=status.HTTP_400_BAD_REQUEST)
+        notification.is_read = True
+        notification.save()
+        return response.Response({'message': 'Notification marked as read'}, status=status.HTTP_200_OK)
 
     @decorators.action(detail=False, methods=['post'], url_path='mark-all-read')
     def mark_all_read(self, request):
         """Mark all notifications for the current user as read."""
-        from users.services import NotificationService
-        count = NotificationService.mark_all_read(request.user)
+        count = Notification.objects.filter(user=request.user, is_read=False).update(is_read=True)
         return response.Response(
             {'message': f'{count} notifications marked as read', 'count': count},
             status=status.HTTP_200_OK
@@ -547,6 +543,10 @@ def suggested_comparisons(request):
 
     GET /api/users/me/suggested-comparisons/
     """
+    from screen.models import AdaptationEdge
+    from diffs.models import DiffItem
+    from django.db.models import Count, Q
+
     user = request.user
 
     # Get user preferences if they exist
@@ -555,13 +555,51 @@ def suggested_comparisons(request):
     except UserPreferences.DoesNotExist:
         preferences = None
 
-    # TODO: Implement intent-based ranking algorithm
-    # For now, return mock data structure
-
     intent = preferences.contribution_interest if preferences else 'EXPLORE'
 
+    # Get adaptation edges with related work/screen data
+    edges = AdaptationEdge.objects.select_related('work', 'screen_work').all()
+
+    # Filter by user's preferred genres if they exist
+    if preferences and preferences.genres:
+        # Filter edges where work.genre is in user's preferred genres
+        genre_filters = Q()
+        for genre in preferences.genres:
+            genre_filters |= Q(work__genre__icontains=genre)
+        edges = edges.filter(genre_filters)
+
+    # Annotate with diff count
+    from django.db.models import F
+    edges = edges.annotate(
+        diff_count=Count('work__diffs', filter=Q(work__diffs__screen_work=F('screen_work')))
+    )
+
+    # Order by diff count (descending) for now
+    # TODO: Implement intent-based ranking
+    edges = edges.order_by('-diff_count', '-screen_work__tmdb_popularity')[:10]
+
+    # Format response
+    comparisons = []
+    for edge in edges:
+        # Get genres from work or screen_work
+        genres = []
+        if edge.work.genre:
+            genres = [edge.work.genre]
+        if edge.screen_work.genres:
+            genres.extend(edge.screen_work.genres[:2])
+        genres = list(set(genres))[:3]  # Dedupe and limit to 3
+
+        comparisons.append({
+            'work_slug': edge.work.slug,
+            'work_title': edge.work.title,
+            'screen_work_slug': edge.screen_work.slug,
+            'screen_work_title': edge.screen_work.title,
+            'genres': genres,
+            'diff_count': edge.diff_count
+        })
+
     return response.Response({
-        'comparisons': [],  # Will be implemented with actual comparison data
+        'comparisons': comparisons,
         'intent': intent
     })
 

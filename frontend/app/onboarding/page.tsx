@@ -8,11 +8,13 @@ import SuggestionsStep from '@/components/onboarding/SuggestionsStep';
 import LoadingSpinner from '@/components/ui/LoadingSpinner';
 import { setUsername, savePreferences, completeOnboarding } from '@/lib/onboarding-utils';
 import { useAuth } from '@/lib/auth-context';
+import { useToast } from '@/hooks/useToast';
 import type { UserPreferences } from '@/lib/types';
 
 export default function OnboardingPage(): JSX.Element {
   const router = useRouter();
   const { user, isAuthenticated, isLoading, refreshUser } = useAuth();
+  const { showToast, ToastContainer } = useToast();
   const [currentStep, setCurrentStep] = useState(1);
   const [preferences, setPreferences] = useState<Partial<UserPreferences>>({});
 
@@ -53,7 +55,7 @@ export default function OnboardingPage(): JSX.Element {
       setCurrentStep(2);
     } catch (err) {
       console.error('Failed to set username:', err);
-      alert('Failed to set username. Please try again.');
+      showToast('Failed to set username. Please try again.', 'error');
     }
   };
 
@@ -64,7 +66,7 @@ export default function OnboardingPage(): JSX.Element {
       setCurrentStep(3);
     } catch (err) {
       console.error('Failed to save preferences:', err);
-      alert('Failed to save preferences. Please try again.');
+      showToast('Failed to save preferences. Please try again.', 'error');
     }
   };
 
@@ -80,7 +82,7 @@ export default function OnboardingPage(): JSX.Element {
       router.push('/');
     } catch (err) {
       console.error('Failed to complete onboarding:', err);
-      alert('Failed to complete onboarding. Please try again.');
+      showToast('Failed to complete onboarding. Please try again.', 'error');
     }
   };
 
@@ -102,6 +104,7 @@ export default function OnboardingPage(): JSX.Element {
           intent={preferences.contribution_interest}
         />
       )}
+      <ToastContainer />
     </div>
   );
 }
