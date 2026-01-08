@@ -1,6 +1,9 @@
 """User models and profiles."""
 from django.db import models
 from django.contrib.auth.models import AbstractUser
+from django.db.models.functions import Lower
+from django.contrib.postgres.fields import ArrayField
+from django.contrib.postgres.indexes import GinIndex
 
 
 class UserRole(models.TextChoices):
@@ -87,10 +90,35 @@ class User(AbstractUser):
     reputation_points = models.IntegerField(default=0)
     spoiler_preference = models.CharField(max_length=15, default='NONE')
 
+    # Onboarding tracking
+    onboarding_completed = models.BooleanField(default=False)
+    onboarding_started_at = models.DateTimeField(null=True, blank=True)
+    onboarding_completed_at = models.DateTimeField(null=True, blank=True)
+    onboarding_step = models.IntegerField(
+        default=0,
+        choices=[
+            (0, 'Not Started'),
+            (1, 'Username Selection'),
+            (2, 'Interest Quiz'),
+            (3, 'Suggested Comparisons'),
+            (4, 'Complete'),
+        ]
+    )
+
     class Meta:
         """Meta options for User model."""
 
         db_table = 'auth_user'
+        constraints = [
+            models.UniqueConstraint(
+                Lower('username'),
+                name='unique_lower_username',
+                violation_error_message='Username already exists (case-insensitive)'
+            ),
+        ]
+        indexes = [
+            models.Index(fields=['username']),
+        ]
 
     def __str__(self) -> str:
         """String representation of User."""
@@ -203,3 +231,46 @@ class Notification(models.Model):
     def __str__(self) -> str:
         """String representation of Notification."""
         return f"Notification for {self.user.username}: {self.title}"
+
+
+class UserPreferences(models.Model):
+    """User preferences from onboarding quiz."""
+
+    user = models.OneToOneField(User, on_delete=models.CASCADE, related_name='preferences')
+    genres = ArrayField(
+        models.CharField(max_length=50),
+        default=list,
+        blank=True,
+        help_text="List of genre preferences"
+    )
+    book_vs_screen = models.CharField(
+        max_length=20,
+        blank=True,
+        choices=[
+            ('BOOKS', 'Prefer Books'),
+            ('EQUAL', 'Enjoy Both Equally'),
+            ('SCREEN', 'Prefer Adaptations'),
+        ]
+    )
+    contribution_interest = models.CharField(
+        max_length=50,
+        blank=True,
+        choices=[
+            ('ADD_DIFFS', 'Point out differences'),
+            ('DISCUSS', 'Discuss with others'),
+            ('EXPLORE', 'Just exploring'),
+        ]
+    )
+    completed_at = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        """Meta options for UserPreferences model."""
+
+        verbose_name_plural = "User preferences"
+        indexes = [
+            GinIndex(fields=['genres']),
+        ]
+
+    def __str__(self) -> str:
+        """String representation of UserPreferences."""
+        return f"{self.user.username}'s preferences"

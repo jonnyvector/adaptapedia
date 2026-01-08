@@ -729,3 +729,285 @@ class BookmarkAPITestCase(APITestCase):
         self.assertEqual(bookmark_data['screen_work_title'], self.screen_work.title)
         self.assertEqual(bookmark_data['screen_work_slug'], self.screen_work.slug)
         self.assertEqual(bookmark_data['screen_work_type'], self.screen_work.type)
+
+
+class SocialAuthIntegrationTests(TestCase):
+    """Test cases for social authentication integration."""
+
+    def test_temp_username_generated_on_social_signup(self):
+        """Test that new social auth users get temporary usernames."""
+        from allauth.socialaccount.signals import pre_social_login
+        from unittest.mock import Mock
+
+        # Create a mock sociallogin object
+        user = User(email='test@example.com')
+
+        mock_account = Mock()
+        mock_account.provider = 'google'
+        mock_account.uid = 'abc123def456'
+
+        mock_sociallogin = Mock()
+        mock_sociallogin.is_existing = False
+        mock_sociallogin.user = user
+        mock_sociallogin.account = mock_account
+
+        # Trigger the signal
+        pre_social_login.send(
+            sender=None,
+            request=None,
+            sociallogin=mock_sociallogin
+        )
+
+        # Verify temporary username was set
+        self.assertEqual(user.username, 'google_e99a18c4')
+        self.assertFalse(user.onboarding_completed)
+        self.assertEqual(user.onboarding_step, 1)
+
+    def test_existing_user_username_unchanged(self):
+        """Test that existing users keep their username."""
+        from allauth.socialaccount.signals import pre_social_login
+        from unittest.mock import Mock
+
+        # Create existing user
+        existing_user = User.objects.create_user(
+            username='realusername',
+            email='test@example.com',
+            password='password'
+        )
+
+        mock_account = Mock()
+        mock_account.provider = 'google'
+        mock_account.uid = 'xyz789'
+
+        mock_sociallogin = Mock()
+        mock_sociallogin.is_existing = True  # Existing user
+        mock_sociallogin.user = existing_user
+        mock_sociallogin.account = mock_account
+
+        # Trigger the signal
+        pre_social_login.send(
+            sender=None,
+            request=None,
+            sociallogin=mock_sociallogin
+        )
+
+        # Verify username was NOT changed
+        self.assertEqual(existing_user.username, 'realusername')
+
+    def test_facebook_temp_username(self):
+        """Test Facebook temp username format."""
+        from allauth.socialaccount.signals import pre_social_login
+        from unittest.mock import Mock
+
+        user = User(email='test@facebook.com')
+
+        mock_account = Mock()
+        mock_account.provider = 'facebook'
+        mock_account.uid = '1234567890'
+
+        mock_sociallogin = Mock()
+        mock_sociallogin.is_existing = False
+        mock_sociallogin.user = user
+        mock_sociallogin.account = mock_account
+
+        pre_social_login.send(
+            sender=None,
+            request=None,
+            sociallogin=mock_sociallogin
+        )
+
+        self.assertEqual(user.username, 'facebook_e807f1fc')
+
+    def test_temp_username_uniqueness(self):
+        """Test that temp usernames are unique when collisions occur."""
+        from allauth.socialaccount.signals import pre_social_login
+        from unittest.mock import Mock
+
+        # Create first user with a specific temp username
+        User.objects.create_user(
+            username='google_e99a18c4',
+            email='existing@example.com',
+            password='password'
+        )
+
+        # Try to create another user with the same UID (should get unique username)
+        user = User(email='test@example.com')
+
+        mock_account = Mock()
+        mock_account.provider = 'google'
+        mock_account.uid = 'abc123def456'  # Same UID as first test
+
+        mock_sociallogin = Mock()
+        mock_sociallogin.is_existing = False
+        mock_sociallogin.user = user
+        mock_sociallogin.account = mock_account
+
+        pre_social_login.send(
+            sender=None,
+            request=None,
+            sociallogin=mock_sociallogin
+        )
+
+        # Should have a different username due to collision
+        self.assertNotEqual(user.username, 'google_e99a18c4')
+        self.assertTrue(user.username.startswith('google_e99a18c4'))
+
+    def test_onboarding_started_at_set(self):
+        """Test that onboarding_started_at is set for new social users."""
+        from allauth.socialaccount.signals import pre_social_login
+        from unittest.mock import Mock
+
+        user = User(email='test@example.com')
+
+        mock_account = Mock()
+        mock_account.provider = 'google'
+        mock_account.uid = 'newuser123'
+
+        mock_sociallogin = Mock()
+        mock_sociallogin.is_existing = False
+        mock_sociallogin.user = user
+        mock_sociallogin.account = mock_account
+
+        pre_social_login.send(
+            sender=None,
+            request=None,
+            sociallogin=mock_sociallogin
+        )
+
+        # Verify onboarding_started_at was set
+        self.assertIsNotNone(user.onboarding_started_at)
+        self.assertFalse(user.onboarding_completed)
+        self.assertEqual(user.onboarding_step, 1)
+
+
+class UsernameServiceTests(TestCase):
+    """Test cases for username service functions."""
+
+    def test_generate_temp_username(self):
+        """Test temp username generation."""
+        from users.username_service import generate_temp_username
+
+        username = generate_temp_username('google', 'test123')
+        self.assertTrue(username.startswith('google_'))
+        self.assertEqual(len(username), 16)  # google_ + 8 hex chars
+
+    def test_generate_temp_username_uniqueness(self):
+        """Test that temp username generation handles collisions."""
+        from users.username_service import generate_temp_username
+
+        # Create a user with the expected temp username
+        User.objects.create_user(
+            username='google_098f6bcd',
+            email='test@example.com',
+            password='password'
+        )
+
+        # Generate a temp username with the same hash
+        username = generate_temp_username('google', 'test')
+
+        # Should get a modified username
+        self.assertNotEqual(username, 'google_098f6bcd')
+        self.assertTrue(username.startswith('google_098f6bcd'))
+
+    def test_is_temp_username(self):
+        """Test temp username detection."""
+        from users.username_service import is_temp_username
+
+        # Valid temp usernames
+        self.assertTrue(is_temp_username('google_abc12345'))
+        self.assertTrue(is_temp_username('facebook_12345678'))
+        self.assertTrue(is_temp_username('github_abcdef01'))
+
+        # Invalid temp usernames
+        self.assertFalse(is_temp_username('regularusername'))
+        self.assertFalse(is_temp_username('google_short'))
+        self.assertFalse(is_temp_username('invalid_provider_abc12345'))
+
+    def test_validate_username_length(self):
+        """Test username validation - length checks."""
+        from users.username_service import validate_username
+
+        # Too short
+        is_valid, error = validate_username('ab')
+        self.assertFalse(is_valid)
+        self.assertIn('at least 3', error)
+
+        # Too long
+        is_valid, error = validate_username('a' * 31)
+        self.assertFalse(is_valid)
+        self.assertIn('at most 30', error)
+
+        # Valid length
+        is_valid, error = validate_username('validuser')
+        self.assertTrue(is_valid)
+        self.assertIsNone(error)
+
+    def test_validate_username_characters(self):
+        """Test username validation - character checks."""
+        from users.username_service import validate_username
+
+        # Invalid characters
+        is_valid, error = validate_username('user@name')
+        self.assertFalse(is_valid)
+        self.assertIn('can only contain', error)
+
+        is_valid, error = validate_username('user name')
+        self.assertFalse(is_valid)
+        self.assertIn('can only contain', error)
+
+        # Valid characters
+        is_valid, error = validate_username('user_name-123')
+        self.assertTrue(is_valid)
+        self.assertIsNone(error)
+
+    def test_validate_username_start_character(self):
+        """Test username validation - must start with alphanumeric."""
+        from users.username_service import validate_username
+
+        # Invalid start
+        is_valid, error = validate_username('_username')
+        self.assertFalse(is_valid)
+        self.assertIn('must start with', error)
+
+        is_valid, error = validate_username('-username')
+        self.assertFalse(is_valid)
+        self.assertIn('must start with', error)
+
+        # Valid start
+        is_valid, error = validate_username('username_')
+        self.assertTrue(is_valid)
+        self.assertIsNone(error)
+
+    def test_validate_username_temp_pattern_rejection(self):
+        """Test username validation - reject temp patterns."""
+        from users.username_service import validate_username
+
+        # Temp patterns should be rejected
+        is_valid, error = validate_username('google_abc12345')
+        self.assertFalse(is_valid)
+        self.assertIn('temporary format', error)
+
+        is_valid, error = validate_username('facebook_12345678')
+        self.assertFalse(is_valid)
+        self.assertIn('temporary format', error)
+
+    def test_validate_username_uniqueness(self):
+        """Test username validation - uniqueness check."""
+        from users.username_service import validate_username
+
+        # Create existing user
+        User.objects.create_user(
+            username='existinguser',
+            email='existing@example.com',
+            password='password'
+        )
+
+        # Try to validate same username
+        is_valid, error = validate_username('existinguser')
+        self.assertFalse(is_valid)
+        self.assertIn('already taken', error)
+
+        # New username should be valid
+        is_valid, error = validate_username('newuser')
+        self.assertTrue(is_valid)
+        self.assertIsNone(error)
