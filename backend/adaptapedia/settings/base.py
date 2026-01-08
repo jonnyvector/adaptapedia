@@ -258,6 +258,11 @@ ACCOUNT_EMAIL_VERIFICATION = 'optional'  # Can be 'mandatory' for stricter verif
 SOCIALACCOUNT_EMAIL_VERIFICATION = 'optional'
 SOCIALACCOUNT_AUTO_SIGNUP = True
 SOCIALACCOUNT_QUERY_EMAIL = True
+SOCIALACCOUNT_LOGIN_ON_GET = True  # Skip intermediate "Continue" page, go straight to provider
+
+# Redirect to custom callback that generates JWT tokens
+LOGIN_REDIRECT_URL = '/api/auth/social/callback/'
+ACCOUNT_LOGOUT_REDIRECT_URL = 'http://localhost:3000/'
 
 # Social providers configuration
 SOCIALACCOUNT_PROVIDERS = {
@@ -269,11 +274,6 @@ SOCIALACCOUNT_PROVIDERS = {
         'AUTH_PARAMS': {
             'access_type': 'online',
         },
-        'APP': {
-            'client_id': os.environ.get('GOOGLE_CLIENT_ID', ''),
-            'secret': os.environ.get('GOOGLE_CLIENT_SECRET', ''),
-            'key': ''
-        }
     },
     'facebook': {
         'METHOD': 'oauth2',
@@ -289,11 +289,6 @@ SOCIALACCOUNT_PROVIDERS = {
         'EXCHANGE_TOKEN': True,
         'VERIFIED_EMAIL': False,
         'VERSION': 'v18.0',
-        'APP': {
-            'client_id': os.environ.get('FACEBOOK_APP_ID', ''),
-            'secret': os.environ.get('FACEBOOK_APP_SECRET', ''),
-            'key': ''
-        }
     }
 }
 

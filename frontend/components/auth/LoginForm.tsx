@@ -119,7 +119,7 @@ export default function LoginForm({ redirectTo = '/' }: LoginFormProps): JSX.Ele
       <div className="space-y-3">
         <button
           type="button"
-          onClick={() => window.location.href = `${process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000/api'}/auth/social/google/login/`}
+          onClick={() => window.location.href = 'http://localhost:8000/accounts/google/login/'}
           className={`w-full flex items-center justify-center gap-3 px-4 py-3 bg-white dark:bg-black text-black dark:text-white rounded-md font-bold hover:bg-stone-50 hover:dark:bg-stone-900 transition-colors min-h-[48px] border ${BORDERS.medium} ${TEXT.secondary}`}
           style={{ fontFamily: FONTS.mono, letterSpacing: LETTER_SPACING.tight }}
         >
@@ -134,7 +134,7 @@ export default function LoginForm({ redirectTo = '/' }: LoginFormProps): JSX.Ele
 
         <button
           type="button"
-          onClick={() => window.location.href = `${process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000/api'}/auth/social/facebook/login/`}
+          onClick={() => window.location.href = 'http://localhost:8000/accounts/facebook/login/'}
           disabled={true}
           className={`w-full flex items-center justify-center gap-3 px-4 py-3 bg-white dark:bg-black text-black dark:text-white rounded-md font-bold hover:bg-stone-50 hover:dark:bg-stone-900 transition-colors min-h-[48px] border ${BORDERS.medium} ${TEXT.secondary} opacity-50 cursor-not-allowed`}
           style={{ fontFamily: FONTS.mono, letterSpacing: LETTER_SPACING.tight }}

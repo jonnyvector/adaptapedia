@@ -8,6 +8,7 @@ from rest_framework_simplejwt.views import (
     TokenObtainPairView,
     TokenRefreshView,
 )
+from users.social_auth_views import SocialAuthCallbackView
 
 
 def health_check(request):
@@ -23,7 +24,8 @@ urlpatterns = [
     # Social authentication
     path('api/auth/', include('dj_rest_auth.urls')),
     path('api/auth/registration/', include('dj_rest_auth.registration.urls')),
-    path('api/auth/social/', include('allauth.socialaccount.urls')),
+    path('api/auth/social/callback/', SocialAuthCallbackView.as_view(), name='social_auth_callback'),
+    path('accounts/', include('allauth.urls')),  # Allauth needs to be at /accounts/ for OAuth callbacks
     # App endpoints
     path('api/works/', include('works.urls')),
     path('api/screen/', include('screen.urls')),

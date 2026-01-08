@@ -72,9 +72,13 @@ export const tokenManager = {
   clearToken: (): void => {
     accessToken = null;
     if (typeof window !== 'undefined') {
+      // Remove current tokens
       localStorage.removeItem('accessToken');
       localStorage.removeItem('refreshToken');
       localStorage.removeItem('user');
+      // Also remove old underscore versions (from social auth before fix)
+      localStorage.removeItem('access_token');
+      localStorage.removeItem('refresh_token');
     }
   },
 };
