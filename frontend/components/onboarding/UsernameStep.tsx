@@ -1,8 +1,8 @@
 'use client';
 
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { FONTS, BORDERS, TEXT, monoUppercase } from '@/lib/brutalist-design';
-import { validateUsernameFormat, debounce, checkUsername } from '@/lib/onboarding-utils';
+import { validateUsernameFormat, checkUsername } from '@/lib/onboarding-utils';
 import type { UsernameCheckResponse } from '@/lib/types';
 import LoadingSpinner from '@/components/ui/LoadingSpinner';
 
@@ -15,10 +15,15 @@ export default function UsernameStep({ onComplete }: UsernameStepProps): JSX.Ele
   const [checking, setChecking] = useState(false);
   const [checkResult, setCheckResult] = useState<UsernameCheckResponse | null>(null);
   const [error, setError] = useState<string>('');
+  const timeoutRef = useRef<NodeJS.Timeout | null>(null);
 
   // Debounced username check
-  const debouncedCheck = useCallback(
-    debounce(async (value: string) => {
+  const debouncedCheck = (value: string): void => {
+    if (timeoutRef.current) {
+      clearTimeout(timeoutRef.current);
+    }
+
+    timeoutRef.current = setTimeout(async () => {
       if (value.length < 3) return;
 
       setChecking(true);
@@ -30,9 +35,8 @@ export default function UsernameStep({ onComplete }: UsernameStepProps): JSX.Ele
       } finally {
         setChecking(false);
       }
-    }, 300),
-    []
-  );
+    }, 300);
+  };
 
   useEffect(() => {
     setError('');
@@ -49,7 +53,7 @@ export default function UsernameStep({ onComplete }: UsernameStepProps): JSX.Ele
     if (username.length >= 3) {
       debouncedCheck(username);
     }
-  }, [username, debouncedCheck]);
+  }, [username]);
 
   const handleSuggestionClick = (suggestion: string) => {
     setUsername(suggestion);

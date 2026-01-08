@@ -53,6 +53,7 @@ describe('CommentsList', () => {
       login: jest.fn(),
       signup: jest.fn(),
       logout: jest.fn(),
+      refreshUser: jest.fn(),
       isLoading: false,
     })
   })
@@ -200,6 +201,7 @@ describe('CommentsList', () => {
         login: jest.fn(),
         signup: jest.fn(),
         logout: jest.fn(),
+        refreshUser: jest.fn(),
         isLoading: false,
       })
 
@@ -225,6 +227,7 @@ describe('CommentsList', () => {
         login: jest.fn(),
         signup: jest.fn(),
         logout: jest.fn(),
+        refreshUser: jest.fn(),
         isLoading: false,
       })
 
@@ -254,6 +257,7 @@ describe('CommentsList', () => {
         login: jest.fn(),
         signup: jest.fn(),
         logout: jest.fn(),
+        refreshUser: jest.fn(),
         isLoading: false,
       })
 
@@ -283,6 +287,7 @@ describe('CommentsList', () => {
         login: jest.fn(),
         signup: jest.fn(),
         logout: jest.fn(),
+        refreshUser: jest.fn(),
         isLoading: false,
       })
 

@@ -37,8 +37,14 @@ function SocialCallbackContent(): JSX.Element {
           const user = await api.auth.getCurrentUser();
           localStorage.setItem('user', JSON.stringify(user));
 
-          // Redirect to home page with full reload to trigger auth context
-          window.location.href = '/';
+          // Check if onboarding is needed
+          if (!user.onboarding_completed) {
+            // Redirect to onboarding
+            window.location.href = '/onboarding';
+          } else {
+            // Redirect to home page with full reload to trigger auth context
+            window.location.href = '/';
+          }
         } catch (err) {
           console.error('Error completing social login:', err);
           setError('Failed to complete login. Please try again.');

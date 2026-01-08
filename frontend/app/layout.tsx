@@ -3,6 +3,7 @@ import { Sora, Space_Grotesk, JetBrains_Mono } from 'next/font/google';
 import './globals.css';
 import Header from '@/components/layout/Header';
 import Footer from '@/components/layout/Footer';
+import OnboardingBanner from '@/components/onboarding/OnboardingBanner';
 import { AuthProvider } from '@/lib/auth-context';
 import { ToastProvider } from '@/lib/toast-context';
 
@@ -58,6 +59,7 @@ export default function RootLayout({
         <ToastProvider>
           <AuthProvider>
             <Header />
+            <OnboardingBanner />
             <div className="flex-1 bg-white dark:bg-black">
               {children}
             </div>

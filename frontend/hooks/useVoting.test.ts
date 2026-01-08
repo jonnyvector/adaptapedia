@@ -59,7 +59,13 @@ describe('useVoting', () => {
 
   describe('Optimistic vote updates', () => {
     it('immediately updates vote counts when voting', async () => {
-      mockVote.mockResolvedValue({})
+      mockVote.mockResolvedValue({
+        id: 1,
+        diff_item: 1,
+        user: 1,
+        vote: 'ACCURATE',
+        created_at: new Date().toISOString(),
+      })
 
       const { result } = renderHook(() => useVoting(1, initialVoteCounts))
 
@@ -73,7 +79,13 @@ describe('useVoting', () => {
     })
 
     it('immediately updates when changing vote', async () => {
-      mockVote.mockResolvedValue({})
+      mockVote.mockResolvedValue({
+        id: 1,
+        diff_item: 1,
+        user: 1,
+        vote: 'ACCURATE',
+        created_at: new Date().toISOString(),
+      })
 
       const { result } = renderHook(() => useVoting(1, initialVoteCounts, 'ACCURATE'))
 
@@ -88,7 +100,13 @@ describe('useVoting', () => {
     })
 
     it('handles vote toggling by removing vote when same vote is clicked', async () => {
-      mockVote.mockResolvedValue({})
+      mockVote.mockResolvedValue({
+        id: 1,
+        diff_item: 1,
+        user: 1,
+        vote: 'ACCURATE',
+        created_at: new Date().toISOString(),
+      })
 
       const { result } = renderHook(() => useVoting(1, initialVoteCounts, 'ACCURATE'))
 
@@ -105,7 +123,13 @@ describe('useVoting', () => {
 
   describe('API interaction', () => {
     it('calls API with correct parameters', async () => {
-      mockVote.mockResolvedValue({})
+      mockVote.mockResolvedValue({
+        id: 1,
+        diff_item: 1,
+        user: 1,
+        vote: 'ACCURATE',
+        created_at: new Date().toISOString(),
+      })
 
       const { result } = renderHook(() => useVoting(123, initialVoteCounts))
 
@@ -150,7 +174,13 @@ describe('useVoting', () => {
     })
 
     it('sets isVoting to false after successful vote', async () => {
-      mockVote.mockResolvedValue({})
+      mockVote.mockResolvedValue({
+        id: 1,
+        diff_item: 1,
+        user: 1,
+        vote: 'ACCURATE',
+        created_at: new Date().toISOString(),
+      })
 
       const { result } = renderHook(() => useVoting(1, initialVoteCounts))
 
@@ -227,7 +257,13 @@ describe('useVoting', () => {
 
     it('clears error on successful vote after previous error', async () => {
       mockVote.mockRejectedValueOnce(new Error('First vote failed'))
-      mockVote.mockResolvedValueOnce({})
+      mockVote.mockResolvedValueOnce({
+        id: 1,
+        diff_item: 1,
+        user: 1,
+        vote: 'ACCURATE',
+        created_at: new Date().toISOString(),
+      })
 
       const { result } = renderHook(() => useVoting(1, initialVoteCounts))
 
@@ -249,7 +285,13 @@ describe('useVoting', () => {
 
   describe('Vote count calculations', () => {
     it('correctly decrements previous vote when changing', async () => {
-      mockVote.mockResolvedValue({})
+      mockVote.mockResolvedValue({
+        id: 1,
+        diff_item: 1,
+        user: 1,
+        vote: 'ACCURATE',
+        created_at: new Date().toISOString(),
+      })
 
       const { result } = renderHook(() => useVoting(1, initialVoteCounts, 'NEEDS_NUANCE'))
 
@@ -262,7 +304,13 @@ describe('useVoting', () => {
     })
 
     it('does not allow negative vote counts', async () => {
-      mockVote.mockResolvedValue({})
+      mockVote.mockResolvedValue({
+        id: 1,
+        diff_item: 1,
+        user: 1,
+        vote: 'ACCURATE',
+        created_at: new Date().toISOString(),
+      })
 
       const voteCounts = { accurate: 0, needs_nuance: 0, disagree: 0 }
       const { result } = renderHook(() => useVoting(1, voteCounts, 'ACCURATE'))
@@ -278,7 +326,13 @@ describe('useVoting', () => {
 
   describe('Multiple votes in sequence', () => {
     it('handles multiple sequential votes correctly', async () => {
-      mockVote.mockResolvedValue({})
+      mockVote.mockResolvedValue({
+        id: 1,
+        diff_item: 1,
+        user: 1,
+        vote: 'ACCURATE',
+        created_at: new Date().toISOString(),
+      })
 
       const { result } = renderHook(() => useVoting(1, initialVoteCounts))
 
@@ -312,7 +366,13 @@ describe('useVoting', () => {
 
   describe('VoteType conversions', () => {
     it('correctly converts ACCURATE vote type', async () => {
-      mockVote.mockResolvedValue({})
+      mockVote.mockResolvedValue({
+        id: 1,
+        diff_item: 1,
+        user: 1,
+        vote: 'ACCURATE',
+        created_at: new Date().toISOString(),
+      })
 
       const { result } = renderHook(() => useVoting(1, initialVoteCounts))
 
@@ -324,7 +384,13 @@ describe('useVoting', () => {
     })
 
     it('correctly converts NEEDS_NUANCE vote type', async () => {
-      mockVote.mockResolvedValue({})
+      mockVote.mockResolvedValue({
+        id: 1,
+        diff_item: 1,
+        user: 1,
+        vote: 'ACCURATE',
+        created_at: new Date().toISOString(),
+      })
 
       const { result } = renderHook(() => useVoting(1, initialVoteCounts))
 
@@ -336,7 +402,13 @@ describe('useVoting', () => {
     })
 
     it('correctly converts DISAGREE vote type', async () => {
-      mockVote.mockResolvedValue({})
+      mockVote.mockResolvedValue({
+        id: 1,
+        diff_item: 1,
+        user: 1,
+        vote: 'ACCURATE',
+        created_at: new Date().toISOString(),
+      })
 
       const { result } = renderHook(() => useVoting(1, initialVoteCounts))
 

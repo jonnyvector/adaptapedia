@@ -61,13 +61,9 @@ export default function SignupForm({ redirectTo = '/' }: SignupFormProps): JSX.E
     try {
       await signup(formData);
 
-      // Handle hash fragments in redirect URL
-      // Use window.location for hash fragments to ensure proper scrolling
-      if (redirectTo.includes('#')) {
-        window.location.href = redirectTo;
-      } else {
-        router.push(redirectTo);
-      }
+      // Traditional signup users have username, but still need onboarding for preferences
+      // Always redirect to onboarding after signup
+      router.push('/onboarding');
     } catch (err) {
       if (err instanceof ApiError) {
         if (err.detail && typeof err.detail === 'object') {

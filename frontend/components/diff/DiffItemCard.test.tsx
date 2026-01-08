@@ -51,6 +51,7 @@ describe('DiffItemCard', () => {
       login: jest.fn(),
       signup: jest.fn(),
       logout: jest.fn(),
+      refreshUser: jest.fn(),
       isLoading: false,
     })
 
@@ -160,6 +161,7 @@ describe('DiffItemCard', () => {
         login: jest.fn(),
         signup: jest.fn(),
         logout: jest.fn(),
+        refreshUser: jest.fn(),
         isLoading: false,
       })
 
@@ -180,6 +182,7 @@ describe('DiffItemCard', () => {
         login: jest.fn(),
         signup: jest.fn(),
         logout: jest.fn(),
+        refreshUser: jest.fn(),
         isLoading: false,
       })
 
@@ -238,6 +241,7 @@ describe('DiffItemCard', () => {
         login: jest.fn(),
         signup: jest.fn(),
         logout: jest.fn(),
+        refreshUser: jest.fn(),
         isLoading: false,
       })
 

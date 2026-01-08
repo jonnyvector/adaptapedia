@@ -1,4 +1,4 @@
-import { api } from './api';
+import { api, tokenManager } from './api';
 import { UsernameCheckResponse, UserPreferences, SuggestedComparison } from './types';
 
 // Debounce helper
@@ -43,77 +43,92 @@ export const GENRE_OPTIONS = [
   'Comedy',
 ];
 
-// Mock API functions (replace with real API calls when backend is ready)
+// Real API functions for onboarding flow
 export async function checkUsername(username: string): Promise<UsernameCheckResponse> {
-  // TODO: Replace with real API call when backend endpoint is ready
-  // Example: return api.onboarding.checkUsername(username);
-  return new Promise((resolve) => {
-    setTimeout(() => {
-      resolve({
-        available: !['admin', 'test', 'user'].includes(username.toLowerCase()),
-        suggestions: ['bookworm_2026', 'reader_x', 'adaptafan_123'],
-      });
-    }, 300);
+  const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000/api'}/users/me/username/check/`, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      'Authorization': `Bearer ${tokenManager.getToken()}`,
+    },
+    body: JSON.stringify({ username }),
   });
+
+  if (!response.ok) {
+    const error = await response.json().catch(() => ({ error: 'Failed to check username' }));
+    throw new Error(error.error || 'Failed to check username');
+  }
+
+  return response.json();
 }
 
 export async function setUsername(username: string): Promise<{ success: boolean; user?: any }> {
-  // TODO: Replace with real API call when backend endpoint is ready
-  // Example: return api.onboarding.setUsername({ username });
-  return new Promise((resolve) => {
-    setTimeout(() => {
-      resolve({ success: true });
-    }, 500);
+  const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000/api'}/users/me/username/`, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      'Authorization': `Bearer ${tokenManager.getToken()}`,
+    },
+    body: JSON.stringify({ username }),
   });
+
+  if (!response.ok) {
+    const error = await response.json().catch(() => ({ error: 'Failed to set username' }));
+    throw new Error(error.error || 'Failed to set username');
+  }
+
+  return response.json();
 }
 
 export async function savePreferences(preferences: Partial<UserPreferences>): Promise<{ success: boolean }> {
-  // TODO: Replace with real API call when backend endpoint is ready
-  // Example: return api.onboarding.savePreferences(preferences);
-  return new Promise((resolve) => {
-    setTimeout(() => {
-      resolve({ success: true });
-    }, 500);
+  const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000/api'}/users/me/preferences/`, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      'Authorization': `Bearer ${tokenManager.getToken()}`,
+    },
+    body: JSON.stringify(preferences),
   });
+
+  if (!response.ok) {
+    const error = await response.json().catch(() => ({ error: 'Failed to save preferences' }));
+    throw new Error(error.error || 'Failed to save preferences');
+  }
+
+  return response.json();
 }
 
 export async function getSuggestedComparisons(): Promise<SuggestedComparison[]> {
-  // TODO: Replace with real API call when backend endpoint is ready
-  // Example: return api.onboarding.getSuggestions();
-  return new Promise((resolve) => {
-    setTimeout(() => {
-      resolve([
-        {
-          work_slug: 'hunger-games',
-          work_title: 'The Hunger Games',
-          screen_work_slug: 'hunger-games-movie',
-          screen_work_title: 'The Hunger Games (Movie)',
-          genres: ['Fantasy', 'Sci-Fi'],
-          diff_count: 12,
-          vote_count: 45,
-          comment_count: 8,
-        },
-        {
-          work_slug: 'harry-potter-philosophers-stone',
-          work_title: "Harry Potter and the Philosopher's Stone",
-          screen_work_slug: 'harry-potter-sorcerers-stone',
-          screen_work_title: "Harry Potter and the Sorcerer's Stone (Movie)",
-          genres: ['Fantasy'],
-          diff_count: 24,
-          vote_count: 89,
-          comment_count: 15,
-        },
-        {
-          work_slug: 'lord-of-the-rings-fellowship',
-          work_title: 'The Fellowship of the Ring',
-          screen_work_slug: 'lotr-fellowship-movie',
-          screen_work_title: 'The Lord of the Rings: The Fellowship of the Ring (Movie)',
-          genres: ['Fantasy'],
-          diff_count: 31,
-          vote_count: 102,
-          comment_count: 22,
-        },
-      ]);
-    }, 500);
+  const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000/api'}/users/me/suggested-comparisons/`, {
+    headers: {
+      'Authorization': `Bearer ${tokenManager.getToken()}`,
+    },
   });
+
+  if (!response.ok) {
+    const error = await response.json().catch(() => ({ error: 'Failed to get suggestions' }));
+    throw new Error(error.error || 'Failed to get suggestions');
+  }
+
+  const data = await response.json();
+  return data.comparisons || [];
+}
+
+export async function completeOnboarding(): Promise<void> {
+  const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000/api'}/users/me/onboarding/`, {
+    method: 'PATCH',
+    headers: {
+      'Content-Type': 'application/json',
+      'Authorization': `Bearer ${tokenManager.getToken()}`,
+    },
+    body: JSON.stringify({
+      onboarding_completed: true,
+      onboarding_step: 4,
+    }),
+  });
+
+  if (!response.ok) {
+    const error = await response.json().catch(() => ({ error: 'Failed to complete onboarding' }));
+    throw new Error(error.error || 'Failed to complete onboarding');
+  }
 }
