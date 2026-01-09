@@ -9,7 +9,7 @@ import { api } from '@/lib/api';
 import { calculateVotePercentage } from '@/lib/vote-utils';
 import AdaptationSwitcher from './AdaptationSwitcher';
 import BookmarkButton from './BookmarkButton';
-import { FONTS, RADIUS } from '@/lib/brutalist-design';
+import { FONTS, RADIUS, TEXT } from '@/lib/brutalist-design';
 
 // Inject Google Fonts for brutalist minimal + nerdy typography
 if (typeof document !== 'undefined' && !document.querySelector('link[href*="Space+Grotesk"]')) {
@@ -247,7 +247,7 @@ export default function MatchupScoreboard({
 
     return (
       <div className="space-y-2">
-        <div className="text-center text-[10px] text-black/60 dark:text-white/60 font-bold uppercase tracking-widest" style={{ fontFamily: 'JetBrains Mono, monospace', letterSpacing: '0.12em' }}>
+        <div className="text-center ${TEXT.metadata} text-black/60 dark:text-white/60 font-bold uppercase tracking-widest" style={{ fontFamily: 'JetBrains Mono, monospace', letterSpacing: '0.12em' }}>
           {currentRating ? 'Your faithfulness rating' : 'Rate faithfulness (optional)'}
         </div>
         <div className="flex justify-center gap-1.5 px-2">
@@ -269,11 +269,11 @@ export default function MatchupScoreboard({
             </button>
           ))}
         </div>
-        <div className="text-center text-[9px] text-black/50 dark:text-white/50 uppercase tracking-wider" style={{ fontFamily: 'JetBrains Mono, monospace', letterSpacing: '0.08em' }}>
+        <div className="text-center ${TEXT.metadata} text-black/50 dark:text-white/50 uppercase tracking-wider" style={{ fontFamily: 'JetBrains Mono, monospace', letterSpacing: '0.08em' }}>
           1 = LOOSE • 5 = FAITHFUL
         </div>
         {showHint && faithfulnessRating && (
-          <div className="text-center text-[9px] text-black/50 dark:text-white/50 uppercase tracking-wider pt-0.5" style={{ fontFamily: 'JetBrains Mono, monospace', letterSpacing: '0.1em' }}>
+          <div className="text-center ${TEXT.metadata} text-black/50 dark:text-white/50 uppercase tracking-wider pt-0.5" style={{ fontFamily: 'JetBrains Mono, monospace', letterSpacing: '0.1em' }}>
             ↑ Selected: {faithfulnessRating}/5 • Pick side above to submit
           </div>
         )}
@@ -313,7 +313,7 @@ export default function MatchupScoreboard({
   // Shared component: Archive card header
   const renderArchiveHeader = () => (
     <div className="relative border-b border-black/10 dark:border-white/10 pb-2 mb-1">
-      <div className="text-[10px] uppercase tracking-widest text-black/60 dark:text-white/60 text-center" style={{ fontFamily: 'JetBrains Mono, monospace', letterSpacing: '0.15em' }}>
+      <div className="${TEXT.metadata} uppercase tracking-widest text-black/60 dark:text-white/60 text-center" style={{ fontFamily: 'JetBrains Mono, monospace', letterSpacing: '0.15em' }}>
         ARCHIVE CARD • {work.year} • {work.author?.split(' ').pop()?.toUpperCase()}
       </div>
     </div>
@@ -345,7 +345,7 @@ export default function MatchupScoreboard({
             {work.title}
           </h1>
           {/* Community flavor */}
-          <div className="text-[10px] uppercase tracking-widest text-black/50 dark:text-white/50" style={{ fontFamily: 'JetBrains Mono, monospace', letterSpacing: '0.12em' }}>
+          <div className="${TEXT.metadata} uppercase tracking-widest text-black/50 dark:text-white/50" style={{ fontFamily: 'JetBrains Mono, monospace', letterSpacing: '0.12em' }}>
             {totalVotes} {totalVotes === 1 ? 'vote' : 'votes'}
           </div>
         </div>
@@ -365,7 +365,7 @@ export default function MatchupScoreboard({
                 />
                 {/* Book stamp - bottom left, flush */}
                 <div className="absolute bottom-0 left-0 px-1.5 py-0.5 bg-black dark:bg-white">
-                  <span className="text-[10px] font-bold uppercase text-white dark:text-black" style={{ fontFamily: 'JetBrains Mono, monospace', letterSpacing: '0.15em' }}>BOOK</span>
+                  <span className="${TEXT.metadata} font-bold uppercase text-white dark:text-black" style={{ fontFamily: 'JetBrains Mono, monospace', letterSpacing: '0.15em' }}>BOOK</span>
                 </div>
               </div>
             )}
@@ -373,7 +373,7 @@ export default function MatchupScoreboard({
               <div className="text-xs text-gray-900 dark:text-gray-100 font-medium" style={{ fontFamily: FONTS.mono }}>{work.author}</div>
               <div className="text-xs text-gray-600 dark:text-gray-400" style={{ fontFamily: 'JetBrains Mono, monospace' }}>({work.year})</div>
               {/* Archival metadata */}
-              <div className="text-[10px] text-black/50 dark:text-white/50 uppercase tracking-wider pt-1" style={{ fontFamily: 'JetBrains Mono, monospace', letterSpacing: '0.08em' }}>
+              <div className="${TEXT.metadata} text-black/50 dark:text-white/50 uppercase tracking-wider pt-1" style={{ fontFamily: 'JetBrains Mono, monospace', letterSpacing: '0.08em' }}>
                 {work.publisher && `${work.publisher}`}
               </div>
             </div>
@@ -406,7 +406,7 @@ export default function MatchupScoreboard({
 
                 {/* Footer metadata */}
                 <div className="relative border-t border-black/10 dark:border-white/10 pt-3 mt-2">
-                  <div className="text-[9px] uppercase tracking-widest text-black/50 dark:text-white/50 text-center" style={{ fontFamily: 'JetBrains Mono, monospace', letterSpacing: '0.15em' }}>
+                  <div className="${TEXT.metadata} uppercase tracking-widest text-black/50 dark:text-white/50 text-center" style={{ fontFamily: 'JetBrains Mono, monospace', letterSpacing: '0.15em' }}>
                     No community data yet
                   </div>
                 </div>
@@ -463,7 +463,7 @@ export default function MatchupScoreboard({
                       </div>
 
                       {/* Bar labels */}
-                      <div className="flex items-center justify-between text-[9px] text-black/50 dark:text-white/50 uppercase tracking-widest px-1" style={{ fontFamily: 'JetBrains Mono, monospace', letterSpacing: '0.1em' }}>
+                      <div className="flex items-center justify-between ${TEXT.metadata} text-black/50 dark:text-white/50 uppercase tracking-widest px-1" style={{ fontFamily: 'JetBrains Mono, monospace', letterSpacing: '0.1em' }}>
                         <span>BOOK {bookPct}%</span>
                         <span>SAMPLE SIZE: {totalVotes}</span>
                         <span>SCREEN {screenPct}%</span>
@@ -473,7 +473,7 @@ export default function MatchupScoreboard({
                     {/* User's vote status - inside the same container */}
                     {userVote && !showEditVote && (
                       <div className="text-center pt-1.5 pb-1.5 border-t border-black/10 dark:border-white/10">
-                        <span className="text-[10px] text-black/70 dark:text-white/70 uppercase tracking-wider font-bold" style={{ fontFamily: 'JetBrains Mono, monospace', letterSpacing: '0.12em' }}>
+                        <span className="${TEXT.metadata} text-black/70 dark:text-white/70 uppercase tracking-wider font-bold" style={{ fontFamily: 'JetBrains Mono, monospace', letterSpacing: '0.12em' }}>
                           You voted: {userVote.preference === 'BOOK' ? 'BOOK' : userVote.preference === 'SCREEN' ? 'SCREEN' : 'TIE'} • <button onClick={() => setShowEditVote(true)} className="underline hover:no-underline text-black dark:text-white">EDIT</button>
                         </span>
                       </div>
@@ -518,7 +518,7 @@ export default function MatchupScoreboard({
 
                 {/* Footer metadata */}
                 <div className="relative border-t border-black/10 dark:border-white/10 pt-3 mt-3">
-                  <div className="text-[9px] uppercase tracking-widest text-black/50 dark:text-white/50 text-center" style={{ fontFamily: 'JetBrains Mono, monospace', letterSpacing: '0.15em' }}>
+                  <div className="${TEXT.metadata} uppercase tracking-widest text-black/50 dark:text-white/50 text-center" style={{ fontFamily: 'JetBrains Mono, monospace', letterSpacing: '0.15em' }}>
                     RATINGS: {faithfulnessCount} • UPDATED: —
                   </div>
                 </div>
@@ -550,7 +550,7 @@ export default function MatchupScoreboard({
               />
               {/* Screen stamp - bottom right, flush */}
               <div className="absolute bottom-0 right-0 px-1.5 py-0.5 bg-black dark:bg-white">
-                <span className="text-[10px] font-bold uppercase text-white dark:text-black" style={{ fontFamily: 'JetBrains Mono, monospace', letterSpacing: '0.15em' }}>
+                <span className="${TEXT.metadata} font-bold uppercase text-white dark:text-black" style={{ fontFamily: 'JetBrains Mono, monospace', letterSpacing: '0.15em' }}>
                   SCREEN
                 </span>
               </div>
@@ -560,7 +560,7 @@ export default function MatchupScoreboard({
             <div className="text-xs text-gray-900 dark:text-gray-100 font-medium" style={{ fontFamily: FONTS.mono }}>{screenWork.director || screenWork.type}</div>
             <div className="text-xs text-gray-600 dark:text-gray-400" style={{ fontFamily: 'JetBrains Mono, monospace' }}>({screenWork.year})</div>
             {/* Archival metadata */}
-            <div className="text-[10px] text-black/50 dark:text-white/50 uppercase tracking-wider pt-1" style={{ fontFamily: 'JetBrains Mono, monospace', letterSpacing: '0.08em' }}>
+            <div className="${TEXT.metadata} text-black/50 dark:text-white/50 uppercase tracking-wider pt-1" style={{ fontFamily: 'JetBrains Mono, monospace', letterSpacing: '0.08em' }}>
               {screenWork.runtime && `${screenWork.runtime}m`}
               {screenWork.studio && ` • ${screenWork.studio}`}
             </div>
@@ -577,7 +577,7 @@ export default function MatchupScoreboard({
             {work.title}
           </h1>
           {/* Community flavor - hide diff count if unknown */}
-          <div className="text-[10px] uppercase tracking-widest text-black/50 dark:text-white/50" style={{ fontFamily: 'JetBrains Mono, monospace', letterSpacing: '0.12em' }}>
+          <div className="${TEXT.metadata} uppercase tracking-widest text-black/50 dark:text-white/50" style={{ fontFamily: 'JetBrains Mono, monospace', letterSpacing: '0.12em' }}>
             {totalVotes} {totalVotes === 1 ? 'VOTE' : 'VOTES'}
           </div>
         </div>
@@ -597,11 +597,11 @@ export default function MatchupScoreboard({
                 />
                 {/* Book stamp - bottom left, flush */}
                 <div className="absolute bottom-0 left-0 px-1.5 py-0.5 bg-black dark:bg-white">
-                  <span className="text-[9px] font-bold uppercase text-white dark:text-black" style={{ fontFamily: 'JetBrains Mono, monospace', letterSpacing: '0.15em' }}>BOOK</span>
+                  <span className="${TEXT.metadata} font-bold uppercase text-white dark:text-black" style={{ fontFamily: 'JetBrains Mono, monospace', letterSpacing: '0.15em' }}>BOOK</span>
                 </div>
               </div>
             )}
-            <div className="text-center text-[10px] text-black/50 dark:text-white/50 uppercase tracking-wider" style={{ fontFamily: 'JetBrains Mono, monospace' }}>
+            <div className="text-center ${TEXT.metadata} text-black/50 dark:text-white/50 uppercase tracking-wider" style={{ fontFamily: 'JetBrains Mono, monospace' }}>
               {work.author} ({work.year})
             </div>
           </div>
@@ -619,13 +619,13 @@ export default function MatchupScoreboard({
                 />
                 {/* Screen stamp - bottom right, flush */}
                 <div className="absolute bottom-0 right-0 px-1.5 py-0.5 bg-black dark:bg-white">
-                  <span className="text-[9px] font-bold uppercase text-white dark:text-black" style={{ fontFamily: 'JetBrains Mono, monospace', letterSpacing: '0.15em' }}>
+                  <span className="${TEXT.metadata} font-bold uppercase text-white dark:text-black" style={{ fontFamily: 'JetBrains Mono, monospace', letterSpacing: '0.15em' }}>
                     SCREEN
                   </span>
                 </div>
               </div>
             )}
-            <div className="text-center text-[10px] text-black/50 dark:text-white/50 uppercase tracking-wider" style={{ fontFamily: 'JetBrains Mono, monospace' }}>
+            <div className="text-center ${TEXT.metadata} text-black/50 dark:text-white/50 uppercase tracking-wider" style={{ fontFamily: 'JetBrains Mono, monospace' }}>
               {screenWork.director || screenWork.type} ({screenWork.year})
             </div>
           </div>
@@ -637,7 +637,7 @@ export default function MatchupScoreboard({
           {hasVotes && (
             <div className="space-y-2">
               {/* Community label */}
-              <div className="text-[9px] uppercase tracking-widest text-black/60 dark:text-white/60" style={{ fontFamily: 'JetBrains Mono, monospace', letterSpacing: '0.12em' }}>
+              <div className="${TEXT.metadata} uppercase tracking-widest text-black/60 dark:text-white/60" style={{ fontFamily: 'JetBrains Mono, monospace', letterSpacing: '0.12em' }}>
                 COMMUNITY
               </div>
               {/* Brutal bar */}
@@ -662,7 +662,7 @@ export default function MatchupScoreboard({
                 )}
               </div>
               {/* Single line: percentages + sample size */}
-              <div className="flex items-center justify-between text-[9px] text-black/60 dark:text-white/60 uppercase tracking-wider" style={{ fontFamily: 'JetBrains Mono, monospace', letterSpacing: '0.08em' }}>
+              <div className="flex items-center justify-between ${TEXT.metadata} text-black/60 dark:text-white/60 uppercase tracking-wider" style={{ fontFamily: 'JetBrains Mono, monospace', letterSpacing: '0.08em' }}>
                 <span>BOOK {bookPct}%</span>
                 <span className="font-bold">SAMPLE SIZE: {totalVotes}</span>
                 <span>SCREEN {screenPct}%</span>
@@ -670,7 +670,7 @@ export default function MatchupScoreboard({
               {/* User vote status */}
               {userVote && !showEditVote && (
                 <div className="text-center pt-1.5 pb-1.5 border-t border-black/10 dark:border-white/10">
-                  <span className="text-[10px] text-black/70 dark:text-white/70 uppercase tracking-wider font-bold" style={{ fontFamily: 'JetBrains Mono, monospace', letterSpacing: '0.12em' }}>
+                  <span className="${TEXT.metadata} text-black/70 dark:text-white/70 uppercase tracking-wider font-bold" style={{ fontFamily: 'JetBrains Mono, monospace', letterSpacing: '0.12em' }}>
                     You voted: {userVote.preference} • <button onClick={() => setShowEditVote(true)} className="underline hover:no-underline text-black dark:text-white">EDIT</button>
                   </span>
                 </div>
@@ -680,7 +680,7 @@ export default function MatchupScoreboard({
           {/* Vote section */}
           {!userVote && !showEditVote && (
             <div className="space-y-1.5">
-              <div className="text-[9px] uppercase tracking-widest text-black/60 dark:text-white/60 text-center" style={{ fontFamily: 'JetBrains Mono, monospace', letterSpacing: '0.12em' }}>
+              <div className="${TEXT.metadata} uppercase tracking-widest text-black/60 dark:text-white/60 text-center" style={{ fontFamily: 'JetBrains Mono, monospace', letterSpacing: '0.12em' }}>
                 CAST YOUR VOTE
               </div>
               {/* Main vote buttons - Book and Screen */}
@@ -798,7 +798,7 @@ export default function MatchupScoreboard({
               </button>
               <button
                 onClick={() => setShowEditVote(false)}
-                className="w-full text-[9px] text-black/60 dark:text-white/60 hover:text-black dark:hover:text-white uppercase tracking-wider underline hover:no-underline"
+                className="w-full ${TEXT.metadata} text-black/60 dark:text-white/60 hover:text-black dark:hover:text-white uppercase tracking-wider underline hover:no-underline"
                 style={{ fontFamily: 'JetBrains Mono, monospace', letterSpacing: '0.12em' }}
               >
                 Cancel
@@ -809,13 +809,13 @@ export default function MatchupScoreboard({
           {/* Faithfulness - inline tight row */}
           <div className="!mt-0 border-t border-black/10 dark:border-white/10 pt-3 space-y-2">
             {avgFaithfulness !== null && (
-              <div className="text-center text-[10px] font-bold text-black dark:text-white uppercase tracking-wider" style={{ fontFamily: 'JetBrains Mono, monospace', letterSpacing: '0.12em' }}>
+              <div className="text-center ${TEXT.metadata} font-bold text-black dark:text-white uppercase tracking-wider" style={{ fontFamily: 'JetBrains Mono, monospace', letterSpacing: '0.12em' }}>
                 FAITHFULNESS {avgFaithfulness.toFixed(1)}/5 ({faithfulnessCount} {faithfulnessCount === 1 ? 'RATING' : 'RATINGS'})
               </div>
             )}
             {!userFaithfulness ? (
               <div className="space-y-1.5">
-                <div className="text-[9px] uppercase tracking-widest text-black/60 dark:text-white/60 text-center" style={{ fontFamily: 'JetBrains Mono, monospace', letterSpacing: '0.12em' }}>
+                <div className="${TEXT.metadata} uppercase tracking-widest text-black/60 dark:text-white/60 text-center" style={{ fontFamily: 'JetBrains Mono, monospace', letterSpacing: '0.12em' }}>
                   RATE (OPTIONAL)
                 </div>
                 <div className="flex justify-center gap-1 px-1">
@@ -833,12 +833,12 @@ export default function MatchupScoreboard({
                     </button>
                   ))}
                 </div>
-                <div className="text-center text-[8px] text-black/50 dark:text-white/50 uppercase tracking-wider" style={{ fontFamily: 'JetBrains Mono, monospace', letterSpacing: '0.08em' }}>
+                <div className="text-center ${TEXT.micro} text-black/50 dark:text-white/50 uppercase tracking-wider" style={{ fontFamily: 'JetBrains Mono, monospace', letterSpacing: '0.08em' }}>
                   1 LOOSE • 5 FAITHFUL
                 </div>
               </div>
             ) : (
-              <div className="text-center text-[9px] text-black/70 dark:text-white/70 uppercase tracking-wider" style={{ fontFamily: 'JetBrains Mono, monospace', letterSpacing: '0.1em' }}>
+              <div className="text-center ${TEXT.metadata} text-black/70 dark:text-white/70 uppercase tracking-wider" style={{ fontFamily: 'JetBrains Mono, monospace', letterSpacing: '0.1em' }}>
                 You rated: {userFaithfulness} • <button onClick={() => setFaithfulnessRating(null)} className="underline hover:no-underline font-bold text-black dark:text-white">EDIT</button>
               </div>
             )}
