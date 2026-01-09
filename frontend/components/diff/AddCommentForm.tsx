@@ -2,7 +2,7 @@
 
 import { useState, useRef, useEffect } from 'react';
 import type { SpoilerScope } from '@/lib/types';
-import LoadingSpinner from '@/components/ui/LoadingSpinner';
+import { Button } from '@/components/ui/Button';
 import { FONTS, LETTER_SPACING, BORDERS, TEXT, RADIUS, monoUppercase } from '@/lib/brutalist-design';
 
 interface AddCommentFormProps {
@@ -172,22 +172,18 @@ export default function AddCommentForm({
         </label>
         <div className="flex flex-wrap gap-2">
           {spoilerScopes.map((scope) => (
-            <button
+            <Button
               key={scope.value}
               type="button"
+              variant={spoilerScope === scope.value ? 'primary' : 'secondary'}
+              size="sm"
               onClick={() => setSpoilerScope(scope.value)}
               disabled={isSubmitting}
-              className={`px-3 py-1.5 ${RADIUS.control} ${TEXT.metadata} font-bold transition-colors ${monoUppercase} ${
-                spoilerScope === scope.value
-                  ? `bg-black dark:bg-white text-white dark:text-black border ${BORDERS.solid}`
-                  : `bg-white dark:bg-black border ${BORDERS.medium} text-black dark:text-white hover:border-black hover:dark:border-white disabled:opacity-50`
-              }`}
-              style={{ fontFamily: FONTS.mono, letterSpacing: LETTER_SPACING.wide }}
               title={scope.description}
               aria-label={`${scope.label} - ${scope.description}`}
             >
               {scope.label}
-            </button>
+            </Button>
           ))}
         </div>
         <p className={`${TEXT.metadata} ${TEXT.mutedMedium} mt-1`} style={{ fontFamily: FONTS.mono }}>
@@ -197,27 +193,27 @@ export default function AddCommentForm({
 
       {/* Action buttons */}
       <div className="flex items-center gap-2">
-        <button
+        <Button
           type="submit"
+          variant="primary"
+          size="md"
           disabled={!isValid || isSubmitting}
-          className={`flex items-center gap-2 px-4 py-2 bg-black dark:bg-white text-white dark:text-black ${RADIUS.control} border ${BORDERS.solid} ${TEXT.secondary} font-bold hover:bg-black/90 hover:dark:bg-white/90 disabled:opacity-50 disabled:cursor-not-allowed transition-colors ${monoUppercase}`}
-          style={{ fontFamily: FONTS.mono, letterSpacing: LETTER_SPACING.tight }}
+          loading={isSubmitting}
           aria-label="Post comment"
         >
-          {isSubmitting && <LoadingSpinner size="sm" />}
           {isSubmitting ? 'Posting...' : 'Post Comment'}
-        </button>
+        </Button>
 
         {onCancel && (
-          <button
+          <Button
             type="button"
+            variant="secondary"
+            size="md"
             onClick={onCancel}
             disabled={isSubmitting}
-            className={`px-4 py-2 bg-white dark:bg-black border ${BORDERS.medium} text-black dark:text-white ${RADIUS.control} ${TEXT.secondary} font-bold hover:border-black hover:dark:border-white disabled:opacity-50 transition-colors ${monoUppercase}`}
-            style={{ fontFamily: FONTS.mono, letterSpacing: LETTER_SPACING.tight }}
           >
             Cancel
-          </button>
+          </Button>
         )}
       </div>
     </form>
