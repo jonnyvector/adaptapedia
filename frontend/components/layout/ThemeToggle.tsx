@@ -1,6 +1,7 @@
 'use client';
 
 import { useState, useEffect } from 'react';
+import { Button } from '@/components/ui/Button';
 import { BORDERS, RADIUS } from '@/lib/brutalist-design';
 
 type Theme = 'light' | 'dark' | 'system';
@@ -67,8 +68,10 @@ export default function ThemeToggle(): JSX.Element {
   // Prevent hydration mismatch by not rendering until mounted
   if (!mounted) {
     return (
-      <button
-        className={`p-2 md:p-0 md:px-3 md:py-3 text-black dark:text-white flex items-center justify-center md:border md:${BORDERS.subtle} md:bg-transparent md:${RADIUS.control}`}
+      <Button
+        variant="ghost"
+        size="sm"
+        className={`p-2 md:p-0 md:px-3 md:py-3 min-h-0 h-auto md:border md:${BORDERS.subtle} md:bg-transparent`}
         aria-label="Toggle theme"
         disabled
       >
@@ -87,16 +90,18 @@ export default function ThemeToggle(): JSX.Element {
             d="M21.752 15.002A9.718 9.718 0 0118 15.75c-5.385 0-9.75-4.365-9.75-9.75 0-1.33.266-2.597.748-3.752A9.753 9.753 0 003 11.25C3 16.635 7.365 21 12.75 21a9.753 9.753 0 009.002-5.998z"
           />
         </svg>
-      </button>
+      </Button>
     );
   }
 
   const displayTheme = getDisplayTheme(theme);
 
   return (
-    <button
+    <Button
+      variant="ghost"
+      size="sm"
       onClick={toggleTheme}
-      className={`p-2 md:p-0 md:px-3 md:py-3 text-black dark:text-white hover:text-black/70 hover:dark:text-white/70 transition-colors flex items-center justify-center md:border md:${BORDERS.subtle} md:bg-transparent md:${RADIUS.control} md:hover:bg-black md:hover:dark:bg-white md:hover:text-white md:hover:dark:text-black`}
+      className={`p-2 md:p-0 md:px-3 md:py-3 min-h-0 h-auto md:border md:${BORDERS.subtle} md:bg-transparent md:hover:bg-black md:hover:dark:bg-white md:hover:text-white md:hover:dark:text-black`}
       aria-label={`Switch to ${displayTheme === 'light' ? 'dark' : 'light'} mode`}
       title={`Switch to ${displayTheme === 'light' ? 'dark' : 'light'} mode`}
     >
@@ -133,6 +138,6 @@ export default function ThemeToggle(): JSX.Element {
           />
         </svg>
       )}
-    </button>
+    </Button>
   );
 }
