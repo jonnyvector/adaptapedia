@@ -11,7 +11,7 @@ import NotificationBell from './NotificationBell';
 import SearchDropdown from '@/components/search/SearchDropdown';
 import { api } from '@/lib/api';
 import type { SearchWithAdaptationsResponse } from '@/lib/types';
-import { FONTS, LETTER_SPACING, BORDERS, TEXT, monoUppercase } from '@/lib/brutalist-design';
+import { FONTS, LETTER_SPACING, BORDERS, TEXT, RADIUS, monoUppercase } from '@/lib/brutalist-design';
 import { XMarkIcon } from '@/components/ui/Icons';
 
 function HeaderContent(): JSX.Element {
@@ -146,7 +146,7 @@ function HeaderContent(): JSX.Element {
                     }
                   }}
                   placeholder="SEARCH BOOKS..."
-                  className={`w-full px-3 py-2 pr-10 ${TEXT.body} bg-white dark:bg-black text-black dark:text-white border ${BORDERS.medium} rounded-md focus:outline-none focus:ring-0 focus:border-black focus:dark:border-white placeholder:${TEXT.mutedLight} placeholder:uppercase min-h-[40px]`}
+                  className={`w-full px-3 py-2 pr-10 ${TEXT.body} bg-white dark:bg-black text-black dark:text-white border ${BORDERS.medium} ${RADIUS.control} focus:outline-none focus:ring-0 focus:border-black focus:dark:border-white placeholder:${TEXT.mutedLight} placeholder:uppercase min-h-[40px]`}
                   style={{ fontFamily: FONTS.mono, letterSpacing: LETTER_SPACING.normal }}
                   aria-label="Search"
                 />
@@ -257,7 +257,7 @@ function HeaderContent(): JSX.Element {
               ) : (
                 <Link
                   href="/auth/login"
-                  className={`px-3 py-1.5 border ${BORDERS.solid} bg-black dark:bg-white text-white dark:text-black hover:bg-white hover:dark:bg-black hover:text-black hover:dark:text-white font-bold transition-all ${TEXT.label} rounded-md ${monoUppercase} flex items-center`}
+                  className={`px-3 py-1.5 border ${BORDERS.solid} bg-black dark:bg-white text-white dark:text-black hover:bg-white hover:dark:bg-black hover:text-black hover:dark:text-white font-bold transition-all ${TEXT.label} ${RADIUS.control} ${monoUppercase} flex items-center`}
                   style={{ fontFamily: FONTS.mono, letterSpacing: LETTER_SPACING.tight }}
                 >
                   Login
@@ -304,7 +304,7 @@ function HeaderContent(): JSX.Element {
                 onChange={(e) => setSearchQuery(e.target.value)}
                 onFocus={() => searchQuery.length >= 2 && setShowDropdown(true)}
                 placeholder="SEARCH BOOKS..."
-                className={`w-full px-3 py-2 ${TEXT.body} bg-white dark:bg-black text-black dark:text-white border ${BORDERS.medium} rounded-md focus:outline-none focus:ring-0 focus:border-black focus:dark:border-white placeholder:${TEXT.mutedLight} placeholder:uppercase min-h-[40px]`}
+                className={`w-full px-3 py-2 ${TEXT.body} bg-white dark:bg-black text-black dark:text-white border ${BORDERS.medium} ${RADIUS.control} focus:outline-none focus:ring-0 focus:border-black focus:dark:border-white placeholder:${TEXT.mutedLight} placeholder:uppercase min-h-[40px]`}
                 style={{ fontFamily: FONTS.mono, letterSpacing: LETTER_SPACING.normal }}
                 aria-label="Search"
               />
@@ -344,7 +344,7 @@ function HeaderContent(): JSX.Element {
                 ) : (
                   <Link
                     href="/auth/login"
-                    className={`block text-center px-4 py-2 border ${BORDERS.solid} bg-black dark:bg-white text-white dark:text-black hover:bg-white hover:dark:bg-black hover:text-black hover:dark:text-white font-bold transition-all text-xs rounded-md ${monoUppercase}`}
+                    className={`block text-center px-4 py-2 border ${BORDERS.solid} bg-black dark:bg-white text-white dark:text-black hover:bg-white hover:dark:bg-black hover:text-black hover:dark:text-white font-bold transition-all text-xs ${RADIUS.control} ${monoUppercase}`}
                     style={{ fontFamily: FONTS.mono, letterSpacing: LETTER_SPACING.tight }}
                   >
                     Login

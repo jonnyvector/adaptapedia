@@ -3,7 +3,7 @@
 import { useState, useEffect, useRef } from 'react';
 import Link from 'next/link';
 import type { User } from '@/lib/types';
-import { FONTS, LETTER_SPACING, BORDERS, TEXT, monoUppercase } from '@/lib/brutalist-design';
+import { FONTS, LETTER_SPACING, BORDERS, TEXT, RADIUS, monoUppercase } from '@/lib/brutalist-design';
 
 interface UserDropdownProps {
   user: User;
@@ -41,7 +41,7 @@ export default function UserDropdown({ user }: UserDropdownProps): JSX.Element {
       </button>
 
       {isOpen && (
-        <div className={`absolute right-0 top-full mt-1 w-48 bg-white dark:bg-black border ${BORDERS.medium} rounded-md py-1 z-50`}>
+        <div className={`absolute right-0 top-full mt-1 w-48 bg-white dark:bg-black border ${BORDERS.medium} ${RADIUS.control} py-1 z-50`}>
           <Link
             href={`/u/${user.username}`}
             className={`block px-4 py-2 ${TEXT.label} text-black dark:text-white hover:text-black hover:dark:text-white hover:bg-stone-100 hover:dark:bg-stone-900 transition-colors font-bold ${monoUppercase}`}
