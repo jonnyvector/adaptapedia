@@ -262,7 +262,7 @@ SOCIALACCOUNT_LOGIN_ON_GET = True  # Skip intermediate "Continue" page, go strai
 
 # Redirect to custom callback that generates JWT tokens
 LOGIN_REDIRECT_URL = '/api/auth/social/callback/'
-ACCOUNT_LOGOUT_REDIRECT_URL = 'http://localhost:3000/'
+ACCOUNT_LOGOUT_REDIRECT_URL = os.environ.get('FRONTEND_URL', 'http://localhost:3000') + '/'
 
 # Social providers configuration
 SOCIALACCOUNT_PROVIDERS = {
