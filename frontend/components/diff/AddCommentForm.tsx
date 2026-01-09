@@ -1,9 +1,10 @@
 'use client';
 
-import { useState, useRef, useEffect } from 'react';
+import { useState } from 'react';
 import type { SpoilerScope } from '@/lib/types';
 import { Button } from '@/components/ui/Button';
-import { FONTS, LETTER_SPACING, BORDERS, TEXT, RADIUS, monoUppercase } from '@/lib/brutalist-design';
+import { Textarea } from '@/components/ui/Textarea';
+import { FONTS, LETTER_SPACING, BORDERS, TEXT, monoUppercase } from '@/lib/brutalist-design';
 
 interface AddCommentFormProps {
   diffItemId: number;
@@ -49,15 +50,6 @@ export default function AddCommentForm({
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [success, setSuccess] = useState(false);
-  const textareaRef = useRef<HTMLTextAreaElement>(null);
-
-  // Auto-resize textarea
-  useEffect(() => {
-    if (textareaRef.current) {
-      textareaRef.current.style.height = 'auto';
-      textareaRef.current.style.height = `${textareaRef.current.scrollHeight}px`;
-    }
-  }, [body]);
 
   const charCount = body.length;
   const isOverLimit = charCount > CHAR_LIMIT;
@@ -105,65 +97,36 @@ export default function AddCommentForm({
     }
   };
 
+  const getHelperText = () => {
+    if (success) return 'Comment posted successfully!';
+    if (error) return error;
+    if (isTooShort) return `Minimum ${MIN_CHARS} characters required`;
+    return undefined;
+  };
+
+  const getErrorMessage = () => {
+    if (isOverLimit || isTooShort || error) {
+      return getHelperText() || undefined;
+    }
+    return undefined;
+  };
+
   return (
     <form onSubmit={handleSubmit} className="space-y-4">
       {/* Textarea */}
-      <div>
-        <label htmlFor="comment-body" className={`block ${TEXT.secondary} font-bold mb-2 ${monoUppercase}`} style={{ fontFamily: FONTS.mono, letterSpacing: LETTER_SPACING.wide }}>
-          {parentId ? 'Add a reply' : 'Add your comment'}
-        </label>
-        <textarea
-          ref={textareaRef}
-          id="comment-body"
-          value={body}
-          onChange={(e) => setBody(e.target.value)}
-          placeholder={parentId ? 'Write your reply...' : 'Share your thoughts on this difference...'}
-          className={`w-full px-3 py-2 border ${RADIUS.control} resize-none bg-white dark:bg-black text-black dark:text-white focus:outline-none transition-colors ${
-            isOverLimit
-              ? `border-red-600 dark:border-red-400 focus:border-red-600 dark:focus:border-red-400`
-              : `${BORDERS.medium} focus:border-black dark:focus:border-white`
-          }`}
-          style={{ fontFamily: FONTS.mono, letterSpacing: LETTER_SPACING.normal }}
-          rows={parentId ? 2 : 3}
-          disabled={isSubmitting}
-          aria-describedby="char-count comment-error"
-          aria-invalid={isOverLimit || isTooShort}
-        />
-
-        {/* Character counter */}
-        <div className="flex items-center justify-between mt-1">
-          <div>
-            {isTooShort && (
-              <p className={`${TEXT.metadata} text-red-600 dark:text-red-400`} style={{ fontFamily: FONTS.mono }}>
-                Minimum {MIN_CHARS} characters required
-              </p>
-            )}
-            {error && (
-              <p id="comment-error" className={`${TEXT.metadata} text-red-600 dark:text-red-400`} style={{ fontFamily: FONTS.mono }}>
-                {error}
-              </p>
-            )}
-            {success && (
-              <p className={`${TEXT.metadata} text-black dark:text-white`} style={{ fontFamily: FONTS.mono }}>
-                Comment posted successfully!
-              </p>
-            )}
-          </div>
-          <span
-            id="char-count"
-            className={`${TEXT.metadata} ${
-              isOverLimit
-                ? 'text-red-600 dark:text-red-400 font-bold'
-                : charCount > CHAR_LIMIT * 0.9
-                ? 'text-amber-600 dark:text-amber-400'
-                : TEXT.mutedMedium
-            }`}
-            style={{ fontFamily: FONTS.mono }}
-          >
-            {charCount}/{CHAR_LIMIT}
-          </span>
-        </div>
-      </div>
+      <Textarea
+        id="comment-body"
+        value={body}
+        onChange={(e) => setBody(e.target.value)}
+        placeholder={parentId ? 'Write your reply...' : 'Share your thoughts on this difference...'}
+        rows={parentId ? 2 : 3}
+        maxLength={CHAR_LIMIT}
+        disabled={isSubmitting}
+        label={parentId ? 'Add a reply' : 'Add your comment'}
+        error={getErrorMessage()}
+        showCharCount={true}
+        textareaSize="md"
+      />
 
       {/* Spoiler scope selector */}
       <div>
