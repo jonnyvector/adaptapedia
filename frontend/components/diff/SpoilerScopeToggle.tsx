@@ -1,5 +1,5 @@
 import type { SpoilerScope } from '@/lib/types';
-import { FONTS, LETTER_SPACING, BORDERS, TEXT, monoUppercase } from '@/lib/brutalist-design';
+import { FONTS, LETTER_SPACING, BORDERS, TEXT, RADIUS, HEIGHT, monoUppercase } from '@/lib/brutalist-design';
 
 interface SpoilerScopeToggleProps {
   currentScope: SpoilerScope;
@@ -41,7 +41,7 @@ export default function SpoilerScopeToggle({
           <button
             key={scope.value}
             onClick={() => onScopeChange(scope.value)}
-            className={`px-3 sm:px-4 py-2 rounded-md ${TEXT.metadata} font-bold transition-colors min-h-[44px] flex items-center ${monoUppercase} ${
+            className={`px-3 sm:px-4 py-2 ${RADIUS.control} ${TEXT.metadata} font-bold transition-colors ${HEIGHT.touchTarget} flex items-center ${monoUppercase} ${
               currentScope === scope.value
                 ? `bg-black dark:bg-white text-white dark:text-black border ${BORDERS.solid}`
                 : `bg-white dark:bg-black text-black dark:text-white border ${BORDERS.medium} hover:border-black hover:dark:border-white`
