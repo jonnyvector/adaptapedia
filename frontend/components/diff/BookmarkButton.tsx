@@ -3,6 +3,7 @@
 import { useState, useEffect } from 'react';
 import { useAuth } from '@/lib/auth-context';
 import { api, ApiError } from '@/lib/api';
+import { Button } from '@/components/ui/Button';
 import { FONTS, BORDERS, TEXT } from '@/lib/brutalist-design';
 
 interface BookmarkButtonProps {
@@ -77,15 +78,16 @@ export default function BookmarkButton({
 
   return (
     <div className={className}>
-      <button
+      <Button
+        variant="ghost"
+        size="sm"
         onClick={handleToggleBookmark}
         disabled={isLoading}
-        className={`inline-flex items-center justify-center transition-colors p-2 ${
+        className={`p-2 min-h-0 h-auto ${
           isBookmarked
             ? `text-black dark:text-white`
             : `text-black/60 dark:text-white/60 hover:text-black hover:dark:text-white`
-        } ${isLoading ? 'opacity-50 cursor-not-allowed' : ''}`}
-        style={{ fontFamily: FONTS.mono }}
+        }`}
         title={isBookmarked ? 'Remove from bookmarks' : 'Add to bookmarks'}
         aria-label={isBookmarked ? 'Remove from bookmarks' : 'Add to bookmarks'}
       >
@@ -105,7 +107,7 @@ export default function BookmarkButton({
             d="M17.593 3.322c1.1.128 1.907 1.077 1.907 2.185V21L12 17.25 4.5 21V5.507c0-1.108.806-2.057 1.907-2.185a48.507 48.507 0 0111.186 0z"
           />
         </svg>
-      </button>
+      </Button>
       {error && (
         <p className={`${TEXT.metadata} text-red-600 dark:text-red-400 mt-1`} role="alert" style={{ fontFamily: FONTS.mono }}>
           {error}
