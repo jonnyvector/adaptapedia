@@ -2,6 +2,7 @@
 
 import { useEffect, useRef, useState } from 'react';
 import Link from 'next/link';
+import Image from 'next/image';
 import type { WorkWithAdaptations, ScreenWork } from '@/lib/types';
 import { FONTS, LETTER_SPACING, BORDERS, TEXT, monoUppercase } from '@/lib/brutalist-design';
 
@@ -101,9 +102,11 @@ export default function SearchDropdown({
                 }`}
               >
                 {work.cover_url ? (
-                  <img
+                  <Image
                     src={work.cover_url}
                     alt={work.title}
+                    width={40}
+                    height={56}
                     className="w-10 h-14 object-cover"
                   />
                 ) : (
@@ -144,9 +147,11 @@ export default function SearchDropdown({
                 }`}
               >
                 {screenWork.poster_url ? (
-                  <img
+                  <Image
                     src={screenWork.poster_url}
                     alt={screenWork.title}
+                    width={40}
+                    height={56}
                     className="w-10 h-14 object-cover"
                   />
                 ) : (
