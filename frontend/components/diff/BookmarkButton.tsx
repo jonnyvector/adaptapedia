@@ -4,6 +4,7 @@ import { useState, useEffect } from 'react';
 import { useAuth } from '@/lib/auth-context';
 import { api, ApiError } from '@/lib/api';
 import { Button } from '@/components/ui/Button';
+import { BrutalistBookmarkIcon, BrutalistBookmarkFilledIcon } from '@/components/ui/Icons';
 import { FONTS, BORDERS, TEXT } from '@/lib/brutalist-design';
 
 interface BookmarkButtonProps {
@@ -91,22 +92,11 @@ export default function BookmarkButton({
         title={isBookmarked ? 'Remove from bookmarks' : 'Add to bookmarks'}
         aria-label={isBookmarked ? 'Remove from bookmarks' : 'Add to bookmarks'}
       >
-        <svg
-          width="16"
-          height="16"
-          viewBox="0 0 24 24"
-          style={{ minWidth: '16px', minHeight: '16px', flexShrink: 0 }}
-          xmlns="http://www.w3.org/2000/svg"
-          fill={isBookmarked ? 'currentColor' : 'none'}
-          strokeWidth="2"
-          stroke="currentColor"
-        >
-          <path
-            strokeLinecap="round"
-            strokeLinejoin="round"
-            d="M17.593 3.322c1.1.128 1.907 1.077 1.907 2.185V21L12 17.25 4.5 21V5.507c0-1.108.806-2.057 1.907-2.185a48.507 48.507 0 0111.186 0z"
-          />
-        </svg>
+        {isBookmarked ? (
+          <BrutalistBookmarkFilledIcon className="w-4 h-4" />
+        ) : (
+          <BrutalistBookmarkIcon className="w-4 h-4" />
+        )}
       </Button>
       {error && (
         <p className={`${TEXT.metadata} text-red-600 dark:text-red-400 mt-1`} role="alert" style={{ fontFamily: FONTS.mono }}>

@@ -1,10 +1,12 @@
 import Link from 'next/link';
+import Image from 'next/image';
 import SearchBar from '@/components/search/SearchBar';
 import RandomComparisonButton from '@/components/ui/RandomComparisonButton';
 import ComparisonCard from '@/components/browse/ComparisonCard';
 import PopularComparisons from '@/components/home/PopularComparisons';
 import type { BrowseComparison } from '@/lib/types';
 import { FONTS, BORDERS, TEXT, RADIUS } from '@/lib/brutalist-design';
+import { ClipboardDocumentListIcon, UserGroupIcon, ShieldCheckIcon, ChartBarIcon, EyeSlashIcon, PlusIcon, ChatBubbleIcon } from '@/components/ui/Icons';
 
 // Force dynamic rendering - page uses client components with useSearchParams
 export const dynamic = 'force-dynamic';
@@ -38,6 +40,17 @@ export default async function Home(): Promise<JSX.Element> {
       <div className="relative py-12 md:py-20 mb-8 md:mb-12">
         <div className="container">
           <div className="max-w-4xl mx-auto text-center">
+            {/* Brutalist Icon */}
+            <div className="mb-6 md:mb-8 flex justify-center">
+              <Image
+                src="/brutalist-icon-outline.svg"
+                alt=""
+                width={120}
+                height={120}
+                className="opacity-90"
+              />
+            </div>
+
             {/* Clean, focused headline */}
             <h1 className="text-4xl sm:text-5xl md:text-7xl font-black mb-4 md:mb-6 leading-[1.1] tracking-tight" style={{ fontFamily: FONTS.mono }}>
               <span className={TEXT.primary}>
@@ -141,10 +154,8 @@ export default async function Home(): Promise<JSX.Element> {
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 sm:gap-6 max-w-6xl mx-auto">
             {/* Card 1 - Structured Comparisons */}
             <div className={`bg-white dark:bg-black border ${BORDERS.medium} p-4 sm:p-6 md:p-8 relative overflow-hidden hover:border-black/50 hover:dark:border-white/50 transition-colors`}>
-              <div className={`mb-6 inline-flex items-center justify-center w-16 h-16 bg-black dark:bg-white border ${BORDERS.medium} transition-transform`}>
-                <svg className="w-8 h-8 text-white dark:text-black" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-3 7h3m-3 4h3m-6-4h.01M9 16h.01" />
-                </svg>
+              <div className={`mb-6 inline-flex items-center justify-center w-16 h-16 bg-black dark:bg-white border ${BORDERS.medium} transition-transform p-1`}>
+                <Image src="/icon-structured.svg" alt="" width={56} height={56} className="dark:invert" />
               </div>
               <h3 className={`text-2xl font-bold mb-3 ${TEXT.primary}`} style={{ fontFamily: FONTS.mono }}>Structured Comparisons</h3>
               <p className={`${TEXT.secondary} ${TEXT.mutedMedium} mb-4`} style={{ fontFamily: FONTS.mono }}>
@@ -196,10 +207,8 @@ export default async function Home(): Promise<JSX.Element> {
 
             {/* Card 2 - Spoiler Control */}
             <div className={`bg-white dark:bg-black border ${BORDERS.medium} p-4 sm:p-6 md:p-8 relative overflow-hidden hover:border-black/50 hover:dark:border-white/50 transition-colors`}>
-              <div className={`mb-6 inline-flex items-center justify-center w-16 h-16 bg-black dark:bg-white border ${BORDERS.medium} transition-transform`}>
-                <svg className="w-8 h-8 text-white dark:text-black" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13.875 18.825A10.05 10.05 0 0112 19c-4.478 0-8.268-2.943-9.543-7a9.97 9.97 0 011.563-3.029m5.858.908a3 3 0 114.243 4.243M9.878 9.878l4.242 4.242M9.88 9.88l-3.29-3.29m7.532 7.532l3.29 3.29M3 3l3.59 3.59m0 0A9.953 9.953 0 0112 5c4.478 0 8.268 2.943 9.543 7a10.025 10.025 0 01-4.132 5.411m0 0L21 21" />
-                </svg>
+              <div className={`mb-6 inline-flex items-center justify-center w-16 h-16 bg-black dark:bg-white border ${BORDERS.medium} transition-transform p-1`}>
+                <Image src="/icon-spoiler.svg" alt="" width={56} height={56} className="dark:invert" />
               </div>
               <h3 className={`text-2xl font-bold mb-3 ${TEXT.primary}`} style={{ fontFamily: FONTS.mono }}>Spoiler Control</h3>
               <p className={`${TEXT.secondary} ${TEXT.mutedMedium} mb-4`} style={{ fontFamily: FONTS.mono }}>
@@ -244,10 +253,8 @@ export default async function Home(): Promise<JSX.Element> {
             {/* Card 3 - Community Driven - Full Width */}
             <div className={`lg:col-span-2 bg-white dark:bg-black border ${BORDERS.medium} p-4 sm:p-6 md:p-8 relative overflow-hidden hover:border-black/50 hover:dark:border-white/50 transition-colors`}>
               <div className="flex flex-col md:flex-row items-start gap-6">
-                <div className={`flex-shrink-0 w-16 h-16 bg-black dark:bg-white border ${BORDERS.medium} transition-transform flex items-center justify-center`}>
-                  <svg className="w-8 h-8 text-white dark:text-black" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z" />
-                  </svg>
+                <div className={`flex-shrink-0 w-16 h-16 bg-black dark:bg-white border ${BORDERS.medium} transition-transform flex items-center justify-center p-1`}>
+                  <Image src="/icon-community.svg" alt="" width={56} height={56} className="dark:invert" />
                 </div>
                 <div className="flex-1">
                   <h3 className={`text-2xl font-bold mb-3 ${TEXT.primary}`} style={{ fontFamily: FONTS.mono }}>Community Driven</h3>
@@ -260,16 +267,12 @@ export default async function Home(): Promise<JSX.Element> {
                     <span className={`${TEXT.metadata} uppercase tracking-wide font-semibold ${TEXT.mutedMedium} block mb-2`} style={{ fontFamily: FONTS.mono }}>Live now</span>
                     <div className={`flex flex-wrap items-center gap-3 ${TEXT.secondary}`}>
                     <span className={`inline-flex items-center gap-1.5 px-2.5 py-1 bg-black/10 dark:bg-white/10 ${TEXT.primary} border ${BORDERS.medium} font-bold uppercase tracking-wider`} style={{ fontFamily: FONTS.mono }}>
-                      <svg className="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
-                      </svg>
+                      <PlusIcon className="w-3.5 h-3.5" />
                       <span className="font-black">27 diffs</span>
                       <span className={`${TEXT.metadata} ${TEXT.mutedMedium}`}>today</span>
                     </span>
                     <span className={`inline-flex items-center gap-1.5 px-2.5 py-1 bg-black/10 dark:bg-white/10 ${TEXT.primary} border ${BORDERS.medium} font-bold uppercase tracking-wider`} style={{ fontFamily: FONTS.mono }}>
-                      <svg className="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z" />
-                      </svg>
+                      <ChatBubbleIcon className="w-3.5 h-3.5" />
                       <span className="font-black">8 discussions</span>
                       <span className={`${TEXT.metadata} ${TEXT.mutedMedium}`}>active</span>
                     </span>

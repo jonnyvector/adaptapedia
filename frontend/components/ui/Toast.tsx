@@ -2,6 +2,7 @@
 
 import { useEffect } from 'react';
 import { FONTS, LETTER_SPACING, BORDERS, TEXT, RADIUS } from '@/lib/brutalist-design';
+import { XMarkIcon } from '@/components/ui/Icons';
 
 export interface ToastProps {
   message: string;
@@ -48,9 +49,7 @@ export default function Toast({ message, type = 'success', duration = 4000, onCl
         className="flex-shrink-0 text-white/80 dark:text-black/80 hover:text-white hover:dark:text-black transition-colors"
         aria-label="Close notification"
       >
-        <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
-        </svg>
+        <XMarkIcon className="w-5 h-5" />
       </button>
       <style jsx>{`
         @keyframes slideInUp {

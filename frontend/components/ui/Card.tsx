@@ -19,7 +19,7 @@ const cardVariants = cva(
         lg: 'p-6 sm:p-8',
       },
       interactive: {
-        true: 'hover:border-black hover:dark:border-white cursor-pointer hover:shadow-lg',
+        true: 'hover:border-black hover:dark:border-white cursor-pointer hover:shadow-lg focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-black dark:focus-visible:outline-white',
         false: '',
       },
       rounded: {

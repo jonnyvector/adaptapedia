@@ -1,0 +1,7 @@
+<svg width="200" height="200" viewBox="0 0 200 200" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <!-- Brutalist bookmark icon - filled simplified -->
+  <rect width="200" height="200" fill="transparent"/>
+
+  <!-- Bookmark shape filled -->
+  <path d="M 50 20 L 150 20 L 150 180 L 100 140 L 50 180 Z" fill="currentColor" stroke="currentColor" stroke-width="12" stroke-linejoin="miter"/>
+</svg>

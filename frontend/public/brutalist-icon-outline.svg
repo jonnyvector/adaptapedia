@@ -1,0 +1,38 @@
+<svg width="200" height="200" viewBox="0 0 200 200" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <!-- Book to Screen comparison icon - White outline version -->
+  <rect width="200" height="200" fill="transparent"/>
+
+  <!-- Book (left side) -->
+  <!-- Book cover -->
+  <rect x="25" y="50" width="65" height="100" fill="transparent" stroke="white" stroke-width="5"/>
+  <!-- Book spine -->
+  <line x1="30" y1="50" x2="30" y2="150" stroke="white" stroke-width="5"/>
+  <!-- Book pages -->
+  <line x1="35" y1="50" x2="35" y2="150" stroke="white" stroke-width="3"/>
+  <!-- Page lines for texture -->
+  <line x1="45" y1="70" x2="75" y2="70" stroke="white" stroke-width="2"/>
+  <line x1="45" y1="85" x2="75" y2="85" stroke="white" stroke-width="2"/>
+  <line x1="45" y1="100" x2="75" y2="100" stroke="white" stroke-width="2"/>
+  <line x1="45" y1="115" x2="75" y2="115" stroke="white" stroke-width="2"/>
+  <line x1="45" y1="130" x2="75" y2="130" stroke="white" stroke-width="2"/>
+
+  <!-- Comparison arrow -->
+  <path d="M 95 95 L 105 95 M 105 95 L 100 90 M 105 95 L 100 100" stroke="white" stroke-width="2.5" stroke-linecap="square"/>
+  <path d="M 105 105 L 95 105 M 95 105 L 100 100 M 95 105 L 100 110" stroke="white" stroke-width="2.5" stroke-linecap="square"/>
+
+  <!-- Screen (right side) -->
+  <!-- TV/Monitor frame -->
+  <rect x="110" y="50" width="70" height="100" fill="transparent" stroke="white" stroke-width="5"/>
+  <!-- Screen display -->
+  <rect x="118" y="58" width="54" height="76" fill="transparent" stroke="white" stroke-width="3"/>
+  <!-- Screen scanlines for texture -->
+  <line x1="118" y1="70" x2="172" y2="70" stroke="white" stroke-width="1.5" opacity="0.5"/>
+  <line x1="118" y1="85" x2="172" y2="85" stroke="white" stroke-width="1.5" opacity="0.5"/>
+  <line x1="118" y1="100" x2="172" y2="100" stroke="white" stroke-width="1.5" opacity="0.5"/>
+  <line x1="118" y1="115" x2="172" y2="115" stroke="white" stroke-width="1.5" opacity="0.5"/>
+  <!-- Play button on screen -->
+  <path d="M 138 90 L 138 110 L 155 100 Z" fill="transparent" stroke="white" stroke-width="2"/>
+  <!-- TV stand -->
+  <rect x="135" y="150" width="20" height="8" fill="transparent" stroke="white" stroke-width="3"/>
+  <rect x="140" y="158" width="10" height="12" fill="transparent" stroke="white" stroke-width="3"/>
+</svg>

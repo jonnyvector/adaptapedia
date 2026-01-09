@@ -13,6 +13,7 @@ import { useAuth } from '@/lib/auth-context';
 import { Button } from '@/components/ui/Button';
 import { Card } from '@/components/ui/Card';
 import ImageLightbox from '@/components/ui/ImageLightbox';
+import { ChatBubbleIcon } from '@/components/ui/Icons';
 import { calculateVotePercentage, getConsensusLabel } from '@/lib/vote-utils';
 import { getTimeSince } from '@/lib/date-utils';
 import { getSpoilerBadgeColor, getSpoilerLabel, getCategoryBadgeColor, getCategoryLabel } from '@/lib/badge-utils';
@@ -393,9 +394,7 @@ export default function DiffItemCard({
               }}
               className="p-0 min-h-0 h-auto hover:underline"
             >
-              <svg className="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z" />
-              </svg>
+              <ChatBubbleIcon className="w-3.5 h-3.5" />
               <span>
                 {commentCount > 0
                   ? `${commentCount} ${commentCount === 1 ? 'comment' : 'comments'}`
