@@ -5,6 +5,7 @@ import { useRouter } from 'next/navigation';
 import type { Work, ScreenWork, PreferenceChoice, ComparisonVoteStats } from '@/lib/types';
 import { useAuth } from '@/lib/auth-context';
 import { calculateVotePercentage } from '@/lib/vote-utils';
+import { Button } from '@/components/ui/Button';
 import { CheckCircleIcon } from '@/components/ui/Icons';
 import { submitComparisonVote, getComparisonVoteStats } from '@/app/actions/comparison-votes';
 import { FONTS, LETTER_SPACING, BORDERS, TEXT, RADIUS, monoUppercase, COLORS } from '@/lib/brutalist-design';
@@ -264,13 +265,14 @@ export default function ComparisonVoting({ work, screenWork, initialStats = null
 
         {/* More Options Toggle */}
         <div className="text-center">
-          <button
+          <Button
+            variant="ghost"
+            size="sm"
             onClick={() => setShowMoreOptions(!showMoreOptions)}
-            className={`${TEXT.metadata} ${TEXT.mutedMedium} hover:text-black hover:dark:text-white transition-colors`}
-            style={{ fontFamily: FONTS.mono }}
+            className="p-0 min-h-0 h-auto"
           >
             {showMoreOptions ? 'Hide options' : 'More options'}
-          </button>
+          </Button>
         </div>
 
         {/* More Options - Expanded */}
