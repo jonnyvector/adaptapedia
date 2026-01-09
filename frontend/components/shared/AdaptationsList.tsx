@@ -1,5 +1,6 @@
 import type { ScreenWork, AdaptationEdge, DiffItem } from '@/lib/types';
 import Link from 'next/link';
+import Image from 'next/image';
 import DiffPreview from '@/components/diff/DiffPreview';
 import { FONTS, LETTER_SPACING, BORDERS, TEXT, monoUppercase } from '@/lib/brutalist-design';
 
@@ -40,10 +41,13 @@ export default function AdaptationsList({
               {/* Poster Image - moved to left side */}
               {adaptation.poster_url && (
                 <div className="flex-shrink-0 lg:w-32">
-                  <img
+                  <Image
                     src={adaptation.poster_url}
                     alt={`Poster for ${adaptation.title}`}
+                    width={200}
+                    height={300}
                     className={`w-full h-auto border ${BORDERS.subtle}`}
+                    sizes="(max-width: 1024px) 100vw, 128px"
                   />
                 </div>
               )}
