@@ -1,12 +1,9 @@
-import LoadingSpinner from '@/components/ui/LoadingSpinner';
+import { LoadingState } from '@/components/ui/LoadingState';
 
 export default function Loading(): JSX.Element {
   return (
     <main className="min-h-screen flex items-center justify-center">
-      <div className="text-center">
-        <LoadingSpinner size="lg" className="mx-auto mb-4" />
-        <p className="text-muted">Loading...</p>
-      </div>
+      <LoadingState />
     </main>
   );
 }

@@ -3,7 +3,7 @@
 import { useEffect } from 'react';
 import { useRouter, usePathname } from 'next/navigation';
 import { useAuth } from '@/lib/auth-context';
-import { FONTS, TEXT, RADIUS} from '@/lib/brutalist-design';
+import { LoadingState } from '@/components/ui/LoadingState';
 
 interface AuthGuardProps {
   children: React.ReactNode;
@@ -30,10 +30,7 @@ export default function AuthGuard({
   if (isLoading) {
     return (
       <div className="flex items-center justify-center min-h-screen">
-        <div className="text-center">
-          <div className="inline-block h-8 w-8 animate-spin rounded-full border-4 border-solid border-black/20 dark:border-white/20 border-t-black dark:border-t-white align-[-0.125em] motion-reduce:animate-[spin_1.5s_linear_infinite]"></div>
-          <p className={`mt-4 ${TEXT.mutedMedium}`} style={{ fontFamily: FONTS.mono }}>Loading...</p>
-        </div>
+        <LoadingState />
       </div>
     );
   }

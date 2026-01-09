@@ -7,6 +7,7 @@ import { Suspense } from 'react';
 import { useSearchParams } from 'next/navigation';
 import LoginForm from '@/components/auth/LoginForm';
 import AuthPageWrapper from '@/components/auth/AuthPageWrapper';
+import { LoadingState } from '@/components/ui/LoadingState';
 
 function LoginPageContent(): JSX.Element {
   const searchParams = useSearchParams();
@@ -26,7 +27,7 @@ export default function LoginPage(): JSX.Element {
   return (
     <Suspense fallback={
       <div className="min-h-screen flex items-center justify-center">
-        <p className="text-muted">Loading...</p>
+        <LoadingState />
       </div>
     }>
       <LoginPageContent />

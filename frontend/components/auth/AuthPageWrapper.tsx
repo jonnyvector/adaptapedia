@@ -4,6 +4,7 @@ import { Suspense } from 'react';
 import { useSearchParams } from 'next/navigation';
 import { useAuth } from '@/lib/auth-context';
 import { FONTS, LETTER_SPACING, TEXT, monoUppercase, RADIUS} from '@/lib/brutalist-design';
+import { LoadingState } from '@/components/ui/LoadingState';
 
 interface AuthPageWrapperProps {
   title: string;
@@ -43,7 +44,7 @@ export default function AuthPageWrapper(props: AuthPageWrapperProps): JSX.Elemen
   return (
     <Suspense fallback={
       <div className="min-h-screen flex items-center justify-center">
-        <p className={`${TEXT.mutedMedium}`} style={{ fontFamily: FONTS.mono }}>Loading...</p>
+        <LoadingState />
       </div>
     }>
       <AuthPageContent {...props} />
