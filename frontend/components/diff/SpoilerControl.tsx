@@ -3,6 +3,7 @@
 import { useEffect } from 'react';
 import type { SpoilerScope } from '@/lib/types';
 import { LockClosedIcon, BookOpenIcon, FilmIcon, LockOpenIcon, CheckIcon } from '@/components/ui/Icons';
+import { Button } from '@/components/ui/Button';
 import { FONTS, LETTER_SPACING, BORDERS, TEXT, RADIUS, monoUppercase } from '@/lib/brutalist-design';
 
 export type SpoilerPreference = 'SAFE' | 'BOOK_ALLOWED' | 'SCREEN_ALLOWED' | 'FULL';
@@ -107,27 +108,24 @@ export default function SpoilerControl({
               const isActive = currentPreference === pref.value;
               const Icon = pref.icon;
               return (
-                <button
+                <Button
                   key={pref.value}
                   onClick={() => onPreferenceChange(pref.value)}
+                  variant={isActive ? 'primary' : 'secondary'}
+                  size="md"
                   className={`
-                    relative flex-1 sm:flex-initial px-2 sm:px-4 py-3 ${RADIUS.control} ${TEXT.label} font-bold
-                    transition-all
-                    flex items-center justify-center gap-0.5 sm:gap-1.5 whitespace-nowrap border
-                    ${
-                      isActive
-                        ? `bg-black dark:bg-white ${BORDERS.solid} text-white dark:text-black`
-                        : `bg-stone-100 dark:bg-stone-900 ${BORDERS.medium} ${TEXT.mutedStrong} hover:border-black hover:dark:border-white`
-                    }
+                    relative flex-1 sm:flex-initial py-3
+                    flex items-center justify-center gap-0.5 sm:gap-1.5 whitespace-nowrap
+                    ${!isActive && `bg-stone-100 dark:bg-stone-900 ${TEXT.mutedStrong}`}
                   `}
-                  style={{ fontFamily: FONTS.mono, letterSpacing: LETTER_SPACING.normal }}
+                  style={{ letterSpacing: LETTER_SPACING.normal }}
                   title={pref.description}
                   aria-pressed={isActive}
                   aria-label={`${pref.label}: ${pref.description}`}
                 >
                   <Icon className="w-3 h-3 sm:w-3.5 sm:h-3.5 hidden sm:block" aria-hidden="true" />
                   <span className={`uppercase ${TEXT.metadata}`}>{pref.label}</span>
-                </button>
+                </Button>
               );
             })}
           </div>
