@@ -1,4 +1,5 @@
 import Link from 'next/link';
+import Image from 'next/image';
 import type { BrowseComparison, TrendingComparison } from '@/lib/types';
 import { FONTS, LETTER_SPACING, BORDERS, TEXT, monoUppercase } from '@/lib/brutalist-design';
 
@@ -40,10 +41,12 @@ export default function ComparisonCard({ comparison, showTrendingBadge = false }
         {/* Book Cover */}
         <div className="flex-1 relative overflow-hidden border-r-2 border-black/20 dark:border-white/20">
           {cover_url ? (
-            <img
+            <Image
               src={cover_url}
               alt={work_title}
-              className="absolute inset-0 w-full h-full object-cover"
+              fill
+              className="object-cover"
+              sizes="(max-width: 768px) 50vw, 25vw"
             />
           ) : (
             <div className="absolute inset-0 flex items-center justify-center bg-surface2 text-muted text-xs">
@@ -86,10 +89,12 @@ export default function ComparisonCard({ comparison, showTrendingBadge = false }
         {/* Movie/TV Poster */}
         <div className="flex-1 relative overflow-hidden">
           {poster_url ? (
-            <img
+            <Image
               src={poster_url}
               alt={screen_work_title}
-              className="absolute inset-0 w-full h-full object-cover"
+              fill
+              className="object-cover"
+              sizes="(max-width: 768px) 50vw, 25vw"
             />
           ) : (
             <div className="absolute inset-0 flex items-center justify-center bg-surface2 text-muted text-xs">
