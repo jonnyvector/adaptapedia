@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import type { Work, ScreenWork, ComparisonVoteStats } from '@/lib/types';
 import { api } from '@/lib/api';
 import ComparisonVoting from './ComparisonVoting';
@@ -31,7 +31,7 @@ export default function CompactVoteStrip({
     }
   }, [work.id, screenWork.id]);
 
-  const fetchStats = async () => {
+  const fetchStats = useCallback(async () => {
     try {
       const data = await api.comparisonVotes.getStats(work.id, screenWork.id);
       setStats(data);
@@ -40,11 +40,11 @@ export default function CompactVoteStrip({
     } finally {
       setLoading(false);
     }
-  };
+  }, [work.id, screenWork.id]);
 
   useEffect(() => {
     fetchStats();
-  }, [work.id, screenWork.id]);
+  }, [fetchStats]);
 
   const handleVoteSubmitted = () => {
     fetchStats();

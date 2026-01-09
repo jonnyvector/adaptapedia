@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { useRouter } from 'next/navigation';
 import type { Work, ScreenWork, PreferenceChoice, ComparisonVoteStats } from '@/lib/types';
 import { useAuth } from '@/lib/auth-context';
@@ -33,7 +33,7 @@ export default function ComparisonVoting({ work, screenWork, initialStats = null
   const [preference, setPreference] = useState<PreferenceChoice | null>(null);
   const [faithfulnessRating, setFaithfulnessRating] = useState<number | null>(null);
 
-  const fetchStats = async () => {
+  const fetchStats = useCallback(async () => {
     try {
       const result = await getComparisonVoteStats(work.id, screenWork.id);
       if (result.success && result.data) {
@@ -50,7 +50,7 @@ export default function ComparisonVoting({ work, screenWork, initialStats = null
     } finally {
       setLoading(false);
     }
-  };
+  }, [work.id, screenWork.id]);
 
   useEffect(() => {
     // Only fetch if we don't have initial stats
@@ -63,7 +63,7 @@ export default function ComparisonVoting({ work, screenWork, initialStats = null
         setFaithfulnessRating(initialStats.user_vote.faithfulness_rating);
       }
     }
-  }, [work.id, screenWork.id, initialStats]);
+  }, [work.id, screenWork.id, initialStats, fetchStats]);
 
   const submitVote = async (selectedPreference: PreferenceChoice, faithfulness: number | null = null) => {
     if (!isAuthenticated) {

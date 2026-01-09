@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { ModerationDiff, ModerationComment, ApiResponse } from '@/lib/types';
 import { api } from '@/lib/api';
 import DiffReviewCard from './DiffReviewCard';
@@ -20,11 +20,7 @@ export default function ModQueue(): JSX.Element {
   const [error, setError] = useState<string | null>(null);
   const [statusFilter, setStatusFilter] = useState<StatusFilter>('PENDING');
 
-  useEffect(() => {
-    loadItems();
-  }, [activeTab, statusFilter]);
-
-  const loadItems = async (): Promise<void> => {
+  const loadItems = useCallback(async (): Promise<void> => {
     setIsLoading(true);
     setError(null);
     try {
@@ -52,7 +48,11 @@ export default function ModQueue(): JSX.Element {
     } finally {
       setIsLoading(false);
     }
-  };
+  }, [activeTab, statusFilter]);
+
+  useEffect(() => {
+    loadItems();
+  }, [loadItems]);
 
   const handleActionComplete = (): void => {
     loadItems();

@@ -86,7 +86,7 @@ export default function DiffItemCard({
         setCommentsExpanded(true);
       }
     }
-  }, []);
+  }, [setCommentsExpanded]);
 
   // Auto-vote after login if pending
   useEffect(() => {
