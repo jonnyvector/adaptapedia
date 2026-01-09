@@ -11,6 +11,7 @@ import CommentsList from './CommentsList';
 import { api } from '@/lib/api';
 import { useAuth } from '@/lib/auth-context';
 import { Button } from '@/components/ui/Button';
+import { Card } from '@/components/ui/Card';
 import ImageLightbox from '@/components/ui/ImageLightbox';
 import { calculateVotePercentage, getConsensusLabel } from '@/lib/vote-utils';
 import { getTimeSince } from '@/lib/date-utils';
@@ -153,7 +154,7 @@ export default function DiffItemCard({
   const hasDetail = diff.detail && diff.detail.trim().length > 0;
 
   return (
-    <div id={`diff-${diff.id}`} className={`border ${BORDERS.medium} bg-stone-50 dark:bg-stone-950 hover:border-black hover:dark:border-white transition-all overflow-hidden`}>
+    <Card id={`diff-${diff.id}`} variant="subtle" padding="none" interactive className="overflow-hidden">
       {/* Compact header row - always visible */}
       <div className="p-3 sm:p-4">
         {/* Badges row - smaller, tag-like */}
@@ -429,6 +430,6 @@ export default function DiffItemCard({
           onClose={() => setLightboxOpen(false)}
         />
       )}
-    </div>
+    </Card>
   );
 }
