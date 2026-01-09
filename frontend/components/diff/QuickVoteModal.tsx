@@ -3,6 +3,7 @@
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { useAuth } from '@/lib/auth-context';
+import { Button } from '@/components/ui/Button';
 import type { Work, ScreenWork } from '@/lib/types';
 import { FONTS, BORDERS, TEXT, RADIUS } from '@/lib/brutalist-design';
 // Simple X icon component
@@ -127,13 +128,15 @@ export default function QuickVoteModal({
           <h2 id="vote-modal-title" className={`text-base font-bold text-black dark:text-white uppercase tracking-wider`} style={{ fontFamily: FONTS.mono, letterSpacing: '0.1em' }}>
             Quick Vote
           </h2>
-          <button
+          <Button
+            variant="ghost"
+            size="sm"
             onClick={onClose}
-            className={`p-2 hover:bg-stone-100 hover:dark:bg-stone-900 ${RADIUS.control} transition-colors`}
+            className="p-2 min-h-0 h-auto hover:bg-stone-100 hover:dark:bg-stone-900"
             aria-label="Close modal"
           >
             <XIcon className="w-5 h-5" />
-          </button>
+          </Button>
         </div>
 
         {/* Content */}
@@ -193,13 +196,14 @@ export default function QuickVoteModal({
           {step === 2 && (
             <div className="space-y-6">
               <div className="text-center mb-6">
-                <button
+                <Button
+                  variant="ghost"
+                  size="sm"
                   onClick={() => setStep(1)}
-                  className={`${TEXT.body} text-black dark:text-white hover:underline mb-2 font-bold`}
-                  style={{ fontFamily: FONTS.mono }}
+                  className="mb-2 p-0 min-h-0 h-auto hover:underline"
                 >
                   ← Back
-                </button>
+                </Button>
                 <p className={`${TEXT.body} ${TEXT.mutedMedium} mb-2 font-bold`} style={{ fontFamily: FONTS.mono }}>Step 2 of 2 (Optional)</p>
                 <h3 className={`text-lg font-bold text-black dark:text-white uppercase tracking-wider`} style={{ fontFamily: FONTS.mono, letterSpacing: '0.08em' }}>
                   How faithful was the adaptation?
@@ -253,22 +257,25 @@ export default function QuickVoteModal({
               </div>
 
               {/* Submit */}
-              <button
+              <Button
+                variant="primary"
+                size="lg"
                 onClick={handleSubmit}
-                disabled={isSubmitting}
-                className={`w-full py-3 bg-black dark:bg-white text-white dark:text-black hover:bg-white hover:dark:bg-black hover:text-black hover:dark:text-white border ${BORDERS.solid} font-bold ${RADIUS.control} transition-all disabled:opacity-50 disabled:cursor-not-allowed uppercase tracking-wider`}
-                style={{ fontFamily: FONTS.mono, letterSpacing: '0.08em' }}
+                loading={isSubmitting}
+                fullWidth
               >
                 {isSubmitting ? 'Submitting...' : 'Submit Vote'}
-              </button>
+              </Button>
 
-              <button
+              <Button
+                variant="ghost"
+                size="md"
                 onClick={handleSubmit}
-                className={`w-full ${TEXT.body} ${TEXT.mutedMedium} hover:text-black hover:dark:text-white transition-colors font-bold`}
-                style={{ fontFamily: FONTS.mono }}
+                fullWidth
+                className="hover:underline"
               >
                 Skip faithfulness rating →
-              </button>
+              </Button>
             </div>
           )}
         </div>
