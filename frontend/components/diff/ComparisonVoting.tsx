@@ -300,7 +300,7 @@ export default function ComparisonVoting({ work, screenWork, initialStats = null
               } disabled:opacity-50`}
               style={{ fontFamily: FONTS.mono, letterSpacing: LETTER_SPACING.wide }}
             >
-              Didn't finish
+              Didn&apos;t finish
             </button>
           </div>
         )}

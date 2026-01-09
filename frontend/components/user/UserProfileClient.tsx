@@ -329,7 +329,7 @@ export default function UserProfileClient({ profile }: UserProfileClientProps): 
                               {formatDate(vote.created_at)}
                             </span>
                           </div>
-                          <p className={`${TEXT.secondary} ${TEXT.mutedMedium} mb-2`} style={{ fontFamily: FONTS.mono }}>"{vote.diff_item_claim}"</p>
+                          <p className={`${TEXT.secondary} ${TEXT.mutedMedium} mb-2`} style={{ fontFamily: FONTS.mono }}>&quot;{vote.diff_item_claim}&quot;</p>
                           <div className="flex items-center gap-2">
                             <span className={`${TEXT.secondary} font-bold uppercase tracking-wider`} style={{ fontFamily: FONTS.mono }}>Your vote:</span>
                             <span
