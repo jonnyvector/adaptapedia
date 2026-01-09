@@ -100,7 +100,7 @@ export default function ComparisonVoting({ work, screenWork, initialStats = null
       setPreference(selectedPreference);
       setShowSuccess(true);
 
-      // If this was a primary choice and they haven't rated faithfulness, prompt them
+      // If this was a primary choice and they haven&apos;t rated faithfulness, prompt them
       if ((selectedPreference === 'BOOK' || selectedPreference === 'SCREEN') && !faithfulness && !faithfulnessRating) {
         setShowFaithfulnessPrompt(true);
       }

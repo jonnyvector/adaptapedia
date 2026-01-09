@@ -243,7 +243,7 @@ export default function QuickVoteModal({
                     onChange={(e) => setHasReadBook(e.target.checked)}
                     className={`w-4 h-4 ${RADIUS.control} border ${BORDERS.subtle}`}
                   />
-                  <span className={`${TEXT.body} text-black dark:text-white font-bold`} style={{ fontFamily: FONTS.mono }}>I've read the book</span>
+                  <span className={`${TEXT.body} text-black dark:text-white font-bold`} style={{ fontFamily: FONTS.mono }}>I&apos;ve read the book</span>
                 </label>
                 <label className="flex items-center gap-2 cursor-pointer">
                   <input
@@ -252,7 +252,7 @@ export default function QuickVoteModal({
                     onChange={(e) => setHasWatchedAdaptation(e.target.checked)}
                     className={`w-4 h-4 ${RADIUS.control} border ${BORDERS.subtle}`}
                   />
-                  <span className={`${TEXT.body} text-black dark:text-white font-bold`} style={{ fontFamily: FONTS.mono }}>I've watched the adaptation</span>
+                  <span className={`${TEXT.body} text-black dark:text-white font-bold`} style={{ fontFamily: FONTS.mono }}>I&apos;ve watched the adaptation</span>
                 </label>
               </div>
 
