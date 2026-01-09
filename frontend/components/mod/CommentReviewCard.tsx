@@ -4,6 +4,7 @@ import Link from 'next/link';
 import { ModerationComment } from '@/lib/types';
 import { api } from '@/lib/api';
 import ModerationActions from './ModerationActions';
+import { Card } from '@/components/ui/Card';
 import { FONTS, LETTER_SPACING, BORDERS, TEXT, RADIUS, monoUppercase } from '@/lib/brutalist-design';
 
 interface CommentReviewCardProps {
@@ -48,7 +49,7 @@ export default function CommentReviewCard({
   };
 
   return (
-    <div className={`border ${BORDERS.medium} ${RADIUS.control} p-6 bg-stone-50 dark:bg-stone-950`}>
+    <Card variant="subtle" padding="lg" rounded>
       {/* Status Badge */}
       <div className="mb-4">
         <span
@@ -112,6 +113,6 @@ export default function CommentReviewCard({
         onHide={handleHide}
         onDelete={handleDelete}
       />
-    </div>
+    </Card>
   );
 }

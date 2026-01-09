@@ -4,6 +4,7 @@ import Link from 'next/link';
 import { ModerationDiff } from '@/lib/types';
 import { api } from '@/lib/api';
 import ModerationActions from './ModerationActions';
+import { Card } from '@/components/ui/Card';
 import { FONTS, LETTER_SPACING, BORDERS, TEXT, RADIUS, monoUppercase } from '@/lib/brutalist-design';
 
 interface DiffReviewCardProps {
@@ -60,7 +61,7 @@ export default function DiffReviewCard({
   };
 
   return (
-    <div className={`border ${BORDERS.medium} ${RADIUS.control} p-6 bg-stone-50 dark:bg-stone-950`}>
+    <Card variant="subtle" padding="lg" rounded>
       {/* Status Badge */}
       <div className="mb-4">
         <span
@@ -146,6 +147,6 @@ export default function DiffReviewCard({
         onReject={handleReject}
         onFlag={handleFlag}
       />
-    </div>
+    </Card>
   );
 }

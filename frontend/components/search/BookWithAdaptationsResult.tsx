@@ -4,6 +4,7 @@ import { useState } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
 import type { WorkWithAdaptations } from '@/lib/types';
+import { Card } from '@/components/ui/Card';
 import { FONTS, LETTER_SPACING, BORDERS, TEXT, monoUppercase, RADIUS} from '@/lib/brutalist-design';
 
 interface BookWithAdaptationsResultProps {
@@ -32,7 +33,7 @@ export default function BookWithAdaptationsResult({ work }: BookWithAdaptationsR
   const otherAdaptations = work.adaptations.slice(1);
 
   return (
-    <div className={`border ${BORDERS.medium} ${RADIUS.control} p-4 hover:border-black hover:dark:border-white transition-colors bg-white dark:bg-black`}>
+    <Card variant="default" padding="sm" interactive rounded>
       {/* Book Info */}
       <div>
         <div className="flex items-start justify-between gap-4">
@@ -175,6 +176,6 @@ export default function BookWithAdaptationsResult({ work }: BookWithAdaptationsR
           </p>
         </div>
       )}
-    </div>
+    </Card>
   );
 }

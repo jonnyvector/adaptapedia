@@ -38,8 +38,8 @@ export default function TrendingComparisons({ limit = 6 }: TrendingComparisonsPr
       <div className="space-y-3">
         {[...Array(3)].map((_, i) => (
           <div key={i} className="animate-pulse">
-            <div className="h-4 bg-black/10 dark:bg-white/10 ${RADIUS.control} w-3/4 mb-2"></div>
-            <div className="h-3 bg-black/10 dark:bg-white/10 ${RADIUS.control} w-1/2"></div>
+            <div className={`h-4 bg-black/10 dark:bg-white/10 ${RADIUS.control} w-3/4 mb-2`}></div>
+            <div className={`h-3 bg-black/10 dark:bg-white/10 ${RADIUS.control} w-1/2`}></div>
           </div>
         ))}
       </div>

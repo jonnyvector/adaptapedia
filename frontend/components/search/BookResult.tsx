@@ -3,6 +3,8 @@ import Image from 'next/image';
 import { BookIcon } from './icons';
 import type { Work } from '@/lib/types';
 import { FONTS, LETTER_SPACING, BORDERS, TEXT, monoUppercase, COLORS, RADIUS} from '@/lib/brutalist-design';
+import { cardVariants } from '@/components/ui/Card';
+import { cn } from '@/lib/utils';
 
 interface BookResultProps {
   book: Work;
@@ -12,7 +14,10 @@ export default function BookResult({ book }: BookResultProps): JSX.Element {
   return (
     <Link
       href={`/book/${book.slug}`}
-      className={`block border ${BORDERS.medium} ${RADIUS.control} p-4 hover:border-black hover:dark:border-white transition-colors bg-white dark:bg-black`}
+      className={cn(
+        cardVariants({ variant: 'default', padding: 'sm', interactive: true, rounded: true }),
+        'block'
+      )}
     >
       <div className="flex gap-4">
         {/* Cover Image */}
