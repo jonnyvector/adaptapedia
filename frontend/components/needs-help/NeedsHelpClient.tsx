@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
+import Image from 'next/image';
 import { useRouter } from 'next/navigation';
 import { api } from '@/lib/api';
 import type { NeedsHelpResponse, NeedsHelpComparison } from '@/lib/types';
@@ -372,11 +373,12 @@ function CompactComparisonCard({
             {/* Book cover thumbnail */}
             <div className={`w-9 h-12 border ${BORDERS.medium} overflow-hidden bg-gradient-to-br from-orange-50 to-amber-50 dark:from-orange-950 dark:to-amber-950 flex-shrink-0 flex items-center justify-center shadow-sm group-hover/link:shadow transition-shadow`}>
               {comparison.cover_url ? (
-                <img
+                <Image
                   src={comparison.cover_url}
                   alt={comparison.work_title || 'Book cover'}
+                  width={36}
+                  height={48}
                   className="w-full h-full object-cover"
-                  loading="lazy"
                 />
               ) : (
                 <div className="flex flex-col items-center justify-center text-orange-600 dark:text-orange-400">
@@ -410,11 +412,12 @@ function CompactComparisonCard({
             {/* Screen poster thumbnail */}
             <div className={`w-9 h-12 border ${BORDERS.medium} overflow-hidden bg-gradient-to-br from-purple-50 to-blue-50 dark:from-purple-950 dark:to-blue-950 flex-shrink-0 flex items-center justify-center shadow-sm group-hover/link:shadow transition-shadow`}>
               {comparison.poster_url ? (
-                <img
+                <Image
                   src={comparison.poster_url}
                   alt={comparison.screen_work_title || 'Poster'}
+                  width={36}
+                  height={48}
                   className="w-full h-full object-cover"
-                  loading="lazy"
                 />
               ) : (
                 <div className="flex flex-col items-center justify-center text-purple-600 dark:text-purple-400">
@@ -475,10 +478,12 @@ function ComparisonCard({ comparison }: { comparison: NeedsHelpComparison }) {
       <div className="flex h-48">
         <div className="w-1/2 relative bg-stone-100 dark:bg-stone-900">
           {comparison.cover_url ? (
-            <img
+            <Image
               src={comparison.cover_url}
               alt={comparison.work_title}
-              className="w-full h-full object-cover"
+              fill
+              className="object-cover"
+              sizes="50vw"
             />
           ) : (
             <div className={`w-full h-full flex items-center justify-center ${TEXT.mutedMedium}`}>
@@ -491,10 +496,12 @@ function ComparisonCard({ comparison }: { comparison: NeedsHelpComparison }) {
         </div>
         <div className="w-1/2 relative bg-stone-100 dark:bg-stone-900">
           {comparison.poster_url ? (
-            <img
+            <Image
               src={comparison.poster_url}
               alt={comparison.screen_work_title}
-              className="w-full h-full object-cover"
+              fill
+              className="object-cover"
+              sizes="50vw"
             />
           ) : (
             <div className={`w-full h-full flex items-center justify-center ${TEXT.mutedMedium}`}>
