@@ -40,10 +40,13 @@ export const BORDERS = {
 // Text Styles - Mobile-first with responsive variants
 export const TEXT = {
   // Sizes - mobile first, then desktop
+  micro: 'text-[8px] sm:text-[9px]', // For vote strips, tiny badges, micro-labels
   metadata: 'text-[9px] sm:text-[10px]',
   label: 'text-[11px] sm:text-xs',
   secondary: 'text-xs sm:text-sm',
   body: 'text-sm sm:text-base',
+  heading: 'text-base sm:text-lg',
+  title: 'text-lg sm:text-xl',
 
   // Colors
   mutedLight: 'text-black/50 dark:text-white/50',
@@ -74,6 +77,42 @@ export const SPACING = {
   gapSmall: 'gap-2 sm:gap-3',
   gapMedium: 'gap-3 sm:gap-4',
   gapLarge: 'gap-4 sm:gap-6',
+} as const;
+
+// Height tokens for common UI elements
+export const HEIGHT = {
+  // Touch target minimums (WCAG AA compliance - 44x44px)
+  touchTarget: 'min-h-[44px]',
+  touchTargetLg: 'min-h-[48px]',
+
+  // Component heights
+  input: 'h-[44px]',
+  inputSm: 'h-[36px]',
+  inputLg: 'h-[48px]',
+
+  // Dividers
+  dividerThin: 'h-[1px]',
+  dividerMedium: 'h-[2px]',
+  dividerThick: 'h-[4px]',
+} as const;
+
+// Width tokens for common UI patterns
+export const WIDTH = {
+  // Cover/poster aspect ratios
+  coverSm: 'w-[120px]',
+  coverMd: 'w-[180px]',
+  coverLg: 'w-[240px]',
+
+  // Component widths
+  scoreboardSm: 'w-[180px]',
+  scoreboardMd: 'w-[200px]',
+  scoreboardLg: 'w-[240px]',
+
+  // Icon sizes
+  iconSm: 'w-4 h-4',
+  iconMd: 'w-5 h-5',
+  iconLg: 'w-6 h-6',
+  iconXl: 'w-8 h-8',
 } as const;
 
 // Common Style Objects - Mobile-optimized
