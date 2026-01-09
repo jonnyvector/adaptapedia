@@ -6,6 +6,7 @@ import { useAuth } from '@/lib/auth-context';
 import { api } from '@/lib/api';
 import type { Work, ScreenWork, DiffCategory } from '@/lib/types';
 import AddDiffForm from '@/components/diff/AddDiffForm';
+import { Button } from '@/components/ui/Button';
 
 interface PageProps {
   params: {
@@ -77,12 +78,14 @@ export default function AddDiffPage({ params }: PageProps): JSX.Element {
         <div className="max-w-md p-6 bg-red-50 border border-red-200 rounded-lg">
           <h2 className="text-lg font-semibold text-red-900 mb-2">Error</h2>
           <p className="text-red-700">{error}</p>
-          <button
+          <Button
             onClick={() => router.push(`/compare/${params.book}/${params.screen}`)}
-            className="mt-4 px-4 py-2 bg-red-600 text-white rounded-md hover:bg-red-700"
+            variant="danger"
+            size="md"
+            className="mt-4"
           >
             Back to Comparison
-          </button>
+          </Button>
         </div>
       </main>
     );
