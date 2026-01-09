@@ -11,9 +11,10 @@ interface NavLinkProps {
   mobile?: boolean;
   className?: string;
   onClick?: () => void;
+  title?: string;
 }
 
-export function NavLink({ href, children, mobile = false, className, onClick }: NavLinkProps) {
+export function NavLink({ href, children, mobile = false, className, onClick, title }: NavLinkProps) {
   const pathname = usePathname();
   const isActive = pathname === href || (href !== '/' && pathname.startsWith(`${href}/`));
 
@@ -22,6 +23,7 @@ export function NavLink({ href, children, mobile = false, className, onClick }: 
       <Link
         href={href}
         onClick={onClick}
+        title={title}
         className={cn(
           `${TEXT.body} px-4 py-3 hover:bg-stone-100 hover:dark:bg-stone-900 transition-colors font-bold ${monoUppercase} border ${BORDERS.medium}`,
           isActive ? 'bg-stone-100 dark:bg-stone-900 text-black dark:text-white' : `${TEXT.primary}`,
@@ -38,6 +40,7 @@ export function NavLink({ href, children, mobile = false, className, onClick }: 
     <Link
       href={href}
       onClick={onClick}
+      title={title}
       className={cn(
         `${TEXT.label} px-2 py-1.5 ${TEXT.mutedStrong} hover:text-black hover:dark:text-white transition-colors flex items-center font-bold ${monoUppercase}`,
         isActive && 'text-black dark:text-white',

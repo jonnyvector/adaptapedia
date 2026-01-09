@@ -19,7 +19,7 @@ function HeaderContent(): JSX.Element {
   const router = useRouter();
   const pathname = usePathname();
   const searchParams = useSearchParams();
-  const { isAuthenticated, user } = useAuth();
+  const { isAuthenticated, user, logout } = useAuth();
   const [searchQuery, setSearchQuery] = useState('');
   const [isSticky, setIsSticky] = useState(false);
   const [mounted, setMounted] = useState(false);
@@ -355,7 +355,7 @@ function HeaderContent(): JSX.Element {
                   <button
                     onClick={async () => {
                       try {
-                        await api.auth.logout();
+                        await logout();
                         window.location.href = '/';
                       } catch (error) {
                         console.error('Logout failed:', error);
