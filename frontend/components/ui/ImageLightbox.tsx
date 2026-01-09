@@ -1,6 +1,7 @@
 'use client';
 
 import { useEffect } from 'react';
+import Image from 'next/image';
 import { BORDERS } from '@/lib/brutalist-design';
 
 interface ImageLightboxProps {
@@ -43,11 +44,14 @@ export default function ImageLightbox({ src, alt, onClose }: ImageLightboxProps)
       </button>
 
       {/* Image - prevent click propagation so clicking image doesn't close modal */}
-      <img
+      <Image
         src={src}
         alt={alt}
+        width={1920}
+        height={1080}
         className="max-w-full max-h-full object-contain cursor-default"
         onClick={(e) => e.stopPropagation()}
+        unoptimized
       />
     </div>
   );
