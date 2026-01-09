@@ -8,6 +8,7 @@ import { useAuth } from '@/lib/auth-context';
 import ThemeToggle from './ThemeToggle';
 import UserDropdown from './UserDropdown';
 import NotificationBell from './NotificationBell';
+import { NavLink } from './NavLink';
 import SearchDropdown from '@/components/search/SearchDropdown';
 import { api } from '@/lib/api';
 import type { SearchWithAdaptationsResponse } from '@/lib/types';
@@ -181,43 +182,17 @@ function HeaderContent(): JSX.Element {
           {/* Navigation & Actions */}
           <nav className="hidden md:flex items-center gap-1">
             {/* Main Navigation Links */}
-            <Link
-              href="/browse"
-              className={`${TEXT.label} px-2 py-1.5 ${TEXT.mutedStrong} hover:text-black hover:dark:text-white transition-colors flex items-center font-bold ${monoUppercase}`}
-              style={{ fontFamily: FONTS.mono, letterSpacing: LETTER_SPACING.wide }}
-            >
-              Browse
-            </Link>
-
-            {/* Catalog Link */}
-            <Link
-              href="/catalog"
-              className={`${TEXT.label} px-2 py-1.5 ${TEXT.mutedStrong} hover:text-black hover:dark:text-white transition-colors flex items-center font-bold ${monoUppercase}`}
-              style={{ fontFamily: FONTS.mono, letterSpacing: LETTER_SPACING.wide }}
-            >
-              Catalog
-            </Link>
+            <NavLink href="/browse">Browse</NavLink>
+            <NavLink href="/catalog">Catalog</NavLink>
 
             {/* Moderator Queue Link */}
             {isModerator && (
-              <Link
-                href="/mod/queue"
-                className={`${TEXT.label} px-2 py-1.5 ${TEXT.mutedStrong} hover:text-black hover:dark:text-white transition-colors flex items-center font-bold ${monoUppercase}`}
-                style={{ fontFamily: FONTS.mono, letterSpacing: LETTER_SPACING.wide }}
-                title="Moderation Queue"
-              >
+              <NavLink href="/mod/queue" title="Moderation Queue">
                 Mod Queue
-              </Link>
+              </NavLink>
             )}
 
-            {/* About Link */}
-            <Link
-              href="/about"
-              className={`${TEXT.label} px-2 py-1.5 ${TEXT.mutedStrong} hover:text-black hover:dark:text-white transition-colors flex items-center font-bold ${monoUppercase}`}
-              style={{ fontFamily: FONTS.mono, letterSpacing: LETTER_SPACING.wide }}
-            >
-              About
-            </Link>
+            <NavLink href="/about">About</NavLink>
 
             {/* Auth Section */}
             <div className="flex items-center gap-1">
@@ -355,52 +330,28 @@ function HeaderContent(): JSX.Element {
 
             {/* Navigation Links */}
             <nav className="flex flex-col p-4 gap-2">
-              <Link
-                href="/browse"
-                className={`${TEXT.body} px-4 py-3 ${TEXT.primary} hover:bg-stone-100 hover:dark:bg-stone-900 transition-colors font-bold ${monoUppercase} border ${BORDERS.medium}`}
-                style={{ fontFamily: FONTS.mono, letterSpacing: LETTER_SPACING.wide }}
-              >
+              <NavLink href="/browse" mobile onClick={() => setMobileMenuOpen(false)}>
                 Browse
-              </Link>
-              <Link
-                href="/catalog"
-                className={`${TEXT.body} px-4 py-3 ${TEXT.primary} hover:bg-stone-100 hover:dark:bg-stone-900 transition-colors font-bold ${monoUppercase} border ${BORDERS.medium}`}
-                style={{ fontFamily: FONTS.mono, letterSpacing: LETTER_SPACING.wide }}
-              >
+              </NavLink>
+              <NavLink href="/catalog" mobile onClick={() => setMobileMenuOpen(false)}>
                 Catalog
-              </Link>
+              </NavLink>
               {isModerator && (
-                <Link
-                  href="/mod/queue"
-                  className={`${TEXT.body} px-4 py-3 ${TEXT.primary} hover:bg-stone-100 hover:dark:bg-stone-900 transition-colors font-bold ${monoUppercase} border ${BORDERS.medium}`}
-                  style={{ fontFamily: FONTS.mono, letterSpacing: LETTER_SPACING.wide }}
-                >
+                <NavLink href="/mod/queue" mobile onClick={() => setMobileMenuOpen(false)}>
                   Mod Queue
-                </Link>
+                </NavLink>
               )}
-              <Link
-                href="/about"
-                className={`${TEXT.body} px-4 py-3 ${TEXT.primary} hover:bg-stone-100 hover:dark:bg-stone-900 transition-colors font-bold ${monoUppercase} border ${BORDERS.medium}`}
-                style={{ fontFamily: FONTS.mono, letterSpacing: LETTER_SPACING.wide }}
-              >
+              <NavLink href="/about" mobile onClick={() => setMobileMenuOpen(false)}>
                 About
-              </Link>
+              </NavLink>
               {isAuthenticated && user && (
                 <>
-                  <Link
-                    href={`/u/${user.username}/bookmarks`}
-                    className={`${TEXT.body} px-4 py-3 ${TEXT.primary} hover:bg-stone-100 hover:dark:bg-stone-900 transition-colors font-bold ${monoUppercase} border ${BORDERS.medium}`}
-                    style={{ fontFamily: FONTS.mono, letterSpacing: LETTER_SPACING.wide }}
-                  >
+                  <NavLink href={`/u/${user.username}/bookmarks`} mobile onClick={() => setMobileMenuOpen(false)}>
                     My Bookmarks
-                  </Link>
-                  <Link
-                    href={`/u/${user.username}`}
-                    className={`${TEXT.body} px-4 py-3 ${TEXT.primary} hover:bg-stone-100 hover:dark:bg-stone-900 transition-colors font-bold ${monoUppercase} border ${BORDERS.medium}`}
-                    style={{ fontFamily: FONTS.mono, letterSpacing: LETTER_SPACING.wide }}
-                  >
+                  </NavLink>
+                  <NavLink href={`/u/${user.username}`} mobile onClick={() => setMobileMenuOpen(false)}>
                     My Profile
-                  </Link>
+                  </NavLink>
                   <button
                     onClick={async () => {
                       try {
