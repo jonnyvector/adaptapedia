@@ -86,7 +86,8 @@ export default function DiffItemCard({
         setCommentsExpanded(true);
       }
     }
-  }, [setCommentsExpanded]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   // Auto-vote after login if pending
   useEffect(() => {
