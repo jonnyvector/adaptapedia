@@ -1,5 +1,6 @@
 import { Metadata } from 'next';
 import Link from 'next/link';
+import Image from 'next/image';
 import { notFound } from 'next/navigation';
 import { api } from '@/lib/api';
 import type { WorkWithAdaptations, ApiResponse } from '@/lib/types';
@@ -108,9 +109,11 @@ export default async function GenrePage({ params, searchParams }: GenrePageProps
                 {/* Book Cover */}
                 {work.cover_url && (
                   <div className="flex-shrink-0">
-                    <img
+                    <Image
                       src={work.cover_url}
                       alt={`${work.title} cover`}
+                      width={128}
+                      height={192}
                       className="w-32 h-48 object-cover rounded"
                     />
                   </div>

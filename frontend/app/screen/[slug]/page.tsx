@@ -7,11 +7,12 @@ import type {
   ApiResponse,
 } from '@/lib/types';
 import { notFound } from 'next/navigation';
+import Link from 'next/link';
+import Image from 'next/image';
 import Infobox from '@/components/shared/Infobox';
 import { ArrowTopRightOnSquareIcon } from '@/components/ui/Icons';
 import DiffItemCard from '@/components/diff/DiffItemCard';
 import DiffPreview from '@/components/diff/DiffPreview';
-import Link from 'next/link';
 
 interface PageProps {
   params: {
@@ -233,9 +234,11 @@ export default async function ScreenWorkPage({
                           {/* Book cover */}
                           {book.cover_url && (
                             <div className="flex-shrink-0 lg:w-32">
-                              <img
+                              <Image
                                 src={book.cover_url}
                                 alt={book.title}
+                                width={128}
+                                height={192}
                                 className="w-full h-auto rounded border border-border shadow-sm"
                               />
                             </div>

@@ -4,6 +4,7 @@ import { useState, useEffect } from 'react';
 import { useAuth } from '@/lib/auth-context';
 import { api } from '@/lib/api';
 import Link from 'next/link';
+import Image from 'next/image';
 import { useRouter } from 'next/navigation';
 import type { Bookmark, ApiResponse } from '@/lib/types';
 import { FONTS, BORDERS, TEXT, RADIUS } from '@/lib/brutalist-design';
@@ -132,9 +133,11 @@ export default function BookmarksPage({ params }: BookmarksPageProps): JSX.Eleme
                   {/* Book Section */}
                   <div className="flex-1 flex gap-4">
                     {bookmark.work_cover_url && (
-                      <img
+                      <Image
                         src={bookmark.work_cover_url}
                         alt={bookmark.work_title}
+                        width={80}
+                        height={112}
                         className={`w-20 h-28 object-cover ${RADIUS.control} border ${BORDERS.subtle}`}
                       />
                     )}
@@ -154,9 +157,11 @@ export default function BookmarksPage({ params }: BookmarksPageProps): JSX.Eleme
                   {/* Screen Section */}
                   <div className="flex-1 flex gap-4 lg:flex-row-reverse">
                     {bookmark.screen_work_poster_url && (
-                      <img
+                      <Image
                         src={bookmark.screen_work_poster_url}
                         alt={bookmark.screen_work_title}
+                        width={80}
+                        height={112}
                         className={`w-20 h-28 object-cover ${RADIUS.control} border ${BORDERS.subtle}`}
                       />
                     )}
