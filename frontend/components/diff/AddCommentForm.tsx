@@ -3,7 +3,7 @@
 import { useState, useRef, useEffect } from 'react';
 import type { SpoilerScope } from '@/lib/types';
 import LoadingSpinner from '@/components/ui/LoadingSpinner';
-import { FONTS, LETTER_SPACING, BORDERS, TEXT, monoUppercase } from '@/lib/brutalist-design';
+import { FONTS, LETTER_SPACING, BORDERS, TEXT, RADIUS, monoUppercase } from '@/lib/brutalist-design';
 
 interface AddCommentFormProps {
   diffItemId: number;
@@ -118,7 +118,7 @@ export default function AddCommentForm({
           value={body}
           onChange={(e) => setBody(e.target.value)}
           placeholder={parentId ? 'Write your reply...' : 'Share your thoughts on this difference...'}
-          className={`w-full px-3 py-2 border rounded-md resize-none bg-white dark:bg-black text-black dark:text-white focus:outline-none transition-colors ${
+          className={`w-full px-3 py-2 border ${RADIUS.control} resize-none bg-white dark:bg-black text-black dark:text-white focus:outline-none transition-colors ${
             isOverLimit
               ? `border-red-600 dark:border-red-400 focus:border-red-600 dark:focus:border-red-400`
               : `${BORDERS.medium} focus:border-black dark:focus:border-white`
@@ -177,7 +177,7 @@ export default function AddCommentForm({
               type="button"
               onClick={() => setSpoilerScope(scope.value)}
               disabled={isSubmitting}
-              className={`px-3 py-1.5 rounded-md ${TEXT.metadata} font-bold transition-colors ${monoUppercase} ${
+              className={`px-3 py-1.5 ${RADIUS.control} ${TEXT.metadata} font-bold transition-colors ${monoUppercase} ${
                 spoilerScope === scope.value
                   ? `bg-black dark:bg-white text-white dark:text-black border ${BORDERS.solid}`
                   : `bg-white dark:bg-black border ${BORDERS.medium} text-black dark:text-white hover:border-black hover:dark:border-white disabled:opacity-50`
@@ -200,7 +200,7 @@ export default function AddCommentForm({
         <button
           type="submit"
           disabled={!isValid || isSubmitting}
-          className={`flex items-center gap-2 px-4 py-2 bg-black dark:bg-white text-white dark:text-black rounded-md border ${BORDERS.solid} ${TEXT.secondary} font-bold hover:bg-black/90 hover:dark:bg-white/90 disabled:opacity-50 disabled:cursor-not-allowed transition-colors ${monoUppercase}`}
+          className={`flex items-center gap-2 px-4 py-2 bg-black dark:bg-white text-white dark:text-black ${RADIUS.control} border ${BORDERS.solid} ${TEXT.secondary} font-bold hover:bg-black/90 hover:dark:bg-white/90 disabled:opacity-50 disabled:cursor-not-allowed transition-colors ${monoUppercase}`}
           style={{ fontFamily: FONTS.mono, letterSpacing: LETTER_SPACING.tight }}
           aria-label="Post comment"
         >
@@ -213,7 +213,7 @@ export default function AddCommentForm({
             type="button"
             onClick={onCancel}
             disabled={isSubmitting}
-            className={`px-4 py-2 bg-white dark:bg-black border ${BORDERS.medium} text-black dark:text-white rounded-md ${TEXT.secondary} font-bold hover:border-black hover:dark:border-white disabled:opacity-50 transition-colors ${monoUppercase}`}
+            className={`px-4 py-2 bg-white dark:bg-black border ${BORDERS.medium} text-black dark:text-white ${RADIUS.control} ${TEXT.secondary} font-bold hover:border-black hover:dark:border-white disabled:opacity-50 transition-colors ${monoUppercase}`}
             style={{ fontFamily: FONTS.mono, letterSpacing: LETTER_SPACING.tight }}
           >
             Cancel

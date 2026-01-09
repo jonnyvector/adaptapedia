@@ -7,7 +7,7 @@ import { useAuth } from '@/lib/auth-context';
 import { calculateVotePercentage } from '@/lib/vote-utils';
 import { CheckCircleIcon } from '@/components/ui/Icons';
 import { submitComparisonVote, getComparisonVoteStats } from '@/app/actions/comparison-votes';
-import { FONTS, LETTER_SPACING, BORDERS, TEXT, monoUppercase, COLORS } from '@/lib/brutalist-design';
+import { FONTS, LETTER_SPACING, BORDERS, TEXT, RADIUS, monoUppercase, COLORS } from '@/lib/brutalist-design';
 
 interface ComparisonVotingProps {
   work: Work;
@@ -140,7 +140,7 @@ export default function ComparisonVoting({ work, screenWork, initialStats = null
 
   if (loading) {
     return (
-      <div className={`rounded-md p-4 bg-stone-50 dark:bg-stone-950 border ${BORDERS.medium}`}>
+      <div className={`${RADIUS.control} p-4 bg-stone-50 dark:bg-stone-950 border ${BORDERS.medium}`}>
         <p className={`${TEXT.secondary} ${TEXT.mutedMedium}`} style={{ fontFamily: FONTS.mono }}>Loading...</p>
       </div>
     );
@@ -149,7 +149,7 @@ export default function ComparisonVoting({ work, screenWork, initialStats = null
   const adaptationType = screenWork.type === 'MOVIE' ? 'Movie' : 'Series';
 
   return (
-    <div className={`rounded-md p-4 sm:p-5 bg-white dark:bg-black border ${BORDERS.medium}`}>
+    <div className={`${RADIUS.control} p-4 sm:p-5 bg-white dark:bg-black border ${BORDERS.medium}`}>
       {/* Stats Display */}
       {stats && stats.total_votes > 0 && (
         <div className="mb-5">
@@ -157,7 +157,7 @@ export default function ComparisonVoting({ work, screenWork, initialStats = null
             <div className="flex items-center gap-2">
               <span className={`${TEXT.secondary} font-bold text-black dark:text-white ${monoUppercase}`} style={{ fontFamily: FONTS.mono, letterSpacing: LETTER_SPACING.wide }}>Community preference</span>
               {stats.total_votes < 10 && (
-                <span className={`px-2 py-0.5 bg-amber-100 dark:bg-amber-900/30 text-amber-700 dark:text-amber-400 ${TEXT.metadata} font-bold rounded-md`} style={{ fontFamily: FONTS.mono }}>
+                <span className={`px-2 py-0.5 bg-amber-100 dark:bg-amber-900/30 text-amber-700 dark:text-amber-400 ${TEXT.metadata} font-bold ${RADIUS.control}`} style={{ fontFamily: FONTS.mono }}>
                   Early votes
                 </span>
               )}
@@ -214,7 +214,7 @@ export default function ComparisonVoting({ work, screenWork, initialStats = null
 
       {/* Success Message */}
       {showSuccess && (
-        <div className={`mb-4 p-3 bg-black dark:bg-white border ${BORDERS.solid} rounded-md flex items-center gap-2 ${TEXT.secondary} text-white dark:text-black`} style={{ fontFamily: FONTS.mono }}>
+        <div className={`mb-4 p-3 bg-black dark:bg-white border ${BORDERS.solid} ${RADIUS.control} flex items-center gap-2 ${TEXT.secondary} text-white dark:text-black`} style={{ fontFamily: FONTS.mono }}>
           <CheckCircleIcon className="w-4 h-4 flex-shrink-0" />
           <span className="font-bold">Vote recorded!</span>
         </div>
@@ -222,7 +222,7 @@ export default function ComparisonVoting({ work, screenWork, initialStats = null
 
       {/* Error Message */}
       {error && (
-        <div className={`mb-4 p-3 bg-red-50 dark:bg-red-950/20 border ${BORDERS.solid} border-red-600 dark:border-red-400 rounded-md ${TEXT.secondary} text-red-600 dark:text-red-400`} style={{ fontFamily: FONTS.mono }}>
+        <div className={`mb-4 p-3 bg-red-50 dark:bg-red-950/20 border ${BORDERS.solid} border-red-600 dark:border-red-400 ${RADIUS.control} ${TEXT.secondary} text-red-600 dark:text-red-400`} style={{ fontFamily: FONTS.mono }}>
           {error}
         </div>
       )}
@@ -239,7 +239,7 @@ export default function ComparisonVoting({ work, screenWork, initialStats = null
           <button
             onClick={() => handlePrimaryVote('BOOK')}
             disabled={submitting}
-            className={`px-4 py-3 rounded-md border font-bold ${TEXT.secondary} transition-all ${monoUppercase} ${
+            className={`px-4 py-3 ${RADIUS.control} border font-bold ${TEXT.secondary} transition-all ${monoUppercase} ${
               preference === 'BOOK'
                 ? `text-white border ${BORDERS.solid}`
                 : `bg-white dark:bg-black border ${BORDERS.medium} text-black dark:text-white hover:border-black hover:dark:border-white`
@@ -251,7 +251,7 @@ export default function ComparisonVoting({ work, screenWork, initialStats = null
           <button
             onClick={() => handlePrimaryVote('SCREEN')}
             disabled={submitting}
-            className={`px-4 py-3 rounded-md border font-bold ${TEXT.secondary} transition-all ${monoUppercase} ${
+            className={`px-4 py-3 ${RADIUS.control} border font-bold ${TEXT.secondary} transition-all ${monoUppercase} ${
               preference === 'SCREEN'
                 ? `text-white border ${BORDERS.solid}`
                 : `bg-white dark:bg-black border ${BORDERS.medium} text-black dark:text-white hover:border-black hover:dark:border-white`
@@ -279,7 +279,7 @@ export default function ComparisonVoting({ work, screenWork, initialStats = null
             <button
               onClick={() => handleSecondaryVote('TIE')}
               disabled={submitting}
-              className={`px-3 py-2 rounded-md border ${TEXT.metadata} font-bold transition-colors ${monoUppercase} ${
+              className={`px-3 py-2 ${RADIUS.control} border ${TEXT.metadata} font-bold transition-colors ${monoUppercase} ${
                 preference === 'TIE'
                   ? `bg-black/20 dark:bg-white/20 border ${BORDERS.solid} text-black dark:text-white`
                   : `bg-white dark:bg-black border ${BORDERS.medium} text-black dark:text-white hover:border-black hover:dark:border-white`
@@ -291,7 +291,7 @@ export default function ComparisonVoting({ work, screenWork, initialStats = null
             <button
               onClick={() => handleSecondaryVote('DIDNT_FINISH')}
               disabled={submitting}
-              className={`px-3 py-2 rounded-md border ${TEXT.metadata} font-bold transition-colors ${monoUppercase} ${
+              className={`px-3 py-2 ${RADIUS.control} border ${TEXT.metadata} font-bold transition-colors ${monoUppercase} ${
                 preference === 'DIDNT_FINISH'
                   ? `bg-black/20 dark:bg-white/20 border ${BORDERS.solid} text-black dark:text-white`
                   : `bg-white dark:bg-black border ${BORDERS.medium} text-black dark:text-white hover:border-black hover:dark:border-white`
@@ -305,7 +305,7 @@ export default function ComparisonVoting({ work, screenWork, initialStats = null
 
         {/* Faithfulness Prompt - After Vote */}
         {showFaithfulnessPrompt && (
-          <div className={`mt-4 p-3 bg-stone-50 dark:bg-stone-950 border ${BORDERS.medium} rounded-md`}>
+          <div className={`mt-4 p-3 bg-stone-50 dark:bg-stone-950 border ${BORDERS.medium} ${RADIUS.control}`}>
             <div className={`${TEXT.secondary} font-bold text-black dark:text-white mb-2 ${monoUppercase}`} style={{ fontFamily: FONTS.mono, letterSpacing: LETTER_SPACING.wide }}>
               How faithful was the adaptation? (optional)
             </div>
@@ -314,7 +314,7 @@ export default function ComparisonVoting({ work, screenWork, initialStats = null
                 <button
                   key={rating}
                   onClick={() => handleFaithfulnessUpdate(rating)}
-                  className={`flex-1 px-2 py-1.5 rounded-md border ${TEXT.secondary} font-bold transition-colors ${
+                  className={`flex-1 px-2 py-1.5 ${RADIUS.control} border ${TEXT.secondary} font-bold transition-colors ${
                     faithfulnessRating === rating
                       ? `bg-black dark:bg-white border ${BORDERS.solid} text-white dark:text-black`
                       : `bg-white dark:bg-black border ${BORDERS.medium} text-black dark:text-white hover:border-black hover:dark:border-white`
@@ -343,7 +343,7 @@ export default function ComparisonVoting({ work, screenWork, initialStats = null
                   key={rating}
                   onClick={() => handleFaithfulnessUpdate(rating)}
                   disabled={submitting}
-                  className={`flex-1 px-2 py-1.5 rounded-md border ${TEXT.secondary} font-bold transition-colors ${
+                  className={`flex-1 px-2 py-1.5 ${RADIUS.control} border ${TEXT.secondary} font-bold transition-colors ${
                     faithfulnessRating === rating
                       ? `bg-black dark:bg-white border ${BORDERS.solid} text-white dark:text-black`
                       : `bg-white dark:bg-black border ${BORDERS.medium} text-black dark:text-white hover:border-black hover:dark:border-white`
