@@ -58,7 +58,7 @@ export default async function Home(): Promise<JSX.Element> {
 
             {/* Helper text */}
             <p className={`${TEXT.secondary} ${TEXT.mutedMedium} max-w-2xl mx-auto mb-6`} style={{ fontFamily: FONTS.mono }}>
-              New pages start empty — that's the point. Your diffs build the database.
+              New pages start empty — that&apos;s the point. Your diffs build the database.
             </p>
 
             {/* Secondary CTAs */}
@@ -252,7 +252,7 @@ export default async function Home(): Promise<JSX.Element> {
                 <div className="flex-1">
                   <h3 className={`text-2xl font-bold mb-3 ${TEXT.primary}`} style={{ fontFamily: FONTS.mono }}>Community Driven</h3>
                   <p className={`${TEXT.secondary} text-lg mb-4 ${TEXT.mutedMedium}`} style={{ fontFamily: FONTS.mono }}>
-                    Add diffs, challenge claims, and push for nuance. Consensus signals make it clear what's agreed on — and what's still debated.
+                    Add diffs, challenge claims, and push for nuance. Consensus signals make it clear what&apos;s agreed on — and what&apos;s still debated.
                   </p>
 
                   {/* Recent Activity */}
