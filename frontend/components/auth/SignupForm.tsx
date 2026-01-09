@@ -4,7 +4,7 @@ import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import { useAuth } from '@/lib/auth-context';
-import { ApiError } from '@/lib/api';
+import { ApiError, getBackendUrl } from '@/lib/api';
 import LoadingSpinner from '@/components/ui/LoadingSpinner';
 import { FONTS, LETTER_SPACING, BORDERS, TEXT, monoUppercase } from '@/lib/brutalist-design';
 
@@ -201,7 +201,7 @@ export default function SignupForm({ redirectTo = '/' }: SignupFormProps): JSX.E
       <div className="space-y-3">
         <button
           type="button"
-          onClick={() => window.location.href = 'http://localhost:8000/accounts/google/login/'}
+          onClick={() => window.location.href = `${getBackendUrl()}/accounts/google/login/`}
           className={`w-full flex items-center justify-center gap-3 px-4 py-3 bg-white dark:bg-black text-black dark:text-white rounded-md font-bold hover:bg-stone-50 hover:dark:bg-stone-900 transition-colors min-h-[48px] border ${BORDERS.medium} ${TEXT.secondary}`}
           style={{ fontFamily: FONTS.mono, letterSpacing: LETTER_SPACING.tight }}
         >
@@ -216,7 +216,7 @@ export default function SignupForm({ redirectTo = '/' }: SignupFormProps): JSX.E
 
         <button
           type="button"
-          onClick={() => window.location.href = 'http://localhost:8000/accounts/facebook/login/'}
+          onClick={() => window.location.href = `${getBackendUrl()}/accounts/facebook/login/`}
           disabled={true}
           className={`w-full flex items-center justify-center gap-3 px-4 py-3 bg-white dark:bg-black text-black dark:text-white rounded-md font-bold hover:bg-stone-50 hover:dark:bg-stone-900 transition-colors min-h-[48px] border ${BORDERS.medium} ${TEXT.secondary} opacity-50 cursor-not-allowed`}
           style={{ fontFamily: FONTS.mono, letterSpacing: LETTER_SPACING.tight }}

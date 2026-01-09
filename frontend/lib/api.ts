@@ -34,6 +34,17 @@ const API_BASE_URL =
     ? process.env.API_URL || 'http://backend:8000/api'
     : process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000/api';
 
+/**
+ * Get the backend URL (without /api suffix) for OAuth and other non-API endpoints
+ * Client-side only - uses NEXT_PUBLIC_BACKEND_URL or falls back to localhost
+ */
+export function getBackendUrl(): string {
+  if (typeof window === 'undefined') {
+    throw new Error('getBackendUrl() should only be called client-side');
+  }
+  return process.env.NEXT_PUBLIC_BACKEND_URL || 'http://localhost:8000';
+}
+
 export class ApiError extends Error {
   constructor(
     message: string,
