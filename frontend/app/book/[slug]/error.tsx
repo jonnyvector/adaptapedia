@@ -1,6 +1,7 @@
 'use client';
 
 import Link from 'next/link';
+import { Button } from '@/components/ui/Button';
 
 export default function Error({
   error,
@@ -38,12 +39,13 @@ export default function Error({
         )}
 
         <div className="flex flex-col sm:flex-row gap-3 justify-center">
-          <button
+          <Button
             onClick={reset}
-            className="px-6 py-3 bg-link text-white rounded-lg hover:opacity-90 transition-opacity font-semibold"
+            variant="primary"
+            size="lg"
           >
             Try again
-          </button>
+          </Button>
           <Link
             href="/"
             className="px-6 py-3 border border-border rounded-lg hover:bg-muted/10 transition-colors font-semibold"
