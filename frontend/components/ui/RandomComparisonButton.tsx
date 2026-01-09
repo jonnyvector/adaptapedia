@@ -3,7 +3,7 @@
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { api } from '@/lib/api';
-import { FONTS, LETTER_SPACING, BORDERS, TEXT, monoUppercase } from '@/lib/brutalist-design';
+import { FONTS, LETTER_SPACING, BORDERS, TEXT, RADIUS, monoUppercase } from '@/lib/brutalist-design';
 
 export default function RandomComparisonButton(): JSX.Element {
   const router = useRouter();
@@ -25,7 +25,7 @@ export default function RandomComparisonButton(): JSX.Element {
     <button
       onClick={handleClick}
       disabled={loading}
-      className={`inline-flex items-center gap-2 px-4 py-2 ${TEXT.secondary} font-bold border ${BORDERS.medium} bg-white dark:bg-black text-black dark:text-white hover:border-black hover:dark:border-white transition-colors rounded-md disabled:opacity-50 ${monoUppercase}`}
+      className={`inline-flex items-center gap-2 px-4 py-2 ${TEXT.secondary} font-bold border ${BORDERS.medium} bg-white dark:bg-black text-black dark:text-white hover:border-black hover:dark:border-white transition-colors ${RADIUS.control} disabled:opacity-50 ${monoUppercase}`}
       style={{ fontFamily: FONTS.mono, letterSpacing: LETTER_SPACING.tight }}
     >
       {loading ? (

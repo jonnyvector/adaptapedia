@@ -1,7 +1,7 @@
 'use client';
 
 import { useEffect } from 'react';
-import { FONTS, LETTER_SPACING, BORDERS, TEXT } from '@/lib/brutalist-design';
+import { FONTS, LETTER_SPACING, BORDERS, TEXT, RADIUS } from '@/lib/brutalist-design';
 
 export interface ToastProps {
   message: string;
@@ -30,7 +30,7 @@ export default function Toast({ message, type = 'success', duration = 4000, onCl
       role="alert"
       aria-live="assertive"
       aria-atomic="true"
-      className={`fixed bottom-4 right-4 z-50 flex items-center gap-3 px-4 py-3 bg-black dark:bg-white border ${BORDERS.solid} rounded-md animate-slide-in-up`}
+      className={`fixed bottom-4 right-4 z-50 flex items-center gap-3 px-4 py-3 bg-black dark:bg-white border ${BORDERS.solid} ${RADIUS.control} animate-slide-in-up`}
       style={{
         animation: 'slideInUp 0.3s ease-out',
         maxWidth: '90vw',

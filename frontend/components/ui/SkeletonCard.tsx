@@ -1,5 +1,5 @@
 import LoadingSkeleton from './LoadingSkeleton';
-import { BORDERS } from '@/lib/brutalist-design';
+import { BORDERS, RADIUS } from '@/lib/brutalist-design';
 
 interface SkeletonCardProps {
   variant?: 'default' | 'compact' | 'detailed';
@@ -8,7 +8,7 @@ interface SkeletonCardProps {
 export default function SkeletonCard({ variant = 'default' }: SkeletonCardProps): JSX.Element {
   if (variant === 'compact') {
     return (
-      <div className={`border ${BORDERS.medium} rounded-md p-4`} aria-hidden="true">
+      <div className={`border ${BORDERS.medium} ${RADIUS.control} p-4`} aria-hidden="true">
         <LoadingSkeleton width="w-3/4" height="h-5" className="mb-2" />
         <LoadingSkeleton width="w-1/2" height="h-4" />
       </div>
@@ -17,7 +17,7 @@ export default function SkeletonCard({ variant = 'default' }: SkeletonCardProps)
 
   if (variant === 'detailed') {
     return (
-      <div className={`border ${BORDERS.medium} rounded-md p-5`} aria-hidden="true">
+      <div className={`border ${BORDERS.medium} ${RADIUS.control} p-5`} aria-hidden="true">
         <div className="flex items-start justify-between mb-3">
           <LoadingSkeleton width="w-2/3" height="h-6" />
           <LoadingSkeleton width="w-16" height="h-6" variant="text" />
@@ -36,7 +36,7 @@ export default function SkeletonCard({ variant = 'default' }: SkeletonCardProps)
 
   // Default variant
   return (
-    <div className={`border ${BORDERS.medium} rounded-md p-4`} aria-hidden="true">
+    <div className={`border ${BORDERS.medium} ${RADIUS.control} p-4`} aria-hidden="true">
       <LoadingSkeleton width="w-3/4" height="h-6" className="mb-2" />
       <LoadingSkeleton width="w-1/2" height="h-4" className="mb-4" />
       <LoadingSkeleton width="w-full" height="h-20" className="mb-4" />
