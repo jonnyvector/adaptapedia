@@ -5,7 +5,7 @@ import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import { useAuth } from '@/lib/auth-context';
 import { ApiError, getBackendUrl } from '@/lib/api';
-import LoadingSpinner from '@/components/ui/LoadingSpinner';
+import { Button } from '@/components/ui/Button';
 import { FONTS, LETTER_SPACING, BORDERS, TEXT, monoUppercase } from '@/lib/brutalist-design';
 
 interface SignupFormProps {
@@ -175,15 +175,14 @@ export default function SignupForm({ redirectTo = '/' }: SignupFormProps): JSX.E
         )}
       </div>
 
-      <button
+      <Button
         type="submit"
-        disabled={isSubmitting}
-        className={`w-full flex items-center justify-center gap-2 px-4 py-3 bg-black dark:bg-white text-white dark:text-black rounded-md font-bold hover:bg-black/90 hover:dark:bg-white/90 disabled:opacity-50 disabled:cursor-not-allowed transition-colors min-h-[48px] border ${BORDERS.solid} ${TEXT.secondary} ${monoUppercase}`}
-        style={{ fontFamily: FONTS.mono, letterSpacing: LETTER_SPACING.tight }}
+        loading={isSubmitting}
+        size="lg"
+        fullWidth
       >
-        {isSubmitting && <LoadingSpinner size="sm" />}
         {isSubmitting ? 'Creating account...' : 'Sign Up'}
-      </button>
+      </Button>
 
       {/* Divider */}
       <div className="relative">
@@ -199,11 +198,12 @@ export default function SignupForm({ redirectTo = '/' }: SignupFormProps): JSX.E
 
       {/* Social Login Buttons */}
       <div className="space-y-3">
-        <button
+        <Button
           type="button"
           onClick={() => window.location.href = `${getBackendUrl()}/accounts/google/login/`}
-          className={`w-full flex items-center justify-center gap-3 px-4 py-3 bg-white dark:bg-black text-black dark:text-white rounded-md font-bold hover:bg-stone-50 hover:dark:bg-stone-900 transition-colors min-h-[48px] border ${BORDERS.medium} ${TEXT.secondary}`}
-          style={{ fontFamily: FONTS.mono, letterSpacing: LETTER_SPACING.tight }}
+          variant="secondary"
+          size="lg"
+          fullWidth
         >
           <svg className="w-5 h-5" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
             <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/>
@@ -212,21 +212,22 @@ export default function SignupForm({ redirectTo = '/' }: SignupFormProps): JSX.E
             <path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/>
           </svg>
           <span className={monoUppercase}>Continue with Google</span>
-        </button>
+        </Button>
 
-        <button
+        <Button
           type="button"
           onClick={() => window.location.href = `${getBackendUrl()}/accounts/facebook/login/`}
           disabled={true}
-          className={`w-full flex items-center justify-center gap-3 px-4 py-3 bg-white dark:bg-black text-black dark:text-white rounded-md font-bold hover:bg-stone-50 hover:dark:bg-stone-900 transition-colors min-h-[48px] border ${BORDERS.medium} ${TEXT.secondary} opacity-50 cursor-not-allowed`}
-          style={{ fontFamily: FONTS.mono, letterSpacing: LETTER_SPACING.tight }}
+          variant="secondary"
+          size="lg"
+          fullWidth
           title="Facebook login coming soon"
         >
           <svg className="w-5 h-5" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" fill="#1877F2">
             <path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/>
           </svg>
           <span className={monoUppercase}>Continue with Facebook</span>
-        </button>
+        </Button>
       </div>
 
       <p className={`text-center ${TEXT.secondary} ${TEXT.mutedMedium}`} style={{ fontFamily: FONTS.mono }}>
