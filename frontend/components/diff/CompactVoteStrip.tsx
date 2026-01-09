@@ -6,7 +6,7 @@ import { api } from '@/lib/api';
 import ComparisonVoting from './ComparisonVoting';
 import { BookOpenIcon, FilmIcon, InformationCircleIcon } from '@/components/ui/Icons';
 import { calculateVotePercentage } from '@/lib/vote-utils';
-import { FONTS, BORDERS, TEXT, RADIUS, COLORS } from '@/lib/brutalist-design';
+import { FONTS, BORDERS, TEXT, RADIUS, COLORS, HEIGHT } from '@/lib/brutalist-design';
 
 interface CompactVoteStripProps {
   work: Work;
@@ -57,7 +57,7 @@ export default function CompactVoteStrip({
 
   if (loading) {
     return (
-      <div className={`bg-stone-50 dark:bg-stone-950 ${RADIUS.control} px-4 py-2.5 h-[44px] flex items-center`}>
+      <div className={`bg-stone-50 dark:bg-stone-950 ${RADIUS.control} px-4 py-2.5 ${HEIGHT.input} flex items-center`}>
         <span className={`${TEXT.body} ${TEXT.mutedMedium} animate-pulse`} style={{ fontFamily: FONTS.mono }}>Loading voting data...</span>
       </div>
     );
