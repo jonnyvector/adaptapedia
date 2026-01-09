@@ -380,7 +380,7 @@ export default function UserProfileClient({ profile }: UserProfileClientProps): 
                               {formatDate(comment.created_at)}
                             </span>
                           </div>
-                          <p className={`${TEXT.secondary} ${TEXT.mutedMedium} mb-2`} style={{ fontFamily: FONTS.mono }}>On: "{comment.diff_item_claim}"</p>
+                          <p className={`${TEXT.secondary} ${TEXT.mutedMedium} mb-2`} style={{ fontFamily: FONTS.mono }}>On: &quot;{comment.diff_item_claim}&quot;</p>
                           <p className={`text-black dark:text-white`} style={{ fontFamily: FONTS.mono }}>{comment.body}</p>
                           {comment.spoiler_scope !== 'NONE' && (
                             <div className="mt-2">
