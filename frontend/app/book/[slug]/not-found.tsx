@@ -8,7 +8,7 @@ export default function BookNotFound(): JSX.Element {
           <h1 className="text-6xl font-bold">404</h1>
           <h2 className="text-3xl font-semibold">Book not found</h2>
           <p className="text-lg text-muted">
-            We couldn't find the book you're looking for.
+            We couldn&apos;t find the book you&apos;re looking for.
           </p>
         </div>
 
@@ -25,7 +25,7 @@ export default function BookNotFound(): JSX.Element {
                 Search for books
               </div>
               <div className="text-sm text-muted">
-                Find the book you're looking for
+                Find the book you&apos;re looking for
               </div>
             </Link>
             <Link

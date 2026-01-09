@@ -20,7 +20,7 @@ export default function Error({
         <div className="space-y-2">
           <h1 className="text-4xl font-bold">Something went wrong</h1>
           <p className="text-lg text-muted">
-            We couldn't load this comparison.
+            We couldn&apos;t load this comparison.
           </p>
         </div>
 

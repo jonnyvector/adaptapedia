@@ -8,7 +8,7 @@ export default function ComparisonNotFound(): JSX.Element {
           <h1 className="text-6xl font-bold">404</h1>
           <h2 className="text-3xl font-semibold">Comparison not found</h2>
           <p className="text-lg text-muted">
-            We couldn't find the book or screen work you're trying to compare.
+            We couldn&apos;t find the book or screen work you&apos;re trying to compare.
           </p>
         </div>
 
