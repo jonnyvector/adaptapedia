@@ -4,7 +4,7 @@ import { useMemo, useState } from 'react';
 import Image from 'next/image';
 import type { Work, ScreenWork, WatchProvider } from '@/lib/types';
 import { BookOpenIcon, FilmIcon, ArrowTopRightOnSquareIcon } from '@/components/ui/Icons';
-import { FONTS, LETTER_SPACING, BORDERS, TEXT, monoUppercase } from '@/lib/brutalist-design';
+import { FONTS, LETTER_SPACING, BORDERS, TEXT, RADIUS, monoUppercase } from '@/lib/brutalist-design';
 
 interface GetItNowModuleProps {
   work: Work;
@@ -119,7 +119,7 @@ export default function GetItNowModule({ work, screenWork }: GetItNowModuleProps
             href={getBookLink('bookshop')}
             target="_blank"
             rel="nofollow sponsored noopener noreferrer"
-            className={`group px-3 py-2.5 ${TEXT.secondary} font-bold border ${BORDERS.medium} bg-white dark:bg-black hover:border-black hover:dark:border-white transition-all text-left flex flex-col rounded-md`}
+            className={`group px-3 py-2.5 ${TEXT.secondary} font-bold border ${BORDERS.medium} bg-white dark:bg-black hover:border-black hover:dark:border-white transition-all text-left flex flex-col ${RADIUS.control}`}
             style={{ fontFamily: FONTS.mono, letterSpacing: LETTER_SPACING.tight }}
           >
             <span className={`font-bold text-black dark:text-white flex items-center gap-1 ${monoUppercase}`}>
@@ -132,7 +132,7 @@ export default function GetItNowModule({ work, screenWork }: GetItNowModuleProps
             href={getBookLink('amazon-print')}
             target="_blank"
             rel="nofollow sponsored noopener noreferrer"
-            className={`group px-3 py-2.5 ${TEXT.secondary} font-bold border ${BORDERS.medium} bg-white dark:bg-black hover:border-black hover:dark:border-white transition-all text-left flex flex-col rounded-md`}
+            className={`group px-3 py-2.5 ${TEXT.secondary} font-bold border ${BORDERS.medium} bg-white dark:bg-black hover:border-black hover:dark:border-white transition-all text-left flex flex-col ${RADIUS.control}`}
             style={{ fontFamily: FONTS.mono, letterSpacing: LETTER_SPACING.tight }}
           >
             <span className={`font-bold text-black dark:text-white flex items-center gap-1 ${monoUppercase}`}>
@@ -145,7 +145,7 @@ export default function GetItNowModule({ work, screenWork }: GetItNowModuleProps
             href={getBookLink('kindle')}
             target="_blank"
             rel="nofollow sponsored noopener noreferrer"
-            className={`group px-3 py-2.5 ${TEXT.secondary} font-bold border ${BORDERS.medium} bg-white dark:bg-black hover:border-black hover:dark:border-white transition-all text-left flex flex-col rounded-md`}
+            className={`group px-3 py-2.5 ${TEXT.secondary} font-bold border ${BORDERS.medium} bg-white dark:bg-black hover:border-black hover:dark:border-white transition-all text-left flex flex-col ${RADIUS.control}`}
             style={{ fontFamily: FONTS.mono, letterSpacing: LETTER_SPACING.tight }}
           >
             <span className={`font-bold text-black dark:text-white flex items-center gap-1 ${monoUppercase}`}>
@@ -158,7 +158,7 @@ export default function GetItNowModule({ work, screenWork }: GetItNowModuleProps
             href={getBookLink('audible')}
             target="_blank"
             rel="nofollow sponsored noopener noreferrer"
-            className={`group px-3 py-2.5 ${TEXT.secondary} font-bold border ${BORDERS.medium} bg-white dark:bg-black hover:border-black hover:dark:border-white transition-all text-left flex flex-col rounded-md`}
+            className={`group px-3 py-2.5 ${TEXT.secondary} font-bold border ${BORDERS.medium} bg-white dark:bg-black hover:border-black hover:dark:border-white transition-all text-left flex flex-col ${RADIUS.control}`}
             style={{ fontFamily: FONTS.mono, letterSpacing: LETTER_SPACING.tight }}
           >
             <span className={`font-bold text-black dark:text-white flex items-center gap-1 ${monoUppercase}`}>
@@ -186,7 +186,7 @@ export default function GetItNowModule({ work, screenWork }: GetItNowModuleProps
               href={getWatchLink()}
               target="_blank"
               rel="nofollow noopener noreferrer"
-              className={`group w-full px-4 py-3 ${TEXT.secondary} font-bold border ${BORDERS.solid} bg-black dark:bg-white hover:bg-white hover:dark:bg-black transition-all text-left flex items-center justify-between rounded-md`}
+              className={`group w-full px-4 py-3 ${TEXT.secondary} font-bold border ${BORDERS.solid} bg-black dark:bg-white hover:bg-white hover:dark:bg-black transition-all text-left flex items-center justify-between ${RADIUS.control}`}
               style={{ fontFamily: FONTS.mono, letterSpacing: LETTER_SPACING.tight }}
             >
               <div className="flex items-center gap-3">
@@ -207,7 +207,7 @@ export default function GetItNowModule({ work, screenWork }: GetItNowModuleProps
                   <div className={`${TEXT.metadata} text-white/70 dark:text-black/70 group-hover:text-black/70 group-hover:dark:text-white/70`}>Stream now</div>
                 </div>
               </div>
-              <span className={`${TEXT.metadata} px-2 py-1 border ${BORDERS.medium} bg-stone-100 dark:bg-stone-900 text-black dark:text-white font-bold ${monoUppercase} rounded-md`} style={{ fontFamily: FONTS.mono, letterSpacing: LETTER_SPACING.wide }}>
+              <span className={`${TEXT.metadata} px-2 py-1 border ${BORDERS.medium} bg-stone-100 dark:bg-stone-900 text-black dark:text-white font-bold ${monoUppercase} ${RADIUS.control}`} style={{ fontFamily: FONTS.mono, letterSpacing: LETTER_SPACING.wide }}>
                 Best
               </span>
             </a>
@@ -221,7 +221,7 @@ export default function GetItNowModule({ work, screenWork }: GetItNowModuleProps
                     href={getWatchLink()}
                     target="_blank"
                     rel="nofollow noopener noreferrer"
-                    className={`group px-3 py-2 ${TEXT.secondary} border ${BORDERS.medium} bg-white dark:bg-black hover:border-black hover:dark:border-white transition-all flex items-center gap-2 rounded-md`}
+                    className={`group px-3 py-2 ${TEXT.secondary} border ${BORDERS.medium} bg-white dark:bg-black hover:border-black hover:dark:border-white transition-all flex items-center gap-2 ${RADIUS.control}`}
                     style={{ fontFamily: FONTS.mono, letterSpacing: LETTER_SPACING.tight }}
                   >
                     {provider.logo_path && (
@@ -294,7 +294,7 @@ export default function GetItNowModule({ work, screenWork }: GetItNowModuleProps
             )}
           </div>
         ) : (
-          <div className={`${TEXT.secondary} ${TEXT.mutedMedium} py-4 text-center border border-dashed ${BORDERS.subtle} rounded-md font-bold ${monoUppercase}`} style={{ fontFamily: FONTS.mono, letterSpacing: LETTER_SPACING.wide }}>
+          <div className={`${TEXT.secondary} ${TEXT.mutedMedium} py-4 text-center border border-dashed ${BORDERS.subtle} ${RADIUS.control} font-bold ${monoUppercase}`} style={{ fontFamily: FONTS.mono, letterSpacing: LETTER_SPACING.wide }}>
             Check local streaming services
           </div>
         )}

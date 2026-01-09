@@ -1,7 +1,7 @@
 'use client';
 
 import { useState, useEffect, useRef } from 'react';
-import { FONTS, BORDERS, TEXT, monoUppercase } from '@/lib/brutalist-design';
+import { FONTS, BORDERS, TEXT, monoUppercase, RADIUS } from '@/lib/brutalist-design';
 import { validateUsernameFormat, checkUsername } from '@/lib/onboarding-utils';
 import type { UsernameCheckResponse } from '@/lib/types';
 import LoadingSpinner from '@/components/ui/LoadingSpinner';
@@ -96,7 +96,7 @@ export default function UsernameStep({ onComplete }: UsernameStepProps): JSX.Ele
               : checkResult?.available
               ? 'border-green-500 dark:border-green-400'
               : BORDERS.medium
-          } rounded-md focus:outline-none focus:border-black focus:dark:border-white bg-white dark:bg-black text-black dark:text-white`}
+          } ${RADIUS.control} focus:outline-none focus:border-black focus:dark:border-white bg-white dark:bg-black text-black dark:text-white`}
           style={{ fontFamily: FONTS.mono }}
         />
 
@@ -140,7 +140,7 @@ export default function UsernameStep({ onComplete }: UsernameStepProps): JSX.Ele
               <button
                 key={suggestion}
                 onClick={() => handleSuggestionClick(suggestion)}
-                className={`px-3 py-2 border ${BORDERS.medium} rounded-md text-sm hover:bg-gray-100 hover:dark:bg-gray-900 transition-colors`}
+                className={`px-3 py-2 border ${BORDERS.medium} ${RADIUS.control} text-sm hover:bg-gray-100 hover:dark:bg-gray-900 transition-colors`}
                 style={{ fontFamily: FONTS.mono }}
               >
                 {suggestion}
@@ -153,7 +153,7 @@ export default function UsernameStep({ onComplete }: UsernameStepProps): JSX.Ele
       <button
         onClick={handleContinue}
         disabled={!isValid}
-        className={`w-full px-6 py-3 bg-black dark:bg-white text-white dark:text-black rounded-md font-bold hover:bg-black/90 hover:dark:bg-white/90 disabled:opacity-50 disabled:cursor-not-allowed transition-colors border ${BORDERS.solid} ${TEXT.secondary} ${monoUppercase}`}
+        className={`w-full px-6 py-3 bg-black dark:bg-white text-white dark:text-black ${RADIUS.control} font-bold hover:bg-black/90 hover:dark:bg-white/90 disabled:opacity-50 disabled:cursor-not-allowed transition-colors border ${BORDERS.solid} ${TEXT.secondary} ${monoUppercase}`}
         style={{ fontFamily: FONTS.mono }}
       >
         Continue →

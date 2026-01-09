@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from 'react';
 import Link from 'next/link';
-import { FONTS, BORDERS, TEXT, monoUppercase } from '@/lib/brutalist-design';
+import { FONTS, BORDERS, TEXT, monoUppercase, RADIUS } from '@/lib/brutalist-design';
 import { getSuggestedComparisons } from '@/lib/onboarding-utils';
 import type { SuggestedComparison } from '@/lib/types';
 import LoadingSpinner from '@/components/ui/LoadingSpinner';
@@ -81,7 +81,7 @@ export default function SuggestionsStep({ onComplete, intent = 'EXPLORE' }: Sugg
           </p>
           <button
             onClick={loadSuggestions}
-            className={`px-6 py-3 border ${BORDERS.medium} rounded-md font-bold hover:bg-gray-100 hover:dark:bg-gray-900 transition-colors ${monoUppercase}`}
+            className={`px-6 py-3 border ${BORDERS.medium} ${RADIUS.control} font-bold hover:bg-gray-100 hover:dark:bg-gray-900 transition-colors ${monoUppercase}`}
             style={{ fontFamily: FONTS.mono }}
           >
             Retry
@@ -98,7 +98,7 @@ export default function SuggestionsStep({ onComplete, intent = 'EXPLORE' }: Sugg
               key={`${comp.work_slug}-${comp.screen_work_slug}`}
               href={`/compare/${comp.work_slug}/${comp.screen_work_slug}`}
               onClick={handleComparisonClick}
-              className={`block p-4 border ${BORDERS.medium} rounded-md hover:bg-gray-100 hover:dark:bg-gray-900 transition-colors ${completing ? 'opacity-50 pointer-events-none' : ''}`}
+              className={`block p-4 border ${BORDERS.medium} ${RADIUS.control} hover:bg-gray-100 hover:dark:bg-gray-900 transition-colors ${completing ? 'opacity-50 pointer-events-none' : ''}`}
             >
               <div className="flex items-start justify-between">
                 <div>
@@ -118,7 +118,7 @@ export default function SuggestionsStep({ onComplete, intent = 'EXPLORE' }: Sugg
       <button
         onClick={onComplete}
         disabled={completing}
-        className={`w-full px-6 py-3 bg-black dark:bg-white text-white dark:text-black rounded-md font-bold hover:bg-black/90 hover:dark:bg-white/90 transition-colors border ${BORDERS.solid} ${TEXT.secondary} ${monoUppercase} ${completing ? 'opacity-50 cursor-not-allowed' : ''}`}
+        className={`w-full px-6 py-3 bg-black dark:bg-white text-white dark:text-black ${RADIUS.control} font-bold hover:bg-black/90 hover:dark:bg-white/90 transition-colors border ${BORDERS.solid} ${TEXT.secondary} ${monoUppercase} ${completing ? 'opacity-50 cursor-not-allowed' : ''}`}
         style={{ fontFamily: FONTS.mono }}
       >
         {completing ? 'Completing...' : 'Get Started!'}

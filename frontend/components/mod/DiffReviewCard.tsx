@@ -4,7 +4,7 @@ import Link from 'next/link';
 import { ModerationDiff } from '@/lib/types';
 import { api } from '@/lib/api';
 import ModerationActions from './ModerationActions';
-import { FONTS, LETTER_SPACING, BORDERS, TEXT, monoUppercase } from '@/lib/brutalist-design';
+import { FONTS, LETTER_SPACING, BORDERS, TEXT, RADIUS, monoUppercase } from '@/lib/brutalist-design';
 
 interface DiffReviewCardProps {
   diff: ModerationDiff;
@@ -60,11 +60,11 @@ export default function DiffReviewCard({
   };
 
   return (
-    <div className={`border ${BORDERS.medium} rounded-md p-6 bg-stone-50 dark:bg-stone-950`}>
+    <div className={`border ${BORDERS.medium} ${RADIUS.control} p-6 bg-stone-50 dark:bg-stone-950`}>
       {/* Status Badge */}
       <div className="mb-4">
         <span
-          className={`inline-block px-3 py-1 rounded-md border ${BORDERS.solid} ${TEXT.metadata} font-bold ${monoUppercase} ${
+          className={`inline-block px-3 py-1 ${RADIUS.control} border ${BORDERS.solid} ${TEXT.metadata} font-bold ${monoUppercase} ${
             diff.status === 'PENDING'
               ? 'bg-amber-100 dark:bg-amber-950/30 text-amber-800 dark:text-amber-400 border-amber-600 dark:border-amber-400'
               : 'bg-orange-100 dark:bg-orange-950/30 text-orange-800 dark:text-orange-400 border-orange-600 dark:border-orange-400'
@@ -95,10 +95,10 @@ export default function DiffReviewCard({
       {/* Diff Content */}
       <div className="mb-4">
         <div className="flex items-center gap-2 mb-2">
-          <span className={`px-2 py-1 bg-blue-100 dark:bg-blue-950/30 text-blue-800 dark:text-blue-400 border ${BORDERS.solid} border-blue-600 dark:border-blue-400 ${TEXT.metadata} font-bold rounded-md ${monoUppercase}`} style={{ fontFamily: FONTS.mono, letterSpacing: LETTER_SPACING.wide }}>
+          <span className={`px-2 py-1 bg-blue-100 dark:bg-blue-950/30 text-blue-800 dark:text-blue-400 border ${BORDERS.solid} border-blue-600 dark:border-blue-400 ${TEXT.metadata} font-bold ${RADIUS.control} ${monoUppercase}`} style={{ fontFamily: FONTS.mono, letterSpacing: LETTER_SPACING.wide }}>
             {categoryLabels[diff.category] || diff.category}
           </span>
-          <span className={`px-2 py-1 bg-purple-100 dark:bg-purple-950/30 text-purple-800 dark:text-purple-400 border ${BORDERS.solid} border-purple-600 dark:border-purple-400 ${TEXT.metadata} font-bold rounded-md ${monoUppercase}`} style={{ fontFamily: FONTS.mono, letterSpacing: LETTER_SPACING.wide }}>
+          <span className={`px-2 py-1 bg-purple-100 dark:bg-purple-950/30 text-purple-800 dark:text-purple-400 border ${BORDERS.solid} border-purple-600 dark:border-purple-400 ${TEXT.metadata} font-bold ${RADIUS.control} ${monoUppercase}`} style={{ fontFamily: FONTS.mono, letterSpacing: LETTER_SPACING.wide }}>
             Spoilers: {spoilerLabels[diff.spoiler_scope] || diff.spoiler_scope}
           </span>
         </div>

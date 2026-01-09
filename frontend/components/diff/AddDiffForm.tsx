@@ -10,7 +10,7 @@ import { Input } from '@/components/ui/Input';
 import { Textarea } from '@/components/ui/Textarea';
 import { CheckCircleIcon } from '@/components/ui/Icons';
 import { MAX_IMAGE_SIZE_BYTES, MAX_IMAGE_SIZE_MB, MIN_CLAIM_LENGTH, MAX_CLAIM_LENGTH, MAX_DETAIL_LENGTH } from '@/lib/constants';
-import { FONTS, LETTER_SPACING, BORDERS, TEXT, HEIGHT, monoUppercase } from '@/lib/brutalist-design';
+import { FONTS, LETTER_SPACING, BORDERS, TEXT, HEIGHT, RADIUS, monoUppercase } from '@/lib/brutalist-design';
 
 interface AddDiffFormProps {
   work: Work;
@@ -240,7 +240,7 @@ export default function AddDiffForm({ work, screenWork, initialCategory }: AddDi
   if (showSuccess) {
     return (
       <div className="max-w-2xl mx-auto p-4 sm:p-6">
-        <div className={`bg-black dark:bg-white border ${BORDERS.solid} rounded-md p-6 text-center`}>
+        <div className={`bg-black dark:bg-white border ${BORDERS.solid} ${RADIUS.control} p-6 text-center`}>
           <div className="flex justify-center mb-4">
             <CheckCircleIcon className="w-16 h-16 text-white dark:text-black" />
           </div>
@@ -267,7 +267,7 @@ export default function AddDiffForm({ work, screenWork, initialCategory }: AddDi
       </div>
 
       {error && (
-        <div className={`mb-4 sm:mb-6 p-3 sm:p-4 bg-red-50 dark:bg-red-950/20 border ${BORDERS.solid} border-red-600 dark:border-red-400 rounded-md ${TEXT.secondary} text-red-600 dark:text-red-400`} style={{ fontFamily: FONTS.mono }}>
+        <div className={`mb-4 sm:mb-6 p-3 sm:p-4 bg-red-50 dark:bg-red-950/20 border ${BORDERS.solid} border-red-600 dark:border-red-400 ${RADIUS.control} ${TEXT.secondary} text-red-600 dark:text-red-400`} style={{ fontFamily: FONTS.mono }}>
           {error}
         </div>
       )}
@@ -284,7 +284,7 @@ export default function AddDiffForm({ work, screenWork, initialCategory }: AddDi
             value={formData.category}
             onChange={handleChange}
             required
-            className={`w-full px-3 py-3 ${TEXT.secondary} bg-white dark:bg-black text-black dark:text-white border ${BORDERS.medium} rounded-md focus:outline-none focus:border-black dark:focus:border-white ${HEIGHT.touchTarget}`}
+            className={`w-full px-3 py-3 ${TEXT.secondary} bg-white dark:bg-black text-black dark:text-white border ${BORDERS.medium} ${RADIUS.control} focus:outline-none focus:border-black dark:focus:border-white ${HEIGHT.touchTarget}`}
             style={{ fontFamily: FONTS.mono, letterSpacing: LETTER_SPACING.normal }}
           >
             <option value="">Select a category...</option>
@@ -344,7 +344,7 @@ export default function AddDiffForm({ work, screenWork, initialCategory }: AddDi
             name="image"
             accept="image/jpeg,image/jpg,image/png,image/webp"
             onChange={handleFileChange}
-            className={`w-full px-3 py-3 ${TEXT.secondary} bg-white dark:bg-black text-black dark:text-white border ${BORDERS.medium} rounded-md focus:outline-none focus:border-black dark:focus:border-white file:mr-4 file:py-2 file:px-4 file:rounded-md file:border-0 ${TEXT.metadata} file:font-bold file:bg-black/10 dark:file:bg-white/10 file:text-black dark:file:text-white hover:file:bg-black/20 hover:dark:file:bg-white/20 ${HEIGHT.touchTarget}`}
+            className={`w-full px-3 py-3 ${TEXT.secondary} bg-white dark:bg-black text-black dark:text-white border ${BORDERS.medium} ${RADIUS.control} focus:outline-none focus:border-black dark:focus:border-white file:mr-4 file:py-2 file:px-4 file:${RADIUS.control} file:border-0 ${TEXT.metadata} file:font-bold file:bg-black/10 dark:file:bg-white/10 file:text-black dark:file:text-white hover:file:bg-black/20 hover:dark:file:bg-white/20 ${HEIGHT.touchTarget}`}
             style={{ fontFamily: FONTS.mono }}
           />
           <p className={`mt-1 ${TEXT.metadata} ${TEXT.mutedMedium}`} style={{ fontFamily: FONTS.mono }}>
@@ -357,7 +357,7 @@ export default function AddDiffForm({ work, screenWork, initialCategory }: AddDi
                 alt="Preview"
                 width={800}
                 height={600}
-                className={`max-w-full max-h-64 rounded-md border ${BORDERS.medium}`}
+                className={`max-w-full max-h-64 ${RADIUS.control} border ${BORDERS.medium}`}
                 unoptimized
               />
               <Button
@@ -388,7 +388,7 @@ export default function AddDiffForm({ work, screenWork, initialCategory }: AddDi
             {SPOILER_SCOPES.map((scope) => (
               <label
                 key={scope.value}
-                className={`flex items-start gap-3 p-3 bg-stone-50 dark:bg-stone-950 border ${BORDERS.medium} rounded-md cursor-pointer hover:border-black hover:dark:border-white transition-colors min-h-[48px]`}
+                className={`flex items-start gap-3 p-3 bg-stone-50 dark:bg-stone-950 border ${BORDERS.medium} ${RADIUS.control} cursor-pointer hover:border-black hover:dark:border-white transition-colors min-h-[48px]`}
               >
                 <input
                   type="radio"
@@ -409,7 +409,7 @@ export default function AddDiffForm({ work, screenWork, initialCategory }: AddDi
 
         {/* Preview */}
         {formData.claim && (
-          <div className={`border ${BORDERS.medium} rounded-md p-4 bg-stone-50 dark:bg-stone-950`}>
+          <div className={`border ${BORDERS.medium} ${RADIUS.control} p-4 bg-stone-50 dark:bg-stone-950`}>
             <h3 className={`${TEXT.secondary} font-bold mb-2 ${monoUppercase}`} style={{ fontFamily: FONTS.mono, letterSpacing: LETTER_SPACING.wide }}>Preview</h3>
             <div className="space-y-2">
               <div>

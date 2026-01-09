@@ -4,7 +4,7 @@ import { useState } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
 import type { WorkWithAdaptations } from '@/lib/types';
-import { FONTS, LETTER_SPACING, BORDERS, TEXT, monoUppercase } from '@/lib/brutalist-design';
+import { FONTS, LETTER_SPACING, BORDERS, TEXT, monoUppercase, RADIUS} from '@/lib/brutalist-design';
 
 interface BookWithAdaptationsResultProps {
   work: WorkWithAdaptations;
@@ -32,7 +32,7 @@ export default function BookWithAdaptationsResult({ work }: BookWithAdaptationsR
   const otherAdaptations = work.adaptations.slice(1);
 
   return (
-    <div className={`border ${BORDERS.medium} rounded-md p-4 hover:border-black hover:dark:border-white transition-colors bg-white dark:bg-black`}>
+    <div className={`border ${BORDERS.medium} ${RADIUS.control} p-4 hover:border-black hover:dark:border-white transition-colors bg-white dark:bg-black`}>
       {/* Book Info */}
       <div>
         <div className="flex items-start justify-between gap-4">
@@ -48,7 +48,7 @@ export default function BookWithAdaptationsResult({ work }: BookWithAdaptationsR
                 <span className={`${TEXT.secondary} ${TEXT.mutedMedium}`} style={{ fontFamily: FONTS.mono }}>({work.year})</span>
               )}
               {work.genre && (
-                <span className={`${TEXT.metadata} px-2 py-0.5 rounded-md bg-stone-100 dark:bg-stone-900 ${TEXT.mutedMedium} font-bold ${monoUppercase}`} style={{ fontFamily: FONTS.mono, letterSpacing: LETTER_SPACING.wide }}>
+                <span className={`${TEXT.metadata} px-2 py-0.5 ${RADIUS.control} bg-stone-100 dark:bg-stone-900 ${TEXT.mutedMedium} font-bold ${monoUppercase}`} style={{ fontFamily: FONTS.mono, letterSpacing: LETTER_SPACING.wide }}>
                   {work.genre}
                 </span>
               )}
@@ -61,7 +61,7 @@ export default function BookWithAdaptationsResult({ work }: BookWithAdaptationsR
                   href={`/compare/${work.slug}/${bestMatch.slug}`}
                   className="block w-full sm:w-auto"
                 >
-                  <button className={`w-full sm:w-auto px-6 py-3 bg-black dark:bg-white text-white dark:text-black font-bold rounded-md border ${BORDERS.solid} hover:opacity-90 transition-opacity ${TEXT.secondary} ${monoUppercase}`} style={{ fontFamily: FONTS.mono, letterSpacing: LETTER_SPACING.tight }}>
+                  <button className={`w-full sm:w-auto px-6 py-3 bg-black dark:bg-white text-white dark:text-black font-bold ${RADIUS.control} border ${BORDERS.solid} hover:opacity-90 transition-opacity ${TEXT.secondary} ${monoUppercase}`} style={{ fontFamily: FONTS.mono, letterSpacing: LETTER_SPACING.tight }}>
                     Compare with {bestMatch.title} ({bestMatch.year} {bestMatch.type === 'MOVIE' ? 'Movie' : 'TV Series'})
                   </button>
                 </Link>
@@ -82,7 +82,7 @@ export default function BookWithAdaptationsResult({ work }: BookWithAdaptationsR
             )}
           </div>
           {work.cover_url && (
-            <div className={`relative w-24 h-36 sm:w-32 sm:h-48 flex-shrink-0 border ${BORDERS.medium} rounded-md overflow-hidden`}>
+            <div className={`relative w-24 h-36 sm:w-32 sm:h-48 flex-shrink-0 border ${BORDERS.medium} ${RADIUS.control} overflow-hidden`}>
               <Image
                 src={work.cover_url}
                 alt={`${work.title} cover`}
@@ -112,7 +112,7 @@ export default function BookWithAdaptationsResult({ work }: BookWithAdaptationsR
               <Link
                 key={adaptation.id}
                 href={`/compare/${work.slug}/${adaptation.slug}`}
-                className={`flex items-center justify-between gap-3 p-3 rounded-md bg-stone-50 dark:bg-stone-950 border ${BORDERS.medium} hover:border-black hover:dark:border-white transition-colors group`}
+                className={`flex items-center justify-between gap-3 p-3 ${RADIUS.control} bg-stone-50 dark:bg-stone-950 border ${BORDERS.medium} hover:border-black hover:dark:border-white transition-colors group`}
               >
                 <div className="flex-1 min-w-0">
                   <div className="flex items-baseline gap-2">
@@ -124,7 +124,7 @@ export default function BookWithAdaptationsResult({ work }: BookWithAdaptationsR
                     )}
                   </div>
                   <div className="flex items-center gap-2 mt-1 flex-wrap">
-                    <span className={`${TEXT.metadata} px-2 py-0.5 rounded-md bg-stone-100 dark:bg-stone-900 ${TEXT.mutedMedium} font-bold ${monoUppercase}`} style={{ fontFamily: FONTS.mono, letterSpacing: LETTER_SPACING.wide }}>
+                    <span className={`${TEXT.metadata} px-2 py-0.5 ${RADIUS.control} bg-stone-100 dark:bg-stone-900 ${TEXT.mutedMedium} font-bold ${monoUppercase}`} style={{ fontFamily: FONTS.mono, letterSpacing: LETTER_SPACING.wide }}>
                       {adaptation.type === 'MOVIE' ? 'Movie' : 'TV Series'}
                     </span>
                     <span className={TEXT.mutedMedium}>•</span>
@@ -148,7 +148,7 @@ export default function BookWithAdaptationsResult({ work }: BookWithAdaptationsR
                     {adaptation.diff_count < 3 && adaptation.diff_count > 0 && (
                       <>
                         <span className={TEXT.mutedMedium}>•</span>
-                        <span className={`${TEXT.metadata} px-2 py-0.5 rounded-md bg-amber-100 dark:bg-amber-950/30 text-amber-800 dark:text-amber-400 font-bold ${monoUppercase}`} style={{ fontFamily: FONTS.mono, letterSpacing: LETTER_SPACING.wide }}>
+                        <span className={`${TEXT.metadata} px-2 py-0.5 ${RADIUS.control} bg-amber-100 dark:bg-amber-950/30 text-amber-800 dark:text-amber-400 font-bold ${monoUppercase}`} style={{ fontFamily: FONTS.mono, letterSpacing: LETTER_SPACING.wide }}>
                           Needs work
                         </span>
                       </>

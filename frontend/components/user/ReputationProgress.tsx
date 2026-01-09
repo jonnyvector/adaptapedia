@@ -1,5 +1,5 @@
 import type { User } from '@/lib/types';
-import { FONTS, LETTER_SPACING, BORDERS, TEXT, monoUppercase } from '@/lib/brutalist-design';
+import { FONTS, LETTER_SPACING, BORDERS, TEXT, monoUppercase, RADIUS} from '@/lib/brutalist-design';
 
 interface ReputationProgressProps {
   user: User;
@@ -32,7 +32,7 @@ export default function ReputationProgress({ user }: ReputationProgressProps) {
       </div>
 
       {permissions.next_unlock && (
-        <div className={`mb-4 p-3 bg-white dark:bg-black border ${BORDERS.medium} border-black/40 dark:border-white/40 rounded-md`}>
+        <div className={`mb-4 p-3 bg-white dark:bg-black border ${BORDERS.medium} border-black/40 dark:border-white/40 ${RADIUS.control}`}>
           <div className="flex items-center gap-2 mb-1">
             <span className={`${TEXT.secondary} font-bold text-black dark:text-white ${monoUppercase}`} style={{ fontFamily: FONTS.mono, letterSpacing: LETTER_SPACING.tight }}>Next Unlock:</span>
             <span className={`${TEXT.secondary} text-black dark:text-white font-bold`} style={{ fontFamily: FONTS.mono }}>
@@ -76,7 +76,7 @@ export default function ReputationProgress({ user }: ReputationProgressProps) {
       </div>
 
       {!permissions.next_unlock && (
-        <div className={`mt-4 p-3 bg-black dark:bg-white border ${BORDERS.solid} rounded-md text-center`}>
+        <div className={`mt-4 p-3 bg-black dark:bg-white border ${BORDERS.solid} ${RADIUS.control} text-center`}>
           <div className={`${TEXT.secondary} font-bold text-white dark:text-black ${monoUppercase}`} style={{ fontFamily: FONTS.mono, letterSpacing: LETTER_SPACING.tight }}>
             🎉 All permissions unlocked!
           </div>

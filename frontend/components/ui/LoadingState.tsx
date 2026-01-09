@@ -1,5 +1,5 @@
 import LoadingSpinner from './LoadingSpinner';
-import { FONTS, TEXT } from '@/lib/brutalist-design';
+import { FONTS, TEXT, RADIUS} from '@/lib/brutalist-design';
 
 interface LoadingStateProps {
   message?: string;

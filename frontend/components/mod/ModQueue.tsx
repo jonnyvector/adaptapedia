@@ -90,7 +90,7 @@ export default function ModQueue(): JSX.Element {
           >
             Pending Diffs
             {activeTab === 'pending-diffs' && counts.diffs > 0 && (
-              <span className={`ml-2 px-2 py-1 bg-black dark:bg-white text-white dark:text-black rounded-md ${TEXT.metadata} font-bold border ${BORDERS.solid}`} style={{ fontFamily: FONTS.mono }}>
+              <span className={`ml-2 px-2 py-1 bg-black dark:bg-white text-white dark:text-black ${RADIUS.control} ${TEXT.metadata} font-bold border ${BORDERS.solid}`} style={{ fontFamily: FONTS.mono }}>
                 {counts.diffs}
               </span>
             )}
@@ -106,7 +106,7 @@ export default function ModQueue(): JSX.Element {
           >
             Pending Comments
             {activeTab === 'pending-comments' && counts.comments > 0 && (
-              <span className={`ml-2 px-2 py-1 bg-black dark:bg-white text-white dark:text-black rounded-md ${TEXT.metadata} font-bold border ${BORDERS.solid}`} style={{ fontFamily: FONTS.mono }}>
+              <span className={`ml-2 px-2 py-1 bg-black dark:bg-white text-white dark:text-black ${RADIUS.control} ${TEXT.metadata} font-bold border ${BORDERS.solid}`} style={{ fontFamily: FONTS.mono }}>
                 {counts.comments}
               </span>
             )}

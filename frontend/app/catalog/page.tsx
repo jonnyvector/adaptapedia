@@ -3,7 +3,7 @@ import { Metadata } from 'next';
 // Force dynamic rendering - page uses client components with useSearchParams
 export const dynamic = 'force-dynamic';
 import CatalogClient from './CatalogClient';
-import { FONTS, TEXT } from '@/lib/brutalist-design';
+import { FONTS, TEXT, RADIUS} from '@/lib/brutalist-design';
 
 export const metadata: Metadata = {
   title: 'Full Catalog | Adaptapedia',

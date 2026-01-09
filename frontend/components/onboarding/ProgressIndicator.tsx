@@ -1,6 +1,6 @@
 'use client';
 
-import { FONTS, TEXT, monoUppercase } from '@/lib/brutalist-design';
+import { FONTS, TEXT, monoUppercase, RADIUS} from '@/lib/brutalist-design';
 
 interface ProgressIndicatorProps {
   currentStep: number;

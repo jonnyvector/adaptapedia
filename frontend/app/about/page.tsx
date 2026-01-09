@@ -4,7 +4,7 @@ import Link from 'next/link';
 export const dynamic = 'force-dynamic';
 import type { Metadata } from 'next';
 import { ArrowTopRightOnSquareIcon } from '@/components/ui/Icons';
-import { FONTS, LETTER_SPACING, BORDERS, TEXT, monoUppercase } from '@/lib/brutalist-design';
+import { FONTS, LETTER_SPACING, BORDERS, TEXT, RADIUS, monoUppercase } from '@/lib/brutalist-design';
 
 export const metadata: Metadata = {
   title: 'About Adaptapedia',
@@ -53,7 +53,7 @@ export default function AboutPage(): JSX.Element {
             <div className="flex justify-center items-center">
               <Link
                 href="/search"
-                className={`px-4 py-2 sm:px-6 sm:py-3 border ${BORDERS.solid} bg-black dark:bg-white text-white dark:text-black hover:bg-white hover:dark:bg-black hover:text-black hover:dark:text-white font-bold transition-all ${TEXT.body} ${monoUppercase} rounded-md`}
+                className={`px-4 py-2 sm:px-6 sm:py-3 border ${BORDERS.solid} bg-black dark:bg-white text-white dark:text-black hover:bg-white hover:dark:bg-black hover:text-black hover:dark:text-white font-bold transition-all ${TEXT.body} ${monoUppercase} ${RADIUS.control}`}
                
               >
                 Start exploring
@@ -165,7 +165,7 @@ export default function AboutPage(): JSX.Element {
                   {/* Voting buttons */}
                   <div className="inline-flex items-stretch gap-2 overflow-hidden" role="group">
                     <button
-                      className={`inline-flex items-center justify-center gap-1.5 px-3 py-1.5 ${TEXT.metadata} font-bold border rounded-md transition-all bg-black dark:bg-white ${BORDERS.solid} text-white dark:text-black ${monoUppercase}`}
+                      className={`inline-flex items-center justify-center gap-1.5 px-3 py-1.5 ${TEXT.metadata} font-bold border ${RADIUS.control} transition-all bg-black dark:bg-white ${BORDERS.solid} text-white dark:text-black ${monoUppercase}`}
                      
                     >
                       <span className="leading-none">↑</span>
@@ -173,7 +173,7 @@ export default function AboutPage(): JSX.Element {
                       <span>(227)</span>
                     </button>
                     <button
-                      className={`inline-flex items-center justify-center gap-1.5 px-3 py-1.5 ${TEXT.metadata} font-bold border rounded-md transition-all bg-white dark:bg-black ${BORDERS.medium} ${TEXT.mutedStrong} hover:border-black dark:hover:border-white ${monoUppercase}`}
+                      className={`inline-flex items-center justify-center gap-1.5 px-3 py-1.5 ${TEXT.metadata} font-bold border ${RADIUS.control} transition-all bg-white dark:bg-black ${BORDERS.medium} ${TEXT.mutedStrong} hover:border-black dark:hover:border-white ${monoUppercase}`}
                      
                     >
                       <span className="leading-none">~</span>
@@ -181,7 +181,7 @@ export default function AboutPage(): JSX.Element {
                       <span>(15)</span>
                     </button>
                     <button
-                      className={`inline-flex items-center justify-center gap-1.5 px-3 py-1.5 ${TEXT.metadata} font-bold border rounded-md transition-all bg-white dark:bg-black ${BORDERS.medium} ${TEXT.mutedStrong} hover:border-black dark:hover:border-white ${monoUppercase}`}
+                      className={`inline-flex items-center justify-center gap-1.5 px-3 py-1.5 ${TEXT.metadata} font-bold border ${RADIUS.control} transition-all bg-white dark:bg-black ${BORDERS.medium} ${TEXT.mutedStrong} hover:border-black dark:hover:border-white ${monoUppercase}`}
                      
                     >
                       <span className="leading-none">↓</span>
@@ -240,25 +240,25 @@ export default function AboutPage(): JSX.Element {
                     <span className={`${TEXT.metadata} font-bold ${TEXT.mutedMedium} ${monoUppercase}`}>Spoiler Level</span>
                   </div>
                   <div className="inline-flex items-center gap-2 w-full">
-                    <button className={`flex-1 inline-flex items-center justify-center gap-1.5 px-3 py-2 ${TEXT.label} font-bold rounded-md border ${BORDERS.solid} bg-green-600 dark:bg-green-500 text-white ${monoUppercase}`}>
+                    <button className={`flex-1 inline-flex items-center justify-center gap-1.5 px-3 py-2 ${TEXT.label} font-bold ${RADIUS.control} border ${BORDERS.solid} bg-green-600 dark:bg-green-500 text-white ${monoUppercase}`}>
                       <svg className="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
                         <path strokeLinecap="round" strokeLinejoin="round" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
                       </svg>
                       Safe
                     </button>
-                    <button className={`flex-1 inline-flex items-center justify-center gap-1.5 px-3 py-2 ${TEXT.label} font-bold rounded-md border ${BORDERS.medium} bg-stone-100 dark:bg-stone-900 ${TEXT.mutedStrong} ${monoUppercase}`}>
+                    <button className={`flex-1 inline-flex items-center justify-center gap-1.5 px-3 py-2 ${TEXT.label} font-bold ${RADIUS.control} border ${BORDERS.medium} bg-stone-100 dark:bg-stone-900 ${TEXT.mutedStrong} ${monoUppercase}`}>
                       <svg className="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
                         <path strokeLinecap="round" strokeLinejoin="round" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" />
                       </svg>
                       Book
                     </button>
-                    <button className={`flex-1 inline-flex items-center justify-center gap-1.5 px-3 py-2 ${TEXT.label} font-bold rounded-md border ${BORDERS.medium} bg-stone-100 dark:bg-stone-900 ${TEXT.mutedStrong} ${monoUppercase}`}>
+                    <button className={`flex-1 inline-flex items-center justify-center gap-1.5 px-3 py-2 ${TEXT.label} font-bold ${RADIUS.control} border ${BORDERS.medium} bg-stone-100 dark:bg-stone-900 ${TEXT.mutedStrong} ${monoUppercase}`}>
                       <svg className="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
                         <path strokeLinecap="round" strokeLinejoin="round" d="M7 4v16M17 4v16M3 8h4m10 0h4M3 12h18M3 16h4m10 0h4M4 20h16a1 1 0 001-1V5a1 1 0 00-1-1H4a1 1 0 00-1 1v14a1 1 0 001 1z" />
                       </svg>
                       Screen
                     </button>
-                    <button className={`flex-1 inline-flex items-center justify-center gap-1.5 px-3 py-2 ${TEXT.label} font-bold rounded-md border ${BORDERS.medium} bg-stone-100 dark:bg-stone-900 ${TEXT.mutedStrong} ${monoUppercase}`}>
+                    <button className={`flex-1 inline-flex items-center justify-center gap-1.5 px-3 py-2 ${TEXT.label} font-bold ${RADIUS.control} border ${BORDERS.medium} bg-stone-100 dark:bg-stone-900 ${TEXT.mutedStrong} ${monoUppercase}`}>
                       <svg className="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
                         <path strokeLinecap="round" strokeLinejoin="round" d="M8 11V7a4 4 0 118 0m-4 8v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2z" />
                       </svg>
@@ -335,7 +335,7 @@ export default function AboutPage(): JSX.Element {
                 href="https://github.com/adaptapedia/adaptapedia"
                 target="_blank"
                 rel="noopener noreferrer"
-                className={`inline-flex items-center gap-2 px-6 py-3 bg-black dark:bg-white text-white dark:text-black border ${BORDERS.solid} font-bold hover:bg-white hover:dark:bg-black hover:text-black hover:dark:text-white transition-all ${TEXT.body} ${monoUppercase} rounded-md`}
+                className={`inline-flex items-center gap-2 px-6 py-3 bg-black dark:bg-white text-white dark:text-black border ${BORDERS.solid} font-bold hover:bg-white hover:dark:bg-black hover:text-black hover:dark:text-white transition-all ${TEXT.body} ${monoUppercase} ${RADIUS.control}`}
                
               >
                 <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">

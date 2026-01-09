@@ -1,6 +1,6 @@
 import Link from 'next/link';
 import type { Comment } from '@/lib/types';
-import { FONTS, LETTER_SPACING, BORDERS, TEXT, monoUppercase } from '@/lib/brutalist-design';
+import { FONTS, LETTER_SPACING, BORDERS, TEXT, monoUppercase, RADIUS} from '@/lib/brutalist-design';
 
 interface UserCommentsListProps {
   comments: Comment[];
@@ -55,7 +55,7 @@ export default function UserCommentsList({
 }: UserCommentsListProps): JSX.Element {
   if (comments.length === 0) {
     return (
-      <div className={`border ${BORDERS.medium} rounded-md p-12 text-center bg-stone-50 dark:bg-stone-950`}>
+      <div className={`border ${BORDERS.medium} ${RADIUS.control} p-12 text-center bg-stone-50 dark:bg-stone-950`}>
         <p className={`${TEXT.body} ${TEXT.mutedMedium} font-bold`} style={{ fontFamily: FONTS.mono }}>No comments posted yet</p>
         <p className={`${TEXT.secondary} ${TEXT.mutedMedium} mt-2`} style={{ fontFamily: FONTS.mono }}>
           Join the discussion on diffs to share your insights
@@ -69,7 +69,7 @@ export default function UserCommentsList({
       {comments.map((comment) => (
         <div
           key={comment.id}
-          className={`border ${BORDERS.medium} rounded-md p-5 hover:border-black hover:dark:border-white transition-colors bg-white dark:bg-black`}
+          className={`border ${BORDERS.medium} ${RADIUS.control} p-5 hover:border-black hover:dark:border-white transition-colors bg-white dark:bg-black`}
         >
           {/* Context - which diff this comment is on */}
           <div className={`mb-3 pb-3 border-b ${BORDERS.subtle}`}>
@@ -94,7 +94,7 @@ export default function UserCommentsList({
           {/* Footer with spoiler badge and timestamp */}
           <div className={`flex items-center justify-between ${TEXT.secondary}`}>
             <span
-              className={`px-2 py-1 ${TEXT.metadata} font-bold rounded-md ${getSpoilerBadgeColor(
+              className={`px-2 py-1 ${TEXT.metadata} font-bold ${RADIUS.control} ${getSpoilerBadgeColor(
                 comment.spoiler_scope
               )}`}
               style={{ fontFamily: FONTS.mono }}

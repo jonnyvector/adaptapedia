@@ -4,7 +4,7 @@ import Link from 'next/link';
 import { ModerationComment } from '@/lib/types';
 import { api } from '@/lib/api';
 import ModerationActions from './ModerationActions';
-import { FONTS, LETTER_SPACING, BORDERS, TEXT, monoUppercase } from '@/lib/brutalist-design';
+import { FONTS, LETTER_SPACING, BORDERS, TEXT, RADIUS, monoUppercase } from '@/lib/brutalist-design';
 
 interface CommentReviewCardProps {
   comment: ModerationComment;
@@ -48,11 +48,11 @@ export default function CommentReviewCard({
   };
 
   return (
-    <div className={`border ${BORDERS.medium} rounded-md p-6 bg-stone-50 dark:bg-stone-950`}>
+    <div className={`border ${BORDERS.medium} ${RADIUS.control} p-6 bg-stone-50 dark:bg-stone-950`}>
       {/* Status Badge */}
       <div className="mb-4">
         <span
-          className={`inline-block px-3 py-1 rounded-md border ${BORDERS.solid} ${TEXT.metadata} font-bold ${monoUppercase} ${
+          className={`inline-block px-3 py-1 ${RADIUS.control} border ${BORDERS.solid} ${TEXT.metadata} font-bold ${monoUppercase} ${
             comment.status === 'PENDING'
               ? 'bg-amber-100 dark:bg-amber-950/30 text-amber-800 dark:text-amber-400 border-amber-600 dark:border-amber-400'
               : 'bg-blue-100 dark:bg-blue-950/30 text-blue-800 dark:text-blue-400 border-blue-600 dark:border-blue-400'
@@ -64,7 +64,7 @@ export default function CommentReviewCard({
       </div>
 
       {/* Comment Context */}
-      <div className={`mb-4 p-3 bg-stone-50 dark:bg-stone-950 rounded-md border ${BORDERS.medium}`}>
+      <div className={`mb-4 p-3 bg-stone-50 dark:bg-stone-950 ${RADIUS.control} border ${BORDERS.medium}`}>
         <div className={`${TEXT.metadata} ${TEXT.mutedMedium} mb-1 ${monoUppercase}`} style={{ fontFamily: FONTS.mono, letterSpacing: LETTER_SPACING.wide }}>Comment on diff:</div>
         <div className={`${TEXT.secondary} font-bold mb-2 text-black dark:text-white`} style={{ fontFamily: FONTS.mono }}>{comment.diff_item_claim}</div>
         <div className={`${TEXT.metadata} ${TEXT.mutedMedium}`} style={{ fontFamily: FONTS.mono }}>
@@ -80,11 +80,11 @@ export default function CommentReviewCard({
       {/* Comment Content */}
       <div className="mb-4">
         <div className="mb-2">
-          <span className={`px-2 py-1 bg-purple-100 dark:bg-purple-950/30 text-purple-800 dark:text-purple-400 border ${BORDERS.solid} border-purple-600 dark:border-purple-400 ${TEXT.metadata} font-bold rounded-md ${monoUppercase}`} style={{ fontFamily: FONTS.mono, letterSpacing: LETTER_SPACING.wide }}>
+          <span className={`px-2 py-1 bg-purple-100 dark:bg-purple-950/30 text-purple-800 dark:text-purple-400 border ${BORDERS.solid} border-purple-600 dark:border-purple-400 ${TEXT.metadata} font-bold ${RADIUS.control} ${monoUppercase}`} style={{ fontFamily: FONTS.mono, letterSpacing: LETTER_SPACING.wide }}>
             Spoilers: {spoilerLabels[comment.spoiler_scope] || comment.spoiler_scope}
           </span>
         </div>
-        <div className={`p-4 bg-stone-50 dark:bg-stone-950 rounded-md border ${BORDERS.medium}`}>
+        <div className={`p-4 bg-stone-50 dark:bg-stone-950 ${RADIUS.control} border ${BORDERS.medium}`}>
           <p className={`${TEXT.secondary} text-black dark:text-white whitespace-pre-wrap`} style={{ fontFamily: FONTS.mono }}>{comment.body}</p>
         </div>
       </div>

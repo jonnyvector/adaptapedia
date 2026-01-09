@@ -1,5 +1,5 @@
 import type { UserProfile } from '@/lib/types';
-import { FONTS, LETTER_SPACING, BORDERS, TEXT, monoUppercase } from '@/lib/brutalist-design';
+import { FONTS, LETTER_SPACING, BORDERS, TEXT, monoUppercase, RADIUS} from '@/lib/brutalist-design';
 
 interface UserProfileHeaderProps {
   profile: UserProfile;
@@ -59,7 +59,7 @@ export default function UserProfileHeader({
             <h1 className={`text-2xl sm:text-3xl lg:text-4xl font-bold text-black dark:text-white ${monoUppercase}`} style={{ fontFamily: FONTS.mono, letterSpacing: LETTER_SPACING.wider }}>{profile.username}</h1>
             {profile.role && profile.role !== 'USER' && (
               <span
-                className={`px-3 py-1 ${TEXT.metadata} font-bold rounded-md border ${BORDERS.solid} ${getRoleBadgeColor(
+                className={`px-3 py-1 ${TEXT.metadata} font-bold ${RADIUS.control} border ${BORDERS.solid} ${getRoleBadgeColor(
                   profile.role
                 )} inline-block ${monoUppercase}`}
                 style={{ fontFamily: FONTS.mono, letterSpacing: LETTER_SPACING.wide }}

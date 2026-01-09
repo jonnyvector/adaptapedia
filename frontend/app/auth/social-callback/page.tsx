@@ -62,7 +62,7 @@ function SocialCallbackContent(): JSX.Element {
   if (error) {
     return (
       <div className="min-h-screen flex flex-col items-center justify-center p-4">
-        <div className="bg-red-50 dark:bg-red-950 border-2 border-red-500/40 text-red-700 dark:text-red-300 px-6 py-4 rounded-md max-w-md text-center">
+        <div className="bg-red-50 dark:bg-red-950 border-2 border-red-500/40 text-red-700 dark:text-red-300 px-6 py-4 ${RADIUS.control} max-w-md text-center">
           <p className="font-bold mb-2">Login Error</p>
           <p className="text-sm">{error}</p>
           <p className="text-xs mt-3 opacity-75">Redirecting to login page...</p>

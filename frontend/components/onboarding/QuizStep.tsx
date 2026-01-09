@@ -1,7 +1,7 @@
 'use client';
 
 import { useState } from 'react';
-import { FONTS, BORDERS, TEXT, monoUppercase } from '@/lib/brutalist-design';
+import { FONTS, BORDERS, TEXT, monoUppercase, RADIUS } from '@/lib/brutalist-design';
 import { GENRE_OPTIONS } from '@/lib/onboarding-utils';
 import type { UserPreferences } from '@/lib/types';
 
@@ -50,7 +50,7 @@ export default function QuizStep({ onComplete, onSkip }: QuizStepProps): JSX.Ele
                 role="checkbox"
                 aria-checked={isSelected}
                 onClick={() => toggleGenre(genre)}
-                className={`px-4 py-3 border ${BORDERS.medium} rounded-md font-bold transition-colors ${
+                className={`px-4 py-3 border ${BORDERS.medium} ${RADIUS.control} font-bold transition-colors ${
                   isSelected
                     ? 'bg-black dark:bg-white text-white dark:text-black border-black dark:border-white'
                     : 'bg-white dark:bg-black hover:bg-gray-100 hover:dark:bg-gray-900'
@@ -84,7 +84,7 @@ export default function QuizStep({ onComplete, onSkip }: QuizStepProps): JSX.Ele
                 role="radio"
                 aria-checked={isSelected}
                 onClick={() => setBookVsScreen(value)}
-                className={`w-full px-4 py-3 border ${BORDERS.medium} rounded-md text-left font-bold transition-colors ${
+                className={`w-full px-4 py-3 border ${BORDERS.medium} ${RADIUS.control} text-left font-bold transition-colors ${
                   isSelected
                     ? 'bg-black dark:bg-white text-white dark:text-black border-black dark:border-white'
                     : 'bg-white dark:bg-black hover:bg-gray-100 hover:dark:bg-gray-900'
@@ -117,7 +117,7 @@ export default function QuizStep({ onComplete, onSkip }: QuizStepProps): JSX.Ele
                 role="radio"
                 aria-checked={isSelected}
                 onClick={() => setContributionInterest(value)}
-                className={`w-full px-4 py-3 border ${BORDERS.medium} rounded-md text-left font-bold transition-colors ${
+                className={`w-full px-4 py-3 border ${BORDERS.medium} ${RADIUS.control} text-left font-bold transition-colors ${
                   isSelected
                     ? 'bg-black dark:bg-white text-white dark:text-black border-black dark:border-white'
                     : 'bg-white dark:bg-black hover:bg-gray-100 hover:dark:bg-gray-900'
@@ -134,14 +134,14 @@ export default function QuizStep({ onComplete, onSkip }: QuizStepProps): JSX.Ele
       <div className="flex gap-3">
         <button
           onClick={onSkip}
-          className={`flex-1 px-6 py-3 border ${BORDERS.medium} rounded-md font-bold hover:bg-gray-100 hover:dark:bg-gray-900 transition-colors ${TEXT.secondary} ${monoUppercase}`}
+          className={`flex-1 px-6 py-3 border ${BORDERS.medium} ${RADIUS.control} font-bold hover:bg-gray-100 hover:dark:bg-gray-900 transition-colors ${TEXT.secondary} ${monoUppercase}`}
           style={{ fontFamily: FONTS.mono }}
         >
           Skip
         </button>
         <button
           onClick={handleContinue}
-          className={`flex-1 px-6 py-3 bg-black dark:bg-white text-white dark:text-black rounded-md font-bold hover:bg-black/90 hover:dark:bg-white/90 transition-colors border ${BORDERS.solid} ${TEXT.secondary} ${monoUppercase}`}
+          className={`flex-1 px-6 py-3 bg-black dark:bg-white text-white dark:text-black ${RADIUS.control} font-bold hover:bg-black/90 hover:dark:bg-white/90 transition-colors border ${BORDERS.solid} ${TEXT.secondary} ${monoUppercase}`}
           style={{ fontFamily: FONTS.mono }}
         >
           Continue →

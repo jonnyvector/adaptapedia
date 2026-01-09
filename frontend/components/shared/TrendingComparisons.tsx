@@ -4,7 +4,7 @@ import { useEffect, useState } from 'react';
 import { api } from '@/lib/api';
 import type { TrendingComparison } from '@/lib/types';
 import ComparisonCard from '@/components/browse/ComparisonCard';
-import { FONTS, TEXT } from '@/lib/brutalist-design';
+import { FONTS, TEXT, RADIUS } from '@/lib/brutalist-design';
 
 interface TrendingComparisonsProps {
   limit?: number;
@@ -38,8 +38,8 @@ export default function TrendingComparisons({ limit = 6 }: TrendingComparisonsPr
       <div className="space-y-3">
         {[...Array(3)].map((_, i) => (
           <div key={i} className="animate-pulse">
-            <div className="h-4 bg-black/10 dark:bg-white/10 rounded-md w-3/4 mb-2"></div>
-            <div className="h-3 bg-black/10 dark:bg-white/10 rounded-md w-1/2"></div>
+            <div className="h-4 bg-black/10 dark:bg-white/10 ${RADIUS.control} w-3/4 mb-2"></div>
+            <div className="h-3 bg-black/10 dark:bg-white/10 ${RADIUS.control} w-1/2"></div>
           </div>
         ))}
       </div>

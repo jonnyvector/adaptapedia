@@ -1,5 +1,5 @@
 import Link from 'next/link';
-import { FONTS, LETTER_SPACING, BORDERS, TEXT } from '@/lib/brutalist-design';
+import { FONTS, LETTER_SPACING, BORDERS, TEXT, RADIUS} from '@/lib/brutalist-design';
 
 interface EmptyStateProps {
   message: string;

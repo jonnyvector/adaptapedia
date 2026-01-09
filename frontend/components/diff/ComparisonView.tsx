@@ -365,7 +365,7 @@ export default function ComparisonView({
                     setSelectedCategories(new Set());
                     setSearchQuery('');
                   }}
-                  className="px-4 py-2 text-sm bg-surface border border-border rounded-md hover:bg-surface2 transition-colors min-h-[40px]"
+                  className="px-4 py-2 text-sm bg-surface border border-border ${RADIUS.control} hover:bg-surface2 transition-colors min-h-[40px]"
                 >
                   Clear all filters
                 </button>

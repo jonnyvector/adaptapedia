@@ -1,6 +1,6 @@
 import Link from 'next/link';
 import type { DiffItem } from '@/lib/types';
-import { FONTS, LETTER_SPACING, BORDERS, TEXT, monoUppercase } from '@/lib/brutalist-design';
+import { FONTS, LETTER_SPACING, BORDERS, TEXT, monoUppercase, RADIUS} from '@/lib/brutalist-design';
 
 interface UserDiffsListProps {
   diffs: DiffItem[];
@@ -70,7 +70,7 @@ export default function UserDiffsList({
 }: UserDiffsListProps): JSX.Element {
   if (diffs.length === 0) {
     return (
-      <div className={`border ${BORDERS.medium} rounded-md p-12 text-center bg-stone-50 dark:bg-stone-950`}>
+      <div className={`border ${BORDERS.medium} ${RADIUS.control} p-12 text-center bg-stone-50 dark:bg-stone-950`}>
         <p className={`${TEXT.body} ${TEXT.mutedMedium} font-bold`} style={{ fontFamily: FONTS.mono }}>No diffs created yet</p>
         <p className={`${TEXT.secondary} ${TEXT.mutedMedium} mt-2`} style={{ fontFamily: FONTS.mono }}>
           Start comparing books and screen adaptations to add your first diff
@@ -84,7 +84,7 @@ export default function UserDiffsList({
       {diffs.map((diff) => (
         <div
           key={diff.id}
-          className={`border ${BORDERS.medium} rounded-md p-5 hover:border-black hover:dark:border-white transition-colors bg-white dark:bg-black`}
+          className={`border ${BORDERS.medium} ${RADIUS.control} p-5 hover:border-black hover:dark:border-white transition-colors bg-white dark:bg-black`}
         >
           {/* Header with comparison link */}
           <div className="mb-3">
@@ -102,7 +102,7 @@ export default function UserDiffsList({
             <h3 className={`${TEXT.body} font-bold flex-1`} style={{ fontFamily: FONTS.mono }}>{diff.claim}</h3>
             <div className="flex gap-2 ml-3">
               <span
-                className={`px-2 py-1 ${TEXT.metadata} font-bold rounded-md border ${BORDERS.solid} ${getCategoryBadgeColor(
+                className={`px-2 py-1 ${TEXT.metadata} font-bold ${RADIUS.control} border ${BORDERS.solid} ${getCategoryBadgeColor(
                   diff.category
                 )} ${monoUppercase}`}
                 style={{ fontFamily: FONTS.mono, letterSpacing: LETTER_SPACING.wide }}
@@ -110,7 +110,7 @@ export default function UserDiffsList({
                 {diff.category}
               </span>
               <span
-                className={`px-2 py-1 ${TEXT.metadata} font-bold rounded-md ${getSpoilerBadgeColor(
+                className={`px-2 py-1 ${TEXT.metadata} font-bold ${RADIUS.control} ${getSpoilerBadgeColor(
                   diff.spoiler_scope
                 )}`}
                 style={{ fontFamily: FONTS.mono }}

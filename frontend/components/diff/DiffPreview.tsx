@@ -1,6 +1,6 @@
 import type { DiffItem } from '@/lib/types';
 import Link from 'next/link';
-import { FONTS, LETTER_SPACING, BORDERS, TEXT, monoUppercase } from '@/lib/brutalist-design';
+import { FONTS, LETTER_SPACING, BORDERS, TEXT, monoUppercase, RADIUS} from '@/lib/brutalist-design';
 
 interface DiffPreviewProps {
   diffs: DiffItem[];
@@ -71,7 +71,7 @@ export default function DiffPreview({
       {previewDiffs.map((diff) => (
         <div
           key={diff.id}
-          className={`border ${BORDERS.medium} rounded-md p-3 bg-white dark:bg-black hover:border-black hover:dark:border-white transition-colors`}
+          className={`border ${BORDERS.medium} ${RADIUS.control} p-3 bg-white dark:bg-black hover:border-black hover:dark:border-white transition-colors`}
         >
           <div className="flex items-start gap-2 mb-2">
             <span className="text-lg" title={diff.category}>
@@ -83,7 +83,7 @@ export default function DiffPreview({
               </p>
             </div>
             <span
-              className={`px-2 py-0.5 ${TEXT.metadata} font-bold rounded-md flex-shrink-0 ${getSpoilerBadgeColor(
+              className={`px-2 py-0.5 ${TEXT.metadata} font-bold ${RADIUS.control} flex-shrink-0 ${getSpoilerBadgeColor(
                 diff.spoiler_scope
               )}`}
               style={{ fontFamily: FONTS.mono }}

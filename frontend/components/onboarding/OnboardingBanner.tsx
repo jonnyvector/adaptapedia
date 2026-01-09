@@ -2,7 +2,7 @@
 
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import { FONTS, BORDERS, TEXT, monoUppercase } from '@/lib/brutalist-design';
+import { FONTS, BORDERS, TEXT, monoUppercase, RADIUS } from '@/lib/brutalist-design';
 import { useAuth } from '@/lib/auth-context';
 
 export default function OnboardingBanner(): JSX.Element | null {
@@ -30,7 +30,7 @@ export default function OnboardingBanner(): JSX.Element | null {
         </p>
         <Link
           href="/onboarding"
-          className={`px-4 py-2 bg-white dark:bg-black text-black dark:text-white border ${BORDERS.medium} rounded-md font-bold hover:bg-gray-100 hover:dark:bg-gray-900 transition-colors ${TEXT.metadata} ${monoUppercase}`}
+          className={`px-4 py-2 bg-white dark:bg-black text-black dark:text-white border ${BORDERS.medium} ${RADIUS.control} font-bold hover:bg-gray-100 hover:dark:bg-gray-900 transition-colors ${TEXT.metadata} ${monoUppercase}`}
           style={{ fontFamily: FONTS.mono }}
         >
           Continue Setup →

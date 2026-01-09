@@ -1,5 +1,5 @@
 import type { BadgeType } from '@/lib/types';
-import { FONTS, LETTER_SPACING, monoUppercase } from '@/lib/brutalist-design';
+import { FONTS, LETTER_SPACING, monoUppercase, RADIUS} from '@/lib/brutalist-design';
 
 interface UserBadgeProps {
   badgeType: BadgeType;

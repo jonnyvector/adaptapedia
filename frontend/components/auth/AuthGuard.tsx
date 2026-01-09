@@ -3,7 +3,7 @@
 import { useEffect } from 'react';
 import { useRouter, usePathname } from 'next/navigation';
 import { useAuth } from '@/lib/auth-context';
-import { FONTS, TEXT } from '@/lib/brutalist-design';
+import { FONTS, TEXT, RADIUS} from '@/lib/brutalist-design';
 
 interface AuthGuardProps {
   children: React.ReactNode;

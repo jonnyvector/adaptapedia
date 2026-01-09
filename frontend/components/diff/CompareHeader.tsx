@@ -12,7 +12,7 @@ import type {
   ApiResponse,
 } from '@/lib/types';
 import { api } from '@/lib/api';
-import { FONTS, LETTER_SPACING, BORDERS, TEXT, monoUppercase, COLORS } from '@/lib/brutalist-design';
+import { FONTS, LETTER_SPACING, BORDERS, TEXT, RADIUS, monoUppercase, COLORS } from '@/lib/brutalist-design';
 
 interface CompareHeaderProps {
   work: Work;
@@ -122,7 +122,7 @@ export default function CompareHeader({
 
           {/* VS Separator */}
           <div className="flex items-center justify-center">
-            <div className={`flex items-center gap-2 px-3 py-2 bg-black dark:bg-white rounded-md border ${BORDERS.solid}`}>
+            <div className={`flex items-center gap-2 px-3 py-2 bg-black dark:bg-white ${RADIUS.control} border ${BORDERS.solid}`}>
               <span className={`text-2xl sm:text-3xl font-bold text-white dark:text-black`} style={{ fontFamily: FONTS.mono }}>VS</span>
             </div>
           </div>
@@ -156,7 +156,7 @@ export default function CompareHeader({
 
         {/* Adaptation Selector (if multiple adaptations exist) */}
         {!loadingAdaptations && adaptations.length > 1 && (
-          <div className={`mb-4 p-3 bg-stone-50 dark:bg-stone-950 rounded-md border ${BORDERS.medium}`}>
+          <div className={`mb-4 p-3 bg-stone-50 dark:bg-stone-950 ${RADIUS.control} border ${BORDERS.medium}`}>
             <div className="flex flex-col sm:flex-row sm:items-center gap-2">
               <label htmlFor="adaptation-select" className={`${TEXT.metadata} font-bold ${monoUppercase} ${TEXT.mutedMedium} whitespace-nowrap`} style={{ fontFamily: FONTS.mono, letterSpacing: LETTER_SPACING.wider }}>
                 Switch adaptation:
@@ -165,7 +165,7 @@ export default function CompareHeader({
                 id="adaptation-select"
                 value={screenWork.slug}
                 onChange={(e) => handleAdaptationChange(e.target.value)}
-                className={`flex-1 px-3 py-2 ${TEXT.secondary} bg-white dark:bg-black text-black dark:text-white border ${BORDERS.medium} rounded-md focus:outline-none focus:border-black dark:focus:border-white`}
+                className={`flex-1 px-3 py-2 ${TEXT.secondary} bg-white dark:bg-black text-black dark:text-white border ${BORDERS.medium} ${RADIUS.control} focus:outline-none focus:border-black dark:focus:border-white`}
                 style={{ fontFamily: FONTS.mono, letterSpacing: LETTER_SPACING.normal }}
               >
                 {adaptations.map((adaptation) => (
@@ -181,7 +181,7 @@ export default function CompareHeader({
         {/* Stats Bar */}
         <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
           {/* Diff Count */}
-          <div className={`bg-stone-50 dark:bg-stone-950 rounded-md border ${BORDERS.medium} p-3`}>
+          <div className={`bg-stone-50 dark:bg-stone-950 ${RADIUS.control} border ${BORDERS.medium} p-3`}>
             <div className={`${TEXT.metadata} font-bold ${monoUppercase} ${TEXT.mutedMedium} mb-1`} style={{ fontFamily: FONTS.mono, letterSpacing: LETTER_SPACING.wider }}>
               Differences
             </div>
@@ -191,7 +191,7 @@ export default function CompareHeader({
           </div>
 
           {/* Community Vote */}
-          <div className={`bg-stone-50 dark:bg-stone-950 rounded-md border ${BORDERS.medium} p-3`}>
+          <div className={`bg-stone-50 dark:bg-stone-950 ${RADIUS.control} border ${BORDERS.medium} p-3`}>
             <div className={`${TEXT.metadata} font-bold ${monoUppercase} ${TEXT.mutedMedium} mb-1`} style={{ fontFamily: FONTS.mono, letterSpacing: LETTER_SPACING.wider }}>
               Community
             </div>
@@ -207,7 +207,7 @@ export default function CompareHeader({
 
           {/* Book Preference */}
           {!loadingStats && stats && stats.total_votes > 0 && (
-            <div className={`bg-stone-50 dark:bg-stone-950 rounded-md border ${BORDERS.medium} p-3`}>
+            <div className={`bg-stone-50 dark:bg-stone-950 ${RADIUS.control} border ${BORDERS.medium} p-3`}>
               <div className={`${TEXT.metadata} font-bold ${monoUppercase} ${TEXT.mutedMedium} mb-1`} style={{ fontFamily: FONTS.mono, letterSpacing: LETTER_SPACING.wider }}>
                 Book
               </div>
@@ -219,7 +219,7 @@ export default function CompareHeader({
 
           {/* Screen Preference */}
           {!loadingStats && stats && stats.total_votes > 0 && (
-            <div className={`bg-stone-50 dark:bg-stone-950 rounded-md border ${BORDERS.medium} p-3`}>
+            <div className={`bg-stone-50 dark:bg-stone-950 ${RADIUS.control} border ${BORDERS.medium} p-3`}>
               <div className={`${TEXT.metadata} font-bold ${monoUppercase} ${TEXT.mutedMedium} mb-1`} style={{ fontFamily: FONTS.mono, letterSpacing: LETTER_SPACING.wider }}>
                 Screen
               </div>
@@ -231,7 +231,7 @@ export default function CompareHeader({
 
           {/* Faithfulness (if available) */}
           {!loadingStats && stats && stats.faithfulness.average !== null && (
-            <div className={`bg-stone-50 dark:bg-stone-950 rounded-md border ${BORDERS.medium} p-3`}>
+            <div className={`bg-stone-50 dark:bg-stone-950 ${RADIUS.control} border ${BORDERS.medium} p-3`}>
               <div className={`${TEXT.metadata} font-bold ${monoUppercase} ${TEXT.mutedMedium} mb-1`} style={{ fontFamily: FONTS.mono, letterSpacing: LETTER_SPACING.wider }}>
                 Faithfulness
               </div>

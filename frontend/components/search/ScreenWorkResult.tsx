@@ -2,7 +2,7 @@ import Link from 'next/link';
 import Image from 'next/image';
 import { FilmIcon, TvIcon } from './icons';
 import type { ScreenWork } from '@/lib/types';
-import { FONTS, LETTER_SPACING, BORDERS, TEXT, monoUppercase, COLORS } from '@/lib/brutalist-design';
+import { FONTS, LETTER_SPACING, BORDERS, TEXT, monoUppercase, COLORS, RADIUS} from '@/lib/brutalist-design';
 
 interface ScreenWorkResultProps {
   screenWork: ScreenWork;
@@ -16,11 +16,11 @@ export default function ScreenWorkResult({
   return (
     <Link
       href={`/screen/${screenWork.slug}`}
-      className={`block border ${BORDERS.medium} rounded-md p-4 hover:border-black hover:dark:border-white transition-colors bg-white dark:bg-black`}
+      className={`block border ${BORDERS.medium} ${RADIUS.control} p-4 hover:border-black hover:dark:border-white transition-colors bg-white dark:bg-black`}
     >
       <div className="flex gap-4">
         {/* Poster Image */}
-        <div className={`flex-shrink-0 w-16 h-24 bg-stone-50 dark:bg-stone-950 rounded-md border ${BORDERS.medium} flex items-center justify-center overflow-hidden`}>
+        <div className={`flex-shrink-0 w-16 h-24 bg-stone-50 dark:bg-stone-950 ${RADIUS.control} border ${BORDERS.medium} flex items-center justify-center overflow-hidden`}>
           {screenWork.poster_url ? (
             <Image
               src={screenWork.poster_url}
@@ -61,7 +61,7 @@ export default function ScreenWorkResult({
 
           <div className="mt-2 flex items-center gap-2">
             <span
-              className={`inline-flex items-center px-2 py-1 rounded-md border ${BORDERS.solid} ${TEXT.metadata} font-bold ${monoUppercase}`}
+              className={`inline-flex items-center px-2 py-1 ${RADIUS.control} border ${BORDERS.solid} ${TEXT.metadata} font-bold ${monoUppercase}`}
               style={{ fontFamily: FONTS.mono, letterSpacing: LETTER_SPACING.wide, backgroundColor: COLORS.screen, color: 'white' }}
             >
               {isMovie ? (

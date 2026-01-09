@@ -4,7 +4,7 @@ import { useRouter } from 'next/navigation';
 import { useAuth } from '@/lib/auth-context';
 import type { DiffCategory } from '@/lib/types';
 import { BookOpenIcon, UserIcon, FilmIcon, SparklesIcon } from '@/components/ui/Icons';
-import { FONTS, LETTER_SPACING, BORDERS, TEXT, monoUppercase } from '@/lib/brutalist-design';
+import { FONTS, LETTER_SPACING, BORDERS, TEXT, RADIUS, monoUppercase } from '@/lib/brutalist-design';
 
 interface DiffStarterKitProps {
   workSlug: string;
@@ -99,7 +99,7 @@ export default function DiffStarterKit({ workSlug, screenSlug }: DiffStarterKitP
         </p>
         <button
           onClick={() => handleCategoryClick('OTHER')}
-          className={`inline-flex items-center gap-2 px-4 py-2 ${TEXT.secondary} font-bold border ${BORDERS.medium} bg-white dark:bg-black text-black dark:text-white hover:border-black hover:dark:border-white transition-colors rounded-md ${monoUppercase}`}
+          className={`inline-flex items-center gap-2 px-4 py-2 ${TEXT.secondary} font-bold border ${BORDERS.medium} bg-white dark:bg-black text-black dark:text-white hover:border-black hover:dark:border-white transition-colors ${RADIUS.control} ${monoUppercase}`}
           style={{ fontFamily: FONTS.mono, letterSpacing: LETTER_SPACING.tight }}
         >
           Add custom difference

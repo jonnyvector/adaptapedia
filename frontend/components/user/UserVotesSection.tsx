@@ -6,7 +6,7 @@ import { api } from '@/lib/api';
 import type { Vote, ApiResponse } from '@/lib/types';
 import UserVotesList from './UserVotesList';
 import LoadingSkeleton from '@/components/ui/LoadingSkeleton';
-import { FONTS, LETTER_SPACING, BORDERS, TEXT, monoUppercase } from '@/lib/brutalist-design';
+import { FONTS, LETTER_SPACING, BORDERS, TEXT, monoUppercase, RADIUS} from '@/lib/brutalist-design';
 
 interface UserVotesSectionProps {
   username: string;
@@ -80,7 +80,7 @@ export default function UserVotesSection({
       )}
 
       {error && !loading && (
-        <div className={`border ${BORDERS.solid} border-red-600 dark:border-red-400 bg-red-50 dark:bg-red-950/20 rounded-md p-6 text-center`}>
+        <div className={`border ${BORDERS.solid} border-red-600 dark:border-red-400 bg-red-50 dark:bg-red-950/20 ${RADIUS.control} p-6 text-center`}>
           <p className={`text-red-700 dark:text-red-400`} style={{ fontFamily: FONTS.mono }}>{error}</p>
         </div>
       )}

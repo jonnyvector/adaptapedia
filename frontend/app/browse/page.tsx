@@ -6,7 +6,7 @@ import { api } from '@/lib/api';
 import type { BrowseSections } from '@/lib/types';
 import ComparisonCard from '@/components/browse/ComparisonCard';
 import EmptyState from '@/components/ui/EmptyState';
-import { FONTS, TEXT } from '@/lib/brutalist-design';
+import { FONTS, TEXT, RADIUS} from '@/lib/brutalist-design';
 
 export const metadata: Metadata = {
   title: 'Browse Comparisons - Adaptapedia',

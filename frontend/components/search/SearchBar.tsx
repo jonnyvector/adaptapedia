@@ -6,7 +6,7 @@ import { SearchIcon, XIcon } from './icons';
 import SearchDropdown from './SearchDropdown';
 import { api } from '@/lib/api';
 import type { SearchWithAdaptationsResponse } from '@/lib/types';
-import { FONTS, LETTER_SPACING, BORDERS, TEXT } from '@/lib/brutalist-design';
+import { FONTS, LETTER_SPACING, BORDERS, TEXT, RADIUS } from '@/lib/brutalist-design';
 
 interface SearchBarProps {
   defaultValue?: string;
@@ -147,7 +147,7 @@ function SearchBarContent({
           }}
           placeholder={placeholder}
           autoFocus={autoFocus}
-          className={`w-full !pl-14 !pr-12 !py-3 sm:!py-3.5 ${TEXT.body} border ${BORDERS.medium} rounded-md focus:outline-none focus:ring-0 focus:border-black focus:dark:border-white bg-white dark:bg-black text-black dark:text-white placeholder:${TEXT.mutedLight}`}
+          className={`w-full !pl-14 !pr-12 !py-3 sm:!py-3.5 ${TEXT.body} border ${BORDERS.medium} ${RADIUS.control} focus:outline-none focus:ring-0 focus:border-black focus:dark:border-white bg-white dark:bg-black text-black dark:text-white placeholder:${TEXT.mutedLight}`}
           style={{ fontFamily: FONTS.mono, letterSpacing: LETTER_SPACING.normal }}
           aria-label="Search"
         />
@@ -190,7 +190,7 @@ export default function SearchBar(props: SearchBarProps): JSX.Element {
             type="search"
             placeholder={props.placeholder || 'Search books and adaptations...'}
             disabled
-            className={`w-full !pl-14 !pr-12 !py-3 sm:!py-3.5 ${TEXT.body} border ${BORDERS.medium} rounded-md bg-white dark:bg-black text-black dark:text-white placeholder:${TEXT.mutedLight}`}
+            className={`w-full !pl-14 !pr-12 !py-3 sm:!py-3.5 ${TEXT.body} border ${BORDERS.medium} ${RADIUS.control} bg-white dark:bg-black text-black dark:text-white placeholder:${TEXT.mutedLight}`}
             style={{ fontFamily: FONTS.mono, letterSpacing: LETTER_SPACING.normal }}
           />
         </div>

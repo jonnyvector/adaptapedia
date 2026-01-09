@@ -7,7 +7,7 @@ import { useAuth } from '@/lib/auth-context';
 import { ApiError, getBackendUrl } from '@/lib/api';
 import { Button } from '@/components/ui/Button';
 import { Input } from '@/components/ui/Input';
-import { FONTS, LETTER_SPACING, BORDERS, TEXT, monoUppercase } from '@/lib/brutalist-design';
+import { FONTS, LETTER_SPACING, BORDERS, TEXT, RADIUS, monoUppercase } from '@/lib/brutalist-design';
 
 interface LoginFormProps {
   redirectTo?: string;
@@ -55,7 +55,7 @@ export default function LoginForm({ redirectTo = '/' }: LoginFormProps): JSX.Ele
   return (
     <form onSubmit={handleSubmit} className="space-y-5 sm:space-y-6 w-full max-w-md">
       {error && (
-        <div className={`bg-red-50 dark:bg-red-950 border ${BORDERS.medium} border-red-500/40 dark:border-red-400/40 text-red-700 dark:text-red-300 px-3 sm:px-4 py-3 rounded-md text-sm sm:text-base`} style={{ fontFamily: FONTS.mono }}>
+        <div className={`bg-red-50 dark:bg-red-950 border ${BORDERS.medium} border-red-500/40 dark:border-red-400/40 text-red-700 dark:text-red-300 px-3 sm:px-4 py-3 ${RADIUS.control} text-sm sm:text-base`} style={{ fontFamily: FONTS.mono }}>
           {error}
         </div>
       )}

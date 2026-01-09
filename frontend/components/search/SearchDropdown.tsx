@@ -4,7 +4,7 @@ import { useEffect, useRef, useState } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
 import type { WorkWithAdaptations, ScreenWork } from '@/lib/types';
-import { FONTS, LETTER_SPACING, BORDERS, TEXT, monoUppercase } from '@/lib/brutalist-design';
+import { FONTS, LETTER_SPACING, BORDERS, TEXT, monoUppercase, RADIUS} from '@/lib/brutalist-design';
 
 interface SearchDropdownProps {
   results: {
@@ -82,7 +82,7 @@ export default function SearchDropdown({
   return (
     <div
       ref={dropdownRef}
-      className={`absolute top-full left-0 right-0 mt-2 bg-white dark:bg-black border ${BORDERS.medium} rounded-md max-h-96 overflow-y-auto z-50`}
+      className={`absolute top-full left-0 right-0 mt-2 bg-white dark:bg-black border ${BORDERS.medium} ${RADIUS.control} max-h-96 overflow-y-auto z-50`}
     >
       {isLoading ? (
         <div className={`p-4 text-center ${TEXT.mutedMedium}`}>

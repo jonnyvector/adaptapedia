@@ -3,7 +3,7 @@
 import { Suspense } from 'react';
 import { useSearchParams } from 'next/navigation';
 import { useAuth } from '@/lib/auth-context';
-import { FONTS, LETTER_SPACING, TEXT, monoUppercase } from '@/lib/brutalist-design';
+import { FONTS, LETTER_SPACING, TEXT, monoUppercase, RADIUS} from '@/lib/brutalist-design';
 
 interface AuthPageWrapperProps {
   title: string;

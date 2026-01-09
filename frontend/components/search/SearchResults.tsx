@@ -3,7 +3,7 @@
 import type { SearchWithAdaptationsResponse, WorkWithAdaptations, ScreenWork } from '@/lib/types';
 import BookWithAdaptationsResult from './BookWithAdaptationsResult';
 import ScreenWorkResult from './ScreenWorkResult';
-import { FONTS, LETTER_SPACING, TEXT, monoUppercase } from '@/lib/brutalist-design';
+import { FONTS, LETTER_SPACING, TEXT, monoUppercase, RADIUS} from '@/lib/brutalist-design';
 
 interface SearchResultsProps {
   query: string;
