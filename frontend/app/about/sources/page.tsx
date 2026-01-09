@@ -123,7 +123,7 @@ export default function DataSourcesPage(): JSX.Element {
                 <h3 className="font-semibold mb-2">What We Use</h3>
                 <p className="text-muted">
                   Wikidata provides the core relationship data that links books to their screen
-                  adaptations. It's a free, collaborative knowledge base that serves as central
+                  adaptations. It&apos;s a free, collaborative knowledge base that serves as central
                   storage for structured data across Wikimedia projects and beyond.
                 </p>
               </div>
@@ -189,7 +189,7 @@ export default function DataSourcesPage(): JSX.Element {
                 <p className="text-muted">
                   Open Library provides extensive book metadata including cover images, publication
                   dates, author information, editions, and ISBN data. As an Internet Archive project,
-                  it aims to create "one web page for every book ever published."
+                  it aims to create &quot;one web page for every book ever published.&quot;
                 </p>
               </div>
 
