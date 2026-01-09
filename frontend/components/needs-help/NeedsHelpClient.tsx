@@ -7,6 +7,7 @@ import { useRouter } from 'next/navigation';
 import { api } from '@/lib/api';
 import type { NeedsHelpResponse, NeedsHelpComparison } from '@/lib/types';
 import LoadingSkeleton from '@/components/ui/LoadingSkeleton';
+import { Button } from '@/components/ui/Button';
 import { FONTS, BORDERS, TEXT, RADIUS, LETTER_SPACING } from '@/lib/brutalist-design';
 
 type TabType = 'no_comments' | 'disputed' | 'needs_diffs';
@@ -148,16 +149,18 @@ export default function NeedsHelpClient() {
 
           {hasAnyContent && (
             <div className="flex flex-col sm:flex-row gap-3">
-              <button
+              <Button
                 onClick={handleReviewNext}
-                className={`border ${BORDERS.solid} bg-transparent hover:bg-black hover:dark:bg-white hover:text-white hover:dark:text-black font-bold transition-all ${TEXT.secondary} ${RADIUS.control} inline-flex items-center gap-2 px-4 py-2`}
-                style={{ fontFamily: FONTS.mono, letterSpacing: LETTER_SPACING.normal }}
+                variant="primary"
+                size="md"
+                className="uppercase"
+                style={{ letterSpacing: LETTER_SPACING.normal }}
               >
                 <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
                   <path strokeLinecap="round" strokeLinejoin="round" d="M13 7l5 5m0 0l-5 5m5-5H6" />
                 </svg>
                 REVIEW NEXT
-              </button>
+              </Button>
               <Link
                 href="/browse"
                 className={`border ${BORDERS.subtle} bg-transparent text-black dark:text-white hover:border-black hover:dark:border-white font-bold transition-all ${TEXT.secondary} ${RADIUS.control} inline-flex items-center justify-center px-4 py-2`}
@@ -172,14 +175,16 @@ export default function NeedsHelpClient() {
         {/* Tabs */}
         {hasAnyContent && (
           <div className={`flex flex-wrap items-center gap-2 border-b ${BORDERS.medium}`}>
-            <button
+            <Button
               onClick={() => setActiveTab('no_comments')}
-              className={`px-4 py-2.5 ${TEXT.secondary} font-bold border-b-2 transition-colors ${
+              variant="ghost"
+              size="md"
+              className={`px-4 py-2.5 border-b-2 rounded-none ${
                 activeTab === 'no_comments'
                   ? `border-black dark:border-white ${TEXT.primary}`
-                  : `border-transparent ${TEXT.mutedMedium} hover:${TEXT.primary} hover:${BORDERS.medium}`
+                  : `border-transparent ${TEXT.mutedMedium}`
               }`}
-              style={{ fontFamily: FONTS.mono, letterSpacing: LETTER_SPACING.normal }}
+              style={{ letterSpacing: LETTER_SPACING.normal }}
             >
               <span className="flex items-center gap-2">
                 <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
@@ -192,16 +197,18 @@ export default function NeedsHelpClient() {
                   </span>
                 )}
               </span>
-            </button>
+            </Button>
 
-            <button
+            <Button
               onClick={() => setActiveTab('disputed')}
-              className={`px-4 py-2.5 ${TEXT.secondary} font-bold border-b-2 transition-colors ${
+              variant="ghost"
+              size="md"
+              className={`px-4 py-2.5 border-b-2 rounded-none ${
                 activeTab === 'disputed'
                   ? `border-black dark:border-white ${TEXT.primary}`
-                  : `border-transparent ${TEXT.mutedMedium} hover:${TEXT.primary} hover:${BORDERS.medium}`
+                  : `border-transparent ${TEXT.mutedMedium}`
               }`}
-              style={{ fontFamily: FONTS.mono, letterSpacing: LETTER_SPACING.normal }}
+              style={{ letterSpacing: LETTER_SPACING.normal }}
             >
               <span className="flex items-center gap-2">
                 <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
@@ -214,16 +221,18 @@ export default function NeedsHelpClient() {
                   </span>
                 )}
               </span>
-            </button>
+            </Button>
 
-            <button
+            <Button
               onClick={() => setActiveTab('needs_diffs')}
-              className={`px-4 py-2.5 ${TEXT.secondary} font-bold border-b-2 transition-colors ${
+              variant="ghost"
+              size="md"
+              className={`px-4 py-2.5 border-b-2 rounded-none ${
                 activeTab === 'needs_diffs'
                   ? `border-black dark:border-white ${TEXT.primary}`
-                  : `border-transparent ${TEXT.mutedMedium} hover:${TEXT.primary} hover:${BORDERS.medium}`
+                  : `border-transparent ${TEXT.mutedMedium}`
               }`}
-              style={{ fontFamily: FONTS.mono, letterSpacing: LETTER_SPACING.normal }}
+              style={{ letterSpacing: LETTER_SPACING.normal }}
             >
               <span className="flex items-center gap-2">
                 <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
@@ -236,7 +245,7 @@ export default function NeedsHelpClient() {
                   </span>
                 )}
               </span>
-            </button>
+            </Button>
           </div>
         )}
       </div>
@@ -452,14 +461,16 @@ function CompactComparisonCard({
               </svg>
               REVIEW
             </Link>
-            <button
+            <Button
               onClick={() => onSkip(comparison.work_id, comparison.screen_work_id)}
-              className={`px-3 py-2 ${TEXT.metadata} font-bold ${TEXT.mutedMedium} hover:${TEXT.primary} transition-colors`}
-              style={{ fontFamily: FONTS.mono, letterSpacing: LETTER_SPACING.wider }}
+              variant="ghost"
+              size="sm"
+              className="uppercase"
+              style={{ letterSpacing: LETTER_SPACING.wider }}
               title="Not familiar with this comparison"
             >
               SKIP
-            </button>
+            </Button>
           </div>
         </div>
       </div>
