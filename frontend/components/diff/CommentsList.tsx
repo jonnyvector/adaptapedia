@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import type { Comment, SpoilerScope } from '@/lib/types';
@@ -249,7 +249,7 @@ export default function CommentsList({
   const [error, setError] = useState<string | null>(null);
   const [showAddForm, setShowAddForm] = useState(autoOpenForm);
 
-  const fetchComments = async (): Promise<void> => {
+  const fetchComments = useCallback(async (): Promise<void> => {
     setLoading(true);
     setError(null);
     try {
@@ -270,11 +270,11 @@ export default function CommentsList({
     } finally {
       setLoading(false);
     }
-  };
+  }, [diffItemId, onCommentCountChange]);
 
   useEffect(() => {
     fetchComments();
-  }, [diffItemId]);
+  }, [fetchComments]);
 
   // Auto-scroll to comments section if there's a pending action
   useEffect(() => {
