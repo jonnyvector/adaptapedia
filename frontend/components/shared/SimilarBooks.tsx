@@ -1,5 +1,6 @@
 import type { SimilarBook } from '@/lib/types';
 import Link from 'next/link';
+import Image from 'next/image';
 import { FONTS, LETTER_SPACING, BORDERS, TEXT, monoUppercase } from '@/lib/brutalist-design';
 
 interface SimilarBooksProps {
@@ -26,12 +27,14 @@ export default function SimilarBooks({ books }: SimilarBooksProps): JSX.Element 
             className={`group flex flex-col border ${BORDERS.medium} rounded-md p-3 hover:border-black hover:dark:border-white transition-all bg-white dark:bg-black`}
           >
             {/* Book Cover */}
-            <div className={`mb-3 aspect-[2/3] bg-stone-50 dark:bg-stone-950 rounded-md overflow-hidden border ${BORDERS.medium}`}>
+            <div className={`mb-3 aspect-[2/3] bg-stone-50 dark:bg-stone-950 rounded-md overflow-hidden border ${BORDERS.medium} relative`}>
               {book.cover_url ? (
-                <img
+                <Image
                   src={book.cover_url}
                   alt={`Cover of ${book.title}`}
-                  className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-200"
+                  fill
+                  className="object-cover group-hover:scale-105 transition-transform duration-200"
+                  sizes="(max-width: 768px) 33vw, 200px"
                 />
               ) : (
                 <div className="w-full h-full flex items-center justify-center text-muted/50">
