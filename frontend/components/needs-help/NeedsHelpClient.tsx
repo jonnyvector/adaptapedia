@@ -245,7 +245,7 @@ export default function NeedsHelpClient() {
         <div className={`text-center py-12 bg-stone-50 dark:bg-stone-950 border ${BORDERS.medium} ${RADIUS.control}`}>
           <div className="text-4xl mb-4">✨</div>
           <h2 className={`text-xl font-bold ${TEXT.primary} mb-2`} style={{ fontFamily: FONTS.mono }}>
-            Everything's looking great!
+            Everything&apos;s looking great!
           </h2>
           <p className={`${TEXT.body} ${TEXT.mutedMedium}`} style={{ fontFamily: FONTS.mono }}>
             No comparisons currently need help. Check back later or explore other content.

@@ -99,7 +99,7 @@ export default function BookmarksPage({ params }: BookmarksPageProps): JSX.Eleme
               ← Back to Profile
             </Link>
           </div>
-          <h1 className="text-3xl md:text-4xl font-bold mb-2 text-black dark:text-white" style={{ fontFamily: FONTS.mono }}>{username}'s Bookmarks</h1>
+          <h1 className="text-3xl md:text-4xl font-bold mb-2 text-black dark:text-white" style={{ fontFamily: FONTS.mono }}>{username}&apos;s Bookmarks</h1>
           <p className={`${TEXT.body} ${TEXT.mutedMedium} uppercase tracking-wider`} style={{ fontFamily: FONTS.mono, letterSpacing: '0.08em' }}>
             {bookmarks.length} {bookmarks.length === 1 ? 'comparison' : 'comparisons'} saved
           </p>
