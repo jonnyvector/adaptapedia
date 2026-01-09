@@ -5,6 +5,7 @@ import { useAuth } from '@/lib/auth-context';
 import { api } from '@/lib/api';
 import type { UserProfile, DiffItem, Vote, Comment, ApiResponse } from '@/lib/types';
 import Link from 'next/link';
+import { Button } from '@/components/ui/Button';
 import ReputationProgress from './ReputationProgress';
 import { FONTS, LETTER_SPACING, BORDERS, TEXT, monoUppercase, RADIUS } from '@/lib/brutalist-design';
 import { TrophyIcon } from '@/components/ui/Icons';
@@ -181,41 +182,29 @@ export default function UserProfileClient({ profile }: UserProfileClientProps): 
       <div className={`bg-white dark:bg-black border ${BORDERS.medium} ${RADIUS.control}`}>
         <div className={`border-b ${BORDERS.medium}`}>
           <div className="flex gap-1 p-1">
-            <button
+            <Button
+              variant={activeTab === 'diffs' ? 'primary' : 'secondary'}
+              size="md"
               onClick={() => setActiveTab('diffs')}
-              className={`px-4 py-2 ${RADIUS.control} ${TEXT.secondary} font-bold transition-colors ${monoUppercase} ${
-                activeTab === 'diffs'
-                  ? `bg-black dark:bg-white text-white dark:text-black border ${BORDERS.solid}`
-                  : `${TEXT.mutedStrong} hover:text-black hover:dark:text-white border ${BORDERS.subtle}`
-              }`}
-              style={{ fontFamily: FONTS.mono, letterSpacing: LETTER_SPACING.tight }}
             >
               Diffs ({profile.diffs_count})
-            </button>
+            </Button>
             {isOwnProfile && (
-              <button
+              <Button
+                variant={activeTab === 'votes' ? 'primary' : 'secondary'}
+                size="md"
                 onClick={() => setActiveTab('votes')}
-                className={`px-4 py-2 ${RADIUS.control} ${TEXT.secondary} font-bold transition-colors ${monoUppercase} ${
-                  activeTab === 'votes'
-                    ? `bg-black dark:bg-white text-white dark:text-black border ${BORDERS.solid}`
-                    : `${TEXT.mutedStrong} hover:text-black hover:dark:text-white border ${BORDERS.subtle}`
-                }`}
-                style={{ fontFamily: FONTS.mono, letterSpacing: LETTER_SPACING.tight }}
               >
                 Voting History ({profile.votes_count})
-              </button>
+              </Button>
             )}
-            <button
+            <Button
+              variant={activeTab === 'comments' ? 'primary' : 'secondary'}
+              size="md"
               onClick={() => setActiveTab('comments')}
-              className={`px-4 py-2 ${RADIUS.control} ${TEXT.secondary} font-bold transition-colors ${monoUppercase} ${
-                activeTab === 'comments'
-                  ? `bg-black dark:bg-white text-white dark:text-black border ${BORDERS.solid}`
-                  : `${TEXT.mutedStrong} hover:text-black hover:dark:text-white border ${BORDERS.subtle}`
-              }`}
-              style={{ fontFamily: FONTS.mono, letterSpacing: LETTER_SPACING.tight }}
             >
               Comments ({profile.comments_count})
-            </button>
+            </Button>
           </div>
         </div>
 
@@ -233,28 +222,20 @@ export default function UserProfileClient({ profile }: UserProfileClientProps): 
                   {/* Ordering Controls */}
                   <div className="mb-4 flex items-center gap-2">
                     <span className={`${TEXT.secondary} ${TEXT.mutedMedium} uppercase tracking-wider`} style={{ fontFamily: FONTS.mono }}>Sort by:</span>
-                    <button
+                    <Button
+                      variant={ordering === 'newest' ? 'primary' : 'secondary'}
+                      size="sm"
                       onClick={() => setOrdering('newest')}
-                      className={`${TEXT.secondary} px-3 py-1 ${RADIUS.control} font-bold ${monoUppercase} transition-colors ${
-                        ordering === 'newest'
-                          ? `bg-black dark:bg-white text-white dark:text-black border ${BORDERS.solid}`
-                          : `${TEXT.mutedStrong} hover:text-black hover:dark:text-white border ${BORDERS.medium}`
-                      }`}
-                      style={{ fontFamily: FONTS.mono, letterSpacing: LETTER_SPACING.tight }}
                     >
                       Newest
-                    </button>
-                    <button
+                    </Button>
+                    <Button
+                      variant={ordering === 'most_votes' ? 'primary' : 'secondary'}
+                      size="sm"
                       onClick={() => setOrdering('most_votes')}
-                      className={`${TEXT.secondary} px-3 py-1 ${RADIUS.control} font-bold ${monoUppercase} transition-colors ${
-                        ordering === 'most_votes'
-                          ? `bg-black dark:bg-white text-white dark:text-black border ${BORDERS.solid}`
-                          : `${TEXT.mutedStrong} hover:text-black hover:dark:text-white border ${BORDERS.medium}`
-                      }`}
-                      style={{ fontFamily: FONTS.mono, letterSpacing: LETTER_SPACING.tight }}
                     >
                       Most Votes
-                    </button>
+                    </Button>
                   </div>
 
                   {diffs.length === 0 ? (
