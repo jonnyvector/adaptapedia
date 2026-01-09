@@ -6,7 +6,8 @@ import Link from 'next/link';
 import { useAuth } from '@/lib/auth-context';
 import { ApiError, getBackendUrl } from '@/lib/api';
 import { Button } from '@/components/ui/Button';
-import { FONTS, LETTER_SPACING, BORDERS, TEXT, monoUppercase } from '@/lib/brutalist-design';
+import { Input } from '@/components/ui/Input';
+import { FONTS, LETTER_SPACING, TEXT, monoUppercase } from '@/lib/brutalist-design';
 
 interface LoginFormProps {
   redirectTo?: string;
@@ -59,39 +60,27 @@ export default function LoginForm({ redirectTo = '/' }: LoginFormProps): JSX.Ele
         </div>
       )}
 
-      <div>
-        <label htmlFor="username" className={`block ${TEXT.secondary} font-bold mb-2 text-black dark:text-white ${monoUppercase}`} style={{ fontFamily: FONTS.mono, letterSpacing: LETTER_SPACING.wide }}>
-          Username
-        </label>
-        <input
-          type="text"
-          id="username"
-          value={formData.username}
-          onChange={(e) => setFormData({ ...formData, username: e.target.value })}
-          required
-          className={`w-full px-3 py-3 ${TEXT.body} border ${BORDERS.medium} rounded-md focus:outline-none focus:border-black focus:dark:border-white min-h-[44px] bg-white dark:bg-black text-black dark:text-white`}
-          style={{ fontFamily: FONTS.mono, letterSpacing: LETTER_SPACING.normal }}
-          disabled={isSubmitting}
-          autoComplete="username"
-        />
-      </div>
+      <Input
+        type="text"
+        id="username"
+        label="Username"
+        value={formData.username}
+        onChange={(e) => setFormData({ ...formData, username: e.target.value })}
+        required
+        disabled={isSubmitting}
+        autoComplete="username"
+      />
 
-      <div>
-        <label htmlFor="password" className={`block ${TEXT.secondary} font-bold mb-2 text-black dark:text-white ${monoUppercase}`} style={{ fontFamily: FONTS.mono, letterSpacing: LETTER_SPACING.wide }}>
-          Password
-        </label>
-        <input
-          type="password"
-          id="password"
-          value={formData.password}
-          onChange={(e) => setFormData({ ...formData, password: e.target.value })}
-          required
-          className={`w-full px-3 py-3 ${TEXT.body} border ${BORDERS.medium} rounded-md focus:outline-none focus:border-black focus:dark:border-white min-h-[44px] bg-white dark:bg-black text-black dark:text-white`}
-          style={{ fontFamily: FONTS.mono, letterSpacing: LETTER_SPACING.normal }}
-          disabled={isSubmitting}
-          autoComplete="current-password"
-        />
-      </div>
+      <Input
+        type="password"
+        id="password"
+        label="Password"
+        value={formData.password}
+        onChange={(e) => setFormData({ ...formData, password: e.target.value })}
+        required
+        disabled={isSubmitting}
+        autoComplete="current-password"
+      />
 
       <Button
         type="submit"
