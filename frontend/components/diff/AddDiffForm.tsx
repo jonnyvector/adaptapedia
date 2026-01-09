@@ -2,6 +2,7 @@
 
 import { useState, useEffect, FormEvent, ChangeEvent } from 'react';
 import { useRouter } from 'next/navigation';
+import Image from 'next/image';
 import type { Work, ScreenWork, DiffCategory, SpoilerScope } from '@/lib/types';
 import { api, ApiError } from '@/lib/api';
 import LoadingSpinner from '@/components/ui/LoadingSpinner';
@@ -380,10 +381,13 @@ export default function AddDiffForm({ work, screenWork, initialCategory }: AddDi
           </p>
           {imagePreview && (
             <div className="mt-3 relative inline-block">
-              <img
+              <Image
                 src={imagePreview}
                 alt="Preview"
+                width={800}
+                height={600}
                 className={`max-w-full max-h-64 rounded-md border ${BORDERS.medium}`}
+                unoptimized
               />
               <button
                 type="button"
