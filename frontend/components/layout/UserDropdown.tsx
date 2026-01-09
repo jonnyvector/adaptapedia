@@ -3,6 +3,7 @@
 import { useState, useEffect, useRef } from 'react';
 import Link from 'next/link';
 import type { User } from '@/lib/types';
+import { Button } from '@/components/ui/Button';
 import { FONTS, LETTER_SPACING, BORDERS, TEXT, RADIUS, monoUppercase } from '@/lib/brutalist-design';
 
 interface UserDropdownProps {
@@ -30,15 +31,16 @@ export default function UserDropdown({ user }: UserDropdownProps): JSX.Element {
 
   return (
     <div className="relative" ref={dropdownRef}>
-      <button
+      <Button
+        variant="ghost"
+        size="sm"
         onClick={() => setIsOpen(!isOpen)}
-        className={`px-2 py-2 ${TEXT.label} ${TEXT.mutedStrong} hover:text-black hover:dark:text-white transition-colors min-h-[40px] flex items-center border-0 bg-transparent font-bold ${monoUppercase}`}
-        style={{ fontFamily: FONTS.mono, letterSpacing: LETTER_SPACING.wide }}
+        className="px-2 py-2 min-h-[40px]"
         aria-label="User menu"
         aria-expanded={isOpen}
       >
         {user.username}
-      </button>
+      </Button>
 
       {isOpen && (
         <div className={`absolute right-0 top-full mt-1 w-48 bg-white dark:bg-black border ${BORDERS.medium} ${RADIUS.control} py-1 z-50`}>
