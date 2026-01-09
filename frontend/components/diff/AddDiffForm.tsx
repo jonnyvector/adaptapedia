@@ -6,6 +6,8 @@ import Image from 'next/image';
 import type { Work, ScreenWork, DiffCategory, SpoilerScope } from '@/lib/types';
 import { api, ApiError } from '@/lib/api';
 import { Button } from '@/components/ui/Button';
+import { Input } from '@/components/ui/Input';
+import { Textarea } from '@/components/ui/Textarea';
 import { CheckCircleIcon } from '@/components/ui/Icons';
 import { MAX_IMAGE_SIZE_BYTES, MAX_IMAGE_SIZE_MB, MIN_CLAIM_LENGTH, MAX_CLAIM_LENGTH, MAX_DETAIL_LENGTH } from '@/lib/constants';
 import { FONTS, LETTER_SPACING, BORDERS, TEXT, monoUppercase } from '@/lib/brutalist-design';
@@ -235,9 +237,6 @@ export default function AddDiffForm({ work, screenWork, initialCategory }: AddDi
     }
   };
 
-  const claimCharCount = formData.claim.length;
-  const detailCharCount = formData.detail.length;
-
   if (showSuccess) {
     return (
       <div className="max-w-2xl mx-auto p-4 sm:p-6">
@@ -301,66 +300,38 @@ export default function AddDiffForm({ work, screenWork, initialCategory }: AddDi
         </div>
 
         {/* Claim */}
-        <div>
-          <label htmlFor="claim" className={`block ${TEXT.secondary} font-bold mb-2 ${monoUppercase}`} style={{ fontFamily: FONTS.mono, letterSpacing: LETTER_SPACING.wide }}>
-            Claim <span className="text-red-500">*</span>
-          </label>
-          <input
-            type="text"
-            id="claim"
-            name="claim"
-            value={formData.claim}
-            onChange={handleChange}
-            required
-            maxLength={200}
-            placeholder="e.g., Ian Malcolm has a larger role in the movie"
-            className={`w-full px-3 py-3 ${TEXT.secondary} bg-white dark:bg-black text-black dark:text-white border ${BORDERS.medium} rounded-md focus:outline-none focus:border-black dark:focus:border-white min-h-[44px]`}
-            style={{ fontFamily: FONTS.mono, letterSpacing: LETTER_SPACING.normal }}
-          />
-          <div className="flex flex-col sm:flex-row sm:justify-between mt-1 gap-1">
-            <p className={`${TEXT.metadata} ${TEXT.mutedMedium}`} style={{ fontFamily: FONTS.mono }}>
-              A brief statement describing the difference (10-200 characters).
-            </p>
-            <span
-              className={`${TEXT.metadata} ${
-                claimCharCount < 10
-                  ? 'text-red-600 dark:text-red-400'
-                  : claimCharCount > 200
-                  ? 'text-red-600 dark:text-red-400'
-                  : TEXT.mutedMedium
-              }`}
-              style={{ fontFamily: FONTS.mono }}
-            >
-              {claimCharCount}/200
-            </span>
-          </div>
-        </div>
+        <Input
+          type="text"
+          id="claim"
+          name="claim"
+          value={formData.claim}
+          onChange={handleChange}
+          required
+          maxLength={200}
+          placeholder="e.g., Ian Malcolm has a larger role in the movie"
+          label={
+            <>
+              Claim <span className="text-red-500">*</span>
+            </>
+          }
+          helperText="A brief statement describing the difference (10-200 characters)."
+          inputSize="md"
+        />
 
         {/* Detail */}
-        <div>
-          <label htmlFor="detail" className={`block ${TEXT.secondary} font-bold mb-2 ${monoUppercase}`} style={{ fontFamily: FONTS.mono, letterSpacing: LETTER_SPACING.wide }}>
-            Detail (Optional)
-          </label>
-          <textarea
-            id="detail"
-            name="detail"
-            value={formData.detail}
-            onChange={handleChange}
-            rows={6}
-            maxLength={1000}
-            placeholder="Provide a more detailed explanation of the difference..."
-            className={`w-full px-3 py-3 ${TEXT.secondary} bg-white dark:bg-black text-black dark:text-white border ${BORDERS.medium} rounded-md focus:outline-none focus:border-black dark:focus:border-white resize-y min-h-[120px]`}
-            style={{ fontFamily: FONTS.mono, letterSpacing: LETTER_SPACING.normal }}
-          />
-          <div className="flex flex-col sm:flex-row sm:justify-between mt-1 gap-1">
-            <p className={`${TEXT.metadata} ${TEXT.mutedMedium}`} style={{ fontFamily: FONTS.mono }}>
-              Optional: Provide more context or explanation (max 1000 characters).
-            </p>
-            <span className={`${TEXT.metadata} ${detailCharCount > 1000 ? 'text-red-600 dark:text-red-400' : TEXT.mutedMedium}`} style={{ fontFamily: FONTS.mono }}>
-              {detailCharCount}/1000
-            </span>
-          </div>
-        </div>
+        <Textarea
+          id="detail"
+          name="detail"
+          value={formData.detail}
+          onChange={handleChange}
+          rows={6}
+          maxLength={1000}
+          placeholder="Provide a more detailed explanation of the difference..."
+          label="Detail (Optional)"
+          helperText="Optional: Provide more context or explanation."
+          showCharCount={true}
+          textareaSize="md"
+        />
 
         {/* Image Upload */}
         <div>

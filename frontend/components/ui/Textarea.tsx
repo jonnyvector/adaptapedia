@@ -28,7 +28,7 @@ const textareaVariants = cva(
 export interface TextareaProps
   extends React.TextareaHTMLAttributes<HTMLTextAreaElement>,
     VariantProps<typeof textareaVariants> {
-  label?: string;
+  label?: React.ReactNode;
   error?: string;
   helperText?: string;
   showCharCount?: boolean;
