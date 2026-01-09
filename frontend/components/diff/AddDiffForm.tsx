@@ -5,7 +5,7 @@ import { useRouter } from 'next/navigation';
 import Image from 'next/image';
 import type { Work, ScreenWork, DiffCategory, SpoilerScope } from '@/lib/types';
 import { api, ApiError } from '@/lib/api';
-import LoadingSpinner from '@/components/ui/LoadingSpinner';
+import { Button } from '@/components/ui/Button';
 import { CheckCircleIcon } from '@/components/ui/Icons';
 import { MAX_IMAGE_SIZE_BYTES, MAX_IMAGE_SIZE_MB, MIN_CLAIM_LENGTH, MAX_CLAIM_LENGTH, MAX_DETAIL_LENGTH } from '@/lib/constants';
 import { FONTS, LETTER_SPACING, BORDERS, TEXT, monoUppercase } from '@/lib/brutalist-design';
@@ -389,19 +389,21 @@ export default function AddDiffForm({ work, screenWork, initialCategory }: AddDi
                 className={`max-w-full max-h-64 rounded-md border ${BORDERS.medium}`}
                 unoptimized
               />
-              <button
+              <Button
                 type="button"
+                variant="danger"
+                size="sm"
                 onClick={() => {
                   setFormData((prev) => ({ ...prev, image: null }));
                   setImagePreview(null);
                   const fileInput = document.getElementById('image') as HTMLInputElement;
                   if (fileInput) fileInput.value = '';
                 }}
-                className={`absolute top-2 right-2 bg-red-600 dark:bg-red-500 text-white rounded-full w-8 h-8 flex items-center justify-center hover:bg-red-700 dark:hover:bg-red-600 transition-colors`}
+                className="absolute top-2 right-2 rounded-full w-8 h-8 p-0 min-h-0"
                 aria-label="Remove image"
               >
                 ×
-              </button>
+              </Button>
             </div>
           )}
         </div>
@@ -453,33 +455,33 @@ export default function AddDiffForm({ work, screenWork, initialCategory }: AddDi
 
         {/* Action Buttons */}
         <div className="flex flex-col sm:flex-row gap-3 pt-4">
-          <button
+          <Button
             type="submit"
-            disabled={isSubmitting}
-            className={`flex-1 flex items-center justify-center gap-2 px-6 py-3 bg-black dark:bg-white text-white dark:text-black rounded-md border ${BORDERS.solid} hover:bg-black/90 hover:dark:bg-white/90 disabled:opacity-50 disabled:cursor-not-allowed transition-colors font-bold min-h-[48px] ${monoUppercase}`}
-            style={{ fontFamily: FONTS.mono, letterSpacing: LETTER_SPACING.tight }}
+            variant="primary"
+            size="lg"
+            loading={isSubmitting}
+            className="flex-1"
           >
-            {isSubmitting && <LoadingSpinner size="sm" />}
             {isSubmitting ? 'Submitting...' : 'Submit Difference'}
-          </button>
-          <button
+          </Button>
+          <Button
             type="button"
+            variant="secondary"
+            size="lg"
             onClick={handleClear}
             disabled={isSubmitting}
-            className={`px-6 py-3 bg-white dark:bg-black border ${BORDERS.medium} rounded-md hover:border-black hover:dark:border-white disabled:opacity-50 disabled:cursor-not-allowed transition-colors min-h-[48px] font-bold ${monoUppercase}`}
-            style={{ fontFamily: FONTS.mono, letterSpacing: LETTER_SPACING.tight }}
           >
             Clear
-          </button>
-          <button
+          </Button>
+          <Button
             type="button"
+            variant="secondary"
+            size="lg"
             onClick={handleCancel}
             disabled={isSubmitting}
-            className={`px-6 py-3 bg-white dark:bg-black border ${BORDERS.medium} rounded-md hover:border-black hover:dark:border-white disabled:opacity-50 disabled:cursor-not-allowed transition-colors min-h-[48px] font-bold ${monoUppercase}`}
-            style={{ fontFamily: FONTS.mono, letterSpacing: LETTER_SPACING.tight }}
           >
             Cancel
-          </button>
+          </Button>
         </div>
       </form>
     </div>
