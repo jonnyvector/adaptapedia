@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
+import Image from 'next/image';
 import type { Work, ScreenWork, DiffItem, DiffCategory } from '@/lib/types';
 import { useAuth } from '@/lib/auth-context';
 import { FONTS, BORDERS, TEXT, RADIUS } from '@/lib/brutalist-design';
@@ -157,9 +158,11 @@ export default function CompareSidebar({
       <div className={`bg-white dark:bg-black border ${BORDERS.medium} ${RADIUS.control} p-4`}>
         <div className="flex gap-3">
           {work.cover_url && (
-            <img
+            <Image
               src={work.cover_url}
               alt={`${work.title} cover`}
+              width={64}
+              height={96}
               className={`w-16 h-24 object-cover ${RADIUS.control} border ${BORDERS.subtle}`}
             />
           )}
@@ -178,9 +181,11 @@ export default function CompareSidebar({
 
         <div className={`flex gap-3 mt-3 pt-3 border-t ${BORDERS.subtle}`}>
           {screenWork.poster_url && (
-            <img
+            <Image
               src={screenWork.poster_url}
               alt={`${screenWork.title} poster`}
+              width={64}
+              height={96}
               className={`w-16 h-24 object-cover ${RADIUS.control} border ${BORDERS.subtle}`}
             />
           )}
