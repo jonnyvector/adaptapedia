@@ -173,7 +173,7 @@ export default async function Home(): Promise<JSX.Element> {
                 </div>
 
                 {/* Mini vote control */}
-                <div className={`flex items-center gap-1 text-[8px] sm:text-[9px]`}>
+                <div className={`flex items-center gap-1 ${TEXT.micro}`}>
                   <button className={`inline-flex items-center justify-center gap-0.5 px-1.5 py-0.5 font-bold bg-black dark:bg-white text-white dark:text-black border ${BORDERS.solid} rounded uppercase tracking-wide`} style={{ fontFamily: FONTS.mono }}>
                     <span>↑ Acc</span>
                     <span className="hidden md:inline">urate</span>
@@ -212,7 +212,7 @@ export default async function Home(): Promise<JSX.Element> {
                 <div className="flex items-center justify-between mb-2 sm:mb-3">
                   <span className={`${TEXT.metadata} font-bold ${TEXT.mutedMedium} uppercase tracking-wide`} style={{ fontFamily: FONTS.mono }}>Spoiler Level</span>
                 </div>
-                <div className={`grid grid-cols-4 gap-1 w-full text-[8px] sm:text-[9px]`}>
+                <div className={`grid grid-cols-4 gap-1 w-full ${TEXT.micro}`}>
                   <button className={`inline-flex items-center justify-center px-1 py-1 font-bold bg-black dark:bg-white text-white dark:text-black border ${BORDERS.solid} rounded uppercase tracking-wide`} style={{ fontFamily: FONTS.mono }}>
                     Safe
                   </button>

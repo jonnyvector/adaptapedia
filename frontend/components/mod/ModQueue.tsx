@@ -7,7 +7,7 @@ import DiffReviewCard from './DiffReviewCard';
 import CommentReviewCard from './CommentReviewCard';
 import LoadingSpinner from '@/components/ui/LoadingSpinner';
 import SkeletonCard from '@/components/ui/SkeletonCard';
-import { FONTS, LETTER_SPACING, BORDERS, TEXT, monoUppercase } from '@/lib/brutalist-design';
+import { FONTS, LETTER_SPACING, BORDERS, TEXT, HEIGHT, RADIUS, monoUppercase } from '@/lib/brutalist-design';
 
 type TabType = 'pending-diffs' | 'pending-comments' | 'flagged';
 type StatusFilter = 'PENDING' | 'FLAGGED' | 'ALL';
@@ -81,7 +81,7 @@ export default function ModQueue(): JSX.Element {
         <div className="flex gap-2 sm:gap-4 min-w-max sm:min-w-0">
           <button
             onClick={() => setActiveTab('pending-diffs')}
-            className={`px-3 sm:px-4 py-2 sm:py-3 font-bold border-b-2 transition-colors whitespace-nowrap ${TEXT.secondary} min-h-[44px] ${monoUppercase} ${
+            className={`px-3 sm:px-4 py-2 sm:py-3 font-bold border-b-2 transition-colors whitespace-nowrap ${TEXT.secondary} ${HEIGHT.touchTarget} ${monoUppercase} ${
               activeTab === 'pending-diffs'
                 ? 'border-black dark:border-white text-black dark:text-white'
                 : 'border-transparent text-black/50 dark:text-white/50 hover:text-black hover:dark:text-white'
@@ -97,7 +97,7 @@ export default function ModQueue(): JSX.Element {
           </button>
           <button
             onClick={() => setActiveTab('pending-comments')}
-            className={`px-3 sm:px-4 py-2 sm:py-3 font-bold border-b-2 transition-colors whitespace-nowrap ${TEXT.secondary} min-h-[44px] ${monoUppercase} ${
+            className={`px-3 sm:px-4 py-2 sm:py-3 font-bold border-b-2 transition-colors whitespace-nowrap ${TEXT.secondary} ${HEIGHT.touchTarget} ${monoUppercase} ${
               activeTab === 'pending-comments'
                 ? 'border-black dark:border-white text-black dark:text-white'
                 : 'border-transparent text-black/50 dark:text-white/50 hover:text-black hover:dark:text-white'
@@ -113,7 +113,7 @@ export default function ModQueue(): JSX.Element {
           </button>
           <button
             onClick={() => setActiveTab('flagged')}
-            className={`px-3 sm:px-4 py-2 sm:py-3 font-bold border-b-2 transition-colors whitespace-nowrap ${TEXT.secondary} min-h-[44px] ${monoUppercase} ${
+            className={`px-3 sm:px-4 py-2 sm:py-3 font-bold border-b-2 transition-colors whitespace-nowrap ${TEXT.secondary} ${HEIGHT.touchTarget} ${monoUppercase} ${
               activeTab === 'flagged'
                 ? 'border-black dark:border-white text-black dark:text-white'
                 : 'border-transparent text-black/50 dark:text-white/50 hover:text-black hover:dark:text-white'
@@ -134,7 +134,7 @@ export default function ModQueue(): JSX.Element {
           <select
             value={statusFilter}
             onChange={(e) => setStatusFilter(e.target.value as StatusFilter)}
-            className={`px-3 py-3 ${TEXT.secondary} border ${BORDERS.medium} rounded-md bg-white dark:bg-black text-black dark:text-white min-h-[44px] focus:outline-none focus:border-black focus:dark:border-white`}
+            className={`px-3 py-3 ${TEXT.secondary} border ${BORDERS.medium} ${RADIUS.control} bg-white dark:bg-black text-black dark:text-white ${HEIGHT.touchTarget} focus:outline-none focus:border-black focus:dark:border-white`}
             style={{ fontFamily: FONTS.mono }}
           >
             <option value="PENDING">Pending</option>
@@ -152,12 +152,12 @@ export default function ModQueue(): JSX.Element {
           <SkeletonCard variant="detailed" />
         </div>
       ) : error ? (
-        <div className={`bg-red-50 dark:bg-red-950/20 border ${BORDERS.medium} border-red-600 dark:border-red-400 rounded-md p-4 text-red-800 dark:text-red-400`}>
+        <div className={`bg-red-50 dark:bg-red-950/20 border ${BORDERS.medium} border-red-600 dark:border-red-400 ${RADIUS.control} p-4 text-red-800 dark:text-red-400`}>
           <p className={`font-bold ${TEXT.secondary}`} style={{ fontFamily: FONTS.mono }}>Error loading items</p>
           <p className={`${TEXT.metadata} mt-1`} style={{ fontFamily: FONTS.mono }}>{error}</p>
           <button
             onClick={loadItems}
-            className={`mt-3 px-4 py-3 bg-red-600 dark:bg-red-700 text-white rounded-md border ${BORDERS.solid} hover:opacity-90 transition-opacity min-h-[44px] ${TEXT.secondary} font-bold ${monoUppercase}`}
+            className={`mt-3 px-4 py-3 bg-red-600 dark:bg-red-700 text-white ${RADIUS.control} border ${BORDERS.solid} hover:opacity-90 transition-opacity ${HEIGHT.touchTarget} ${TEXT.secondary} font-bold ${monoUppercase}`}
             style={{ fontFamily: FONTS.mono, letterSpacing: LETTER_SPACING.tight }}
           >
             Retry
@@ -169,7 +169,7 @@ export default function ModQueue(): JSX.Element {
           {(activeTab === 'pending-diffs' || activeTab === 'flagged') && (
             <div className="space-y-4 sm:space-y-6">
               {diffs.length === 0 ? (
-                <div className={`text-center py-8 sm:py-12 border ${BORDERS.medium} rounded-md bg-stone-50 dark:bg-stone-950`}>
+                <div className={`text-center py-8 sm:py-12 border ${BORDERS.medium} ${RADIUS.control} bg-stone-50 dark:bg-stone-950`}>
                   <p className={`${TEXT.body} font-bold text-black dark:text-white`} style={{ fontFamily: FONTS.mono }}>
                     No {activeTab === 'flagged' ? 'flagged' : 'pending'} diffs to
                     review
@@ -194,7 +194,7 @@ export default function ModQueue(): JSX.Element {
           {activeTab === 'pending-comments' && (
             <div className="space-y-4 sm:space-y-6">
               {comments.length === 0 ? (
-                <div className={`text-center py-8 sm:py-12 border ${BORDERS.medium} rounded-md bg-stone-50 dark:bg-stone-950`}>
+                <div className={`text-center py-8 sm:py-12 border ${BORDERS.medium} ${RADIUS.control} bg-stone-50 dark:bg-stone-950`}>
                   <p className={`${TEXT.body} font-bold text-black dark:text-white`} style={{ fontFamily: FONTS.mono }}>
                     No pending comments to review
                   </p>

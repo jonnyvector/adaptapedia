@@ -10,7 +10,7 @@ import { Input } from '@/components/ui/Input';
 import { Textarea } from '@/components/ui/Textarea';
 import { CheckCircleIcon } from '@/components/ui/Icons';
 import { MAX_IMAGE_SIZE_BYTES, MAX_IMAGE_SIZE_MB, MIN_CLAIM_LENGTH, MAX_CLAIM_LENGTH, MAX_DETAIL_LENGTH } from '@/lib/constants';
-import { FONTS, LETTER_SPACING, BORDERS, TEXT, monoUppercase } from '@/lib/brutalist-design';
+import { FONTS, LETTER_SPACING, BORDERS, TEXT, HEIGHT, monoUppercase } from '@/lib/brutalist-design';
 
 interface AddDiffFormProps {
   work: Work;
@@ -284,7 +284,7 @@ export default function AddDiffForm({ work, screenWork, initialCategory }: AddDi
             value={formData.category}
             onChange={handleChange}
             required
-            className={`w-full px-3 py-3 ${TEXT.secondary} bg-white dark:bg-black text-black dark:text-white border ${BORDERS.medium} rounded-md focus:outline-none focus:border-black dark:focus:border-white min-h-[44px]`}
+            className={`w-full px-3 py-3 ${TEXT.secondary} bg-white dark:bg-black text-black dark:text-white border ${BORDERS.medium} rounded-md focus:outline-none focus:border-black dark:focus:border-white ${HEIGHT.touchTarget}`}
             style={{ fontFamily: FONTS.mono, letterSpacing: LETTER_SPACING.normal }}
           >
             <option value="">Select a category...</option>
@@ -344,7 +344,7 @@ export default function AddDiffForm({ work, screenWork, initialCategory }: AddDi
             name="image"
             accept="image/jpeg,image/jpg,image/png,image/webp"
             onChange={handleFileChange}
-            className={`w-full px-3 py-3 ${TEXT.secondary} bg-white dark:bg-black text-black dark:text-white border ${BORDERS.medium} rounded-md focus:outline-none focus:border-black dark:focus:border-white file:mr-4 file:py-2 file:px-4 file:rounded-md file:border-0 ${TEXT.metadata} file:font-bold file:bg-black/10 dark:file:bg-white/10 file:text-black dark:file:text-white hover:file:bg-black/20 hover:dark:file:bg-white/20 min-h-[44px]`}
+            className={`w-full px-3 py-3 ${TEXT.secondary} bg-white dark:bg-black text-black dark:text-white border ${BORDERS.medium} rounded-md focus:outline-none focus:border-black dark:focus:border-white file:mr-4 file:py-2 file:px-4 file:rounded-md file:border-0 ${TEXT.metadata} file:font-bold file:bg-black/10 dark:file:bg-white/10 file:text-black dark:file:text-white hover:file:bg-black/20 hover:dark:file:bg-white/20 ${HEIGHT.touchTarget}`}
             style={{ fontFamily: FONTS.mono }}
           />
           <p className={`mt-1 ${TEXT.metadata} ${TEXT.mutedMedium}`} style={{ fontFamily: FONTS.mono }}>
