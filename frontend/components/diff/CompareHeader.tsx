@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
+import Image from 'next/image';
 import type {
   Work,
   ScreenWork,
@@ -94,9 +95,11 @@ export default function CompareHeader({
           <div className="flex gap-4">
             {work.cover_url && (
               <div className="flex-shrink-0">
-                <img
+                <Image
                   src={work.cover_url}
                   alt={`${work.title} cover`}
+                  width={96}
+                  height={144}
                   className={`w-20 h-28 sm:w-24 sm:h-36 object-cover border ${BORDERS.medium}`}
                 />
               </div>
@@ -128,9 +131,11 @@ export default function CompareHeader({
           <div className="flex gap-4 md:flex-row-reverse">
             {screenWork.poster_url && (
               <div className="flex-shrink-0">
-                <img
+                <Image
                   src={screenWork.poster_url}
                   alt={`${screenWork.title} poster`}
+                  width={96}
+                  height={144}
                   className={`w-20 h-28 sm:w-24 sm:h-36 object-cover border ${BORDERS.medium}`}
                 />
               </div>
