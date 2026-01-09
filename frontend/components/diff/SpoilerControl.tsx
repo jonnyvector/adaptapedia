@@ -3,7 +3,7 @@
 import { useEffect } from 'react';
 import type { SpoilerScope } from '@/lib/types';
 import { LockClosedIcon, BookOpenIcon, FilmIcon, LockOpenIcon, CheckIcon } from '@/components/ui/Icons';
-import { FONTS, LETTER_SPACING, BORDERS, TEXT, monoUppercase } from '@/lib/brutalist-design';
+import { FONTS, LETTER_SPACING, BORDERS, TEXT, RADIUS, monoUppercase } from '@/lib/brutalist-design';
 
 export type SpoilerPreference = 'SAFE' | 'BOOK_ALLOWED' | 'SCREEN_ALLOWED' | 'FULL';
 
@@ -111,7 +111,7 @@ export default function SpoilerControl({
                   key={pref.value}
                   onClick={() => onPreferenceChange(pref.value)}
                   className={`
-                    relative flex-1 sm:flex-initial px-2 sm:px-4 py-3 rounded-md ${TEXT.label} font-bold
+                    relative flex-1 sm:flex-initial px-2 sm:px-4 py-3 ${RADIUS.control} ${TEXT.label} font-bold
                     transition-all
                     flex items-center justify-center gap-0.5 sm:gap-1.5 whitespace-nowrap border
                     ${
@@ -126,7 +126,7 @@ export default function SpoilerControl({
                   aria-label={`${pref.label}: ${pref.description}`}
                 >
                   <Icon className="w-3 h-3 sm:w-3.5 sm:h-3.5 hidden sm:block" aria-hidden="true" />
-                  <span className="uppercase text-[9px] sm:text-[10px]">{pref.label}</span>
+                  <span className={`uppercase ${TEXT.metadata}`}>{pref.label}</span>
                 </button>
               );
             })}
