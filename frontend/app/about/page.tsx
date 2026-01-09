@@ -77,7 +77,7 @@ export default function AboutPage(): JSX.Element {
                 differences that occur in the adaptation process.
               </p>
               <p className={`${TEXT.body} ${TEXT.mutedMedium} leading-relaxed`}>
-                Whether you're deciding what to read or watch next, or simply curious about how
+                Whether you&apos;re deciding what to read or watch next, or simply curious about how
                 your favorite stories changed in translation, Adaptapedia is here to help.
               </p>
             </div>
@@ -102,7 +102,7 @@ export default function AboutPage(): JSX.Element {
               </h3>
 
               <p className={`${TEXT.secondary} ${TEXT.mutedMedium} mb-6`}>
-                <strong className={TEXT.primary}>Short, specific, and verifiable</strong> beats long essays. Here's a real example:
+                <strong className={TEXT.primary}>Short, specific, and verifiable</strong> beats long essays. Here&apos;s a real example:
               </p>
 
               {/* Example Diff Card */}
@@ -121,7 +121,7 @@ export default function AboutPage(): JSX.Element {
                   {/* Claim */}
                   <div className="mb-2">
                     <h3 className="text-base font-bold text-black dark:text-white leading-tight">
-                      Jack Torrance's character arc begins differently
+                      Jack Torrance&apos;s character arc begins differently
                     </h3>
                   </div>
 
