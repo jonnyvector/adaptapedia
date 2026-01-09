@@ -9,7 +9,7 @@ import { api } from '@/lib/api';
 import { calculateVotePercentage } from '@/lib/vote-utils';
 import AdaptationSwitcher from './AdaptationSwitcher';
 import BookmarkButton from './BookmarkButton';
-import { FONTS } from '@/lib/brutalist-design';
+import { FONTS, RADIUS } from '@/lib/brutalist-design';
 
 // Inject Google Fonts for brutalist minimal + nerdy typography
 if (typeof document !== 'undefined' && !document.querySelector('link[href*="Space+Grotesk"]')) {
@@ -160,22 +160,20 @@ export default function MatchupScoreboard({
         <button
           onClick={() => handleVote('BOOK')}
           disabled={isSubmitting}
-          className={`${buttonClass} font-bold transition-all disabled:opacity-50 rounded-md`}
+          className={`${buttonClass} font-bold transition-all disabled:opacity-50 ${RADIUS.control} bg-transparent`}
           style={{
             border: `1px solid ${bookAccent}`,
-            borderColor: bookAccent,
             color: bookAccent,
             fontFamily: 'JetBrains Mono, monospace',
             letterSpacing: '0.05em',
-            backgroundColor: 'transparent'
           }}
           onMouseEnter={(e) => {
             e.currentTarget.style.backgroundColor = bookAccent;
             e.currentTarget.style.color = 'white';
           }}
           onMouseLeave={(e) => {
-            e.currentTarget.style.backgroundColor = 'transparent';
-            e.currentTarget.style.color = bookAccent;
+            e.currentTarget.style.backgroundColor = '';
+            e.currentTarget.style.color = '';
           }}
         >
           BOOK
@@ -183,10 +181,21 @@ export default function MatchupScoreboard({
         <button
           onClick={() => handleVote('TIE')}
           disabled={isSubmitting}
-          className={`${buttonClass} font-bold transition-all disabled:opacity-50 border border-black/30 dark:border-white/30 text-black/70 dark:text-white/70 hover:border-black hover:dark:border-white hover:bg-black hover:dark:bg-white hover:text-white hover:dark:text-black rounded-md`}
+          className={`${buttonClass} font-bold transition-all disabled:opacity-50 border border-black/30 dark:border-white/30 text-black/70 dark:text-white/70 ${RADIUS.control} bg-transparent`}
           style={{
             fontFamily: 'JetBrains Mono, monospace',
             letterSpacing: '0.05em'
+          }}
+          onMouseEnter={(e) => {
+            const isDark = document.documentElement.getAttribute('data-theme') === 'dark';
+            e.currentTarget.style.backgroundColor = isDark ? 'white' : 'black';
+            e.currentTarget.style.color = isDark ? 'black' : 'white';
+            e.currentTarget.style.borderColor = isDark ? 'white' : 'black';
+          }}
+          onMouseLeave={(e) => {
+            e.currentTarget.style.backgroundColor = '';
+            e.currentTarget.style.color = '';
+            e.currentTarget.style.borderColor = '';
           }}
         >
           TIE
@@ -194,22 +203,20 @@ export default function MatchupScoreboard({
         <button
           onClick={() => handleVote('SCREEN')}
           disabled={isSubmitting}
-          className={`${buttonClass} font-bold transition-all disabled:opacity-50 rounded-md`}
+          className={`${buttonClass} font-bold transition-all disabled:opacity-50 ${RADIUS.control} bg-transparent`}
           style={{
             border: `1px solid ${screenAccent}`,
-            borderColor: screenAccent,
             color: screenAccent,
             fontFamily: 'JetBrains Mono, monospace',
             letterSpacing: '0.05em',
-            backgroundColor: 'transparent'
           }}
           onMouseEnter={(e) => {
             e.currentTarget.style.backgroundColor = screenAccent;
             e.currentTarget.style.color = 'white';
           }}
           onMouseLeave={(e) => {
-            e.currentTarget.style.backgroundColor = 'transparent';
-            e.currentTarget.style.color = screenAccent;
+            e.currentTarget.style.backgroundColor = '';
+            e.currentTarget.style.color = '';
           }}
         >
           SCREEN
@@ -249,7 +256,7 @@ export default function MatchupScoreboard({
               key={rating}
               onClick={() => handleClick(rating)}
               disabled={isSubmitting}
-              className={`w-7 h-7 border font-bold text-xs transition-all disabled:opacity-50 rounded-md ${
+              className={`w-7 py-3 border font-bold text-xs transition-all disabled:opacity-50 ${RADIUS.control} ${
                 currentRating === rating
                   ? 'bg-black dark:bg-white text-white dark:text-black border-black dark:border-white'
                   : 'bg-transparent text-black dark:text-white border-black/20 dark:border-white/20 hover:bg-black hover:dark:bg-white hover:text-white hover:dark:text-black hover:border-black hover:dark:border-white'
@@ -278,7 +285,7 @@ export default function MatchupScoreboard({
   const renderCTAButton = () => (
     <button
       onClick={onAddDiff}
-      className="w-full py-2.5 px-3 border border-black dark:border-white bg-transparent text-black dark:text-white hover:bg-black hover:dark:bg-white hover:text-white hover:dark:text-black font-bold transition-all text-xs rounded-md"
+      className="w-full py-3 px-3 border border-black dark:border-white bg-transparent text-black dark:text-white hover:bg-black hover:dark:bg-white hover:text-white hover:dark:text-black font-bold transition-all text-xs ${RADIUS.control}"
       style={{
         fontFamily: 'JetBrains Mono, monospace',
         letterSpacing: '0.05em'
@@ -321,7 +328,7 @@ export default function MatchupScoreboard({
   }
 
   return (
-    <div className="relative bg-white dark:bg-black border-0 sm:border sm:border-black/30 sm:dark:border-white/30 p-0 sm:p-6 md:p-10 overflow-visible">
+    <div className="relative bg-white dark:bg-black p-0 sm:p-4 md:p-6 lg:p-10">
       {/* Bookmark button - top-right corner of hero */}
       <div className="absolute top-3 right-3 z-10">
         <BookmarkButton workId={workId} screenWorkId={screenWorkId} />
@@ -344,11 +351,11 @@ export default function MatchupScoreboard({
         </div>
 
         {/* 3-column grid - aligned tops */}
-        <div className="grid gap-6" style={{ gridTemplateColumns: '260px minmax(400px, 1fr) 260px', alignItems: 'start' }}>
+        <div className="grid gap-4 lg:gap-6" style={{ gridTemplateColumns: '200px minmax(300px, 1fr) 200px', alignItems: 'start' }}>
           {/* Left: Book Cover */}
           <div className="relative flex flex-col items-center gap-3">
             {work.cover_url && (
-              <div className="relative w-[240px] h-[360px]">
+              <div className="relative w-full aspect-[2/3] max-w-[240px] border border-black/20 dark:border-white/20">
                 <Image
                   src={work.cover_url}
                   alt={`${work.title} cover`}
@@ -462,17 +469,20 @@ export default function MatchupScoreboard({
                         <span>SCREEN {screenPct}%</span>
                       </div>
                     </div>
+
+                    {/* User's vote status - inside the same container */}
+                    {userVote && !showEditVote && (
+                      <div className="text-center pt-1.5 pb-1.5 border-t border-black/10 dark:border-white/10">
+                        <span className="text-[10px] text-black/70 dark:text-white/70 uppercase tracking-wider font-bold" style={{ fontFamily: 'JetBrains Mono, monospace', letterSpacing: '0.12em' }}>
+                          You voted: {userVote.preference === 'BOOK' ? 'BOOK' : userVote.preference === 'SCREEN' ? 'SCREEN' : 'TIE'} • <button onClick={() => setShowEditVote(true)} className="underline hover:no-underline text-black dark:text-white">EDIT</button>
+                        </span>
+                      </div>
+                    )}
                   </div>
                 )}
 
-                {/* User's vote status or vote buttons */}
-                {userVote && !showEditVote ? (
-                  <div className="text-center py-2">
-                    <span className="text-[10px] text-black/70 dark:text-white/70 uppercase tracking-wider font-bold" style={{ fontFamily: 'JetBrains Mono, monospace', letterSpacing: '0.12em' }}>
-                      You voted: {userVote.preference === 'BOOK' ? 'BOOK' : userVote.preference === 'SCREEN' ? 'SCREEN' : 'TIE'} • <button onClick={() => setShowEditVote(true)} className="underline hover:no-underline text-black dark:text-white">EDIT</button>
-                    </span>
-                  </div>
-                ) : !userVote && !showEditVote ? (
+                {/* Vote buttons - shown when no vote exists or editing */}
+                {!userVote && !showEditVote ? (
                   <div className="space-y-2 pt-2">
                     <p className="text-center text-xs font-bold text-black/80 dark:text-white/80 uppercase tracking-wider mb-1" style={{ fontFamily: 'JetBrains Mono, monospace', letterSpacing: '0.1em' }}>
                       Cast your vote
@@ -530,7 +540,7 @@ export default function MatchupScoreboard({
         {/* Right: Screen Poster */}
         <div className="relative flex flex-col items-center gap-3">
           {screenWork.poster_url && (
-            <div className="relative w-[240px] h-[360px]">
+            <div className="relative w-full aspect-[2/3] max-w-[240px] border border-black/20 dark:border-white/20">
               <Image
                 src={screenWork.poster_url}
                 alt={`${screenWork.title} poster`}
@@ -560,7 +570,7 @@ export default function MatchupScoreboard({
       </div>
 
       {/* Mobile: Compact layout - brutalist style */}
-      <div className="md:hidden space-y-4">
+      <div className="md:hidden space-y-4 pt-4">
         {/* Title */}
         <div className="text-center space-y-2">
           <h1 className="text-xl font-bold text-black dark:text-white" style={{ fontFamily: FONTS.mono }}>
@@ -576,7 +586,7 @@ export default function MatchupScoreboard({
         <div className="grid grid-cols-2 gap-3">
           <div className="space-y-2">
             {work.cover_url && (
-              <div className="relative w-full aspect-[2/3]">
+              <div className="relative w-full aspect-[2/3] border border-black/20 dark:border-white/20">
                 <Image
                   src={work.cover_url}
                   alt={`${work.title} cover`}
@@ -598,7 +608,7 @@ export default function MatchupScoreboard({
 
           <div className="space-y-2">
             {screenWork.poster_url && (
-              <div className="relative w-full aspect-[2/3]">
+              <div className="relative w-full aspect-[2/3] border border-black/20 dark:border-white/20">
                 <Image
                   src={screenWork.poster_url}
                   alt={`${screenWork.title} poster`}
@@ -621,47 +631,54 @@ export default function MatchupScoreboard({
           </div>
         </div>
 
-        {/* MODULE 1: Community bar - shows if votes exist */}
-        {hasVotes && (
-          <div className="border border-black/20 dark:border-white/20 bg-stone-50 dark:bg-stone-950 p-2 sm:p-3 space-y-2">
-            {/* Community label */}
-            <div className="text-[9px] uppercase tracking-widest text-black/60 dark:text-white/60" style={{ fontFamily: 'JetBrains Mono, monospace', letterSpacing: '0.12em' }}>
-              COMMUNITY
-            </div>
-            {/* Brutal bar */}
-            <div className="relative h-7 overflow-hidden flex bg-stone-200 dark:bg-stone-800">
-              {bookPct > 0 && (
-                <div
-                  className="transition-all duration-500"
-                  style={{
-                    width: `${bookPct}%`,
-                    backgroundColor: bookAccent
-                  }}
-                />
-              )}
-              {screenPct > 0 && (
-                <div
-                  className="transition-all duration-500"
-                  style={{
-                    width: `${screenPct}%`,
-                    backgroundColor: screenAccent
-                  }}
-                />
-              )}
-            </div>
-            {/* Single line: percentages + sample size */}
-            <div className="flex items-center justify-between text-[9px] text-black/60 dark:text-white/60 uppercase tracking-wider pt-1.5" style={{ fontFamily: 'JetBrains Mono, monospace', letterSpacing: '0.08em' }}>
-              <span>BOOK {bookPct}%</span>
-              <span className="font-bold">SAMPLE SIZE: {totalVotes}</span>
-              <span>SCREEN {screenPct}%</span>
-            </div>
-          </div>
-        )}
-
-        {/* MODULE 2: Action module - vote + faithfulness */}
+        {/* Combined MODULE: Community bar + voting + faithfulness */}
         <div className="border border-black/20 dark:border-white/20 bg-stone-50 dark:bg-stone-950 p-2 sm:p-3 space-y-3">
+          {/* Community bar - shows if votes exist */}
+          {hasVotes && (
+            <div className="space-y-2">
+              {/* Community label */}
+              <div className="text-[9px] uppercase tracking-widest text-black/60 dark:text-white/60" style={{ fontFamily: 'JetBrains Mono, monospace', letterSpacing: '0.12em' }}>
+                COMMUNITY
+              </div>
+              {/* Brutal bar */}
+              <div className="relative h-7 overflow-hidden flex bg-stone-200 dark:bg-stone-800">
+                {bookPct > 0 && (
+                  <div
+                    className="transition-all duration-500"
+                    style={{
+                      width: `${bookPct}%`,
+                      backgroundColor: bookAccent
+                    }}
+                  />
+                )}
+                {screenPct > 0 && (
+                  <div
+                    className="transition-all duration-500"
+                    style={{
+                      width: `${screenPct}%`,
+                      backgroundColor: screenAccent
+                    }}
+                  />
+                )}
+              </div>
+              {/* Single line: percentages + sample size */}
+              <div className="flex items-center justify-between text-[9px] text-black/60 dark:text-white/60 uppercase tracking-wider" style={{ fontFamily: 'JetBrains Mono, monospace', letterSpacing: '0.08em' }}>
+                <span>BOOK {bookPct}%</span>
+                <span className="font-bold">SAMPLE SIZE: {totalVotes}</span>
+                <span>SCREEN {screenPct}%</span>
+              </div>
+              {/* User vote status */}
+              {userVote && !showEditVote && (
+                <div className="text-center pt-1.5 pb-1.5 border-t border-black/10 dark:border-white/10">
+                  <span className="text-[10px] text-black/70 dark:text-white/70 uppercase tracking-wider font-bold" style={{ fontFamily: 'JetBrains Mono, monospace', letterSpacing: '0.12em' }}>
+                    You voted: {userVote.preference} • <button onClick={() => setShowEditVote(true)} className="underline hover:no-underline text-black dark:text-white">EDIT</button>
+                  </span>
+                </div>
+              )}
+            </div>
+          )}
           {/* Vote section */}
-          {!userVote && !showEditVote ? (
+          {!userVote && !showEditVote && (
             <div className="space-y-1.5">
               <div className="text-[9px] uppercase tracking-widest text-black/60 dark:text-white/60 text-center" style={{ fontFamily: 'JetBrains Mono, monospace', letterSpacing: '0.12em' }}>
                 CAST YOUR VOTE
@@ -671,7 +688,7 @@ export default function MatchupScoreboard({
                 <button
                   onClick={() => handleVote('BOOK')}
                   disabled={isSubmitting}
-                  className="py-3 font-bold border text-xs disabled:opacity-50 transition-all rounded-md"
+                  className="py-4 font-bold border text-xs disabled:opacity-50 transition-all ${RADIUS.control}"
                   style={{
                     borderColor: bookAccent,
                     backgroundColor: 'transparent',
@@ -697,7 +714,7 @@ export default function MatchupScoreboard({
                 <button
                   onClick={() => handleVote('SCREEN')}
                   disabled={isSubmitting}
-                  className="py-3 font-bold border text-xs disabled:opacity-50 transition-all rounded-md"
+                  className="py-4 font-bold border text-xs disabled:opacity-50 transition-all ${RADIUS.control}"
                   style={{
                     borderColor: screenAccent,
                     backgroundColor: 'transparent',
@@ -725,7 +742,7 @@ export default function MatchupScoreboard({
               <button
                 onClick={() => handleVote('TIE')}
                 disabled={isSubmitting}
-                className="w-full py-2 font-bold border border-black/30 dark:border-white/30 text-black/70 dark:text-white/70 text-xs disabled:opacity-50 transition-all rounded-md hover:border-black hover:dark:border-white hover:bg-black hover:dark:bg-white hover:text-white hover:dark:text-black"
+                className="w-full py-2 font-bold border border-black/30 dark:border-white/30 text-black/70 dark:text-white/70 text-xs disabled:opacity-50 transition-all ${RADIUS.control} hover:border-black hover:dark:border-white hover:bg-black hover:dark:bg-white hover:text-white hover:dark:text-black"
                 style={{
                   fontFamily: 'JetBrains Mono, monospace',
                   letterSpacing: '0.05em',
@@ -735,19 +752,14 @@ export default function MatchupScoreboard({
                 TIE
               </button>
             </div>
-          ) : userVote && !showEditVote ? (
-            <div className="text-center py-1">
-              <span className="text-[10px] text-black/70 dark:text-white/70 uppercase tracking-wider font-bold" style={{ fontFamily: 'JetBrains Mono, monospace', letterSpacing: '0.12em' }}>
-                You voted: {userVote.preference} • <button onClick={() => setShowEditVote(true)} className="underline hover:no-underline text-black dark:text-white">EDIT</button>
-              </span>
-            </div>
-          ) : showEditVote && (
+          )}
+          {showEditVote && (
             <div className="space-y-2">
               <div className="grid grid-cols-2 gap-2">
                 <button
                   onClick={() => handleVote('BOOK')}
                   disabled={isSubmitting}
-                  className="py-3 font-bold border text-xs disabled:opacity-50 transition-all rounded-md"
+                  className="py-4 font-bold border text-xs disabled:opacity-50 transition-all ${RADIUS.control}"
                   style={{
                     borderColor: bookAccent,
                     backgroundColor: 'transparent',
@@ -761,7 +773,7 @@ export default function MatchupScoreboard({
                 <button
                   onClick={() => handleVote('SCREEN')}
                   disabled={isSubmitting}
-                  className="py-3 font-bold border text-xs disabled:opacity-50 transition-all rounded-md"
+                  className="py-4 font-bold border text-xs disabled:opacity-50 transition-all ${RADIUS.control}"
                   style={{
                     borderColor: screenAccent,
                     backgroundColor: 'transparent',
@@ -776,7 +788,7 @@ export default function MatchupScoreboard({
               <button
                 onClick={() => handleVote('TIE')}
                 disabled={isSubmitting}
-                className="w-full py-2 font-bold border border-black/30 dark:border-white/30 text-black/70 dark:text-white/70 text-xs disabled:opacity-50 transition-all rounded-md hover:border-black hover:dark:border-white hover:bg-black hover:dark:bg-white hover:text-white hover:dark:text-black"
+                className="w-full py-2 font-bold border border-black/30 dark:border-white/30 text-black/70 dark:text-white/70 text-xs disabled:opacity-50 transition-all ${RADIUS.control} hover:border-black hover:dark:border-white hover:bg-black hover:dark:bg-white hover:text-white hover:dark:text-black"
                 style={{
                   fontFamily: 'JetBrains Mono, monospace',
                   letterSpacing: '0.05em'
@@ -795,7 +807,7 @@ export default function MatchupScoreboard({
           )}
 
           {/* Faithfulness - inline tight row */}
-          <div className="border-t border-black/10 dark:border-white/10 pt-3 space-y-2">
+          <div className="!mt-0 border-t border-black/10 dark:border-white/10 pt-3 space-y-2">
             {avgFaithfulness !== null && (
               <div className="text-center text-[10px] font-bold text-black dark:text-white uppercase tracking-wider" style={{ fontFamily: 'JetBrains Mono, monospace', letterSpacing: '0.12em' }}>
                 FAITHFULNESS {avgFaithfulness.toFixed(1)}/5 ({faithfulnessCount} {faithfulnessCount === 1 ? 'RATING' : 'RATINGS'})
@@ -812,7 +824,7 @@ export default function MatchupScoreboard({
                       key={rating}
                       onClick={() => handleFaithfulnessRate(rating)}
                       disabled={isSubmitting}
-                      className="flex-1 h-9 border border-black/20 dark:border-white/20 bg-transparent text-black dark:text-white font-bold text-xs transition-all disabled:opacity-50 hover:bg-black hover:dark:bg-white hover:text-white hover:dark:text-black rounded-md"
+                      className="flex-1 py-3 border border-black/20 dark:border-white/20 bg-transparent text-black dark:text-white font-bold text-xs transition-all disabled:opacity-50 hover:bg-black hover:dark:bg-white hover:text-white hover:dark:text-black ${RADIUS.control}"
                       style={{
                         fontFamily: 'JetBrains Mono, monospace'
                       }}
@@ -838,7 +850,7 @@ export default function MatchupScoreboard({
           {/* Primary CTA - big button */}
           <button
             onClick={onAddDiff}
-            className="w-full py-3 px-3 font-bold border border-black dark:border-white bg-black dark:bg-white text-white dark:text-black hover:bg-transparent hover:text-black dark:hover:bg-transparent dark:hover:text-white transition-all text-xs rounded-md"
+            className="w-full py-3 px-3 font-bold border border-black dark:border-white bg-black dark:bg-white text-white dark:text-black hover:bg-transparent hover:text-black dark:hover:bg-transparent dark:hover:text-white transition-all text-xs ${RADIUS.control}"
             style={{
               fontFamily: 'JetBrains Mono, monospace',
               letterSpacing: '0.05em'

@@ -10,11 +10,13 @@ import { FONTS, BORDERS, TEXT, RADIUS } from '@/lib/brutalist-design';
 interface MaskedDiffCardProps {
   diff: DiffItem;
   userSpoilerScope: SpoilerScope;
+  onReveal?: () => void;
 }
 
 export default function MaskedDiffCard({
   diff,
   userSpoilerScope,
+  onReveal,
 }: MaskedDiffCardProps): JSX.Element {
   const [revealed, setRevealed] = useState(false);
 
@@ -83,7 +85,10 @@ export default function MaskedDiffCard({
           Category: <span className="font-bold capitalize">{diff.category.toLowerCase()}</span>
         </p>
         <button
-          onClick={() => setRevealed(true)}
+          onClick={() => {
+            setRevealed(true);
+            onReveal?.();
+          }}
           className={`px-4 py-3 bg-black dark:bg-white text-white dark:text-black hover:opacity-80 transition-opacity font-bold ${TEXT.secondary} min-h-[48px] flex items-center justify-center gap-2 border ${BORDERS.solid} ${RADIUS.control}`}
           style={{ fontFamily: FONTS.mono }}
           aria-label={`Reveal ${getSpoilerLabel(diff.spoiler_scope).toLowerCase()}`}

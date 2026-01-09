@@ -138,7 +138,7 @@ export default async function Home(): Promise<JSX.Element> {
           </div>
 
           {/* Balanced grid layout */}
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-6 max-w-6xl mx-auto">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 sm:gap-6 max-w-6xl mx-auto">
             {/* Card 1 - Structured Comparisons */}
             <div className={`bg-white dark:bg-black border ${BORDERS.medium} p-4 sm:p-6 md:p-8 relative overflow-hidden hover:border-black/50 hover:dark:border-white/50 transition-colors`}>
               <div className={`mb-6 inline-flex items-center justify-center w-16 h-16 bg-black dark:bg-white border ${BORDERS.medium} transition-transform`}>
@@ -176,15 +176,15 @@ export default async function Home(): Promise<JSX.Element> {
                 <div className={`flex items-center gap-1 text-[8px] sm:text-[9px]`}>
                   <button className={`inline-flex items-center justify-center gap-0.5 px-1.5 py-0.5 font-bold bg-black dark:bg-white text-white dark:text-black border ${BORDERS.solid} rounded uppercase tracking-wide`} style={{ fontFamily: FONTS.mono }}>
                     <span>↑ Acc</span>
-                    <span className="hidden sm:inline">urate</span>
+                    <span className="hidden md:inline">urate</span>
                   </button>
                   <button className={`inline-flex items-center justify-center gap-0.5 px-1.5 py-0.5 font-bold ${TEXT.mutedStrong} border ${BORDERS.medium} rounded uppercase tracking-wide`} style={{ fontFamily: FONTS.mono }}>
                     <span>~ Nua</span>
-                    <span className="hidden sm:inline">nce</span>
+                    <span className="hidden md:inline">nce</span>
                   </button>
                   <button className={`inline-flex items-center justify-center gap-0.5 px-1.5 py-0.5 font-bold ${TEXT.mutedStrong} border ${BORDERS.medium} rounded uppercase tracking-wide`} style={{ fontFamily: FONTS.mono }}>
                     <span>↓ Dis</span>
-                    <span className="hidden sm:inline">agree</span>
+                    <span className="hidden md:inline">agree</span>
                   </button>
                 </div>
               </div>
@@ -195,7 +195,7 @@ export default async function Home(): Promise<JSX.Element> {
             </div>
 
             {/* Card 2 - Spoiler Control */}
-            <div className={`bg-white dark:bg-black border ${BORDERS.medium} p-8 relative overflow-hidden hover:border-black/50 hover:dark:border-white/50 transition-colors`}>
+            <div className={`bg-white dark:bg-black border ${BORDERS.medium} p-4 sm:p-6 md:p-8 relative overflow-hidden hover:border-black/50 hover:dark:border-white/50 transition-colors`}>
               <div className={`mb-6 inline-flex items-center justify-center w-16 h-16 bg-black dark:bg-white border ${BORDERS.medium} transition-transform`}>
                 <svg className="w-8 h-8 text-white dark:text-black" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13.875 18.825A10.05 10.05 0 0112 19c-4.478 0-8.268-2.943-9.543-7a9.97 9.97 0 011.563-3.029m5.858.908a3 3 0 114.243 4.243M9.878 9.878l4.242 4.242M9.88 9.88l-3.29-3.29m7.532 7.532l3.29 3.29M3 3l3.59 3.59m0 0A9.953 9.953 0 0112 5c4.478 0 8.268 2.943 9.543 7a10.025 10.025 0 01-4.132 5.411m0 0L21 21" />
@@ -242,7 +242,7 @@ export default async function Home(): Promise<JSX.Element> {
             </div>
 
             {/* Card 3 - Community Driven - Full Width */}
-            <div className={`md:col-span-2 bg-white dark:bg-black border ${BORDERS.medium} p-8 relative overflow-hidden hover:border-black/50 hover:dark:border-white/50 transition-colors`}>
+            <div className={`lg:col-span-2 bg-white dark:bg-black border ${BORDERS.medium} p-4 sm:p-6 md:p-8 relative overflow-hidden hover:border-black/50 hover:dark:border-white/50 transition-colors`}>
               <div className="flex flex-col md:flex-row items-start gap-6">
                 <div className={`flex-shrink-0 w-16 h-16 bg-black dark:bg-white border ${BORDERS.medium} transition-transform flex items-center justify-center`}>
                   <svg className="w-8 h-8 text-white dark:text-black" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -279,17 +279,17 @@ export default async function Home(): Promise<JSX.Element> {
                     </div>
                   </div>
                 </div>
-                <div className="flex gap-6 text-center flex-shrink-0">
+                <div className="flex gap-3 sm:gap-6 text-center flex-shrink-0">
                   <div>
-                    <div className={`text-3xl font-black ${TEXT.primary}`} style={{ fontFamily: FONTS.mono }}>12.8K</div>
+                    <div className={`text-2xl sm:text-3xl font-black ${TEXT.primary}`} style={{ fontFamily: FONTS.mono }}>12.8K</div>
                     <div className={`${TEXT.metadata} ${TEXT.mutedMedium} uppercase tracking-wide`} style={{ fontFamily: FONTS.mono }}>Edits</div>
                   </div>
                   <div>
-                    <div className={`text-3xl font-black ${TEXT.primary}`} style={{ fontFamily: FONTS.mono }}>1.2K</div>
+                    <div className={`text-2xl sm:text-3xl font-black ${TEXT.primary}`} style={{ fontFamily: FONTS.mono }}>1.2K</div>
                     <div className={`${TEXT.metadata} ${TEXT.mutedMedium} uppercase tracking-wide`} style={{ fontFamily: FONTS.mono }}>Editors</div>
                   </div>
                   <div>
-                    <div className={`text-3xl font-black ${TEXT.primary}`} style={{ fontFamily: FONTS.mono }}>4.2K</div>
+                    <div className={`text-2xl sm:text-3xl font-black ${TEXT.primary}`} style={{ fontFamily: FONTS.mono }}>4.2K</div>
                     <div className={`${TEXT.metadata} ${TEXT.mutedMedium} uppercase tracking-wide`} style={{ fontFamily: FONTS.mono }}>Comparisons</div>
                   </div>
                 </div>

@@ -6,6 +6,7 @@ import { api } from '@/lib/api';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import type { Bookmark, ApiResponse } from '@/lib/types';
+import { FONTS, BORDERS, TEXT, RADIUS } from '@/lib/brutalist-design';
 
 interface BookmarksPageProps {
   params: {
@@ -57,7 +58,7 @@ export default function BookmarksPage({ params }: BookmarksPageProps): JSX.Eleme
       <main className="min-h-screen">
         <div className="container py-6">
           <div className="text-center py-12">
-            <p className="text-muted">Loading bookmarks...</p>
+            <p className={`${TEXT.body} ${TEXT.mutedMedium}`} style={{ fontFamily: FONTS.mono }}>Loading bookmarks...</p>
           </div>
         </div>
       </main>
@@ -69,11 +70,12 @@ export default function BookmarksPage({ params }: BookmarksPageProps): JSX.Eleme
     return (
       <main className="min-h-screen">
         <div className="container py-6">
-          <div className="text-center py-12 bg-surface rounded-lg border border-border">
-            <p className="text-lg text-muted mb-4">Please log in to view bookmarks</p>
+          <div className={`text-center py-12 bg-stone-50 dark:bg-stone-950 ${RADIUS.control} border ${BORDERS.medium}`}>
+            <p className={`${TEXT.body} ${TEXT.primary} mb-4 font-bold`} style={{ fontFamily: FONTS.mono }}>Please log in to view bookmarks</p>
             <Link
               href="/auth/login"
-              className="inline-block px-6 py-3 bg-link text-white rounded-lg hover:opacity-90 transition-opacity font-semibold"
+              className={`inline-block px-6 py-3 bg-black dark:bg-white text-white dark:text-black ${RADIUS.control} hover:bg-black/90 hover:dark:bg-white/90 transition-colors border ${BORDERS.solid} font-bold uppercase tracking-wider`}
+              style={{ fontFamily: FONTS.mono, letterSpacing: '0.05em' }}
             >
               Log In
             </Link>
@@ -89,26 +91,31 @@ export default function BookmarksPage({ params }: BookmarksPageProps): JSX.Eleme
         {/* Header */}
         <div className="mb-8">
           <div className="flex items-center gap-2 mb-4">
-            <Link href={`/u/${username}`} className="text-link hover:underline">
+            <Link
+              href={`/u/${username}`}
+              className={`${TEXT.body} ${TEXT.primary} hover:underline font-bold uppercase tracking-wider`}
+              style={{ fontFamily: FONTS.mono, letterSpacing: '0.05em' }}
+            >
               ← Back to Profile
             </Link>
           </div>
-          <h1 className="text-4xl font-bold mb-2">{username}'s Bookmarks</h1>
-          <p className="text-muted">
+          <h1 className="text-3xl md:text-4xl font-bold mb-2 text-black dark:text-white" style={{ fontFamily: FONTS.mono }}>{username}'s Bookmarks</h1>
+          <p className={`${TEXT.body} ${TEXT.mutedMedium} uppercase tracking-wider`} style={{ fontFamily: FONTS.mono, letterSpacing: '0.08em' }}>
             {bookmarks.length} {bookmarks.length === 1 ? 'comparison' : 'comparisons'} saved
           </p>
         </div>
 
         {/* Bookmarks List */}
         {bookmarks.length === 0 ? (
-          <div className="text-center py-12 bg-surface rounded-lg border border-border">
-            <p className="text-lg text-muted mb-4">No bookmarks yet</p>
-            <p className="text-sm text-muted mb-6">
+          <div className={`text-center py-12 bg-stone-50 dark:bg-stone-950 ${RADIUS.control} border ${BORDERS.medium}`}>
+            <p className={`${TEXT.body} ${TEXT.primary} mb-4 font-bold`} style={{ fontFamily: FONTS.mono }}>No bookmarks yet</p>
+            <p className={`${TEXT.secondary} ${TEXT.mutedMedium} mb-6`} style={{ fontFamily: FONTS.mono }}>
               Bookmark comparisons to save them for later
             </p>
             <Link
               href="/browse"
-              className="inline-block px-6 py-3 bg-link text-white rounded-lg hover:opacity-90 transition-opacity font-semibold"
+              className={`inline-block px-6 py-3 bg-black dark:bg-white text-white dark:text-black ${RADIUS.control} hover:bg-black/90 hover:dark:bg-white/90 transition-colors border ${BORDERS.solid} font-bold uppercase tracking-wider`}
+              style={{ fontFamily: FONTS.mono, letterSpacing: '0.05em' }}
             >
               Explore Comparisons
             </Link>
@@ -119,7 +126,7 @@ export default function BookmarksPage({ params }: BookmarksPageProps): JSX.Eleme
               <Link
                 key={bookmark.id}
                 href={`/compare/${bookmark.work_slug}/${bookmark.screen_work_slug}`}
-                className="block border-2 border-border rounded-lg p-6 hover:shadow-lg hover:border-link/30 transition-all bg-surface"
+                className={`block border ${BORDERS.medium} ${RADIUS.control} p-6 hover:border-black hover:dark:border-white transition-all bg-white dark:bg-black`}
               >
                 <div className="flex flex-col lg:flex-row gap-6">
                   {/* Book Section */}
@@ -128,21 +135,21 @@ export default function BookmarksPage({ params }: BookmarksPageProps): JSX.Eleme
                       <img
                         src={bookmark.work_cover_url}
                         alt={bookmark.work_title}
-                        className="w-20 h-28 object-cover rounded border border-border shadow-sm"
+                        className={`w-20 h-28 object-cover ${RADIUS.control} border ${BORDERS.subtle}`}
                       />
                     )}
                     <div className="flex-1">
-                      <div className="text-xs text-muted mb-1">Book</div>
-                      <h3 className="text-xl font-bold text-foreground mb-1">
+                      <div className={`${TEXT.label} ${TEXT.mutedMedium} mb-1 font-bold uppercase tracking-wider`} style={{ fontFamily: FONTS.mono, letterSpacing: '0.1em' }}>Book</div>
+                      <h3 className={`text-lg font-bold ${TEXT.primary} mb-1`} style={{ fontFamily: FONTS.mono }}>
                         {bookmark.work_title}
                       </h3>
                       {bookmark.work_author && (
-                        <p className="text-sm text-muted">by {bookmark.work_author}</p>
+                        <p className={`${TEXT.secondary} ${TEXT.mutedMedium}`} style={{ fontFamily: FONTS.mono }}>by {bookmark.work_author}</p>
                       )}
                     </div>
                   </div>
 
-                  <div className="text-2xl text-muted self-center hidden lg:block">→</div>
+                  <div className={`text-2xl ${TEXT.mutedMedium} self-center hidden lg:block`} style={{ fontFamily: FONTS.mono }}>→</div>
 
                   {/* Screen Section */}
                   <div className="flex-1 flex gap-4 lg:flex-row-reverse">
@@ -150,14 +157,14 @@ export default function BookmarksPage({ params }: BookmarksPageProps): JSX.Eleme
                       <img
                         src={bookmark.screen_work_poster_url}
                         alt={bookmark.screen_work_title}
-                        className="w-20 h-28 object-cover rounded border border-border shadow-sm"
+                        className={`w-20 h-28 object-cover ${RADIUS.control} border ${BORDERS.subtle}`}
                       />
                     )}
                     <div className="flex-1 lg:text-right">
-                      <div className="text-xs text-muted mb-1">
+                      <div className={`${TEXT.label} ${TEXT.mutedMedium} mb-1 font-bold uppercase tracking-wider`} style={{ fontFamily: FONTS.mono, letterSpacing: '0.1em' }}>
                         {bookmark.screen_work_type === 'MOVIE' ? 'Movie' : 'TV Series'}
                       </div>
-                      <h3 className="text-xl font-bold text-foreground mb-1">
+                      <h3 className={`text-lg font-bold ${TEXT.primary} mb-1`} style={{ fontFamily: FONTS.mono }}>
                         {bookmark.screen_work_title}
                       </h3>
                     </div>
@@ -165,11 +172,11 @@ export default function BookmarksPage({ params }: BookmarksPageProps): JSX.Eleme
                 </div>
 
                 {/* Metadata */}
-                <div className="mt-4 pt-4 border-t border-border flex items-center justify-between">
-                  <span className="text-xs text-muted">
+                <div className={`mt-4 pt-4 border-t ${BORDERS.subtle} flex items-center justify-between`}>
+                  <span className={`${TEXT.label} ${TEXT.mutedMedium} uppercase tracking-wider`} style={{ fontFamily: FONTS.mono, letterSpacing: '0.08em' }}>
                     Bookmarked {new Date(bookmark.created_at).toLocaleDateString()}
                   </span>
-                  <span className="text-sm text-link font-medium">
+                  <span className={`${TEXT.secondary} ${TEXT.primary} font-bold uppercase tracking-wider`} style={{ fontFamily: FONTS.mono, letterSpacing: '0.05em' }}>
                     View Comparison →
                   </span>
                 </div>

@@ -68,7 +68,7 @@ export default function ThemeToggle(): JSX.Element {
   if (!mounted) {
     return (
       <button
-        className={`px-2 py-1 sm:px-2 sm:py-1.5 flex items-center justify-center border ${BORDERS.subtle} bg-transparent ${RADIUS.control}`}
+        className={`p-2 md:p-0 md:px-3 md:py-3 text-black dark:text-white flex items-center justify-center md:border md:${BORDERS.subtle} md:bg-transparent md:${RADIUS.control}`}
         aria-label="Toggle theme"
         disabled
       >
@@ -96,7 +96,7 @@ export default function ThemeToggle(): JSX.Element {
   return (
     <button
       onClick={toggleTheme}
-      className={`px-2 py-1 sm:px-2 sm:py-1.5 text-black dark:text-white hover:bg-black hover:dark:bg-white hover:text-white hover:dark:text-black transition-all flex items-center justify-center border ${BORDERS.subtle} bg-transparent ${RADIUS.control}`}
+      className={`p-2 md:p-0 md:px-3 md:py-3 text-black dark:text-white hover:text-black/70 hover:dark:text-white/70 transition-colors flex items-center justify-center md:border md:${BORDERS.subtle} md:bg-transparent md:${RADIUS.control} md:hover:bg-black md:hover:dark:bg-white md:hover:text-white md:hover:dark:text-black`}
       aria-label={`Switch to ${displayTheme === 'light' ? 'dark' : 'light'} mode`}
       title={`Switch to ${displayTheme === 'light' ? 'dark' : 'light'} mode`}
     >

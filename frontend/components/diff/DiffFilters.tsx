@@ -49,7 +49,7 @@ export default function DiffFilters({
         )}
       </div>
 
-      <div className="flex flex-wrap gap-2">
+      <div className="flex flex-wrap gap-1.5">
         {categories.map((category) => {
           const count = categoryCounts[category] || 0;
           const isSelected = selectedCategories.has(category);
@@ -60,7 +60,7 @@ export default function DiffFilters({
             <button
               key={category}
               onClick={() => onToggleCategory(category)}
-              className={`px-3 py-2 ${RADIUS.control} border ${TEXT.secondary} font-bold transition-all ${
+              className={`px-3 py-1.5 ${RADIUS.control} border ${TEXT.secondary} font-bold transition-all ${
                 isSelected
                   ? `bg-black dark:bg-white ${BORDERS.solid} text-white dark:text-black`
                   : `bg-white dark:bg-black ${BORDERS.medium} ${TEXT.mutedStrong} hover:${BORDERS.solid}`

@@ -43,8 +43,8 @@ export default function ComparisonHero({
     <div className={`relative ${RADIUS.control} mb-6 sm:mb-8 min-h-[400px] md:min-h-[500px] bg-white dark:bg-black border ${BORDERS.medium}`}>
 
       {/* Content */}
-      <div className="relative p-6 md:p-10">
-        <div className="flex flex-col md:flex-row md:items-stretch md:justify-between gap-6">
+      <div className="relative p-6 md:p-6 lg:p-10">
+        <div className="flex flex-col md:flex-row md:items-stretch gap-4 md:gap-6">
           {/* Book Section */}
           <div className="flex-1 flex gap-4 md:gap-5 min-w-0">
 
@@ -55,11 +55,11 @@ export default function ComparisonHero({
                   alt={`${work.title} cover`}
                   width={144}
                   height={208}
-                  className="w-28 h-40 sm:w-36 sm:h-52 object-cover rounded-lg shadow-lg"
+                  className="w-24 h-36 md:w-28 md:h-40 lg:w-36 lg:h-52 object-cover rounded-lg shadow-lg"
                 />
               </div>
             )}
-            <div className="flex-1 min-w-0 flex flex-col py-2">
+            <div className="flex-1 min-w-0 flex flex-col py-2 overflow-hidden">
               <h2 className={`${TEXT.label} ${TEXT.mutedMedium} mb-1 sm:mb-2 font-bold uppercase tracking-wider`} style={{ fontFamily: FONTS.mono, letterSpacing: '0.1em' }}>Book</h2>
               <h1 className={`text-xl sm:text-2xl md:text-3xl font-bold break-words text-black dark:text-white mb-2`} style={{ fontFamily: FONTS.mono }}>{work.title}</h1>
 
@@ -100,7 +100,7 @@ export default function ComparisonHero({
           </div>
 
           {/* VS divider - desktop */}
-          <div className="hidden md:flex items-center justify-center mx-4 flex-shrink-0 relative">
+          <div className="hidden md:flex items-center justify-center mx-1 lg:mx-4 flex-shrink-0 relative">
             <div className={`absolute inset-y-0 left-1/2 w-px ${BORDERS.subtle.replace('border-', 'bg-')}`}></div>
             <div className={`relative px-2.5 py-1 ${RADIUS.control} bg-white dark:bg-black border ${BORDERS.solid}`}>
               <span className={`${TEXT.label} font-bold ${TEXT.mutedMedium} tracking-wider uppercase`} style={{ fontFamily: FONTS.mono, letterSpacing: '0.15em' }}>VS</span>
@@ -124,11 +124,11 @@ export default function ComparisonHero({
                   alt={`${screenWork.title} poster`}
                   width={144}
                   height={208}
-                  className="w-28 h-40 sm:w-36 sm:h-52 object-cover rounded-lg shadow-lg"
+                  className="w-24 h-36 md:w-28 md:h-40 lg:w-36 lg:h-52 object-cover rounded-lg shadow-lg"
                 />
               </div>
             )}
-            <div className="flex-1 md:text-right min-w-0 flex flex-col py-2">
+            <div className="flex-1 md:text-right min-w-0 flex flex-col py-2 overflow-hidden">
               <h2 className={`${TEXT.label} ${TEXT.mutedMedium} mb-1 sm:mb-2 font-bold uppercase tracking-wider`} style={{ fontFamily: FONTS.mono, letterSpacing: '0.1em' }}>
                 {screenWork.type === 'MOVIE' ? 'Movie' : 'TV Series'}
               </h2>

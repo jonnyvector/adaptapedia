@@ -28,6 +28,7 @@ function HeaderContent(): JSX.Element {
   const desktopSearchRef = useRef<HTMLDivElement>(null);
   const mobileSearchRef = useRef<HTMLDivElement>(null);
   const justSubmittedRef = useRef(false);
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const isHomePage = pathname === '/';
   const isSearchPage = pathname === '/search';
   const isModerator = user && (user.role === 'MOD' || user.role === 'ADMIN');
@@ -80,6 +81,7 @@ function HeaderContent(): JSX.Element {
   // Close dropdown when pathname changes (navigation occurred)
   useEffect(() => {
     setShowDropdown(false);
+    setMobileMenuOpen(false);
   }, [pathname]);
 
   const handleSearch = (e: React.FormEvent) => {
@@ -119,7 +121,7 @@ function HeaderContent(): JSX.Element {
       }`}
     >
       <div className="container">
-        <div className="flex items-center justify-between py-1.5 sm:py-2 gap-2 sm:gap-3">
+        <div className="flex items-center justify-between py-1.5 sm:py-2 gap-2 sm:gap-3 min-w-0">
           {/* Logo/Home Link */}
           <Link
             href="/"
@@ -177,11 +179,11 @@ function HeaderContent(): JSX.Element {
           )}
 
           {/* Navigation & Actions */}
-          <nav className="flex items-center gap-1" style={{ alignItems: 'center' }}>
+          <nav className="hidden md:flex items-center gap-1">
             {/* Main Navigation Links */}
             <Link
               href="/browse"
-              className={`hidden sm:inline ${TEXT.label} px-2 py-1.5 ${TEXT.mutedStrong} hover:text-black hover:dark:text-white transition-colors flex items-center font-bold ${monoUppercase}`}
+              className={`${TEXT.label} px-2 py-1.5 ${TEXT.mutedStrong} hover:text-black hover:dark:text-white transition-colors flex items-center font-bold ${monoUppercase}`}
               style={{ fontFamily: FONTS.mono, letterSpacing: LETTER_SPACING.wide }}
             >
               Browse
@@ -190,7 +192,7 @@ function HeaderContent(): JSX.Element {
             {/* Catalog Link */}
             <Link
               href="/catalog"
-              className={`hidden sm:inline ${TEXT.label} px-2 py-1.5 ${TEXT.mutedStrong} hover:text-black hover:dark:text-white transition-colors flex items-center font-bold ${monoUppercase}`}
+              className={`${TEXT.label} px-2 py-1.5 ${TEXT.mutedStrong} hover:text-black hover:dark:text-white transition-colors flex items-center font-bold ${monoUppercase}`}
               style={{ fontFamily: FONTS.mono, letterSpacing: LETTER_SPACING.wide }}
             >
               Catalog
@@ -200,7 +202,7 @@ function HeaderContent(): JSX.Element {
             {isModerator && (
               <Link
                 href="/mod/queue"
-                className={`hidden sm:inline ${TEXT.label} px-2 py-1.5 ${TEXT.mutedStrong} hover:text-black hover:dark:text-white transition-colors flex items-center font-bold ${monoUppercase}`}
+                className={`${TEXT.label} px-2 py-1.5 ${TEXT.mutedStrong} hover:text-black hover:dark:text-white transition-colors flex items-center font-bold ${monoUppercase}`}
                 style={{ fontFamily: FONTS.mono, letterSpacing: LETTER_SPACING.wide }}
                 title="Moderation Queue"
               >
@@ -211,64 +213,90 @@ function HeaderContent(): JSX.Element {
             {/* About Link */}
             <Link
               href="/about"
-              className={`hidden sm:inline ${TEXT.label} px-2 py-1.5 ${TEXT.mutedStrong} hover:text-black hover:dark:text-white transition-colors flex items-center font-bold ${monoUppercase}`}
+              className={`${TEXT.label} px-2 py-1.5 ${TEXT.mutedStrong} hover:text-black hover:dark:text-white transition-colors flex items-center font-bold ${monoUppercase}`}
               style={{ fontFamily: FONTS.mono, letterSpacing: LETTER_SPACING.wide }}
             >
               About
             </Link>
 
             {/* Auth Section */}
-            {!mounted ? (
-              <div className="w-16 h-10" />
-            ) : isAuthenticated && user ? (
-              <>
-                {/* Bookmarks Icon (Desktop only) */}
-                <Link
-                  href={`/u/${user.username}/bookmarks`}
-                  className="icon-btn hidden md:flex"
-                  title="My Bookmarks"
-                  aria-label="My Bookmarks"
-                >
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    fill="none"
-                    viewBox="0 0 24 24"
-                    strokeWidth="1.5"
-                    stroke="currentColor"
-                    className="icon-md"
+            <div className="flex items-center gap-1">
+              {!mounted ? (
+                <div className="w-16 h-10" />
+              ) : isAuthenticated && user ? (
+                <>
+                  {/* Bookmarks Icon (Desktop only) */}
+                  <Link
+                    href={`/u/${user.username}/bookmarks`}
+                    className="icon-btn hidden md:flex"
+                    title="My Bookmarks"
+                    aria-label="My Bookmarks"
                   >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      d="M17.593 3.322c1.1.128 1.907 1.077 1.907 2.185V21L12 17.25 4.5 21V5.507c0-1.108.806-2.057 1.907-2.185a48.507 48.507 0 0111.186 0z"
-                    />
-                  </svg>
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      fill="none"
+                      viewBox="0 0 24 24"
+                      strokeWidth="1.5"
+                      stroke="currentColor"
+                      className="icon-md"
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        d="M17.593 3.322c1.1.128 1.907 1.077 1.907 2.185V21L12 17.25 4.5 21V5.507c0-1.108.806-2.057 1.907-2.185a48.507 48.507 0 0111.186 0z"
+                      />
+                    </svg>
+                  </Link>
+
+                  {/* Notifications */}
+                  <NotificationBell />
+
+                  {/* User Dropdown */}
+                  <UserDropdown user={user} />
+                </>
+              ) : (
+                <Link
+                  href="/auth/login"
+                  className={`px-3 py-1.5 border ${BORDERS.solid} bg-black dark:bg-white text-white dark:text-black hover:bg-white hover:dark:bg-black hover:text-black hover:dark:text-white font-bold transition-all ${TEXT.label} rounded-md ${monoUppercase} flex items-center`}
+                  style={{ fontFamily: FONTS.mono, letterSpacing: LETTER_SPACING.tight }}
+                >
+                  Login
                 </Link>
+              )}
 
-                {/* Notifications */}
-                <NotificationBell />
-
-                {/* User Dropdown */}
-                <UserDropdown user={user} />
-              </>
-            ) : (
-              <Link
-                href="/auth/login"
-                className={`px-2.5 py-1 sm:px-3 sm:py-1.5 border ${BORDERS.solid} bg-black dark:bg-white text-white dark:text-black hover:bg-white hover:dark:bg-black hover:text-black hover:dark:text-white font-bold transition-all ${TEXT.label} rounded-md ${monoUppercase} flex items-center`}
-                style={{ fontFamily: FONTS.mono, letterSpacing: LETTER_SPACING.tight }}
-              >
-                Login
-              </Link>
-            )}
-
-            {/* Theme Toggle */}
-            <ThemeToggle />
+              {/* Theme Toggle */}
+              <ThemeToggle />
+            </div>
           </nav>
+
+          {/* Mobile-only: Theme toggle and hamburger menu */}
+          <div className="md:hidden flex items-center gap-1">
+            <ThemeToggle />
+            <button
+              onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+              className={`p-2 ${TEXT.primary} hover:text-black hover:dark:text-white transition-colors`}
+              aria-label="Menu"
+              aria-expanded={mobileMenuOpen}
+            >
+              <svg
+                className="w-6 h-6"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                {mobileMenuOpen ? (
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                ) : (
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
+                )}
+              </svg>
+            </button>
+          </div>
         </div>
 
         {/* Mobile Search Bar - Show on non-home/search pages */}
         {!isHomePage && !isSearchPage && (
-          <div className="md:hidden pb-2 relative" ref={mobileSearchRef}>
+          <div className="md:hidden pb-3 -mt-1 relative" ref={mobileSearchRef}>
             <form onSubmit={handleSearch} className="w-full">
               <input
                 type="search"
@@ -294,6 +322,105 @@ function HeaderContent(): JSX.Element {
           </div>
         )}
       </div>
+
+      {/* Mobile Menu Overlay */}
+      {mobileMenuOpen && (
+        <div className="md:hidden fixed inset-0 top-[57px] bg-white dark:bg-black z-50 border-t border-black dark:border-white">
+          <div className="flex flex-col h-full">
+            {/* Auth Section at Top */}
+            {mounted && (
+              <div className="border-b border-black dark:border-white px-4 py-2.5">
+                {isAuthenticated && user ? (
+                  <div className="flex items-center justify-between gap-3">
+                    <Link
+                      href={`/u/${user.username}`}
+                      className={`text-xs font-bold ${TEXT.primary} ${monoUppercase} hover:underline`}
+                      style={{ fontFamily: FONTS.mono, letterSpacing: LETTER_SPACING.wider }}
+                    >
+                      {user.username}
+                    </Link>
+                    <NotificationBell />
+                  </div>
+                ) : (
+                  <Link
+                    href="/auth/login"
+                    className={`block text-center px-4 py-2 border ${BORDERS.solid} bg-black dark:bg-white text-white dark:text-black hover:bg-white hover:dark:bg-black hover:text-black hover:dark:text-white font-bold transition-all text-xs rounded-md ${monoUppercase}`}
+                    style={{ fontFamily: FONTS.mono, letterSpacing: LETTER_SPACING.tight }}
+                  >
+                    Login
+                  </Link>
+                )}
+              </div>
+            )}
+
+            {/* Navigation Links */}
+            <nav className="flex flex-col p-4 gap-2">
+              <Link
+                href="/browse"
+                className={`${TEXT.body} px-4 py-3 ${TEXT.primary} hover:bg-stone-100 hover:dark:bg-stone-900 transition-colors font-bold ${monoUppercase} border ${BORDERS.medium}`}
+                style={{ fontFamily: FONTS.mono, letterSpacing: LETTER_SPACING.wide }}
+              >
+                Browse
+              </Link>
+              <Link
+                href="/catalog"
+                className={`${TEXT.body} px-4 py-3 ${TEXT.primary} hover:bg-stone-100 hover:dark:bg-stone-900 transition-colors font-bold ${monoUppercase} border ${BORDERS.medium}`}
+                style={{ fontFamily: FONTS.mono, letterSpacing: LETTER_SPACING.wide }}
+              >
+                Catalog
+              </Link>
+              {isModerator && (
+                <Link
+                  href="/mod/queue"
+                  className={`${TEXT.body} px-4 py-3 ${TEXT.primary} hover:bg-stone-100 hover:dark:bg-stone-900 transition-colors font-bold ${monoUppercase} border ${BORDERS.medium}`}
+                  style={{ fontFamily: FONTS.mono, letterSpacing: LETTER_SPACING.wide }}
+                >
+                  Mod Queue
+                </Link>
+              )}
+              <Link
+                href="/about"
+                className={`${TEXT.body} px-4 py-3 ${TEXT.primary} hover:bg-stone-100 hover:dark:bg-stone-900 transition-colors font-bold ${monoUppercase} border ${BORDERS.medium}`}
+                style={{ fontFamily: FONTS.mono, letterSpacing: LETTER_SPACING.wide }}
+              >
+                About
+              </Link>
+              {isAuthenticated && user && (
+                <>
+                  <Link
+                    href={`/u/${user.username}/bookmarks`}
+                    className={`${TEXT.body} px-4 py-3 ${TEXT.primary} hover:bg-stone-100 hover:dark:bg-stone-900 transition-colors font-bold ${monoUppercase} border ${BORDERS.medium}`}
+                    style={{ fontFamily: FONTS.mono, letterSpacing: LETTER_SPACING.wide }}
+                  >
+                    My Bookmarks
+                  </Link>
+                  <Link
+                    href={`/u/${user.username}`}
+                    className={`${TEXT.body} px-4 py-3 ${TEXT.primary} hover:bg-stone-100 hover:dark:bg-stone-900 transition-colors font-bold ${monoUppercase} border ${BORDERS.medium}`}
+                    style={{ fontFamily: FONTS.mono, letterSpacing: LETTER_SPACING.wide }}
+                  >
+                    My Profile
+                  </Link>
+                  <button
+                    onClick={async () => {
+                      try {
+                        await api.auth.logout();
+                        window.location.href = '/';
+                      } catch (error) {
+                        console.error('Logout failed:', error);
+                      }
+                    }}
+                    className={`${TEXT.body} px-4 py-3 text-left bg-black dark:bg-white text-white dark:text-black hover:bg-black/80 hover:dark:bg-white/80 transition-colors font-bold ${monoUppercase} border ${BORDERS.solid}`}
+                    style={{ fontFamily: FONTS.mono, letterSpacing: LETTER_SPACING.wide }}
+                  >
+                    Logout
+                  </button>
+                </>
+              )}
+            </nav>
+          </div>
+        </div>
+      )}
     </header>
   );
 }

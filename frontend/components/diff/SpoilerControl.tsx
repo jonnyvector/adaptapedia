@@ -91,7 +91,7 @@ export default function SpoilerControl({
 
   return (
     <div className="sticky top-0 z-10 bg-white dark:bg-black border-b border-black/20 dark:border-white/20 mb-4 sm:mb-6 mt-6 sm:mt-8">
-      <div className="container py-2 sm:py-3">
+      <div className="py-2 sm:py-3 sm:container">
         {/* Segmented Control */}
         <div className="flex flex-col sm:flex-row sm:items-center gap-2 sm:gap-3 mb-1 sm:mb-2">
           {/* Label - Hidden on mobile */}
@@ -111,7 +111,7 @@ export default function SpoilerControl({
                   key={pref.value}
                   onClick={() => onPreferenceChange(pref.value)}
                   className={`
-                    relative flex-1 sm:flex-initial px-2 sm:px-4 py-1 sm:py-1.5 rounded-md ${TEXT.label} font-bold
+                    relative flex-1 sm:flex-initial px-2 sm:px-4 py-3 rounded-md ${TEXT.label} font-bold
                     transition-all
                     flex items-center justify-center gap-0.5 sm:gap-1.5 whitespace-nowrap border
                     ${
@@ -149,21 +149,18 @@ export default function SpoilerControl({
 
         {/* Compact stats line */}
         {(consensusAccuracy !== undefined || topCategories.length > 0) && (
-          <div className={`${TEXT.metadata} ${TEXT.mutedLight} flex flex-wrap items-center gap-1 leading-none text-center sm:text-left`} style={{ fontFamily: FONTS.mono, letterSpacing: LETTER_SPACING.normal }}>
+          <div className={`${TEXT.metadata} ${TEXT.mutedLight} text-center sm:text-left px-4 sm:px-0 leading-tight`} style={{ fontFamily: FONTS.mono, letterSpacing: LETTER_SPACING.normal }}>
             {consensusAccuracy !== undefined && consensusAccuracy > 0 && (
-              <>
-                <span>{Math.round(consensusAccuracy)}% accurate</span>
-              </>
+              <>{Math.round(consensusAccuracy)}% accurate</>
             )}
             {topCategories.length > 0 && (
               <>
-                {consensusAccuracy !== undefined && consensusAccuracy > 0 && (
-                  <span className="hidden sm:inline">·</span>
-                )}
-                <span className="hidden sm:inline">Top:</span>
+                {consensusAccuracy !== undefined && consensusAccuracy > 0 && <> · </>}
+                <span className="hidden sm:inline">Top: </span>
+                <span className="sm:hidden">Most common: </span>
                 {topCategories.slice(0, 2).map((cat, index) => (
                   <span key={cat.category}>
-                    {index > 0 && <span>,</span>} {cat.category} ({cat.count})
+                    {index > 0 && <>, </>}{cat.category} ({cat.count})
                   </span>
                 ))}
               </>

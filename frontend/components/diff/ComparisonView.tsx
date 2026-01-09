@@ -58,6 +58,9 @@ export default function ComparisonView({
   // Track which diffs have expanded comments (persists across spoiler changes)
   const [expandedComments, setExpandedComments] = useState<Set<number>>(new Set());
 
+  // Track which masked diffs have been individually revealed
+  const [revealedDiffs, setRevealedDiffs] = useState<Set<number>>(new Set());
+
   // Track which categories are expanded
   const [expandedCategories, setExpandedCategories] = useState<Set<string>>(new Set(['PLOT', 'CHARACTER', 'ENDING', 'SETTING', 'THEME', 'TONE', 'TIMELINE', 'WORLDBUILDING', 'OTHER']));
 
@@ -78,6 +81,11 @@ export default function ComparisonView({
   const { visible: visibleDiffs, masked: maskedDiffs } = useMemo(() => {
     return filterDiffsByPreference(diffs, spoilerPreference);
   }, [diffs, spoilerPreference]);
+
+  // Calculate actual hidden count (excluding revealed diffs)
+  const hiddenCount = useMemo(() => {
+    return maskedDiffs.filter(diff => !revealedDiffs.has(diff.id)).length;
+  }, [maskedDiffs, revealedDiffs]);
 
   // Get the current spoiler scope for the API (for the DiffItemCard)
   const currentSpoilerScope = useMemo(() => {
@@ -267,7 +275,7 @@ export default function ComparisonView({
   }, [diffs]);
 
   return (
-    <div className="container">
+    <div className="container pb-8 sm:pb-12">
       {/* Matchup Scoreboard */}
       <MatchupScoreboard
         work={work}
@@ -291,48 +299,10 @@ export default function ComparisonView({
         currentPreference={spoilerPreference}
         onPreferenceChange={setSpoilerPreference}
         visibleCount={visibleDiffs.length}
-        hiddenCount={maskedDiffs.length}
+        hiddenCount={hiddenCount}
         consensusAccuracy={consensusAccuracy}
         topCategories={topCategories}
       />
-
-      {/* Stats Line */}
-      {visibleDiffs.length > 0 && (
-        <div className={`mb-4 px-4 py-2 bg-stone-50 dark:bg-stone-950 border ${BORDERS.medium} ${RADIUS.control}`}>
-          <div className={`flex flex-wrap items-center gap-x-4 gap-y-2 ${TEXT.secondary} ${TEXT.mutedMedium} font-bold`} style={{ fontFamily: FONTS.mono }}>
-            <span className="text-black dark:text-white">
-              {visibleDiffs.length} {visibleDiffs.length === 1 ? 'diff' : 'diffs'} shown
-            </span>
-            {consensusAccuracy > 0 && (
-              <>
-                <span>·</span>
-                <span>
-                  <span className="text-black dark:text-white">{Math.round(consensusAccuracy)}%</span> accurate
-                </span>
-              </>
-            )}
-            {topCategories.length > 0 && (
-              <>
-                <span>·</span>
-                <span className="flex items-center gap-1.5 flex-wrap">
-                  <span>Most common:</span>
-                  {topCategories.map((cat, idx) => (
-                    <span key={cat.category}>
-                      <button
-                        onClick={() => handleToggleCategory(cat.category.toUpperCase() as DiffCategory)}
-                        className="font-bold text-black dark:text-white hover:opacity-70 hover:underline"
-                      >
-                        {cat.category}
-                      </button>
-                      {idx < topCategories.length - 1 && ', '}
-                    </span>
-                  ))}
-                </span>
-              </>
-            )}
-          </div>
-        </div>
-      )}
 
       {/* Filter Bar - only show when there are diffs */}
       {diffs.length > 0 && (
@@ -458,16 +428,18 @@ export default function ComparisonView({
           {/* Masked Diffs - Show these after visible diffs */}
           {maskedDiffs.length > 0 && (
             <div className={`border-t ${BORDERS.medium} pt-6 sm:pt-8`}>
-              <div className={`mb-4 p-3 sm:p-4 bg-stone-50 dark:bg-stone-950 border ${BORDERS.medium}`}>
-                <h2 className={`text-base sm:text-lg font-bold text-black dark:text-white mb-2 flex items-center gap-2`} style={{ fontFamily: FONTS.mono }}>
-                  <LockClosedIcon className="w-6 h-6" aria-hidden="true" />
-                  {maskedDiffs.length} Hidden Difference{maskedDiffs.length !== 1 ? 's' : ''}
-                </h2>
-                <p className={`${TEXT.body} text-black dark:text-white`} style={{ fontFamily: FONTS.mono }}>
-                  The following differences contain spoilers beyond your current setting.
-                  Increase your spoiler level above to reveal them, or click individual reveal buttons.
-                </p>
-              </div>
+              {hiddenCount > 0 && (
+                <div className={`mb-4 p-3 sm:p-4 bg-stone-50 dark:bg-stone-950 border ${BORDERS.medium}`}>
+                  <h2 className={`text-base sm:text-lg font-bold text-black dark:text-white mb-2 flex items-center gap-2`} style={{ fontFamily: FONTS.mono }}>
+                    <LockClosedIcon className="w-6 h-6" aria-hidden="true" />
+                    {hiddenCount} Hidden Difference{hiddenCount !== 1 ? 's' : ''}
+                  </h2>
+                  <p className={`${TEXT.body} text-black dark:text-white`} style={{ fontFamily: FONTS.mono }}>
+                    The following differences contain spoilers beyond your current setting.
+                    Increase your spoiler level above to reveal them, or click individual reveal buttons.
+                  </p>
+                </div>
+              )}
 
               {Object.entries(maskedDiffsByCategory).map(([category, categoryDiffs]) => (
                 <div key={category} className="border-b border-border pb-4 sm:pb-6 last:border-0 mb-6">
@@ -476,7 +448,16 @@ export default function ComparisonView({
                   </h3>
                   <div className="space-y-3 sm:space-y-4">
                     {categoryDiffs.map((diff) => (
-                      <MaskedDiffCard key={diff.id} diff={diff} userSpoilerScope={currentSpoilerScope} />
+                      <MaskedDiffCard
+                        key={diff.id}
+                        diff={diff}
+                        userSpoilerScope={currentSpoilerScope}
+                        onReveal={() => setRevealedDiffs(prev => {
+                          const next = new Set(prev);
+                          next.add(diff.id);
+                          return next;
+                        })}
+                      />
                     ))}
                   </div>
                 </div>
@@ -500,10 +481,10 @@ export default function ComparisonView({
               {visibleDiffs.length !== 1 ? 's' : ''}
             </>
           )}
-          {maskedDiffs.length > 0 && (
+          {hiddenCount > 0 && (
             <>
               {' '}
-              + <span className="text-black dark:text-white">{maskedDiffs.length}</span> hidden
+              + <span className="text-black dark:text-white">{hiddenCount}</span> hidden
             </>
           )}
         </div>
