@@ -44,7 +44,7 @@ async function getCatalogData(
     const res = await fetch(
       `${API_URL}/works/catalog/?${params}`,
       {
-        next: { revalidate: 3600 }, // Cache for 1 hour
+        next: { revalidate: 60 }, // Cache for 1 minute
       }
     );
 

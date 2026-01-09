@@ -4,7 +4,7 @@
     "builder": "NIXPACKS"
   },
   "deploy": {
-    "startCommand": "python manage.py migrate && python manage.py update_site_domain && gunicorn adaptapedia.wsgi:application --bind 0.0.0.0:$PORT",
+    "startCommand": "python manage.py migrate && python manage.py update_site_domain && python manage.py clear_browse_cache && gunicorn adaptapedia.wsgi:application --bind 0.0.0.0:$PORT",
     "restartPolicyType": "ON_FAILURE",
     "restartPolicyMaxRetries": 10
   }

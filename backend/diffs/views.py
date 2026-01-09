@@ -277,8 +277,8 @@ class DiffItemViewSet(viewsets.ModelViewSet):
             'all_comparisons': DiffService.get_all_comparisons(limit=50),
         }
 
-        # Cache for 15 minutes (900 seconds)
-        cache.set(cache_key, data, 900)
+        # Cache for 5 minutes (300 seconds)
+        cache.set(cache_key, data, 300)
 
         return Response(data)
 
@@ -309,8 +309,8 @@ class DiffItemViewSet(viewsets.ModelViewSet):
         # Get needs help data
         data = DiffService.get_needs_help(limit=limit)
 
-        # Cache for 15 minutes (900 seconds)
-        cache.set(cache_key, data, 900)
+        # Cache for 5 minutes (300 seconds)
+        cache.set(cache_key, data, 300)
 
         return Response(data)
 
