@@ -2,6 +2,8 @@ import Link from 'next/link';
 import Image from 'next/image';
 import type { BrowseComparison, TrendingComparison } from '@/lib/types';
 import { FONTS, LETTER_SPACING, BORDERS, TEXT, monoUppercase } from '@/lib/brutalist-design';
+import { cardVariants } from '@/components/ui/Card';
+import { cn } from '@/lib/utils';
 
 interface ComparisonCardProps {
   comparison: BrowseComparison | TrendingComparison;
@@ -34,7 +36,10 @@ export default function ComparisonCard({ comparison, showTrendingBadge = false }
   return (
     <Link
       href={comparisonUrl}
-      className={`group block border ${BORDERS.medium} overflow-hidden hover:border-black hover:dark:border-white transition-all duration-200 bg-stone-50 dark:bg-stone-950`}
+      className={cn(
+        cardVariants({ variant: 'subtle', padding: 'none', interactive: true }),
+        'group block overflow-hidden'
+      )}
     >
       {/* Visual: Book Cover ↔ Movie Poster */}
       <div className="relative flex h-56 sm:h-48 bg-stone-50 dark:bg-stone-950">
