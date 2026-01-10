@@ -177,66 +177,15 @@ class WorkViewSet(viewsets.ReadOnlyModelViewSet):
 
         Returns all books with adaptation counts and cover URLs.
         """
-        from screen.models import AdaptationEdge
+        from .services import WorkService
 
         # Get query params
         sort_by = request.query_params.get('sort', 'title')
         order = request.query_params.get('order', 'asc')
         filter_type = request.query_params.get('filter', 'all')
 
-        # Base queryset
-        queryset = Work.objects.all()
-
-        # Apply filters
-        if filter_type == 'with-covers':
-            queryset = queryset.exclude(cover_url__isnull=True).exclude(cover_url='')
-        elif filter_type == 'without-covers':
-            queryset = queryset.filter(cover_url__isnull=True) | queryset.filter(cover_url='')
-
-        # Annotate with adaptation count
-        queryset = queryset.annotate(
-            adaptation_count=Count('adaptations')
-        )
-
-        # Apply sorting
-        sort_field = {
-            'title': 'title',
-            'year': 'year',
-            'adaptations': 'adaptation_count',
-        }.get(sort_by, 'title')
-
-        if order == 'desc':
-            sort_field = f'-{sort_field}'
-
-        queryset = queryset.order_by(sort_field)
-
-        # Build response with adaptation details
-        results = []
-        for work in queryset:
-            # Get adaptations for this work
-            adaptations = AdaptationEdge.objects.filter(
-                work=work
-            ).select_related('screen_work').order_by('screen_work__year')
-
-            adaptation_list = [{
-                'id': edge.screen_work.id,
-                'title': edge.screen_work.title,
-                'year': edge.screen_work.year,
-                'type': edge.screen_work.type,
-                'slug': edge.screen_work.slug,
-                'poster_url': edge.screen_work.poster_url,
-            } for edge in adaptations]
-
-            results.append({
-                'id': work.id,
-                'title': work.title,
-                'author': work.author,
-                'year': work.year,
-                'slug': work.slug,
-                'cover_url': work.cover_url,
-                'adaptation_count': len(adaptation_list),
-                'adaptations': adaptation_list,
-            })
+        # Get catalog data from service (handles all business logic and query optimization)
+        results = WorkService.get_catalog(sort_by, order, filter_type)
 
         return Response({
             'count': len(results),
