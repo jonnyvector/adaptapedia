@@ -68,6 +68,10 @@ class DiffItem(models.Model):
             models.Index(fields=['category']),
             models.Index(fields=['status']),
             models.Index(fields=['spoiler_scope']),
+            models.Index(fields=['updated_at']),  # For recently_updated queries
+            models.Index(fields=['created_at']),  # For ordering
+            models.Index(fields=['status', 'updated_at']),  # Composite for filtered sorts
+            models.Index(fields=['status', 'work', 'screen_work']),  # For comparison queries
         ]
 
     def __str__(self) -> str:
@@ -108,6 +112,7 @@ class DiffVote(models.Model):
         unique_together = [['diff_item', 'user']]
         indexes = [
             models.Index(fields=['diff_item', 'vote']),
+            models.Index(fields=['created_at']),  # For trending queries with date filters
         ]
 
     def __str__(self) -> str:
@@ -139,6 +144,10 @@ class DiffComment(models.Model):
         """Meta options for DiffComment model."""
 
         ordering = ['created_at']
+        indexes = [
+            models.Index(fields=['diff_item', 'status']),  # For filtering live comments
+            models.Index(fields=['user', '-created_at']),  # For user comment history
+        ]
 
     def __str__(self) -> str:
         """String representation of DiffComment."""
@@ -183,6 +192,7 @@ class ComparisonVote(models.Model):
         indexes = [
             models.Index(fields=['work', 'screen_work']),
             models.Index(fields=['preference']),
+            models.Index(fields=['user', '-created_at']),  # For user voting history
         ]
 
     def __str__(self) -> str:

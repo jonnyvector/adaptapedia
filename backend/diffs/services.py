@@ -1,10 +1,24 @@
 """Business logic services for diffs app."""
-from typing import Optional, Dict, Any
+from typing import Optional, Dict, Any, List
 from datetime import timedelta
 from django.contrib.auth import get_user_model
 from django.utils import timezone
 from django.db.models import Count, Q, F, FloatField, ExpressionWrapper, Max, Case, When, IntegerField
 from .models import DiffItem, DiffVote, DiffComment
+from .constants import (
+    CURATED_WORK_IDS,
+    SPOILER_SCOPE_ORDER,
+    TRENDING_LOOKBACK_DAYS,
+    TRENDING_MAX_PER_WORK,
+    TRENDING_DIFF_WEIGHT,
+    TRENDING_VOTE_WEIGHT,
+    FEATURED_DIFF_WEIGHT,
+    FEATURED_VOTE_WEIGHT,
+    MIN_VOTES_FOR_DISPUTE,
+    DISPUTE_ACCURACY_MIN,
+    DISPUTE_ACCURACY_MAX,
+    RECENTLY_UPDATED_HOURS,
+)
 
 User = get_user_model()
 
@@ -13,25 +27,92 @@ class DiffService:
     """Service class for Diff-related business logic."""
 
     @staticmethod
-    def _get_comparison_votes(work_ids: list[int], screen_work_ids: list[int]) -> dict:
+    def _get_comparison_votes(work_ids: list[int], screen_work_ids: list[int]) -> Dict[tuple[int, int], int]:
         """
         Get comparison vote counts for multiple work/screen work pairs.
 
+        Single query with GROUP BY - replaced N*M query loop.
         Returns dict with (work_id, screen_work_id) tuples as keys and vote counts as values.
         """
         from diffs.models import ComparisonVote
 
-        comparison_votes = {}
-        for work_id in set(work_ids):
-            for screen_work_id in set(screen_work_ids):
-                count = ComparisonVote.objects.filter(
-                    work_id=work_id,
-                    screen_work_id=screen_work_id
-                ).count()
-                if count > 0:  # Only store non-zero counts
-                    comparison_votes[(work_id, screen_work_id)] = count
+        # Single query with GROUP BY - much more efficient than nested loops
+        votes = ComparisonVote.objects.filter(
+            work_id__in=work_ids,
+            screen_work_id__in=screen_work_ids
+        ).values('work_id', 'screen_work_id').annotate(
+            count=Count('id')
+        )
+
+        # Build dict from results
+        comparison_votes = {
+            (vote['work_id'], vote['screen_work_id']): vote['count']
+            for vote in votes
+        }
 
         return comparison_votes
+
+    @staticmethod
+    def _bulk_fetch_works_and_screens(
+        work_ids: List[int], screen_work_ids: List[int]
+    ) -> tuple[Dict[int, Any], Dict[int, Any]]:
+        """
+        Bulk fetch works and screen works by IDs to avoid N+1 queries.
+
+        Returns:
+            Tuple of (works_dict, screen_works_dict) where keys are IDs.
+        """
+        from works.models import Work
+        from screen.models import ScreenWork
+
+        works = {w.id: w for w in Work.objects.filter(id__in=work_ids)}
+        screen_works = {s.id: s for s in ScreenWork.objects.filter(id__in=screen_work_ids)}
+
+        return works, screen_works
+
+    @staticmethod
+    def _build_comparison_dict(
+        work: Any,
+        screen_work: Any,
+        diff_count: int = 0,
+        vote_count: int = 0,
+        comparison_vote_count: int = 0,
+        **extra_fields
+    ) -> Dict[str, Any]:
+        """
+        Build a standardized comparison dictionary for API responses.
+
+        Args:
+            work: Work model instance
+            screen_work: ScreenWork model instance
+            diff_count: Number of diffs for this comparison
+            vote_count: Number of diff votes for this comparison
+            comparison_vote_count: Number of comparison votes
+            **extra_fields: Additional fields to include (activity_score, last_updated, etc.)
+
+        Returns:
+            Dictionary with standardized comparison fields
+        """
+        result = {
+            'work_id': work.id,
+            'work_title': work.title,
+            'work_slug': work.slug,
+            'work_author': work.author,
+            'work_year': work.year,
+            'cover_url': work.cover_url,
+            'screen_work_id': screen_work.id,
+            'screen_work_title': screen_work.title,
+            'screen_work_slug': screen_work.slug,
+            'screen_work_type': screen_work.get_type_display(),
+            'screen_work_year': screen_work.year,
+            'poster_url': screen_work.poster_url,
+            'diff_count': diff_count,
+            'vote_count': vote_count,
+            'comparison_vote_count': comparison_vote_count,
+        }
+        # Add any extra fields
+        result.update(extra_fields)
+        return result
 
     @staticmethod
     def create_diff(
@@ -105,7 +186,7 @@ class DiffService:
         return list(queryset)
 
     @staticmethod
-    def get_trending_comparisons(limit: int = 8, days: int = 7) -> list[dict]:
+    def get_trending_comparisons(limit: int = 8, days: int = 7) -> List[Dict[str, Any]]:
         """
         Get trending comparisons based on recent activity.
 
@@ -201,8 +282,9 @@ class DiffService:
                 break
 
         # Bulk fetch all needed works and screen works to avoid N+1 queries
-        works = {w.id: w for w in Work.objects.filter(id__in=work_ids_to_fetch)}
-        screen_works = {s.id: s for s in ScreenWork.objects.filter(id__in=screen_work_ids_to_fetch)}
+        works, screen_works = DiffService._bulk_fetch_works_and_screens(
+            list(work_ids_to_fetch), list(screen_work_ids_to_fetch)
+        )
 
         # Get comparison vote counts
         comparison_votes = DiffService._get_comparison_votes(list(work_ids_to_fetch), list(screen_work_ids_to_fetch))
@@ -213,29 +295,23 @@ class DiffService:
             work = works[comparison['work_id']]
             screen_work = screen_works[comparison['screen_work_id']]
 
-            results.append({
-                'work_id': work.id,
-                'work_title': work.title,
-                'work_slug': work.slug,
-                'work_year': work.year,
-                'cover_url': work.cover_url,
-                'screen_work_id': screen_work.id,
-                'screen_work_title': screen_work.title,
-                'screen_work_slug': screen_work.slug,
-                'screen_work_type': screen_work.get_type_display(),
-                'screen_work_year': screen_work.year,
-                'poster_url': screen_work.poster_url,
-                'total_diffs': comparison['total_diffs'],
-                'recent_diffs': comparison['recent_diffs'],
-                'recent_votes': comparison['recent_votes'],
-                'activity_score': float(comparison['activity_score']),
-                'comparison_vote_count': comparison_votes.get((work.id, screen_work.id), 0),
-            })
+            results.append(DiffService._build_comparison_dict(
+                work=work,
+                screen_work=screen_work,
+                diff_count=comparison['total_diffs'],
+                vote_count=0,  # Not tracked for trending
+                comparison_vote_count=comparison_votes.get((work.id, screen_work.id), 0),
+                # Extra fields specific to trending
+                total_diffs=comparison['total_diffs'],
+                recent_diffs=comparison['recent_diffs'],
+                recent_votes=comparison['recent_votes'],
+                activity_score=float(comparison['activity_score']),
+            ))
 
         return results
 
     @staticmethod
-    def get_featured_comparisons(limit: int = 12) -> list[dict]:
+    def get_featured_comparisons(limit: int = 12) -> List[Dict[str, Any]]:
         """
         Get featured comparisons with highest overall engagement.
 
@@ -278,8 +354,7 @@ class DiffService:
         # Bulk fetch works and screen works
         work_ids = [c['work_id'] for c in comparisons]
         screen_work_ids = [c['screen_work_id'] for c in comparisons]
-        works = {w.id: w for w in Work.objects.filter(id__in=work_ids)}
-        screen_works = {s.id: s for s in ScreenWork.objects.filter(id__in=screen_work_ids)}
+        works, screen_works = DiffService._bulk_fetch_works_and_screens(work_ids, screen_work_ids)
 
         # Get comparison vote counts for each comparison
         comparison_votes = DiffService._get_comparison_votes(work_ids, screen_work_ids)
@@ -289,28 +364,18 @@ class DiffService:
             work = works[comparison['work_id']]
             screen_work = screen_works[comparison['screen_work_id']]
 
-            results.append({
-                'work_id': work.id,
-                'work_title': work.title,
-                'work_slug': work.slug,
-                'work_author': work.author,
-                'work_year': work.year,
-                'cover_url': work.cover_url,
-                'screen_work_id': screen_work.id,
-                'screen_work_title': screen_work.title,
-                'screen_work_slug': screen_work.slug,
-                'screen_work_type': screen_work.get_type_display(),
-                'screen_work_year': screen_work.year,
-                'poster_url': screen_work.poster_url,
-                'diff_count': comparison['total_diffs'],
-                'vote_count': comparison['total_votes'],
-                'comparison_vote_count': comparison_votes.get((work.id, screen_work.id), 0),
-            })
+            results.append(DiffService._build_comparison_dict(
+                work=work,
+                screen_work=screen_work,
+                diff_count=comparison['total_diffs'],
+                vote_count=comparison['total_votes'],
+                comparison_vote_count=comparison_votes.get((work.id, screen_work.id), 0),
+            ))
 
         return results
 
     @staticmethod
-    def get_recently_updated(limit: int = 12) -> list[dict]:
+    def get_recently_updated(limit: int = 12) -> List[Dict[str, Any]]:
         """
         Get comparisons with recent activity (last 48 hours).
         """
@@ -333,8 +398,7 @@ class DiffService:
         # Bulk fetch
         work_ids = [c['work_id'] for c in comparisons]
         screen_work_ids = [c['screen_work_id'] for c in comparisons]
-        works = {w.id: w for w in Work.objects.filter(id__in=work_ids)}
-        screen_works = {s.id: s for s in ScreenWork.objects.filter(id__in=screen_work_ids)}
+        works, screen_works = DiffService._bulk_fetch_works_and_screens(work_ids, screen_work_ids)
 
         # Get comparison vote counts
         comparison_votes = DiffService._get_comparison_votes(work_ids, screen_work_ids)
@@ -344,29 +408,19 @@ class DiffService:
             work = works[comparison['work_id']]
             screen_work = screen_works[comparison['screen_work_id']]
 
-            results.append({
-                'work_id': work.id,
-                'work_title': work.title,
-                'work_slug': work.slug,
-                'work_author': work.author,
-                'work_year': work.year,
-                'cover_url': work.cover_url,
-                'screen_work_id': screen_work.id,
-                'screen_work_title': screen_work.title,
-                'screen_work_slug': screen_work.slug,
-                'screen_work_type': screen_work.get_type_display(),
-                'screen_work_year': screen_work.year,
-                'poster_url': screen_work.poster_url,
-                'diff_count': comparison['total_diffs'],
-                'vote_count': comparison['total_votes'],
-                'comparison_vote_count': comparison_votes.get((work.id, screen_work.id), 0),
-                'last_updated': comparison['last_updated'],
-            })
+            results.append(DiffService._build_comparison_dict(
+                work=work,
+                screen_work=screen_work,
+                diff_count=comparison['total_diffs'],
+                vote_count=comparison['total_votes'],
+                comparison_vote_count=comparison_votes.get((work.id, screen_work.id), 0),
+                last_updated=comparison['last_updated'],
+            ))
 
         return results
 
     @staticmethod
-    def get_most_documented(limit: int = 12) -> list[dict]:
+    def get_most_documented(limit: int = 12) -> List[Dict[str, Any]]:
         """
         Get comparisons with the most diffs documented.
         """
@@ -387,8 +441,7 @@ class DiffService:
         # Bulk fetch
         work_ids = [c['work_id'] for c in comparisons]
         screen_work_ids = [c['screen_work_id'] for c in comparisons]
-        works = {w.id: w for w in Work.objects.filter(id__in=work_ids)}
-        screen_works = {s.id: s for s in ScreenWork.objects.filter(id__in=screen_work_ids)}
+        works, screen_works = DiffService._bulk_fetch_works_and_screens(work_ids, screen_work_ids)
 
         # Get comparison vote counts
         comparison_votes = DiffService._get_comparison_votes(work_ids, screen_work_ids)
@@ -398,23 +451,13 @@ class DiffService:
             work = works[comparison['work_id']]
             screen_work = screen_works[comparison['screen_work_id']]
 
-            results.append({
-                'work_id': work.id,
-                'work_title': work.title,
-                'work_slug': work.slug,
-                'work_author': work.author,
-                'work_year': work.year,
-                'cover_url': work.cover_url,
-                'screen_work_id': screen_work.id,
-                'screen_work_title': screen_work.title,
-                'screen_work_slug': screen_work.slug,
-                'screen_work_type': screen_work.get_type_display(),
-                'screen_work_year': screen_work.year,
-                'poster_url': screen_work.poster_url,
-                'diff_count': comparison['total_diffs'],
-                'vote_count': comparison['total_votes'],
-                'comparison_vote_count': comparison_votes.get((work.id, screen_work.id), 0),
-            })
+            results.append(DiffService._build_comparison_dict(
+                work=work,
+                screen_work=screen_work,
+                diff_count=comparison['total_diffs'],
+                vote_count=comparison['total_votes'],
+                comparison_vote_count=comparison_votes.get((work.id, screen_work.id), 0),
+            ))
 
         return results
 
@@ -603,7 +646,7 @@ class DiffService:
         }
 
     @staticmethod
-    def get_all_comparisons(limit: int = 50) -> list[dict]:
+    def get_all_comparisons(limit: int = 50) -> List[Dict[str, Any]]:
         """
         Get all available book-to-screen comparisons from AdaptationEdge.
 
