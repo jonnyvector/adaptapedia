@@ -179,46 +179,9 @@ class DiffService:
         return list(queryset)
 
     @staticmethod
-    def get_trending_comparisons(limit: int = 8, days: int = 7) -> List[Dict[str, Any]]:
-        """
-        Get trending comparisons based on recent activity.
-
-        Trending algorithm:
-        1. Recent activity (diffs added or votes cast in last N days)
-        2. Volume of activity (number of recent diffs + votes)
-        3. Diversity (prefer different books, not all from same book)
-
-        Args:
-            limit: Number of trending comparisons to return (default 8)
-            days: Number of days to look back for activity (default 7)
-
-        Returns:
-            List of dicts with comparison metadata:
-            {
-                'work_id': int,
-                'work_title': str,
-                'work_slug': str,
-                'work_year': int,
-                'screen_work_id': int,
-                'screen_work_title': str,
-                'screen_work_slug': str,
-                'screen_work_type': str,
-                'screen_work_year': int,
-                'total_diffs': int,
-                'recent_diffs': int,
-                'recent_votes': int,
-                'activity_score': float,
-            }
-        """
-        from works.models import Work
-        from screen.models import ScreenWork
-
-        # Calculate the cutoff date for "recent" activity
-        cutoff_date = timezone.now() - timedelta(days=days)
-
-        # Get all comparisons (work + screen_work pairs) with activity metrics
-        # We need to group by work_id and screen_work_id
-        comparisons = DiffItem.objects.filter(
+    def _get_trending_query(cutoff_date):
+        """Build the trending comparisons query with activity metrics."""
+        return DiffItem.objects.filter(
             status='LIVE'
         ).values(
             'work_id', 'screen_work_id'
@@ -238,10 +201,10 @@ class DiffService:
                 distinct=True
             ),
         ).annotate(
-            # Activity score: (recent_diffs * 3) + (recent_votes * 1)
+            # Activity score: (recent_diffs * weight) + (recent_votes * weight)
             # Weight new diffs more heavily than votes to encourage new content
             activity_score=ExpressionWrapper(
-                (F('recent_diffs') * 3.0) + (F('recent_votes') * 1.0),
+                (F('recent_diffs') * TRENDING_DIFF_WEIGHT) + (F('recent_votes') * TRENDING_VOTE_WEIGHT),
                 output_field=FloatField()
             )
         ).filter(
@@ -251,12 +214,16 @@ class DiffService:
             '-activity_score', '-recent_diffs', '-total_diffs'
         )
 
-        # Fetch the top comparisons with diversity
-        # First, collect the IDs we need to fetch
+    @staticmethod
+    def _apply_diversity_filter(comparisons, limit: int, max_per_work: int = TRENDING_MAX_PER_WORK) -> tuple:
+        """
+        Apply diversity filtering to limit comparisons from the same work.
+
+        Returns tuple of (comparisons_list, work_ids, screen_work_ids) for bulk fetching.
+        """
         work_ids_to_fetch = set()
         screen_work_ids_to_fetch = set()
         comparisons_list = []
-        max_per_work = 2  # Maximum comparisons from the same book
 
         for comparison in comparisons:
             work_id = comparison['work_id']
@@ -274,9 +241,37 @@ class DiffService:
             if len(comparisons_list) >= limit:
                 break
 
-        # Bulk fetch all needed works and screen works to avoid N+1 queries
+        return comparisons_list, list(work_ids_to_fetch), list(screen_work_ids_to_fetch)
+
+    @staticmethod
+    def get_trending_comparisons(limit: int = 8, days: int = 7) -> List[Dict[str, Any]]:
+        """
+        Get trending comparisons based on recent activity.
+
+        Trending algorithm:
+        1. Recent activity (diffs added or votes cast in last N days)
+        2. Volume of activity (number of recent diffs + votes)
+        3. Diversity (prefer different books, not all from same book)
+
+        Args:
+            limit: Number of trending comparisons to return (default 8)
+            days: Number of days to look back for activity (default 7)
+
+        Returns:
+            List of dicts with comparison metadata (work details, activity metrics, etc.)
+        """
+        # Calculate cutoff date and get trending comparisons
+        cutoff_date = timezone.now() - timedelta(days=TRENDING_LOOKBACK_DAYS)
+        comparisons = DiffService._get_trending_query(cutoff_date)
+
+        # Apply diversity filtering
+        comparisons_list, work_ids_to_fetch, screen_work_ids_to_fetch = DiffService._apply_diversity_filter(
+            comparisons, limit
+        )
+
+        # Bulk fetch all needed works and screen works
         works, screen_works = DiffService._bulk_fetch_works_and_screens(
-            list(work_ids_to_fetch), list(screen_work_ids_to_fetch)
+            work_ids_to_fetch, screen_work_ids_to_fetch
         )
 
         # Get comparison vote counts
