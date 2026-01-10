@@ -83,12 +83,17 @@ class ReputationService:
         return event
 
     @staticmethod
-    def calculate_diff_consensus_rep(diff_item) -> Optional[ReputationEventType]:
+    def calculate_diff_consensus_rep(diff_item: Any) -> Optional[ReputationEventType]:
         """
         Calculate reputation award based on diff voting consensus.
 
+        Args:
+            diff_item: DiffItem instance with vote counts annotated
+
+        Returns:
+            ReputationEventType for the consensus level, or None if below threshold
+
         Call this when a diff reaches voting threshold (e.g., 10+ votes).
-        Returns the appropriate event type for the consensus level.
         """
         total_votes = diff_item.total_votes
 
@@ -369,7 +374,7 @@ class NotificationService:
         return Notification.objects.filter(user=user, is_read=False).count()
 
     @staticmethod
-    def notify_diff_consensus(diff_item, creator: User):
+    def notify_diff_consensus(diff_item, creator: User) -> None:
         """Create notification when a diff reaches consensus."""
         total_votes = diff_item.total_votes
         accurate_ratio = diff_item.accurate_count / total_votes if total_votes > 0 else 0
@@ -386,7 +391,7 @@ class NotificationService:
         )
 
     @staticmethod
-    def notify_comment_reply(comment, parent_comment):
+    def notify_comment_reply(comment, parent_comment) -> None:
         """Create notification when someone replies to a comment."""
         NotificationService.create_notification(
             user=parent_comment.user,
