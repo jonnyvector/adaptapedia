@@ -110,11 +110,13 @@ class ReputationService:
     @staticmethod
     def get_user_stats(user: User) -> Dict[str, Any]:
         """Get comprehensive reputation stats for a user."""
-        from diffs.models import DiffItem, DiffVote, DiffComment
+        from diffs.models import DiffItem, DiffVote, DiffComment, ComparisonVote
 
-        # Count contributions
+        # Count contributions (including both diff votes and comparison votes)
         total_diffs = DiffItem.objects.filter(created_by=user, status='LIVE').count()
-        total_votes = DiffVote.objects.filter(user=user).count()
+        diff_votes = DiffVote.objects.filter(user=user).count()
+        comparison_votes = ComparisonVote.objects.filter(user=user).count()
+        total_votes = diff_votes + comparison_votes
         total_comments = DiffComment.objects.filter(user=user, status='LIVE').count()
 
         # Calculate accuracy rate

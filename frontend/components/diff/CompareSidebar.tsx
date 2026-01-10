@@ -319,7 +319,7 @@ export default function CompareSidebar({
               <button
                 key={disputedDiff.diff.id}
                 onClick={() => onScrollToDiff(disputedDiff.diff.id)}
-                className="w-full text-left p-2 rounded hover:bg-surface2 transition-colors group"
+                className={`w-full text-left p-2 hover:bg-surface2 transition-colors group ${RADIUS.control}`}
               >
                 <div className="flex items-start gap-2">
                   <span className="text-danger text-xs mt-0.5 shrink-0">⚠</span>

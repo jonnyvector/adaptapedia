@@ -299,7 +299,8 @@ export default async function ScreenWorkPage({
                             <div className="flex flex-wrap gap-3 items-center">
                               <Link
                                 href={compareUrl}
-                                className="inline-flex items-center gap-2 px-6 py-3 bg-link text-white rounded-lg hover:opacity-90 transition-opacity font-semibold text-base shadow-sm"
+                                className="inline-flex items-center gap-2 px-6 py-3 bg-link text-white hover:opacity-90 transition-opacity font-semibold text-base shadow-sm"
+                                style={{ borderRadius: 'var(--button-radius)' }}
                               >
                                 Compare →
                               </Link>
@@ -307,14 +308,16 @@ export default async function ScreenWorkPage({
                               {/* Secondary Actions */}
                               <Link
                                 href={`/book/${book.slug}`}
-                                className="inline-flex items-center gap-2 px-4 py-2 bg-surface border border-border text-foreground rounded-lg hover:bg-muted/10 transition-colors text-sm"
+                                className="inline-flex items-center gap-2 px-4 py-2 bg-surface border border-border text-foreground hover:bg-muted/10 transition-colors text-sm"
+                                style={{ borderRadius: 'var(--button-radius)' }}
                               >
                                 View book
                               </Link>
 
                               <Link
                                 href={`${compareUrl}#add-diff`}
-                                className="inline-flex items-center gap-2 px-4 py-2 bg-surface border border-border text-foreground rounded-lg hover:bg-muted/10 transition-colors text-sm"
+                                className="inline-flex items-center gap-2 px-4 py-2 bg-surface border border-border text-foreground hover:bg-muted/10 transition-colors text-sm"
+                                style={{ borderRadius: 'var(--button-radius)' }}
                               >
                                 + Add difference
                               </Link>

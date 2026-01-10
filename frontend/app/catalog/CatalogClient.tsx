@@ -4,7 +4,7 @@ import { useState, useMemo } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
 import { FilmIcon, TvIcon } from '@/components/ui/Icons';
-import { FONTS, LETTER_SPACING, BORDERS, TEXT, monoUppercase } from '@/lib/brutalist-design';
+import { FONTS, LETTER_SPACING, BORDERS, TEXT, RADIUS, monoUppercase } from '@/lib/brutalist-design';
 
 interface CatalogBook {
   id: number;
@@ -126,8 +126,8 @@ export default function CatalogClient({
               placeholder="Search books..."
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
-              className={`w-full px-3 py-2 ${TEXT.body} border ${BORDERS.medium} bg-white dark:bg-black text-black dark:text-white focus:outline-none focus:ring-0 focus:border-black focus:dark:border-white`}
-             
+              className={`w-full px-3 py-2 ${TEXT.body} border ${BORDERS.medium} ${RADIUS.input} bg-white dark:bg-black text-black dark:text-white focus:outline-none focus:ring-0 focus:border-black focus:dark:border-white`}
+
             />
           </div>
 
@@ -137,8 +137,8 @@ export default function CatalogClient({
             <select
               value={sortBy}
               onChange={(e) => setSortBy(e.target.value)}
-              className={`w-full px-3 py-2 ${TEXT.body} border ${BORDERS.medium} bg-white dark:bg-black text-black dark:text-white focus:outline-none focus:ring-0 focus:border-black focus:dark:border-white`}
-             
+              className={`w-full px-3 py-2 ${TEXT.body} border ${BORDERS.medium} ${RADIUS.input} bg-white dark:bg-black text-black dark:text-white focus:outline-none focus:ring-0 focus:border-black focus:dark:border-white`}
+
             >
               <option value="title">Title</option>
               <option value="year">Year</option>
@@ -152,8 +152,8 @@ export default function CatalogClient({
             <select
               value={order}
               onChange={(e) => setOrder(e.target.value)}
-              className={`w-full px-3 py-2 ${TEXT.body} border ${BORDERS.medium} bg-white dark:bg-black text-black dark:text-white focus:outline-none focus:ring-0 focus:border-black focus:dark:border-white`}
-             
+              className={`w-full px-3 py-2 ${TEXT.body} border ${BORDERS.medium} ${RADIUS.input} bg-white dark:bg-black text-black dark:text-white focus:outline-none focus:ring-0 focus:border-black focus:dark:border-white`}
+
             >
               <option value="asc">Ascending</option>
               <option value="desc">Descending</option>
@@ -166,8 +166,8 @@ export default function CatalogClient({
             <select
               value={filter}
               onChange={(e) => setFilter(e.target.value)}
-              className={`w-full px-3 py-2 ${TEXT.body} border ${BORDERS.medium} bg-white dark:bg-black text-black dark:text-white focus:outline-none focus:ring-0 focus:border-black focus:dark:border-white`}
-             
+              className={`w-full px-3 py-2 ${TEXT.body} border ${BORDERS.medium} ${RADIUS.input} bg-white dark:bg-black text-black dark:text-white focus:outline-none focus:ring-0 focus:border-black focus:dark:border-white`}
+
             >
               <option value="all">All ({initialData.count})</option>
               <option value="with-covers">With Covers ({withCovers})</option>

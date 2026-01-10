@@ -48,7 +48,8 @@ export default function Error({
           </Button>
           <Link
             href="/"
-            className="px-6 py-3 border border-border rounded-lg hover:bg-muted/10 transition-colors font-semibold"
+            className="px-6 py-3 border border-border hover:bg-muted/10 transition-colors font-semibold"
+            style={{ borderRadius: 'var(--button-radius)' }}
           >
             Go home
           </Link>

@@ -25,11 +25,6 @@
   <rect x="110" y="50" width="70" height="100" fill="transparent" stroke="white" stroke-width="5"/>
   <!-- Screen display -->
   <rect x="118" y="58" width="54" height="76" fill="transparent" stroke="white" stroke-width="3"/>
-  <!-- Screen scanlines for texture -->
-  <line x1="118" y1="70" x2="172" y2="70" stroke="white" stroke-width="1.5" opacity="0.5"/>
-  <line x1="118" y1="85" x2="172" y2="85" stroke="white" stroke-width="1.5" opacity="0.5"/>
-  <line x1="118" y1="100" x2="172" y2="100" stroke="white" stroke-width="1.5" opacity="0.5"/>
-  <line x1="118" y1="115" x2="172" y2="115" stroke="white" stroke-width="1.5" opacity="0.5"/>
   <!-- Play button on screen -->
   <path d="M 138 90 L 138 110 L 155 100 Z" fill="transparent" stroke="white" stroke-width="2"/>
   <!-- TV stand -->

@@ -165,7 +165,7 @@ export default function CompareHeader({
                 id="adaptation-select"
                 value={screenWork.slug}
                 onChange={(e) => handleAdaptationChange(e.target.value)}
-                className={`flex-1 px-3 py-2 ${TEXT.secondary} bg-white dark:bg-black text-black dark:text-white border ${BORDERS.medium} ${RADIUS.control} focus:outline-none focus:border-black dark:focus:border-white`}
+                className={`flex-1 px-3 py-2 ${TEXT.secondary} bg-white dark:bg-black text-black dark:text-white border ${BORDERS.medium} ${RADIUS.input} focus:outline-none focus:border-black dark:focus:border-white`}
                 style={{ fontFamily: FONTS.mono, letterSpacing: LETTER_SPACING.normal }}
               >
                 {adaptations.map((adaptation) => (

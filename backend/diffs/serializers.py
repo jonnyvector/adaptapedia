@@ -193,6 +193,18 @@ class DiffCommentSerializer(serializers.ModelSerializer):
 class ComparisonVoteSerializer(serializers.ModelSerializer):
     """Serializer for ComparisonVote model."""
 
+    # Include work details for display
+    work_title = serializers.CharField(source='work.title', read_only=True)
+    work_slug = serializers.CharField(source='work.slug', read_only=True)
+    work_author = serializers.CharField(source='work.author', read_only=True)
+    cover_url = serializers.CharField(source='work.cover_url', read_only=True)
+
+    # Include screen work details for display
+    screen_work_title = serializers.CharField(source='screen_work.title', read_only=True)
+    screen_work_slug = serializers.CharField(source='screen_work.slug', read_only=True)
+    screen_work_type = serializers.CharField(source='screen_work.type', read_only=True)
+    poster_url = serializers.CharField(source='screen_work.poster_url', read_only=True)
+
     class Meta:
         """Meta options for ComparisonVoteSerializer."""
 
@@ -201,6 +213,14 @@ class ComparisonVoteSerializer(serializers.ModelSerializer):
             'id',
             'work',
             'screen_work',
+            'work_title',
+            'work_slug',
+            'work_author',
+            'cover_url',
+            'screen_work_title',
+            'screen_work_slug',
+            'screen_work_type',
+            'poster_url',
             'user',
             'has_read_book',
             'has_watched_adaptation',

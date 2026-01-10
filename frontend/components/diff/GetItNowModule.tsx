@@ -255,7 +255,8 @@ export default function GetItNowModule({ work, screenWork }: GetItNowModuleProps
                       href={getWatchLink()}
                       target="_blank"
                       rel="nofollow noopener noreferrer"
-                      className="px-2 py-1.5 text-xs rounded-lg border border-gray-200 dark:border-border hover:bg-gray-50 dark:hover:bg-surface2 transition-colors flex items-center gap-2"
+                      className="px-2 py-1.5 text-xs border border-gray-200 dark:border-border hover:bg-gray-50 dark:hover:bg-surface2 transition-colors flex items-center gap-2"
+                      style={{ borderRadius: 'var(--button-radius)' }}
                     >
                       {provider.logo_path && (
                         <Image
@@ -263,7 +264,8 @@ export default function GetItNowModule({ work, screenWork }: GetItNowModuleProps
                           alt={provider.provider_name}
                           width={20}
                           height={20}
-                          className="w-5 h-5 rounded flex-shrink-0"
+                          className="w-5 h-5 flex-shrink-0"
+                          style={{ borderRadius: 'var(--button-radius)' }}
                         />
                       )}
                       <span className="text-gray-700 dark:text-gray-300 truncate">Rent</span>
@@ -275,7 +277,8 @@ export default function GetItNowModule({ work, screenWork }: GetItNowModuleProps
                       href={getWatchLink()}
                       target="_blank"
                       rel="nofollow noopener noreferrer"
-                      className="px-2 py-1.5 text-xs rounded-lg border border-gray-200 dark:border-border hover:bg-gray-50 dark:hover:bg-surface2 transition-colors flex items-center gap-2"
+                      className="px-2 py-1.5 text-xs border border-gray-200 dark:border-border hover:bg-gray-50 dark:hover:bg-surface2 transition-colors flex items-center gap-2"
+                      style={{ borderRadius: 'var(--button-radius)' }}
                     >
                       {provider.logo_path && (
                         <Image
@@ -283,7 +286,8 @@ export default function GetItNowModule({ work, screenWork }: GetItNowModuleProps
                           alt={provider.provider_name}
                           width={20}
                           height={20}
-                          className="w-5 h-5 rounded flex-shrink-0"
+                          className="w-5 h-5 flex-shrink-0"
+                          style={{ borderRadius: 'var(--button-radius)' }}
                         />
                       )}
                       <span className="text-gray-700 dark:text-gray-300 truncate">Buy</span>

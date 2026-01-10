@@ -123,7 +123,7 @@ class UserViewSet(viewsets.ReadOnlyModelViewSet):
     @decorators.action(detail=True, methods=['get'], url_path='votes', permission_classes=[permissions.IsAuthenticated])
     def votes(self, request, username=None):
         """
-        Get votes cast by a specific user.
+        Get votes cast by a specific user (comparison votes: Book vs Screen preference).
 
         Only accessible to the user themselves (private data).
 
@@ -132,8 +132,8 @@ class UserViewSet(viewsets.ReadOnlyModelViewSet):
         - page: page number
         - page_size: items per page (max 100)
         """
-        from diffs.models import DiffVote
-        from diffs.serializers import DiffVoteSerializer
+        from diffs.models import ComparisonVote
+        from diffs.serializers import ComparisonVoteSerializer
 
         user = self.get_object()
 
@@ -144,10 +144,10 @@ class UserViewSet(viewsets.ReadOnlyModelViewSet):
                 status=status.HTTP_403_FORBIDDEN
             )
 
-        # Get user's votes
-        queryset = DiffVote.objects.filter(
+        # Get user's comparison votes
+        queryset = ComparisonVote.objects.filter(
             user=user
-        ).select_related('diff_item', 'diff_item__work', 'diff_item__screen_work', 'diff_item__created_by')
+        ).select_related('work', 'screen_work')
 
         # Apply ordering (always newest for now)
         queryset = queryset.order_by('-created_at')
@@ -157,10 +157,10 @@ class UserViewSet(viewsets.ReadOnlyModelViewSet):
         page = paginator.paginate_queryset(queryset, request)
 
         if page is not None:
-            serializer = DiffVoteSerializer(page, many=True)
+            serializer = ComparisonVoteSerializer(page, many=True)
             return paginator.get_paginated_response(serializer.data)
 
-        serializer = DiffVoteSerializer(queryset, many=True)
+        serializer = ComparisonVoteSerializer(queryset, many=True)
         return response.Response(serializer.data)
 
 

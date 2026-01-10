@@ -284,7 +284,7 @@ export default function DiffItemCard({
 
         {/* Voting buttons - segmented control */}
         {showError && error && (
-          <div className="text-xs text-danger bg-danger/10 px-3 py-1.5 rounded border border-danger/30 mb-3">
+          <div className={`text-xs text-danger bg-danger/10 px-3 py-1.5 border border-danger/30 mb-3 ${RADIUS.control}`}>
             {error}
           </div>
         )}

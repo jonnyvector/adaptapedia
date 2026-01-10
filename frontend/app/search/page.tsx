@@ -78,7 +78,8 @@ export default async function SearchPage({ searchParams }: SearchPageProps): Pro
                     <Link
                       key={term}
                       href={`/search?q=${encodeURIComponent(term)}`}
-                      className="px-3 py-1 rounded-full bg-muted/20 text-sm hover:bg-muted/30 transition-colors"
+                      className="px-3 py-1 bg-muted/20 text-sm hover:bg-muted/30 transition-colors"
+                      style={{ borderRadius: 'var(--button-radius)' }}
                     >
                       {term}
                     </Link>

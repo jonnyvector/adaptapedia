@@ -256,6 +256,15 @@ export interface ComparisonVote {
   faithfulness_rating: number | null;
   created_at: string;
   updated_at: string;
+  // Display fields
+  work_title?: string;
+  work_slug?: string;
+  work_author?: string;
+  cover_url?: string;
+  screen_work_title?: string;
+  screen_work_slug?: string;
+  screen_work_type?: 'MOVIE' | 'TV';
+  poster_url?: string;
 }
 
 export interface ComparisonVoteStats {
@@ -318,6 +327,7 @@ export interface BrowseComparison {
   poster_url?: string;
   diff_count: number;
   vote_count: number;
+  comparison_vote_count?: number;
   last_updated?: string;
   activity_score?: number;
   recent_diffs?: number;
@@ -384,6 +394,7 @@ export interface TrendingComparison {
   recent_diffs: number;
   recent_votes: number;
   activity_score: number;
+  comparison_vote_count?: number;
 }
 
 export interface Bookmark {

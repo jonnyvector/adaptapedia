@@ -71,31 +71,34 @@ export default async function GenrePage({ params, searchParams }: GenrePageProps
         <div className="flex gap-2 mb-6">
           <Link
             href={`/browse/${encodeURIComponent(genreName)}`}
-            className={`px-4 py-2 rounded-lg font-medium transition-colors ${
+            className={`px-4 py-2 font-medium transition-colors ${
               !type
                 ? 'bg-link text-white'
                 : 'bg-surface2 text-foreground hover:bg-muted/30'
             }`}
+            style={{ borderRadius: 'var(--button-radius)' }}
           >
             All
           </Link>
           <Link
             href={`/browse/${encodeURIComponent(genreName)}?type=MOVIE`}
-            className={`px-4 py-2 rounded-lg font-medium transition-colors ${
+            className={`px-4 py-2 font-medium transition-colors ${
               type === 'MOVIE'
                 ? 'bg-link text-white'
                 : 'bg-surface2 text-foreground hover:bg-muted/30'
             }`}
+            style={{ borderRadius: 'var(--button-radius)' }}
           >
             Movies
           </Link>
           <Link
             href={`/browse/${encodeURIComponent(genreName)}?type=TV`}
-            className={`px-4 py-2 rounded-lg font-medium transition-colors ${
+            className={`px-4 py-2 font-medium transition-colors ${
               type === 'TV'
                 ? 'bg-link text-white'
                 : 'bg-surface2 text-foreground hover:bg-muted/30'
             }`}
+            style={{ borderRadius: 'var(--button-radius)' }}
           >
             TV Series
           </Link>
@@ -149,11 +152,12 @@ export default async function GenrePage({ params, searchParams }: GenrePageProps
                           <Link
                             key={adaptation.id}
                             href={`/compare/${work.slug}/${adaptation.slug}`}
-                            className="px-4 py-2 bg-link text-white rounded-lg hover:bg-link/90 transition-colors text-sm font-medium inline-flex items-center gap-2"
+                            className="px-4 py-2 bg-link text-white hover:bg-link/90 transition-colors text-sm font-medium inline-flex items-center gap-2"
+                            style={{ borderRadius: 'var(--button-radius)' }}
                           >
                             {adaptation.title} ({adaptation.year})
                             {adaptation.diff_count > 0 && (
-                              <span className="text-xs bg-white/20 px-2 py-0.5 rounded">
+                              <span className="text-xs bg-white/20 px-2 py-0.5" style={{ borderRadius: 'var(--button-radius)' }}>
                                 {adaptation.diff_count} {adaptation.diff_count === 1 ? 'diff' : 'diffs'}
                               </span>
                             )}
@@ -178,18 +182,20 @@ export default async function GenrePage({ params, searchParams }: GenrePageProps
             {currentPage > 1 && (
               <Link
                 href={`/browse/${encodeURIComponent(genreName)}?page=${currentPage - 1}${type ? `&type=${type}` : ''}`}
-                className="px-4 py-2 bg-link text-white rounded-lg hover:bg-link/90 transition-colors"
+                className="px-4 py-2 bg-link text-white hover:bg-link/90 transition-colors"
+                style={{ borderRadius: 'var(--button-radius)' }}
               >
                 Previous
               </Link>
             )}
-            <span className="px-4 py-2 bg-surface2 text-foreground rounded-lg">
+            <span className="px-4 py-2 bg-surface2 text-foreground" style={{ borderRadius: 'var(--button-radius)' }}>
               Page {currentPage} of {totalPages}
             </span>
             {currentPage < totalPages && (
               <Link
                 href={`/browse/${encodeURIComponent(genreName)}?page=${currentPage + 1}${type ? `&type=${type}` : ''}`}
-                className="px-4 py-2 bg-link text-white rounded-lg hover:bg-link/90 transition-colors"
+                className="px-4 py-2 bg-link text-white hover:bg-link/90 transition-colors"
+                style={{ borderRadius: 'var(--button-radius)' }}
               >
                 Next
               </Link>

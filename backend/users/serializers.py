@@ -108,6 +108,10 @@ class UserProfileSerializer(serializers.ModelSerializer):
     badges = UserBadgeSerializer(many=True, read_only=True)
     recent_reputation_events = serializers.SerializerMethodField()
     stats = serializers.SerializerMethodField()
+    diffs_count = serializers.SerializerMethodField()
+    votes_count = serializers.SerializerMethodField()
+    comments_count = serializers.SerializerMethodField()
+    reputation_score = serializers.IntegerField(source='reputation_points', read_only=True)
 
     class Meta:
         """Meta options for UserProfileSerializer."""
@@ -119,11 +123,32 @@ class UserProfileSerializer(serializers.ModelSerializer):
             'date_joined',
             'role',
             'reputation_points',
+            'reputation_score',
+            'diffs_count',
+            'votes_count',
+            'comments_count',
             'badges',
             'stats',
             'recent_reputation_events',
         ]
         read_only_fields = fields
+
+    def get_diffs_count(self, obj: User) -> int:
+        """Get count of diffs created by user."""
+        from diffs.models import DiffItem
+        return DiffItem.objects.filter(created_by=obj, status='LIVE').count()
+
+    def get_votes_count(self, obj: User) -> int:
+        """Get count of votes cast by user (both diff votes and comparison votes)."""
+        from diffs.models import DiffVote, ComparisonVote
+        diff_votes = DiffVote.objects.filter(user=obj).count()
+        comparison_votes = ComparisonVote.objects.filter(user=obj).count()
+        return diff_votes + comparison_votes
+
+    def get_comments_count(self, obj: User) -> int:
+        """Get count of comments posted by user."""
+        from diffs.models import DiffComment
+        return DiffComment.objects.filter(user=obj, status='LIVE').count()
 
     def get_recent_reputation_events(self, obj: User):
         """Get recent reputation events."""

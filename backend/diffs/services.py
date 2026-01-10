@@ -13,6 +13,27 @@ class DiffService:
     """Service class for Diff-related business logic."""
 
     @staticmethod
+    def _get_comparison_votes(work_ids: list[int], screen_work_ids: list[int]) -> dict:
+        """
+        Get comparison vote counts for multiple work/screen work pairs.
+
+        Returns dict with (work_id, screen_work_id) tuples as keys and vote counts as values.
+        """
+        from diffs.models import ComparisonVote
+
+        comparison_votes = {}
+        for work_id in set(work_ids):
+            for screen_work_id in set(screen_work_ids):
+                count = ComparisonVote.objects.filter(
+                    work_id=work_id,
+                    screen_work_id=screen_work_id
+                ).count()
+                if count > 0:  # Only store non-zero counts
+                    comparison_votes[(work_id, screen_work_id)] = count
+
+        return comparison_votes
+
+    @staticmethod
     def create_diff(
         work_id: int,
         screen_work_id: int,
@@ -183,6 +204,9 @@ class DiffService:
         works = {w.id: w for w in Work.objects.filter(id__in=work_ids_to_fetch)}
         screen_works = {s.id: s for s in ScreenWork.objects.filter(id__in=screen_work_ids_to_fetch)}
 
+        # Get comparison vote counts
+        comparison_votes = DiffService._get_comparison_votes(list(work_ids_to_fetch), list(screen_work_ids_to_fetch))
+
         # Build the final results
         results = []
         for comparison in comparisons_list:
@@ -205,6 +229,7 @@ class DiffService:
                 'recent_diffs': comparison['recent_diffs'],
                 'recent_votes': comparison['recent_votes'],
                 'activity_score': float(comparison['activity_score']),
+                'comparison_vote_count': comparison_votes.get((work.id, screen_work.id), 0),
             })
 
         return results
@@ -256,6 +281,9 @@ class DiffService:
         works = {w.id: w for w in Work.objects.filter(id__in=work_ids)}
         screen_works = {s.id: s for s in ScreenWork.objects.filter(id__in=screen_work_ids)}
 
+        # Get comparison vote counts for each comparison
+        comparison_votes = DiffService._get_comparison_votes(work_ids, screen_work_ids)
+
         results = []
         for comparison in comparisons:
             work = works[comparison['work_id']]
@@ -276,6 +304,7 @@ class DiffService:
                 'poster_url': screen_work.poster_url,
                 'diff_count': comparison['total_diffs'],
                 'vote_count': comparison['total_votes'],
+                'comparison_vote_count': comparison_votes.get((work.id, screen_work.id), 0),
             })
 
         return results
@@ -307,6 +336,9 @@ class DiffService:
         works = {w.id: w for w in Work.objects.filter(id__in=work_ids)}
         screen_works = {s.id: s for s in ScreenWork.objects.filter(id__in=screen_work_ids)}
 
+        # Get comparison vote counts
+        comparison_votes = DiffService._get_comparison_votes(work_ids, screen_work_ids)
+
         results = []
         for comparison in comparisons:
             work = works[comparison['work_id']]
@@ -327,6 +359,7 @@ class DiffService:
                 'poster_url': screen_work.poster_url,
                 'diff_count': comparison['total_diffs'],
                 'vote_count': comparison['total_votes'],
+                'comparison_vote_count': comparison_votes.get((work.id, screen_work.id), 0),
                 'last_updated': comparison['last_updated'],
             })
 
@@ -357,6 +390,9 @@ class DiffService:
         works = {w.id: w for w in Work.objects.filter(id__in=work_ids)}
         screen_works = {s.id: s for s in ScreenWork.objects.filter(id__in=screen_work_ids)}
 
+        # Get comparison vote counts
+        comparison_votes = DiffService._get_comparison_votes(work_ids, screen_work_ids)
+
         results = []
         for comparison in comparisons:
             work = works[comparison['work_id']]
@@ -377,6 +413,7 @@ class DiffService:
                 'poster_url': screen_work.poster_url,
                 'diff_count': comparison['total_diffs'],
                 'vote_count': comparison['total_votes'],
+                'comparison_vote_count': comparison_votes.get((work.id, screen_work.id), 0),
             })
 
         return results
@@ -592,6 +629,11 @@ class DiffService:
             key = (item['work_id'], item['screen_work_id'])
             diff_counts[key] = item['total_diffs']
 
+        # Get comparison vote counts
+        work_ids = [edge.work.id for edge in edges]
+        screen_work_ids = [edge.screen_work.id for edge in edges]
+        comparison_votes = DiffService._get_comparison_votes(work_ids, screen_work_ids)
+
         results = []
         for edge in edges:
             key = (edge.work.id, edge.screen_work.id)
@@ -611,6 +653,7 @@ class DiffService:
                 'screen_work_year': edge.screen_work.year,
                 'poster_url': edge.screen_work.poster_url,
                 'diff_count': diff_count,
+                'comparison_vote_count': comparison_votes.get(key, 0),
             })
 
         return results

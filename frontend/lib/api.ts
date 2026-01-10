@@ -92,11 +92,50 @@ export const tokenManager = {
       localStorage.removeItem('refresh_token');
     }
   },
+
+  refreshAccessToken: async (): Promise<string | null> => {
+    if (typeof window === 'undefined') return null;
+
+    const refreshToken = localStorage.getItem('refreshToken');
+    if (!refreshToken) return null;
+
+    try {
+      const response = await fetch(`${API_BASE_URL}/token/refresh/`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ refresh: refreshToken }),
+      });
+
+      if (!response.ok) {
+        // Refresh token is invalid/expired, clear everything
+        tokenManager.clearToken();
+        return null;
+      }
+
+      const data = await response.json();
+      const newAccessToken = data.access;
+
+      tokenManager.setToken(newAccessToken);
+
+      // Update the server-side cookie for server actions
+      const { setAuthCookie } = await import('@/app/actions/auth');
+      await setAuthCookie(newAccessToken);
+
+      return newAccessToken;
+    } catch (error) {
+      console.error('Token refresh failed:', error);
+      tokenManager.clearToken();
+      return null;
+    }
+  },
 };
 
 async function fetchApi<T>(
   endpoint: string,
-  options?: RequestInit
+  options?: RequestInit,
+  retryCount: number = 0
 ): Promise<T> {
   const url = `${API_BASE_URL}${endpoint}`;
 
@@ -118,6 +157,21 @@ async function fetchApi<T>(
 
   if (!response.ok) {
     const error = await response.json().catch(() => ({ error: 'Unknown error' }));
+
+    // Handle 401 errors - attempt token refresh
+    if (response.status === 401 && retryCount === 0 && typeof window !== 'undefined') {
+      const newToken = await tokenManager.refreshAccessToken();
+      if (newToken) {
+        // Retry the request with the new token
+        return fetchApi<T>(endpoint, options, 1);
+      }
+      // If refresh failed, token is cleared, user needs to login again
+      throw new ApiError(
+        'Session expired. Please log in again.',
+        response.status,
+        error.detail || error
+      );
+    }
 
     // Don't log 401 errors for /users/me/ - these are expected for expired tokens
     const shouldLog = !(response.status === 401 && url.includes('/users/me'));

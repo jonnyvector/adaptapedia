@@ -99,7 +99,7 @@ export default function SearchInput({ mobile = false, className = '' }: SearchIn
             }
           }}
           placeholder="SEARCH BOOKS..."
-          className={`w-full px-3 py-2 ${mobile ? '' : 'pr-10'} ${TEXT.body} bg-white dark:bg-black text-black dark:text-white border ${BORDERS.medium} ${RADIUS.control} focus:outline-none focus:ring-0 focus:border-black focus:dark:border-white focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-black dark:focus-visible:outline-white placeholder:${TEXT.mutedLight} placeholder:uppercase min-h-[40px]`}
+          className={`w-full px-3 py-2 ${mobile ? '' : 'pr-10'} ${TEXT.body} bg-white dark:bg-black text-black dark:text-white border ${BORDERS.medium} ${RADIUS.input} focus:outline-none focus:ring-0 focus:border-black focus:dark:border-white focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-black dark:focus-visible:outline-white placeholder:${TEXT.mutedLight} placeholder:uppercase min-h-[40px]`}
           style={{ fontFamily: FONTS.mono, letterSpacing: LETTER_SPACING.normal }}
           aria-label="Search"
         />

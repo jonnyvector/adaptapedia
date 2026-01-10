@@ -134,7 +134,7 @@ export default function ModQueue(): JSX.Element {
           <select
             value={statusFilter}
             onChange={(e) => setStatusFilter(e.target.value as StatusFilter)}
-            className={`px-3 py-3 ${TEXT.secondary} border ${BORDERS.medium} ${RADIUS.control} bg-white dark:bg-black text-black dark:text-white ${HEIGHT.touchTarget} focus:outline-none focus:border-black focus:dark:border-white`}
+            className={`px-3 py-3 ${TEXT.secondary} border ${BORDERS.medium} ${RADIUS.input} bg-white dark:bg-black text-black dark:text-white ${HEIGHT.touchTarget} focus:outline-none focus:border-black focus:dark:border-white`}
             style={{ fontFamily: FONTS.mono }}
           >
             <option value="PENDING">Pending</option>

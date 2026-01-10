@@ -3,10 +3,11 @@
 import { useState, useEffect } from 'react';
 import { useAuth } from '@/lib/auth-context';
 import { api } from '@/lib/api';
-import type { UserProfile, DiffItem, Vote, Comment, ApiResponse } from '@/lib/types';
+import type { UserProfile, DiffItem, ComparisonVote, Comment, ApiResponse } from '@/lib/types';
 import Link from 'next/link';
 import { Button } from '@/components/ui/Button';
 import ReputationProgress from './ReputationProgress';
+import ComparisonVoteCard from './ComparisonVoteCard';
 import { FONTS, LETTER_SPACING, BORDERS, TEXT, monoUppercase, RADIUS } from '@/lib/brutalist-design';
 import { TrophyIcon } from '@/components/ui/Icons';
 
@@ -20,7 +21,7 @@ export default function UserProfileClient({ profile }: UserProfileClientProps): 
   const { user: currentUser } = useAuth();
   const [activeTab, setActiveTab] = useState<TabType>('diffs');
   const [diffs, setDiffs] = useState<DiffItem[]>([]);
-  const [votes, setVotes] = useState<Vote[]>([]);
+  const [votes, setVotes] = useState<ComparisonVote[]>([]);
   const [comments, setComments] = useState<Comment[]>([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -40,7 +41,7 @@ export default function UserProfileClient({ profile }: UserProfileClientProps): 
         } else if (activeTab === 'votes') {
           if (isOwnProfile) {
             const response = await api.users.getVotes(profile.username);
-            setVotes((response as ApiResponse<Vote>).results || []);
+            setVotes((response as ApiResponse<ComparisonVote>).results || []);
           }
         } else if (activeTab === 'comments') {
           const response = await api.users.getComments(profile.username);
@@ -292,46 +293,7 @@ export default function UserProfileClient({ profile }: UserProfileClientProps): 
                   ) : (
                     <div className="space-y-4">
                       {votes.map((vote) => (
-                        <div key={vote.id} className={`border ${BORDERS.medium} ${RADIUS.control} p-4 hover:bg-stone-50 hover:dark:bg-stone-950 transition-colors`}>
-                          <div className="flex items-start justify-between mb-2">
-                            <div className="flex-1">
-                              <Link
-                                href={`/compare/${vote.work_slug}/${vote.screen_work_slug}`}
-                                className={`text-black dark:text-white hover:underline font-bold`}
-                                style={{ fontFamily: FONTS.mono }}
-                              >
-                                {vote.work_title} / {vote.screen_work_title}
-                              </Link>
-                              <span className={`ml-2 ${TEXT.metadata} px-2 py-1 border ${BORDERS.subtle} ${RADIUS.control} ${TEXT.mutedStrong} font-bold ${monoUppercase}`} style={{ fontFamily: FONTS.mono, letterSpacing: LETTER_SPACING.wide }}>
-                                {vote.diff_item_category}
-                              </span>
-                            </div>
-                            <span className={`${TEXT.metadata} ${TEXT.mutedMedium} whitespace-nowrap ml-4 uppercase tracking-wider`} style={{ fontFamily: FONTS.mono }}>
-                              {formatDate(vote.created_at)}
-                            </span>
-                          </div>
-                          <p className={`${TEXT.secondary} ${TEXT.mutedMedium} mb-2`} style={{ fontFamily: FONTS.mono }}>&quot;{vote.diff_item_claim}&quot;</p>
-                          <div className="flex items-center gap-2">
-                            <span className={`${TEXT.secondary} font-bold uppercase tracking-wider`} style={{ fontFamily: FONTS.mono }}>Your vote:</span>
-                            <span
-                              className={`${TEXT.secondary} px-2 py-1 border ${BORDERS.solid} ${RADIUS.control} font-bold ${monoUppercase} ${
-                                vote.vote === 'ACCURATE'
-                                  ? 'bg-black dark:bg-white text-white dark:text-black'
-                                  : vote.vote === 'NEEDS_NUANCE'
-                                  ? 'bg-black/60 dark:bg-white/60 text-white dark:text-black'
-                                  : 'bg-black/40 dark:bg-white/40 text-white dark:text-black'
-                              }`}
-                              style={{ fontFamily: FONTS.mono, letterSpacing: LETTER_SPACING.tight }}
-                            >
-                              {vote.vote === 'ACCURATE' ? 'Accurate' : vote.vote === 'NEEDS_NUANCE' ? 'Needs Nuance' : 'Disagree'}
-                            </span>
-                            {vote.created_by_username && (
-                              <span className={`${TEXT.secondary} ${TEXT.mutedMedium}`} style={{ fontFamily: FONTS.mono }}>
-                                by <Link href={`/u/${vote.created_by_username}`} className={`text-black dark:text-white hover:underline font-bold`} style={{ fontFamily: FONTS.mono }}>{vote.created_by_username}</Link>
-                              </span>
-                            )}
-                          </div>
-                        </div>
+                        <ComparisonVoteCard key={vote.id} vote={vote} />
                       ))}
                     </div>
                   )}

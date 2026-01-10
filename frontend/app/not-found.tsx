@@ -43,7 +43,8 @@ export default function NotFound(): JSX.Element {
         <div>
           <Link
             href="/"
-            className="inline-flex items-center px-6 py-3 bg-link text-white rounded-lg hover:opacity-90 transition-opacity font-semibold"
+            className="inline-flex items-center px-6 py-3 bg-link text-white hover:opacity-90 transition-opacity font-semibold"
+            style={{ borderRadius: 'var(--button-radius)' }}
           >
             Return home
           </Link>

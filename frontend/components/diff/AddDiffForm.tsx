@@ -284,7 +284,7 @@ export default function AddDiffForm({ work, screenWork, initialCategory }: AddDi
             value={formData.category}
             onChange={handleChange}
             required
-            className={`w-full px-3 py-3 ${TEXT.secondary} bg-white dark:bg-black text-black dark:text-white border ${BORDERS.medium} ${RADIUS.control} focus:outline-none focus:border-black dark:focus:border-white ${HEIGHT.touchTarget}`}
+            className={`w-full px-3 py-3 ${TEXT.secondary} bg-white dark:bg-black text-black dark:text-white border ${BORDERS.medium} ${RADIUS.input} focus:outline-none focus:border-black dark:focus:border-white ${HEIGHT.touchTarget}`}
             style={{ fontFamily: FONTS.mono, letterSpacing: LETTER_SPACING.normal }}
           >
             <option value="">Select a category...</option>

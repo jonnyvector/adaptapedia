@@ -26,7 +26,8 @@ export const COLORS = {
 // Border Radius
 export const RADIUS = {
   none: '', // 0 radius for structural elements (cards, containers)
-  control: 'rounded', // 4px for interactive controls (buttons, inputs)
+  control: '[border-radius:var(--button-radius)]', // Uses CSS variable for centralized control
+  input: '[border-radius:var(--input-radius)]', // Uses CSS variable for input elements
 } as const;
 
 // Border Styles
