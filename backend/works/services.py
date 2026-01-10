@@ -208,7 +208,12 @@ class SearchService:
     def detect_screen_search(query: str) -> Optional[int]:
         """
         Detect if search query is for a specific screen adaptation by year.
-        Returns year if detected, None otherwise.
+
+        Args:
+            query: Search query string to parse for year
+
+        Returns:
+            Year as integer if detected in query (e.g., 1980, 2021), None otherwise
 
         Examples:
             "The Shining 1980" -> 1980

@@ -3,7 +3,7 @@ from rest_framework import viewsets, permissions, decorators, response, status
 from rest_framework.views import APIView
 from rest_framework.pagination import PageNumberPagination
 from rest_framework.throttling import UserRateThrottle
-from rest_framework_simplejwt.tokens import RefreshToken
+from rest_framework_simplejwt.tokens import RefreshToken, TokenError
 from django.contrib.auth import authenticate
 from django.db import models, IntegrityError
 from django.shortcuts import get_object_or_404
@@ -238,9 +238,9 @@ class LogoutView(APIView):
                 {'message': 'Successfully logged out'},
                 status=status.HTTP_200_OK
             )
-        except Exception:
+        except (TokenError, ValueError, KeyError) as e:
             return response.Response(
-                {'error': 'Invalid token'},
+                {'error': 'Invalid or expired token'},
                 status=status.HTTP_400_BAD_REQUEST
             )
 
