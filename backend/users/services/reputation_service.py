@@ -113,8 +113,52 @@ class ReputationService:
         return None
 
     @staticmethod
+    def _calculate_user_accuracy(user: User) -> tuple[Optional[float], int]:
+        """
+        Calculate accuracy rate for a user's diffs.
+
+        Args:
+            user: User to calculate accuracy for
+
+        Returns:
+            Tuple of (accuracy_rate, diffs_evaluated_count)
+            accuracy_rate is None if no diffs have enough votes
+        """
+        from diffs.models import DiffItem
+
+        # Only count diffs with minimum votes for meaningful accuracy
+        MIN_VOTES_FOR_ACCURACY = 5
+
+        diffs_with_votes = DiffItem.objects.filter(
+            created_by=user,
+            status='LIVE'
+        ).annotate(
+            total_votes_count=Count('votes'),
+            accurate_votes=Count('votes', filter=Q(votes__vote='ACCURATE')),
+        ).filter(total_votes_count__gte=MIN_VOTES_FOR_ACCURACY)
+
+        accuracy_stats = diffs_with_votes.aggregate(
+            avg_accuracy=Avg(
+                F('accurate_votes') * 100.0 / F('total_votes_count')
+            )
+        )
+
+        accuracy_rate = (
+            round(accuracy_stats['avg_accuracy'], 1)
+            if accuracy_stats['avg_accuracy']
+            else None
+        )
+
+        return accuracy_rate, diffs_with_votes.count()
+
+    @staticmethod
     def get_user_stats(user: User) -> Dict[str, Any]:
-        """Get comprehensive reputation stats for a user."""
+        """
+        Get comprehensive reputation stats for a user.
+
+        Returns:
+            Dictionary with reputation, contribution counts, accuracy, and recent events
+        """
         from diffs.models import DiffItem, DiffVote, DiffComment, ComparisonVote
 
         # Count contributions (including both diff votes and comparison votes)
@@ -124,22 +168,8 @@ class ReputationService:
         total_votes = diff_votes + comparison_votes
         total_comments = DiffComment.objects.filter(user=user, status='LIVE').count()
 
-        # Calculate accuracy rate
-        diffs_with_votes = DiffItem.objects.filter(
-            created_by=user,
-            status='LIVE'
-        ).annotate(
-            total_votes_count=Count('votes'),
-            accurate_votes=Count('votes', filter=Q(votes__vote='ACCURATE')),
-        ).filter(total_votes_count__gte=5)  # Only count diffs with 5+ votes
-
-        accuracy_stats = diffs_with_votes.aggregate(
-            avg_accuracy=Avg(
-                F('accurate_votes') * 100.0 / F('total_votes_count')
-            )
-        )
-
-        accuracy_rate = round(accuracy_stats['avg_accuracy'], 1) if accuracy_stats['avg_accuracy'] else None
+        # Calculate accuracy rate and evaluated count
+        accuracy_rate, diffs_evaluated = ReputationService._calculate_user_accuracy(user)
 
         # Get recent reputation events
         recent_events = ReputationEvent.objects.filter(user=user).select_related(
@@ -152,7 +182,7 @@ class ReputationService:
             'total_votes': total_votes,
             'total_comments': total_comments,
             'accuracy_rate': accuracy_rate,
-            'diffs_evaluated': diffs_with_votes.count(),
+            'diffs_evaluated': diffs_evaluated,
             'recent_events': recent_events,
         }
 
@@ -178,6 +208,27 @@ class BadgeService:
 
         # Community badges
         BadgeType.EARLY_ADOPTER: {'joined_before': '2025-02-01'},
+    }
+
+    # Milestone badge thresholds ordered from highest to lowest
+    # Awards the highest applicable badge based on user's current count
+    MILESTONE_THRESHOLDS = {
+        'votes': [
+            (100, BadgeType.VOTER_100),
+            (50, BadgeType.VOTER_50),
+            (10, BadgeType.VOTER_10),
+            (1, BadgeType.FIRST_VOTE),
+        ],
+        'comments': [
+            (50, BadgeType.COMMENTER_50),
+            (10, BadgeType.COMMENTER_10),
+            (1, BadgeType.FIRST_COMMENT),
+        ],
+        'diffs': [
+            (25, BadgeType.DIFF_CREATOR_25),
+            (5, BadgeType.DIFF_CREATOR_5),
+            (1, BadgeType.FIRST_DIFF),
+        ],
     }
 
     @staticmethod
@@ -221,62 +272,34 @@ class BadgeService:
         """
         Check and award all applicable milestone badges for a user.
 
-        Returns list of newly awarded badges.
+        Uses data-driven approach with MILESTONE_THRESHOLDS configuration.
+        Awards the highest applicable badge for each metric.
+
+        Returns:
+            List of newly awarded badges
         """
         from diffs.models import DiffItem, DiffVote, DiffComment
 
         awarded_badges = []
 
         # Count user's contributions
-        vote_count = DiffVote.objects.filter(user=user).count()
-        comment_count = DiffComment.objects.filter(user=user, status='LIVE').count()
-        diff_count = DiffItem.objects.filter(created_by=user, status='LIVE').count()
+        counts = {
+            'votes': DiffVote.objects.filter(user=user).count(),
+            'comments': DiffComment.objects.filter(user=user, status='LIVE').count(),
+            'diffs': DiffItem.objects.filter(created_by=user, status='LIVE').count(),
+        }
 
-        # Check vote badges
-        if vote_count == 1:
-            badge = BadgeService.award_badge(user, BadgeType.FIRST_VOTE)
-            if badge:
-                awarded_badges.append(badge)
-        elif vote_count >= 100:
-            badge = BadgeService.award_badge(user, BadgeType.VOTER_100)
-            if badge:
-                awarded_badges.append(badge)
-        elif vote_count >= 50:
-            badge = BadgeService.award_badge(user, BadgeType.VOTER_50)
-            if badge:
-                awarded_badges.append(badge)
-        elif vote_count >= 10:
-            badge = BadgeService.award_badge(user, BadgeType.VOTER_10)
-            if badge:
-                awarded_badges.append(badge)
+        # Check each metric against thresholds (highest to lowest)
+        for metric, thresholds in BadgeService.MILESTONE_THRESHOLDS.items():
+            count = counts[metric]
 
-        # Check comment badges
-        if comment_count == 1:
-            badge = BadgeService.award_badge(user, BadgeType.FIRST_COMMENT)
-            if badge:
-                awarded_badges.append(badge)
-        elif comment_count >= 50:
-            badge = BadgeService.award_badge(user, BadgeType.COMMENTER_50)
-            if badge:
-                awarded_badges.append(badge)
-        elif comment_count >= 10:
-            badge = BadgeService.award_badge(user, BadgeType.COMMENTER_10)
-            if badge:
-                awarded_badges.append(badge)
-
-        # Check diff creation badges
-        if diff_count == 1:
-            badge = BadgeService.award_badge(user, BadgeType.FIRST_DIFF)
-            if badge:
-                awarded_badges.append(badge)
-        elif diff_count >= 25:
-            badge = BadgeService.award_badge(user, BadgeType.DIFF_CREATOR_25)
-            if badge:
-                awarded_badges.append(badge)
-        elif diff_count >= 5:
-            badge = BadgeService.award_badge(user, BadgeType.DIFF_CREATOR_5)
-            if badge:
-                awarded_badges.append(badge)
+            # Find the highest threshold met
+            for threshold, badge_type in thresholds:
+                if count >= threshold:
+                    badge = BadgeService.award_badge(user, badge_type)
+                    if badge:
+                        awarded_badges.append(badge)
+                    break  # Only award the highest applicable badge
 
         return awarded_badges
 
