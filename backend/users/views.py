@@ -543,60 +543,10 @@ def suggested_comparisons(request):
 
     GET /api/users/me/suggested-comparisons/
     """
-    from screen.models import AdaptationEdge
-    from diffs.models import DiffItem
-    from django.db.models import Count, Q
+    from .services.recommendation_service import RecommendationService
 
-    user = request.user
-
-    # Get user preferences if they exist
-    try:
-        preferences = user.preferences
-    except UserPreferences.DoesNotExist:
-        preferences = None
-
-    intent = preferences.contribution_interest if preferences else 'EXPLORE'
-
-    # Get adaptation edges with related work/screen data
-    edges = AdaptationEdge.objects.select_related('work', 'screen_work').all()
-
-    # Filter by user's preferred genres if they exist
-    if preferences and preferences.genres:
-        # Filter edges where work.genre is in user's preferred genres
-        genre_filters = Q()
-        for genre in preferences.genres:
-            genre_filters |= Q(work__genre__icontains=genre)
-        edges = edges.filter(genre_filters)
-
-    # Annotate with diff count
-    from django.db.models import F
-    edges = edges.annotate(
-        diff_count=Count('work__diffs', filter=Q(work__diffs__screen_work=F('screen_work')))
-    )
-
-    # Order by diff count (descending) for now
-    # TODO: Implement intent-based ranking
-    edges = edges.order_by('-diff_count', '-screen_work__tmdb_popularity')[:10]
-
-    # Format response
-    comparisons = []
-    for edge in edges:
-        # Get genres from work or screen_work
-        genres = []
-        if edge.work.genre:
-            genres = [edge.work.genre]
-        if edge.screen_work.genres:
-            genres.extend(edge.screen_work.genres[:2])
-        genres = list(set(genres))[:3]  # Dedupe and limit to 3
-
-        comparisons.append({
-            'work_slug': edge.work.slug,
-            'work_title': edge.work.title,
-            'screen_work_slug': edge.screen_work.slug,
-            'screen_work_title': edge.screen_work.title,
-            'genres': genres,
-            'diff_count': edge.diff_count
-        })
+    # Get suggestions from service (handles all business logic)
+    comparisons, intent = RecommendationService.get_suggested_comparisons(request.user)
 
     return response.Response({
         'comparisons': comparisons,
