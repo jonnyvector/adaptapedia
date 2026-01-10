@@ -171,16 +171,9 @@ class DiffService:
         ).select_related('work', 'screen_work', 'created_by').prefetch_related('votes')
 
         if max_spoiler_scope:
-            # Apply spoiler filtering
-            from .models import SpoilerScope
-            scope_order = {
-                SpoilerScope.NONE: 0,
-                SpoilerScope.BOOK_ONLY: 1,
-                SpoilerScope.SCREEN_ONLY: 1,
-                SpoilerScope.FULL: 2,
-            }
-            max_level = scope_order.get(max_spoiler_scope, 0)
-            allowed_scopes = [k for k, v in scope_order.items() if v <= max_level]
+            # Apply spoiler filtering using constant
+            max_level = SPOILER_SCOPE_ORDER.get(max_spoiler_scope, 0)
+            allowed_scopes = [k for k, v in SPOILER_SCOPE_ORDER.items() if v <= max_level]
             queryset = queryset.filter(spoiler_scope__in=allowed_scopes)
 
         return list(queryset)

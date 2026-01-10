@@ -9,6 +9,7 @@ from .models import DiffItem, DiffVote, DiffComment, SpoilerScope, ComparisonVot
 from .serializers import DiffItemSerializer, DiffVoteSerializer, DiffCommentSerializer, ComparisonVoteSerializer
 from .services import DiffService
 from .permissions import CanEditDiff, CanMergeDiff
+from .constants import SPOILER_SCOPE_ORDER
 
 
 class DiffItemViewSet(viewsets.ModelViewSet):
@@ -37,14 +38,8 @@ class DiffItemViewSet(viewsets.ModelViewSet):
         # Filter by spoiler scope
         if spoiler_scope:
             # Order by spoiler severity: NONE < BOOK_ONLY/SCREEN_ONLY < FULL
-            scope_order = {
-                SpoilerScope.NONE: 0,
-                SpoilerScope.BOOK_ONLY: 1,
-                SpoilerScope.SCREEN_ONLY: 1,
-                SpoilerScope.FULL: 2,
-            }
-            max_level = scope_order.get(spoiler_scope, 0)
-            allowed_scopes = [k for k, v in scope_order.items() if v <= max_level]
+            max_level = SPOILER_SCOPE_ORDER.get(spoiler_scope, 0)
+            allowed_scopes = [k for k, v in SPOILER_SCOPE_ORDER.items() if v <= max_level]
             queryset = queryset.filter(spoiler_scope__in=allowed_scopes)
 
         # Annotate with vote metrics
