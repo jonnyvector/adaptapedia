@@ -655,10 +655,10 @@ export default function MatchupScoreboard({
                 )}
               </div>
               {/* Single line: percentages + sample size */}
-              <div className="flex items-center justify-between ${TEXT.metadata} text-black/60 dark:text-white/60 uppercase tracking-wider" style={{ fontFamily: 'JetBrains Mono, monospace', letterSpacing: '0.08em' }}>
-                <span>BOOK {bookPct}%</span>
-                <span className="font-bold">SAMPLE SIZE: {totalVotes}</span>
-                <span>SCREEN {screenPct}%</span>
+              <div className="grid grid-cols-3 items-center ${TEXT.metadata} text-black/60 dark:text-white/60 uppercase tracking-wider" style={{ fontFamily: 'JetBrains Mono, monospace', letterSpacing: '0.08em' }}>
+                <span className="text-left">BOOK {bookPct}%</span>
+                <span className="font-bold text-center">SAMPLE SIZE: {totalVotes}</span>
+                <span className="text-right">SCREEN {screenPct}%</span>
               </div>
               {/* User vote status */}
               {userVote && !showEditVote && (
