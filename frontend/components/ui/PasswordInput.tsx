@@ -37,28 +37,36 @@ export const PasswordInput = React.forwardRef<HTMLInputElement, PasswordInputPro
             <svg
               xmlns="http://www.w3.org/2000/svg"
               viewBox="0 0 24 24"
-              fill="currentColor"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="1.5"
+              strokeLinecap="square"
+              strokeLinejoin="miter"
               className="w-5 h-5"
             >
-              {/* Eye shape */}
-              <path d="M12 4L23 12L12 20L1 12L12 4Z" />
-              {/* Pupil cutout */}
-              <path d="M12 9L15 12L12 15L9 12L12 9Z" fill="white" className="dark:fill-black" />
+              {/* Almond eye shape */}
+              <path d="M2 12C2 12 5 6 12 6C19 6 22 12 22 12C22 12 19 18 12 18C5 18 2 12 2 12Z" />
+              {/* Pupil */}
+              <circle cx="12" cy="12" r="3" />
               {/* Diagonal slash */}
-              <rect x="10.5" y="0" width="3" height="28" transform="rotate(45 12 12)" />
+              <line x1="3" y1="3" x2="21" y2="21" strokeWidth="1.5" />
             </svg>
           ) : (
             // Brutalist eye icon (show)
             <svg
               xmlns="http://www.w3.org/2000/svg"
               viewBox="0 0 24 24"
-              fill="currentColor"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="1.5"
+              strokeLinecap="square"
+              strokeLinejoin="miter"
               className="w-5 h-5"
             >
-              {/* Eye shape - angular diamond */}
-              <path d="M12 4L23 12L12 20L1 12L12 4Z" />
-              {/* Pupil - smaller diamond cutout */}
-              <path d="M12 9L15 12L12 15L9 12L12 9Z" fill="white" className="dark:fill-black" />
+              {/* Almond eye shape */}
+              <path d="M2 12C2 12 5 6 12 6C19 6 22 12 22 12C22 12 19 18 12 18C5 18 2 12 2 12Z" />
+              {/* Pupil */}
+              <circle cx="12" cy="12" r="3" />
             </svg>
           )}
         </button>
