@@ -7,6 +7,7 @@ import { useAuth } from '@/lib/auth-context';
 import { ApiError, getBackendUrl } from '@/lib/api';
 import { Button } from '@/components/ui/Button';
 import { Input } from '@/components/ui/Input';
+import { PasswordInput } from '@/components/ui/PasswordInput';
 import { FONTS, LETTER_SPACING, BORDERS, TEXT, RADIUS, monoUppercase } from '@/lib/brutalist-design';
 
 interface LoginFormProps {
@@ -71,8 +72,7 @@ export default function LoginForm({ redirectTo = '/' }: LoginFormProps): JSX.Ele
         autoComplete="username"
       />
 
-      <Input
-        type="password"
+      <PasswordInput
         id="password"
         label="Password"
         value={formData.password}

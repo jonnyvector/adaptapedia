@@ -7,6 +7,7 @@ import { useAuth } from '@/lib/auth-context';
 import { ApiError, getBackendUrl } from '@/lib/api';
 import { Button } from '@/components/ui/Button';
 import { Input } from '@/components/ui/Input';
+import { PasswordInput } from '@/components/ui/PasswordInput';
 import { FONTS, LETTER_SPACING, BORDERS, TEXT, RADIUS, monoUppercase } from '@/lib/brutalist-design';
 
 interface SignupFormProps {
@@ -24,6 +25,11 @@ export default function SignupForm({ redirectTo = '/' }: SignupFormProps): JSX.E
   });
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [errors, setErrors] = useState<Record<string, string>>({});
+  const [passwordConfirmTouched, setPasswordConfirmTouched] = useState(false);
+
+  // Check if passwords match in real-time
+  const passwordsMatch = formData.password && formData.password_confirm && formData.password === formData.password_confirm;
+  const showPasswordMismatch = passwordConfirmTouched && formData.password_confirm && !passwordsMatch;
 
   const validateForm = (): boolean => {
     const newErrors: Record<string, string> = {};
@@ -117,8 +123,7 @@ export default function SignupForm({ redirectTo = '/' }: SignupFormProps): JSX.E
         error={errors.email}
       />
 
-      <Input
-        type="password"
+      <PasswordInput
         id="password"
         label="Password"
         value={formData.password}
@@ -130,16 +135,22 @@ export default function SignupForm({ redirectTo = '/' }: SignupFormProps): JSX.E
         helperText="Must be at least 8 characters"
       />
 
-      <Input
-        type="password"
+      <PasswordInput
         id="password_confirm"
         label="Confirm Password"
         value={formData.password_confirm}
-        onChange={(e) => setFormData({ ...formData, password_confirm: e.target.value })}
+        onChange={(e) => {
+          setFormData({ ...formData, password_confirm: e.target.value });
+          if (!passwordConfirmTouched) {
+            setPasswordConfirmTouched(true);
+          }
+        }}
         required
         disabled={isSubmitting}
         autoComplete="new-password"
-        error={errors.password_confirm}
+        error={showPasswordMismatch ? 'Passwords do not match' : errors.password_confirm}
+        variant={passwordsMatch && passwordConfirmTouched ? 'success' : undefined}
+        helperText={passwordsMatch && passwordConfirmTouched ? '✓ Passwords match' : undefined}
       />
 
       <Button
