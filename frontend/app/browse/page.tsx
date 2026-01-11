@@ -71,12 +71,26 @@ export default async function BrowsePage({ searchParams }: BrowsePageProps): Pro
           </div>
         </div>
 
-        {!hasAnyContent ? (
+{!hasAnyContent ? (
           <EmptyState
             message="No comparisons available yet. Be the first to document differences!"
             action={{ label: "← Back to Home", href: "/" }}
           />
+        ) : sort !== 'popularity' ? (
+          // Filtered view - show only sorted results
+          <div>
+            {sections.all_comparisons.length > 0 && (
+              <section>
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 sm:gap-6">
+                  {sections.all_comparisons.map((comparison) => (
+                    <ComparisonCard key={`${comparison.work_id}-${comparison.screen_work_id}`} comparison={comparison} />
+                  ))}
+                </div>
+              </section>
+            )}
+          </div>
         ) : (
+          // Default view - show all sections
           <div className="space-y-8 sm:space-y-12 md:space-y-16">
             {/* Featured Section */}
             {sections.featured.length > 0 && (
