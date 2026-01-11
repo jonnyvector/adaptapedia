@@ -4,7 +4,7 @@ import { cn } from '@/lib/utils';
 import { FONTS, LETTER_SPACING, BORDERS, TEXT, RADIUS, monoUppercase } from '@/lib/brutalist-design';
 
 const inputVariants = cva(
-  `w-full ${TEXT.body} border bg-white dark:bg-black text-black dark:text-white ${RADIUS.input} outline-none transition-colors disabled:opacity-50 disabled:cursor-not-allowed`,
+  `w-full ${TEXT.body} border bg-white dark:bg-black text-black dark:text-white ${RADIUS.input} outline-none focus:outline-none focus:ring-0 focus-visible:outline-none focus-visible:ring-0 transition-colors disabled:opacity-50 disabled:cursor-not-allowed`,
   {
     variants: {
       variant: {
