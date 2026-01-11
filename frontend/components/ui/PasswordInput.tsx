@@ -28,7 +28,7 @@ export const PasswordInput = React.forwardRef<HTMLInputElement, PasswordInputPro
         <button
           type="button"
           onClick={() => setShowPassword(!showPassword)}
-          className={`absolute right-3 top-1/2 -translate-y-1/2 ${props.label ? 'mt-4' : ''} text-black/60 dark:text-white/60 hover:text-black hover:dark:text-white transition-colors focus:outline-none focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-black dark:focus-visible:outline-white ${RADIUS.control} p-1`}
+          className={`absolute right-3 top-1/2 -translate-y-1/2 ${props.label ? 'mt-4' : ''} text-black/60 hover:text-black transition-colors focus:outline-none focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-black ${RADIUS.control} p-1`}
           aria-label={showPassword ? 'Hide password' : 'Show password'}
           tabIndex={-1}
         >
