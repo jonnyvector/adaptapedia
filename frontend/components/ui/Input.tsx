@@ -31,10 +31,11 @@ export interface InputProps
   label?: React.ReactNode;
   error?: string;
   helperText?: string;
+  endAdornment?: React.ReactNode;
 }
 
 const Input = React.forwardRef<HTMLInputElement, InputProps>(
-  ({ className, variant, inputSize, label, error, helperText, id, ...props }, ref) => {
+  ({ className, variant, inputSize, label, error, helperText, endAdornment, id, ...props }, ref) => {
     const inputId = id || `input-${Math.random().toString(36).substr(2, 9)}`;
     const inputVariant = error ? 'error' : variant;
 
@@ -49,13 +50,20 @@ const Input = React.forwardRef<HTMLInputElement, InputProps>(
             {label}
           </label>
         )}
-        <input
-          ref={ref}
-          id={inputId}
-          className={cn(inputVariants({ variant: inputVariant, inputSize }), className)}
-          style={{ fontFamily: FONTS.mono, letterSpacing: LETTER_SPACING.normal }}
-          {...props}
-        />
+        <div className="relative">
+          <input
+            ref={ref}
+            id={inputId}
+            className={cn(inputVariants({ variant: inputVariant, inputSize }), className)}
+            style={{ fontFamily: FONTS.mono, letterSpacing: LETTER_SPACING.normal }}
+            {...props}
+          />
+          {endAdornment && (
+            <div className="absolute right-3 top-1/2 -translate-y-1/2">
+              {endAdornment}
+            </div>
+          )}
+        </div>
         {error && (
           <p
             className={`mt-1 ${TEXT.metadata} text-red-600 dark:text-red-400`}

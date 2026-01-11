@@ -16,27 +16,15 @@ export const PasswordInput = React.forwardRef<HTMLInputElement, PasswordInputPro
       return <Input ref={ref} type="password" className={className} {...props} />;
     }
 
-    return (
-      <div className="relative">
-        <Input
-          ref={ref}
-          type={showPassword ? 'text' : 'password'}
-          className={className}
-          style={{ paddingRight: '3rem' }}
-          {...props}
-        />
-        <button
-          type="button"
-          onClick={() => setShowPassword(!showPassword)}
-          className="absolute right-3 text-black/60 hover:text-black transition-colors focus:outline-none focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-black p-1"
-          style={{
-            borderRadius: RADIUS.control,
-            top: props.label ? 'calc(50% + 18px)' : '50%',
-            transform: 'translateY(-50%)'
-          }}
-          aria-label={showPassword ? 'Hide password' : 'Show password'}
-          tabIndex={-1}
-        >
+    const toggleButton = (
+      <button
+        type="button"
+        onClick={() => setShowPassword(!showPassword)}
+        className="text-black/60 hover:text-black transition-colors focus:outline-none focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-black p-1"
+        style={{ borderRadius: RADIUS.control }}
+        aria-label={showPassword ? 'Hide password' : 'Show password'}
+        tabIndex={-1}
+      >
           {showPassword ? (
             // Brutalist eye-slash icon (hide)
             <svg
@@ -74,8 +62,18 @@ export const PasswordInput = React.forwardRef<HTMLInputElement, PasswordInputPro
               <circle cx="12" cy="12" r="3" />
             </svg>
           )}
-        </button>
-      </div>
+      </button>
+    );
+
+    return (
+      <Input
+        ref={ref}
+        type={showPassword ? 'text' : 'password'}
+        className={className}
+        style={{ paddingRight: '3rem' }}
+        endAdornment={toggleButton}
+        {...props}
+      />
     );
   }
 );
