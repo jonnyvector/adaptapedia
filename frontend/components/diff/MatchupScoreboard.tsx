@@ -319,14 +319,6 @@ export default function MatchupScoreboard({
     </div>
   );
 
-  if (loading) {
-    return (
-      <div className="bg-white dark:bg-black border-2 border-black dark:border-white p-8 min-h-[420px] flex items-center justify-center">
-        <div className="text-sm text-gray-600 dark:text-gray-400" style={{ fontFamily: 'JetBrains Mono, monospace' }}>Loading...</div>
-      </div>
-    );
-  }
-
   return (
     <div className="relative bg-white dark:bg-black py-0 sm:py-4 md:py-6 lg:py-10">
       {/* Bookmark button - top-right corner of hero */}
