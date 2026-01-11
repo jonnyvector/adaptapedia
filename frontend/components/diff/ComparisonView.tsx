@@ -317,7 +317,7 @@ export default function ComparisonView({
                   resultsCount={filteredDiffs.length}
                 />
               </div>
-              <div className="flex gap-3">
+              <div className="flex flex-col sm:flex-row gap-3">
                 <DiffSort value={sortOption} onChange={setSortOption} />
                 <button
                   onClick={handleAddDiff}
