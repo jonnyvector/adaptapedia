@@ -49,19 +49,26 @@ export default async function BrowsePage({ searchParams }: BrowsePageProps): Pro
       <div className="container py-8 md:py-16">
         {/* Header */}
         <div className="mb-8 md:mb-12">
-          <h1
-            className={`text-3xl sm:text-4xl md:text-6xl font-black mb-4 md:mb-6 tracking-tight ${TEXT.primary}`}
+          <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-4 mb-4 md:mb-6">
+            <div className="flex-1">
+              <h1
+                className={`text-3xl sm:text-4xl md:text-6xl font-black mb-2 tracking-tight ${TEXT.primary}`}
 
-          >
-            Browse Comparisons
-          </h1>
-          <p
-            className={`text-base sm:text-lg md:text-xl ${TEXT.mutedMedium} max-w-2xl`}
+              >
+                Browse Comparisons
+              </h1>
+              <p
+                className={`text-base sm:text-lg md:text-xl ${TEXT.mutedMedium} max-w-2xl`}
 
-          >
-            Explore book-to-screen adaptations with community-documented differences.
-            Click any comparison to see what changed.
-          </p>
+              >
+                Explore book-to-screen adaptations with community-documented differences.
+                Click any comparison to see what changed.
+              </p>
+            </div>
+            <div className="flex-shrink-0 sm:pt-2">
+              <SortDropdown />
+            </div>
+          </div>
         </div>
 
         {!hasAnyContent ? (
@@ -143,17 +150,10 @@ export default async function BrowsePage({ searchParams }: BrowsePageProps): Pro
             {sections.all_comparisons.length > 0 && (
               <section>
                 <div className="mb-4 sm:mb-6">
-                  <div className="flex flex-col sm:flex-row sm:items-end sm:justify-between gap-3 mb-4">
-                    <div>
-                      <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold mb-1 sm:mb-2">All Comparisons</h2>
-                      <p className="text-muted text-sm sm:text-base">
-                        Browse all available book-to-screen adaptations
-                      </p>
-                    </div>
-                    <div className="flex-shrink-0">
-                      <SortDropdown />
-                    </div>
-                  </div>
+                  <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold mb-1 sm:mb-2">All Comparisons</h2>
+                  <p className="text-muted text-sm sm:text-base">
+                    Browse all available book-to-screen adaptations
+                  </p>
                 </div>
                 <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 sm:gap-6">
                   {sections.all_comparisons.map((comparison) => (
