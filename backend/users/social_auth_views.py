@@ -1,4 +1,5 @@
 """Custom views for social authentication with JWT."""
+import os
 from django.shortcuts import redirect
 from django.views import View
 from rest_framework_simplejwt.tokens import RefreshToken
@@ -11,9 +12,11 @@ class SocialAuthCallbackView(View):
 
     def get(self, request):
         """Generate JWT tokens and redirect to frontend with tokens."""
+        frontend_base_url = os.environ.get('FRONTEND_URL', 'http://localhost:3000')
+
         if not request.user.is_authenticated:
             # User not authenticated, redirect to login
-            return redirect('http://localhost:3000/auth/login?error=auth_failed')
+            return redirect(f'{frontend_base_url}/auth/login?error=auth_failed')
 
         try:
             # Generate JWT tokens
@@ -22,7 +25,7 @@ class SocialAuthCallbackView(View):
             refresh_token = str(refresh)
 
             # Build frontend URL with tokens
-            frontend_url = 'http://localhost:3000/auth/social-callback'
+            frontend_url = f'{frontend_base_url}/auth/social-callback'
             params = {
                 'access': access_token,
                 'refresh': refresh_token,
@@ -34,4 +37,4 @@ class SocialAuthCallbackView(View):
         except Exception as e:
             # Log error and redirect to frontend with error message
             print(f"Social auth error: {e}")
-            return redirect('http://localhost:3000/auth/login?error=token_generation_failed')
+            return redirect(f'{frontend_base_url}/auth/login?error=token_generation_failed')
