@@ -611,41 +611,58 @@ class DiffService:
         }
 
     @staticmethod
-    def get_all_comparisons(limit: int = 50) -> List[Dict[str, Any]]:
+    def get_all_comparisons(limit: int = 50, sort: str = 'popularity') -> List[Dict[str, Any]]:
         """
         Get all available book-to-screen comparisons from AdaptationEdge.
 
-        Returns comparisons sorted by TMDb popularity, showing diff count for each.
+        Args:
+            limit: Number of comparisons to return (default 50)
+            sort: Sort order - 'popularity' (default), 'trending', 'most_documented', 'recently_updated', 'newest'
+
+        Returns comparisons sorted by the specified criteria, with diff/vote counts for each.
         """
         from works.models import Work
         from screen.models import ScreenWork, AdaptationEdge
 
-        # Get all adaptation edges with related data
-        edges = AdaptationEdge.objects.select_related(
-            'work', 'screen_work'
-        ).order_by('-screen_work__tmdb_popularity', 'work__title')[:limit]
+        # Get ALL adaptation edges with related data (no limit yet)
+        # We'll filter and sort after we have all the data
+        edges = AdaptationEdge.objects.select_related('work', 'screen_work').all()
 
-        # Get diff counts for all comparisons
-        diff_counts = {}
-        diff_data = DiffItem.objects.filter(
+        # Get diff counts and vote counts for all comparisons
+        diff_and_vote_data = DiffItem.objects.filter(
             status='LIVE'
         ).values('work_id', 'screen_work_id').annotate(
-            total_diffs=Count('id', distinct=True)
+            total_diffs=Count('id', distinct=True),
+            total_votes=Count('votes', distinct=True),
+            last_updated=Max('updated_at'),
+            first_created=Max('created_at'),  # Use Max to get most recent, will sort by this for 'newest'
         )
 
-        for item in diff_data:
+        # Build lookup dicts
+        comparison_data = {}
+        for item in diff_and_vote_data:
             key = (item['work_id'], item['screen_work_id'])
-            diff_counts[key] = item['total_diffs']
+            comparison_data[key] = {
+                'diff_count': item['total_diffs'],
+                'vote_count': item['total_votes'],
+                'last_updated': item['last_updated'],
+                'first_created': item['first_created'],
+            }
 
         # Get comparison vote counts
         work_ids = [edge.work.id for edge in edges]
         screen_work_ids = [edge.screen_work.id for edge in edges]
         comparison_votes = DiffService._get_comparison_votes(work_ids, screen_work_ids)
 
+        # Build ALL results
         results = []
         for edge in edges:
             key = (edge.work.id, edge.screen_work.id)
-            diff_count = diff_counts.get(key, 0)
+            data = comparison_data.get(key, {})
+            diff_count = data.get('diff_count', 0)
+            vote_count = data.get('vote_count', 0)
+            last_updated = data.get('last_updated')
+            first_created = data.get('first_created')
 
             results.append({
                 'work_id': edge.work.id,
@@ -661,7 +678,32 @@ class DiffService:
                 'screen_work_year': edge.screen_work.year,
                 'poster_url': edge.screen_work.poster_url,
                 'diff_count': diff_count,
+                'vote_count': vote_count,
                 'comparison_vote_count': comparison_votes.get(key, 0),
+                'last_updated': last_updated.isoformat() if last_updated else None,
+                'first_created': first_created.isoformat() if first_created else None,
+                'tmdb_popularity': edge.screen_work.tmdb_popularity or 0,  # For popularity sort
             })
 
-        return results
+        # Apply sorting based on sort parameter
+        if sort == 'trending':
+            # Use the existing trending logic for 7-day activity
+            # For now, approximate by recent updates + high engagement
+            results.sort(key=lambda x: (
+                x['last_updated'] or '',  # Recent activity first
+                x['diff_count'] + x['vote_count'],  # Then by total engagement
+            ), reverse=True)
+        elif sort == 'most_documented':
+            results.sort(key=lambda x: (x['diff_count'], x['vote_count']), reverse=True)
+        elif sort == 'recently_updated':
+            results.sort(key=lambda x: x['last_updated'] or '', reverse=True)
+        elif sort == 'newest':
+            results.sort(key=lambda x: x['first_created'] or '', reverse=True)
+        else:  # popularity
+            results.sort(key=lambda x: (x['tmdb_popularity'], x['work_title']), reverse=True)
+
+        # Remove tmdb_popularity from results as it's only used for sorting
+        for r in results:
+            r.pop('tmdb_popularity', None)
+
+        return results[:limit]

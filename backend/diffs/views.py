@@ -252,11 +252,23 @@ class DiffItemViewSet(viewsets.ModelViewSet):
         """
         Get curated browse sections: featured, recently updated, most documented, trending.
 
+        Query parameters:
+        - sort (str): Sort order for 'all_comparisons' section. Options: 'popularity' (default), 'trending', 'most_documented', 'recently_updated', 'newest'
+
         Returns all sections in one response for the browse page.
         Comparisons can appear in multiple sections (e.g., both Featured and Trending).
-        Cached for performance.
+        Cached for performance (cache key includes sort parameter).
         """
-        cache_key = 'browse_page_sections'
+        # Get sort parameter from query string
+        sort = request.query_params.get('sort', 'popularity')
+
+        # Validate sort parameter
+        valid_sorts = ['popularity', 'trending', 'most_documented', 'recently_updated', 'newest']
+        if sort not in valid_sorts:
+            sort = 'popularity'
+
+        # Cache key includes sort parameter so different sorts are cached separately
+        cache_key = f'browse_page_sections_sort_{sort}'
 
         # Try to get from cache
         cached_data = cache.get(cache_key)
@@ -269,7 +281,7 @@ class DiffItemViewSet(viewsets.ModelViewSet):
             'recently_updated': DiffService.get_recently_updated(limit=12),
             'most_documented': DiffService.get_most_documented(limit=12),
             'trending': DiffService.get_trending_comparisons(limit=12, days=7),
-            'all_comparisons': DiffService.get_all_comparisons(limit=50),
+            'all_comparisons': DiffService.get_all_comparisons(limit=50, sort=sort),
         }
 
         # Cache for 5 minutes (300 seconds)

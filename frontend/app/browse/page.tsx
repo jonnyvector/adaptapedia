@@ -6,6 +6,7 @@ import { api } from '@/lib/api';
 import type { BrowseSections } from '@/lib/types';
 import ComparisonCard from '@/components/browse/ComparisonCard';
 import EmptyState from '@/components/ui/EmptyState';
+import SortDropdown from '@/components/browse/SortDropdown';
 import { FONTS, TEXT, RADIUS} from '@/lib/brutalist-design';
 
 export const metadata: Metadata = {
@@ -13,11 +14,18 @@ export const metadata: Metadata = {
   description: 'Explore book-to-movie comparisons with documented differences',
 };
 
-export default async function BrowsePage(): Promise<JSX.Element> {
+interface BrowsePageProps {
+  searchParams: { [key: string]: string | string[] | undefined };
+}
+
+export default async function BrowsePage({ searchParams }: BrowsePageProps): Promise<JSX.Element> {
+  // Get sort parameter from URL query string
+  const sort = typeof searchParams.sort === 'string' ? searchParams.sort : 'popularity';
+
   let sections: BrowseSections;
 
   try {
-    sections = await api.diffs.browse() as BrowseSections;
+    sections = await api.diffs.browse(sort) as BrowseSections;
   } catch (error) {
     console.error('Error fetching browse sections:', error);
     sections = {
@@ -135,10 +143,17 @@ export default async function BrowsePage(): Promise<JSX.Element> {
             {sections.all_comparisons.length > 0 && (
               <section>
                 <div className="mb-4 sm:mb-6">
-                  <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold mb-1 sm:mb-2">All Comparisons</h2>
-                  <p className="text-muted text-sm sm:text-base">
-                    Browse all available book-to-screen adaptations
-                  </p>
+                  <div className="flex flex-col sm:flex-row sm:items-end sm:justify-between gap-3 mb-4">
+                    <div>
+                      <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold mb-1 sm:mb-2">All Comparisons</h2>
+                      <p className="text-muted text-sm sm:text-base">
+                        Browse all available book-to-screen adaptations
+                      </p>
+                    </div>
+                    <div className="flex-shrink-0">
+                      <SortDropdown />
+                    </div>
+                  </div>
                 </div>
                 <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 sm:gap-6">
                   {sections.all_comparisons.map((comparison) => (

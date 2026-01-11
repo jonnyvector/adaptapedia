@@ -352,8 +352,9 @@ export const api = {
     getRandomComparison: async (): Promise<{ work_slug: string; screen_work_slug: string; diff_count: number }> => {
       return fetchApi('/diffs/items/random-comparison/');
     },
-    browse: async () => {
-      return fetchApi('/diffs/items/browse/');
+    browse: async (sort?: string) => {
+      const query = sort && sort !== 'popularity' ? `?sort=${sort}` : '';
+      return fetchApi(`/diffs/items/browse/${query}`);
     },
     getTrending: async (limit?: number, days?: number): Promise<TrendingComparison[]> => {
       const params: Record<string, string> = {};

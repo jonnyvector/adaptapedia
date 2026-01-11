@@ -137,20 +137,20 @@ export default function ComparisonCard({ comparison, showTrendingBadge = false }
           Book vs {screen_work_type?.toUpperCase() === 'MOVIE' ? 'Movie' : screen_work_type?.toUpperCase() === 'TV' ? 'Series' : screen_work_type}
         </div>
 
-        {/* Engagement Metrics - Improved signals */}
+        {/* Coverage Metrics - Shows diff count and vote count for engagement/coverage signal */}
         <div className="flex flex-wrap items-center gap-2">
-          {/* Diffs + Comparison Votes combined for better engagement signal */}
+          {/* Diffs + Votes = Coverage metric */}
           <span className={`inline-flex items-center gap-1 px-2 py-1 ${TEXT.metadata} font-bold bg-stone-100 dark:bg-stone-900 text-black dark:text-white border ${BORDERS.subtle} ${monoUppercase}`} style={{ fontFamily: FONTS.mono, letterSpacing: LETTER_SPACING.tight }}>
             <svg className="w-3 h-3" fill="none" viewBox="0 0 24 24" stroke="currentColor">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
             </svg>
             <span className="font-bold">{diff_count}</span>
             <span>{diff_count === 1 ? 'diff' : 'diffs'}</span>
-            {comparison_vote_count > 0 && (
+            {vote_count > 0 && (
               <>
                 <span>•</span>
-                <span className="font-bold">{comparison_vote_count}</span>
-                <span>{comparison_vote_count === 1 ? 'vote' : 'votes'}</span>
+                <span className="font-bold">{vote_count}</span>
+                <span>{vote_count === 1 ? 'vote' : 'votes'}</span>
               </>
             )}
           </span>
