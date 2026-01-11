@@ -152,36 +152,39 @@ function HeaderContent(): JSX.Element {
 
       {/* Mobile Menu Overlay */}
       {mobileMenuOpen && (
-        <div className="md:hidden fixed inset-0 top-[57px] bg-white dark:bg-black z-50 border-t border-black dark:border-white">
+        <div className="md:hidden fixed inset-0 top-[57px] bg-white dark:bg-black z-50">
           <div className="flex flex-col h-full">
             {/* Auth Section at Top */}
-            {mounted && (
-              <div className="border-b border-black dark:border-white px-4 py-2.5">
-                {isAuthenticated && user ? (
-                  <div className="flex items-center justify-between gap-3">
-                    <Link
-                      href={`/u/${user.username}`}
-                      className={`text-xs font-bold ${TEXT.primary} ${monoUppercase} hover:underline`}
-                      style={{ fontFamily: FONTS.mono, letterSpacing: LETTER_SPACING.wider }}
-                    >
-                      {user.username}
-                    </Link>
-                    <NotificationBell />
-                  </div>
-                ) : (
+            {mounted && !isAuthenticated && !user && (
+              <div className="px-4 pt-4 pb-3">
+                <Link
+                  href="/auth/login"
+                  className={`flex items-center justify-center px-4 py-3 border ${BORDERS.solid} bg-black dark:bg-white text-white dark:text-black hover:bg-white hover:dark:bg-black hover:text-black hover:dark:text-white font-bold transition-all ${TEXT.body} ${RADIUS.control} ${monoUppercase}`}
+                  style={{ fontFamily: FONTS.mono, letterSpacing: LETTER_SPACING.tight }}
+                >
+                  Login
+                </Link>
+              </div>
+            )}
+
+            {/* User Info for Authenticated Users */}
+            {mounted && isAuthenticated && user && (
+              <div className="px-4 pt-4 pb-3">
+                <div className="flex items-center justify-between gap-3">
                   <Link
-                    href="/auth/login"
-                    className={`block text-center px-4 py-2 border ${BORDERS.solid} bg-black dark:bg-white text-white dark:text-black hover:bg-white hover:dark:bg-black hover:text-black hover:dark:text-white font-bold transition-all text-xs ${RADIUS.control} ${monoUppercase}`}
-                    style={{ fontFamily: FONTS.mono, letterSpacing: LETTER_SPACING.tight }}
+                    href={`/u/${user.username}`}
+                    className={`${TEXT.body} font-bold ${TEXT.primary} ${monoUppercase} hover:underline`}
+                    style={{ fontFamily: FONTS.mono, letterSpacing: LETTER_SPACING.wider }}
                   >
-                    Login
+                    {user.username}
                   </Link>
-                )}
+                  <NotificationBell />
+                </div>
               </div>
             )}
 
             {/* Navigation Links */}
-            <nav className="flex flex-col p-4 gap-2">
+            <nav className="flex flex-col px-4 pb-4 gap-2">
               <NavLink href="/browse" mobile onClick={() => setMobileMenuOpen(false)}>
                 Browse
               </NavLink>
