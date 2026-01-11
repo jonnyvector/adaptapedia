@@ -6,31 +6,33 @@ export default function Loading(): JSX.Element {
     <div>
       {/* Desktop Header Skeleton */}
       <div className="hidden md:block bg-white dark:bg-black py-6 lg:py-10">
-        {/* Title centered */}
-        <div className="text-center space-y-1.5 mb-6">
-          <LoadingSkeleton width="w-64" height="h-8" className="mx-auto" />
-          <LoadingSkeleton width="w-16" height="h-4" className="mx-auto" />
-        </div>
-
-        {/* 3-column grid */}
-        <div className="grid gap-4 lg:gap-6 px-4" style={{ gridTemplateColumns: '200px minmax(300px, 1fr) 200px', alignItems: 'start' }}>
-          {/* Left cover */}
-          <div className="flex flex-col items-center gap-3">
-            <LoadingSkeleton width="w-full" height="h-72" className="aspect-[2/3]" />
-            <LoadingSkeleton width="w-32" height="h-4" />
-            <LoadingSkeleton width="w-20" height="h-4" />
+        <div className="container">
+          {/* Title centered */}
+          <div className="text-center space-y-1.5 mb-6">
+            <LoadingSkeleton width="w-64" height="h-8" className="mx-auto" />
+            <LoadingSkeleton width="w-16" height="h-4" className="mx-auto" />
           </div>
 
-          {/* Center scoreboard */}
-          <div>
-            <LoadingSkeleton width="w-full" height="h-64" />
-          </div>
+          {/* 3-column grid */}
+          <div className="grid gap-4 lg:gap-6" style={{ gridTemplateColumns: '200px minmax(300px, 1fr) 200px', alignItems: 'start' }}>
+            {/* Left cover */}
+            <div className="flex flex-col items-center gap-3">
+              <LoadingSkeleton width="w-full" height="h-72" className="aspect-[2/3]" />
+              <LoadingSkeleton width="w-32" height="h-4" />
+              <LoadingSkeleton width="w-20" height="h-4" />
+            </div>
 
-          {/* Right cover */}
-          <div className="flex flex-col items-center gap-3">
-            <LoadingSkeleton width="w-full" height="h-72" className="aspect-[2/3]" />
-            <LoadingSkeleton width="w-32" height="h-4" />
-            <LoadingSkeleton width="w-20" height="h-4" />
+            {/* Center scoreboard */}
+            <div>
+              <LoadingSkeleton width="w-full" height="h-64" />
+            </div>
+
+            {/* Right cover */}
+            <div className="flex flex-col items-center gap-3">
+              <LoadingSkeleton width="w-full" height="h-72" className="aspect-[2/3]" />
+              <LoadingSkeleton width="w-32" height="h-4" />
+              <LoadingSkeleton width="w-20" height="h-4" />
+            </div>
           </div>
         </div>
       </div>
