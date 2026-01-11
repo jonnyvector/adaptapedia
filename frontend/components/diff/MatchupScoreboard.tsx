@@ -657,7 +657,7 @@ export default function MatchupScoreboard({
               {/* Single line: percentages + sample size */}
               <div className="grid grid-cols-3 items-center ${TEXT.metadata} text-black/60 dark:text-white/60 uppercase tracking-wider" style={{ fontFamily: 'JetBrains Mono, monospace', letterSpacing: '0.08em' }}>
                 <span className="text-left">BOOK {bookPct}%</span>
-                <span className="font-bold text-center">SAMPLE SIZE: {totalVotes}</span>
+                <span className="font-bold text-center text-xs">SAMPLE SIZE: {totalVotes}</span>
                 <span className="text-right">SCREEN {screenPct}%</span>
               </div>
               {/* User vote status */}
