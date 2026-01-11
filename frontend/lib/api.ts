@@ -37,13 +37,33 @@ const API_BASE_URL =
 
 /**
  * Get the backend URL (without /api suffix) for OAuth and other non-API endpoints
- * Client-side only - uses NEXT_PUBLIC_BACKEND_URL or falls back to localhost
+ * Client-side only - uses NEXT_PUBLIC_BACKEND_URL or derives from window.location
  */
 export function getBackendUrl(): string {
   if (typeof window === 'undefined') {
     throw new Error('getBackendUrl() should only be called client-side');
   }
-  return process.env.NEXT_PUBLIC_BACKEND_URL || 'http://localhost:8000';
+
+  // If environment variable is set, use it
+  if (process.env.NEXT_PUBLIC_BACKEND_URL) {
+    return process.env.NEXT_PUBLIC_BACKEND_URL;
+  }
+
+  // Otherwise, derive from current hostname
+  const hostname = window.location.hostname;
+
+  // Production frontend → production backend
+  if (hostname === 'www.adaptapedia.co' || hostname === 'adaptapedia.co') {
+    return 'https://impartial-tranquility-production.up.railway.app';
+  }
+
+  // Railway preview/staging deployments
+  if (hostname.includes('railway.app')) {
+    return 'https://impartial-tranquility-production.up.railway.app';
+  }
+
+  // Local development
+  return 'http://localhost:8000';
 }
 
 export class ApiError extends Error {
