@@ -171,10 +171,37 @@ async function fetchApi<T>(
     headers['Authorization'] = `Bearer ${token}`;
   }
 
-  const response = await fetch(url, {
-    ...options,
-    headers,
-  });
+  // Add timeout to prevent hanging (30 seconds for server-side, 10 seconds for client-side)
+  const timeoutMs = typeof window === 'undefined' ? 30000 : 10000;
+  const controller = new AbortController();
+  const timeoutId = setTimeout(() => controller.abort(), timeoutMs);
+
+  try {
+    const response = await fetch(url, {
+      ...options,
+      headers,
+      signal: controller.signal,
+    });
+    clearTimeout(timeoutId);
+
+    return await handleResponse<T>(response, endpoint, options, retryCount);
+  } catch (error: any) {
+    clearTimeout(timeoutId);
+    if (error.name === 'AbortError') {
+      console.error(`API request timeout after ${timeoutMs}ms:`, url);
+      throw new Error(`Request timeout: ${endpoint}`);
+    }
+    throw error;
+  }
+}
+
+async function handleResponse<T>(
+  response: Response,
+  endpoint: string,
+  options?: RequestInit,
+  retryCount: number = 0
+): Promise<T> {
+  const url = `${API_BASE_URL}${endpoint}`;
 
   if (!response.ok) {
     const error = await response.json().catch(() => ({ error: 'Unknown error' }));
