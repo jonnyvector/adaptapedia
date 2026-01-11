@@ -58,12 +58,10 @@ export default async function ComparePage({ params }: PageProps): Promise<JSX.El
   const { work, screenWork, diffs } = await getComparisonData(params.book, params.screen);
 
   return (
-    <main className="min-h-screen">
-      <ComparisonView
-        work={work}
-        screenWork={screenWork}
-        initialDiffs={diffs}
-      />
-    </main>
+    <ComparisonView
+      work={work}
+      screenWork={screenWork}
+      initialDiffs={diffs}
+    />
   );
 }
