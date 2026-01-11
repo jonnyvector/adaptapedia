@@ -3,9 +3,22 @@
 from django.db import migrations, models
 
 
-def populate_genres_from_tmdb(apps, schema_editor):
-    """Populate work genres from screen adaptation TMDb genres."""
-    # Use raw SQL for efficiency
+def add_genres_field_if_not_exists(apps, schema_editor):
+    """Add genres field only if it doesn't exist, then populate from TMDb."""
+    # Check if column exists and add if not
+    schema_editor.execute("""
+        DO $$
+        BEGIN
+            IF NOT EXISTS (
+                SELECT 1 FROM information_schema.columns
+                WHERE table_name='works_work' AND column_name='genres'
+            ) THEN
+                ALTER TABLE works_work ADD COLUMN genres JSONB DEFAULT '[]'::jsonb;
+            END IF;
+        END $$;
+    """)
+
+    # Populate genres from TMDb
     schema_editor.execute("""
         UPDATE works_work w
         SET genres = s.genres
@@ -19,8 +32,7 @@ def populate_genres_from_tmdb(apps, schema_editor):
 
 def reverse_populate(apps, schema_editor):
     """Clear genres field on reverse."""
-    Work = apps.get_model('works', 'Work')
-    Work.objects.all().update(genres=[])
+    schema_editor.execute("UPDATE works_work SET genres = '[]'::jsonb;")
 
 
 class Migration(migrations.Migration):
@@ -31,10 +43,5 @@ class Migration(migrations.Migration):
     ]
 
     operations = [
-        migrations.AddField(
-            model_name='work',
-            name='genres',
-            field=models.JSONField(blank=True, default=list),
-        ),
-        migrations.RunPython(populate_genres_from_tmdb, reverse_populate),
+        migrations.RunPython(add_genres_field_if_not_exists, reverse_populate),
     ]
