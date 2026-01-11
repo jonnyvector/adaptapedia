@@ -2,7 +2,7 @@
 
 import { useEffect } from 'react';
 import type { SpoilerScope } from '@/lib/types';
-import { LockClosedIcon, BookOpenIcon, FilmIcon, LockOpenIcon, CheckIcon } from '@/components/ui/Icons';
+import { BrutalistShieldIcon, BrutalistBookIconSmall, BrutalistScreenIconSmall, BrutalistEyeIcon } from '@/components/ui/Icons';
 import { Button } from '@/components/ui/Button';
 import { FONTS, LETTER_SPACING, BORDERS, TEXT, RADIUS, monoUppercase } from '@/lib/brutalist-design';
 
@@ -31,7 +31,7 @@ const preferences: {
     value: 'SAFE',
     label: 'Safe',
     description: 'No spoilers - high-level changes only',
-    icon: LockClosedIcon,
+    icon: BrutalistShieldIcon,
     allowedScopes: ['NONE'],
     color: 'emerald',
     activeClass: 'bg-accent-emerald/10 text-accent-emerald border-accent-emerald/30',
@@ -41,7 +41,7 @@ const preferences: {
     value: 'BOOK_ALLOWED',
     label: 'Book',
     description: 'Safe + book plot details',
-    icon: BookOpenIcon,
+    icon: BrutalistBookIconSmall,
     allowedScopes: ['NONE', 'BOOK_ONLY'],
     color: 'amber',
     activeClass: 'bg-accent-amber/10 text-accent-amber border-accent-amber/30',
@@ -51,7 +51,7 @@ const preferences: {
     value: 'SCREEN_ALLOWED',
     label: 'Screen',
     description: 'Safe + movie/TV plot details',
-    icon: FilmIcon,
+    icon: BrutalistScreenIconSmall,
     allowedScopes: ['NONE', 'SCREEN_ONLY'],
     color: 'amber',
     activeClass: 'bg-accent-amber/10 text-accent-amber border-accent-amber/30',
@@ -61,7 +61,7 @@ const preferences: {
     value: 'FULL',
     label: 'All',
     description: 'Show everything including endings',
-    icon: LockOpenIcon,
+    icon: BrutalistEyeIcon,
     allowedScopes: ['NONE', 'BOOK_ONLY', 'SCREEN_ONLY', 'FULL'],
     color: 'rose',
     activeClass: 'bg-accent-rose/10 text-accent-rose border-accent-rose/30',
@@ -92,7 +92,7 @@ export default function SpoilerControl({
 
   return (
     <div className="sticky top-0 z-10 bg-white dark:bg-black border-b border-black/20 dark:border-white/20 mb-4 sm:mb-6 mt-6 sm:mt-8">
-      <div className="py-2 sm:py-3 sm:container">
+      <div className="py-2 sm:py-3 sm:container sm:px-0">
         {/* Segmented Control */}
         <div className="flex flex-col sm:flex-row sm:items-center gap-2 sm:gap-3 mb-1 sm:mb-2">
           {/* Label - Hidden on mobile */}
@@ -114,7 +114,7 @@ export default function SpoilerControl({
                   variant={isActive ? 'primary' : 'secondary'}
                   size="md"
                   className={`
-                    relative flex-1 sm:flex-initial py-3
+                    relative flex-1 sm:flex-initial
                     flex items-center justify-center gap-0.5 sm:gap-1.5 whitespace-nowrap
                     ${!isActive && `bg-stone-100 dark:bg-stone-900 ${TEXT.mutedStrong}`}
                   `}
@@ -123,7 +123,7 @@ export default function SpoilerControl({
                   aria-pressed={isActive}
                   aria-label={`${pref.label}: ${pref.description}`}
                 >
-                  <Icon className="w-3 h-3 sm:w-3.5 sm:h-3.5 hidden sm:block" aria-hidden="true" />
+                  <Icon className="w-4 h-4 sm:w-5 sm:h-5 hidden sm:block" aria-hidden="true" />
                   <span className={`uppercase ${TEXT.metadata}`}>{pref.label}</span>
                 </Button>
               );

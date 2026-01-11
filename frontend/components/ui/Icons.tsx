@@ -837,7 +837,196 @@ export function BrutalistEyeIcon({ className = "w-6 h-6" }: IconProps) {
       className={className}
       aria-hidden="true"
     >
-      {/* Eye shape */}
+      {/* Eye shape - diamond with sharp points */}
+      <path
+        d="M 30 100 L 100 50 L 170 100 L 100 150 Z"
+        fill="transparent"
+        stroke="currentColor"
+        strokeWidth="12"
+        strokeLinejoin="miter"
+      />
+      {/* Pupil */}
+      <circle
+        cx="100"
+        cy="100"
+        r="25"
+        fill="transparent"
+        stroke="currentColor"
+        strokeWidth="12"
+      />
+    </svg>
+  );
+}
+
+// Diff Category Icons
+export function BrutalistPlotIcon({ className = "w-6 h-6" }: IconProps) {
+  return (
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      fill="none"
+      viewBox="0 0 200 200"
+      className={className}
+      aria-hidden="true"
+    >
+      {/* Document/scroll with lines representing plot */}
+      <rect
+        x="40"
+        y="30"
+        width="120"
+        height="140"
+        fill="transparent"
+        stroke="currentColor"
+        strokeWidth="12"
+      />
+      <line x1="60" y1="60" x2="140" y2="60" stroke="currentColor" strokeWidth="8" />
+      <line x1="60" y1="85" x2="140" y2="85" stroke="currentColor" strokeWidth="8" />
+      <line x1="60" y1="110" x2="140" y2="110" stroke="currentColor" strokeWidth="8" />
+      <line x1="60" y1="135" x2="110" y2="135" stroke="currentColor" strokeWidth="8" />
+    </svg>
+  );
+}
+
+export function BrutalistCharacterIcon({ className = "w-6 h-6" }: IconProps) {
+  return (
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      fill="none"
+      viewBox="0 0 200 200"
+      className={className}
+      aria-hidden="true"
+    >
+      {/* Person silhouette - head and shoulders */}
+      <circle
+        cx="100"
+        cy="60"
+        r="30"
+        fill="transparent"
+        stroke="currentColor"
+        strokeWidth="12"
+      />
+      {/* Shoulders/body - trapezoid shape */}
+      <path
+        d="M 60 100 L 60 160 L 140 160 L 140 100 L 100 90 Z"
+        fill="transparent"
+        stroke="currentColor"
+        strokeWidth="12"
+        strokeLinejoin="miter"
+      />
+    </svg>
+  );
+}
+
+export function BrutalistEndingIcon({ className = "w-6 h-6" }: IconProps) {
+  return (
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      fill="none"
+      viewBox="0 0 200 200"
+      className={className}
+      aria-hidden="true"
+    >
+      {/* Flag pole */}
+      <line
+        x1="60"
+        y1="30"
+        x2="60"
+        y2="170"
+        stroke="currentColor"
+        strokeWidth="12"
+        strokeLinecap="square"
+      />
+      {/* Flag */}
+      <path
+        d="M 60 30 L 160 50 L 160 90 L 60 110 Z"
+        fill="transparent"
+        stroke="currentColor"
+        strokeWidth="12"
+        strokeLinejoin="miter"
+      />
+    </svg>
+  );
+}
+
+export function BrutalistToneIcon({ className = "w-6 h-6" }: IconProps) {
+  return (
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      fill="none"
+      viewBox="0 0 200 200"
+      className={className}
+      aria-hidden="true"
+    >
+      {/* Abstract waves/layers representing tone/mood */}
+      <path
+        d="M 30 60 L 60 50 L 90 60 L 120 50 L 150 60 L 170 50"
+        fill="transparent"
+        stroke="currentColor"
+        strokeWidth="12"
+        strokeLinecap="square"
+        strokeLinejoin="miter"
+      />
+      <path
+        d="M 30 100 L 60 90 L 90 100 L 120 90 L 150 100 L 170 90"
+        fill="transparent"
+        stroke="currentColor"
+        strokeWidth="12"
+        strokeLinecap="square"
+        strokeLinejoin="miter"
+      />
+      <path
+        d="M 30 140 L 60 130 L 90 140 L 120 130 L 150 140 L 170 130"
+        fill="transparent"
+        stroke="currentColor"
+        strokeWidth="12"
+        strokeLinecap="square"
+        strokeLinejoin="miter"
+      />
+    </svg>
+  );
+}
+
+// Community Guidelines Icons
+export function BrutalistChecklistIcon({ className = "w-6 h-6" }: IconProps) {
+  return (
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      fill="none"
+      viewBox="0 0 200 200"
+      className={className}
+      aria-hidden="true"
+    >
+      {/* Document outline */}
+      <rect
+        x="40"
+        y="30"
+        width="120"
+        height="140"
+        fill="transparent"
+        stroke="currentColor"
+        strokeWidth="12"
+      />
+      {/* Checkmarks */}
+      <path d="M 60 65 L 70 75 L 90 55" stroke="currentColor" strokeWidth="10" strokeLinecap="square" fill="none" />
+      <path d="M 60 100 L 70 110 L 90 90" stroke="currentColor" strokeWidth="10" strokeLinecap="square" fill="none" />
+      <path d="M 60 135 L 70 145 L 90 125" stroke="currentColor" strokeWidth="10" strokeLinecap="square" fill="none" />
+      {/* Lines */}
+      <line x1="105" y1="65" x2="140" y2="65" stroke="currentColor" strokeWidth="8" />
+      <line x1="105" y1="100" x2="140" y2="100" stroke="currentColor" strokeWidth="8" />
+      <line x1="105" y1="135" x2="140" y2="135" stroke="currentColor" strokeWidth="8" />
+    </svg>
+  );
+}
+
+export function BrutalistEyeSlashIcon({ className = "w-6 h-6" }: IconProps) {
+  return (
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      fill="none"
+      viewBox="0 0 200 200"
+      className={className}
+      aria-hidden="true"
+    >
+      {/* Eye outline */}
       <path
         d="M 30 100 Q 100 40 170 100 Q 100 160 30 100"
         fill="transparent"
@@ -848,10 +1037,165 @@ export function BrutalistEyeIcon({ className = "w-6 h-6" }: IconProps) {
       <circle
         cx="100"
         cy="100"
-        r="25"
+        r="20"
         fill="transparent"
         stroke="currentColor"
         strokeWidth="12"
+      />
+      {/* Diagonal slash (hide spoilers) */}
+      <line
+        x1="40"
+        y1="160"
+        x2="160"
+        y2="40"
+        stroke="currentColor"
+        strokeWidth="14"
+        strokeLinecap="square"
+      />
+    </svg>
+  );
+}
+
+export function BrutalistChatHeartIcon({ className = "w-6 h-6" }: IconProps) {
+  return (
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      fill="none"
+      viewBox="0 0 200 200"
+      className={className}
+      aria-hidden="true"
+    >
+      {/* Speech bubble */}
+      <rect
+        x="30"
+        y="40"
+        width="140"
+        height="100"
+        rx="8"
+        fill="transparent"
+        stroke="currentColor"
+        strokeWidth="12"
+      />
+      {/* Speech bubble tail */}
+      <path
+        d="M 70 140 L 60 170 L 90 140"
+        fill="transparent"
+        stroke="currentColor"
+        strokeWidth="12"
+        strokeLinejoin="miter"
+      />
+      {/* Heart inside bubble */}
+      <path
+        d="M 100 110 L 110 95 Q 115 85 125 85 Q 135 85 135 95 Q 135 105 125 115 L 100 135 L 75 115 Q 65 105 65 95 Q 65 85 75 85 Q 85 85 90 95 Z"
+        fill="transparent"
+        stroke="currentColor"
+        strokeWidth="10"
+        strokeLinejoin="round"
+      />
+    </svg>
+  );
+}
+
+export function BrutalistLightbulbIcon({ className = "w-6 h-6" }: IconProps) {
+  return (
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      fill="none"
+      viewBox="0 0 200 200"
+      className={className}
+      aria-hidden="true"
+    >
+      {/* Bulb */}
+      <circle cx="100" cy="80" r="40" fill="transparent" stroke="currentColor" strokeWidth="12" />
+      {/* Base */}
+      <rect x="85" y="120" width="30" height="30" fill="transparent" stroke="currentColor" strokeWidth="12" />
+      {/* Connection */}
+      <line x1="80" y1="110" x2="120" y2="110" stroke="currentColor" strokeWidth="12" />
+      {/* Light rays */}
+      <line x1="60" y1="50" x2="45" y2="35" stroke="currentColor" strokeWidth="10" strokeLinecap="square" />
+      <line x1="140" y1="50" x2="155" y2="35" stroke="currentColor" strokeWidth="10" strokeLinecap="square" />
+      <line x1="100" y1="30" x2="100" y2="15" stroke="currentColor" strokeWidth="10" strokeLinecap="square" />
+    </svg>
+  );
+}
+
+export function BrutalistBallotIcon({ className = "w-6 h-6" }: IconProps) {
+  return (
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      fill="none"
+      viewBox="0 0 200 200"
+      className={className}
+      aria-hidden="true"
+    >
+      {/* Ballot box */}
+      <rect x="40" y="90" width="120" height="80" fill="transparent" stroke="currentColor" strokeWidth="12" />
+      {/* Ballot being inserted */}
+      <rect x="75" y="40" width="50" height="70" fill="transparent" stroke="currentColor" strokeWidth="12" />
+      {/* Checkmark on ballot */}
+      <path d="M 85 65 L 95 75 L 115 55" stroke="currentColor" strokeWidth="10" strokeLinecap="square" fill="none" />
+    </svg>
+  );
+}
+
+export function BrutalistStarBadgeIcon({ className = "w-6 h-6" }: IconProps) {
+  return (
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      fill="none"
+      viewBox="0 0 200 200"
+      className={className}
+      aria-hidden="true"
+    >
+      {/* Badge circle */}
+      <circle cx="100" cy="100" r="60" fill="transparent" stroke="currentColor" strokeWidth="12" />
+      {/* Star inside */}
+      <path
+        d="M 100 65 L 110 90 L 135 90 L 115 105 L 125 130 L 100 115 L 75 130 L 85 105 L 65 90 L 90 90 Z"
+        fill="transparent"
+        stroke="currentColor"
+        strokeWidth="10"
+        strokeLinejoin="miter"
+      />
+    </svg>
+  );
+}
+
+export function BrutalistNoSignIcon({ className = "w-6 h-6" }: IconProps) {
+  return (
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      fill="none"
+      viewBox="0 0 200 200"
+      className={className}
+      aria-hidden="true"
+    >
+      {/* Circle */}
+      <circle cx="100" cy="100" r="60" fill="transparent" stroke="currentColor" strokeWidth="12" />
+      {/* Diagonal line (prohibition) */}
+      <line x1="65" y1="65" x2="135" y2="135" stroke="currentColor" strokeWidth="12" strokeLinecap="square" />
+    </svg>
+  );
+}
+
+export function BrutalistCopyrightIcon({ className = "w-6 h-6" }: IconProps) {
+  return (
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      fill="none"
+      viewBox="0 0 200 200"
+      className={className}
+      aria-hidden="true"
+    >
+      {/* Outer circle */}
+      <circle cx="100" cy="100" r="60" fill="transparent" stroke="currentColor" strokeWidth="12" />
+      {/* C shape */}
+      <path
+        d="M 130 70 A 30 30 0 0 0 130 130"
+        fill="transparent"
+        stroke="currentColor"
+        strokeWidth="12"
+        strokeLinecap="square"
       />
     </svg>
   );

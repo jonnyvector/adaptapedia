@@ -3,15 +3,15 @@
   <rect width="200" height="200" fill="transparent"/>
 
   <!-- Eye almond shape -->
-  <path d="M 20 100 L 100 60 L 180 100 L 100 140 Z" fill="transparent" stroke="white" stroke-width="10"/>
+  <path d="M 20 100 L 100 60 L 180 100 L 100 140 Z" fill="transparent" stroke="currentColor" stroke-width="10"/>
 
   <!-- Pupil -->
-  <circle cx="100" cy="100" r="25" fill="white"/>
+  <circle cx="100" cy="100" r="25" fill="currentColor"/>
 
   <!-- Slash through eye -->
-  <line x1="30" y1="155" x2="170" y2="50" stroke="white" stroke-width="12" stroke-linecap="square"/>
+  <line x1="30" y1="155" x2="170" y2="50" stroke="currentColor" stroke-width="12" stroke-linecap="square"/>
 
   <!-- Brutalist corner accents -->
-  <rect x="20" y="145" width="20" height="20" fill="transparent" stroke="white" stroke-width="6"/>
-  <rect x="160" y="40" width="20" height="20" fill="transparent" stroke="white" stroke-width="6"/>
+  <rect x="20" y="145" width="20" height="20" fill="transparent" stroke="currentColor" stroke-width="6"/>
+  <rect x="160" y="40" width="20" height="20" fill="transparent" stroke="currentColor" stroke-width="6"/>
 </svg>

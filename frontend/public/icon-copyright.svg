@@ -1,0 +1,13 @@
+<svg width="200" height="200" viewBox="0 0 200 200" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <!-- Respect Copyright - Copyright symbol -->
+  <rect width="200" height="200" fill="transparent"/>
+
+  <!-- Outer octagon -->
+  <path d="M 65 20 L 135 20 L 180 65 L 180 135 L 135 180 L 65 180 L 20 135 L 20 65 Z" fill="transparent" stroke="currentColor" stroke-width="8"/>
+
+  <!-- C shape (copyright) -->
+  <path d="M 130 70 L 95 70 L 70 95 L 70 105 L 95 130 L 130 130" fill="transparent" stroke="currentColor" stroke-width="12"/>
+
+  <!-- Inner detail -->
+  <rect x="85" y="85" width="10" height="30" fill="currentColor"/>
+</svg>

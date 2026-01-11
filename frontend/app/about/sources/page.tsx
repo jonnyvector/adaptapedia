@@ -1,4 +1,5 @@
 import Link from 'next/link';
+import Image from 'next/image';
 
 // Force dynamic rendering - page uses client components with useSearchParams
 export const dynamic = 'force-dynamic';
@@ -50,11 +51,15 @@ export default function DataSourcesPage(): JSX.Element {
                   <ArrowTopRightOnSquareIcon className="w-3 h-3" />
                 </a>
               </div>
-              {/* Placeholder for TMDb logo */}
-              <div className="w-24 h-24 border-2 border-dashed border-border rounded-lg flex items-center justify-center text-xs text-muted text-center p-2">
-                TMDb Logo
-                <br />
-                (to be added)
+              {/* TMDb logo */}
+              <div className="w-32 h-24 flex items-center justify-center p-3 bg-white dark:bg-stone-100 border border-border rounded-lg">
+                <Image
+                  src="/tmdb-logo.svg"
+                  alt="The Movie Database (TMDb)"
+                  width={120}
+                  height={90}
+                  className="w-full h-auto"
+                />
               </div>
             </div>
 
@@ -110,11 +115,15 @@ export default function DataSourcesPage(): JSX.Element {
                   <ArrowTopRightOnSquareIcon className="w-3 h-3" />
                 </a>
               </div>
-              {/* Placeholder for Wikidata logo */}
-              <div className="w-24 h-24 border-2 border-dashed border-border rounded-lg flex items-center justify-center text-xs text-muted text-center p-2">
-                Wikidata Logo
-                <br />
-                (to be added)
+              {/* Wikidata logo */}
+              <div className="w-32 h-24 flex items-center justify-center p-3 bg-white dark:bg-stone-100 border border-border rounded-lg">
+                <Image
+                  src="/wikidata-logo.svg"
+                  alt="Wikidata"
+                  width={120}
+                  height={90}
+                  className="w-full h-auto"
+                />
               </div>
             </div>
 
@@ -175,11 +184,15 @@ export default function DataSourcesPage(): JSX.Element {
                   <ArrowTopRightOnSquareIcon className="w-3 h-3" />
                 </a>
               </div>
-              {/* Placeholder for Open Library logo */}
-              <div className="w-24 h-24 border-2 border-dashed border-border rounded-lg flex items-center justify-center text-xs text-muted text-center p-2">
-                Open Library Logo
-                <br />
-                (to be added)
+              {/* Open Library logo */}
+              <div className="w-32 h-24 flex items-center justify-center p-3 bg-white dark:bg-stone-100 border border-border rounded-lg">
+                <Image
+                  src="/openlibrary-logo.svg"
+                  alt="Open Library"
+                  width={120}
+                  height={90}
+                  className="w-full h-auto"
+                />
               </div>
             </div>
 

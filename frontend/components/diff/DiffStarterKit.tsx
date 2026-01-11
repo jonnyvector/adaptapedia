@@ -3,7 +3,7 @@
 import { useRouter } from 'next/navigation';
 import { useAuth } from '@/lib/auth-context';
 import type { DiffCategory } from '@/lib/types';
-import { BookOpenIcon, UserIcon, FilmIcon, SparklesIcon } from '@/components/ui/Icons';
+import { BrutalistPlotIcon, BrutalistCharacterIcon, BrutalistEndingIcon, BrutalistToneIcon } from '@/components/ui/Icons';
 import { FONTS, LETTER_SPACING, BORDERS, TEXT, RADIUS, monoUppercase } from '@/lib/brutalist-design';
 
 interface DiffStarterKitProps {
@@ -15,31 +15,26 @@ const STARTER_CATEGORIES: Array<{
   category: DiffCategory;
   label: string;
   icon: React.ComponentType<{ className?: string }>;
-  description: string;
 }> = [
   {
     category: 'PLOT',
     label: 'Plot change',
-    icon: BookOpenIcon,
-    description: 'Major storyline differences',
+    icon: BrutalistPlotIcon,
   },
   {
     category: 'CHARACTER',
     label: 'Character change',
-    icon: UserIcon,
-    description: 'Character differences or omissions',
+    icon: BrutalistCharacterIcon,
   },
   {
     category: 'ENDING',
     label: 'Ending change',
-    icon: FilmIcon,
-    description: 'How the story concludes',
+    icon: BrutalistEndingIcon,
   },
   {
     category: 'TONE',
     label: 'Tone/theme change',
-    icon: SparklesIcon,
-    description: 'Mood or thematic differences',
+    icon: BrutalistToneIcon,
   },
 ];
 
@@ -70,24 +65,19 @@ export default function DiffStarterKit({ workSlug, screenSlug }: DiffStarterKitP
       </div>
 
       <div className="grid sm:grid-cols-2 gap-3 sm:gap-4 max-w-3xl mx-auto">
-        {STARTER_CATEGORIES.map(({ category, label, icon: Icon, description }) => (
+        {STARTER_CATEGORIES.map(({ category, label, icon: Icon }) => (
           <button
             key={category}
             onClick={() => handleCategoryClick(category)}
             className={`group p-4 sm:p-5 bg-stone-50 dark:bg-stone-950 border ${BORDERS.medium} hover:border-black hover:dark:border-white transition-all text-left`}
           >
-            <div className="flex items-start gap-3">
+            <div className="flex items-center gap-3">
               <div className={`flex-shrink-0 ${TEXT.mutedMedium}`}>
                 <Icon className="w-7 h-7 sm:w-8 sm:h-8" />
               </div>
-              <div className="flex-1 min-w-0">
-                <h3 className={`text-base sm:text-lg font-bold text-black dark:text-white mb-1 ${monoUppercase}`} style={{ fontFamily: FONTS.mono, letterSpacing: LETTER_SPACING.tight }}>
-                  {label}
-                </h3>
-                <p className={`${TEXT.metadata} ${TEXT.mutedMedium}`} style={{ fontFamily: FONTS.mono, letterSpacing: LETTER_SPACING.normal }}>
-                  {description}
-                </p>
-              </div>
+              <h3 className={`text-base sm:text-lg font-bold text-black dark:text-white ${monoUppercase} mb-0`} style={{ fontFamily: FONTS.mono, letterSpacing: LETTER_SPACING.tight }}>
+                {label}
+              </h3>
             </div>
           </button>
         ))}

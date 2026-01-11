@@ -17,6 +17,8 @@ const nextConfig = {
       'static.wikia.nocookie.net',
       'encrypted-tbn0.gstatic.com',
       'michaelcrichton.com',
+      'd28hgpri8am2if.cloudfront.net',
+      'i.gr-assets.com',
     ],
   },
 };

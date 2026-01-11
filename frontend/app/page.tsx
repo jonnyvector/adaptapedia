@@ -154,8 +154,8 @@ export default async function Home(): Promise<JSX.Element> {
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 sm:gap-6 max-w-6xl mx-auto">
             {/* Card 1 - Structured Comparisons */}
             <div className={`bg-white dark:bg-black border ${BORDERS.medium} p-4 sm:p-6 md:p-8 relative overflow-hidden hover:border-black/50 hover:dark:border-white/50 transition-colors`}>
-              <div className={`mb-6 inline-flex items-center justify-center w-16 h-16 bg-black dark:bg-white border ${BORDERS.medium} transition-transform p-1`}>
-                <Image src="/icon-structured.svg" alt="" width={56} height={56} className="dark:invert" />
+              <div className={`mb-6 inline-flex items-center justify-center w-16 h-16 bg-black dark:bg-white border ${BORDERS.medium} transition-transform p-1 text-white dark:text-black`}>
+                <Image src="/icon-structured.svg" alt="" width={56} height={56} />
               </div>
               <h3 className={`text-2xl font-bold mb-3 ${TEXT.primary}`} style={{ fontFamily: FONTS.mono }}>Structured Comparisons</h3>
               <p className={`${TEXT.secondary} ${TEXT.mutedMedium} mb-4`} style={{ fontFamily: FONTS.mono }}>
@@ -207,8 +207,8 @@ export default async function Home(): Promise<JSX.Element> {
 
             {/* Card 2 - Spoiler Control */}
             <div className={`bg-white dark:bg-black border ${BORDERS.medium} p-4 sm:p-6 md:p-8 relative overflow-hidden hover:border-black/50 hover:dark:border-white/50 transition-colors`}>
-              <div className={`mb-6 inline-flex items-center justify-center w-16 h-16 bg-black dark:bg-white border ${BORDERS.medium} transition-transform p-1`}>
-                <Image src="/icon-spoiler.svg" alt="" width={56} height={56} className="dark:invert" />
+              <div className={`mb-6 inline-flex items-center justify-center w-16 h-16 bg-black dark:bg-white border ${BORDERS.medium} transition-transform p-1 text-white dark:text-black`}>
+                <Image src="/icon-spoiler.svg" alt="" width={56} height={56} />
               </div>
               <h3 className={`text-2xl font-bold mb-3 ${TEXT.primary}`} style={{ fontFamily: FONTS.mono }}>Spoiler Control</h3>
               <p className={`${TEXT.secondary} ${TEXT.mutedMedium} mb-4`} style={{ fontFamily: FONTS.mono }}>
@@ -253,8 +253,8 @@ export default async function Home(): Promise<JSX.Element> {
             {/* Card 3 - Community Driven - Full Width */}
             <div className={`lg:col-span-2 bg-white dark:bg-black border ${BORDERS.medium} p-4 sm:p-6 md:p-8 relative overflow-hidden hover:border-black/50 hover:dark:border-white/50 transition-colors`}>
               <div className="flex flex-col md:flex-row items-start gap-6">
-                <div className={`flex-shrink-0 w-16 h-16 bg-black dark:bg-white border ${BORDERS.medium} transition-transform flex items-center justify-center p-1`}>
-                  <Image src="/icon-community.svg" alt="" width={56} height={56} className="dark:invert" />
+                <div className={`flex-shrink-0 w-16 h-16 bg-black dark:bg-white border ${BORDERS.medium} transition-transform flex items-center justify-center p-1 text-white dark:text-black`}>
+                  <Image src="/icon-community.svg" alt="" width={56} height={56} />
                 </div>
                 <div className="flex-1">
                   <h3 className={`text-2xl font-bold mb-3 ${TEXT.primary}`} style={{ fontFamily: FONTS.mono }}>Community Driven</h3>

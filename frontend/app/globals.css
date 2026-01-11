@@ -52,8 +52,8 @@
   --primary-hover: var(--accent-blue-hover);
   --primary-light: var(--accent-blue-light);
 
-  --link: var(--accent-blue);
-  --linkHover: var(--accent-blue-hover);
+  --link: var(--text-secondary);
+  --linkHover: var(--text);
 
   /* Minimal shadow tokens - subtle depth */
   --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.04);
@@ -92,8 +92,8 @@
   --primary-hover: #93C5FD;
   --primary-light: rgba(59, 130, 246, 0.1);
 
-  --link: #60A5FA;
-  --linkHover: #93C5FD;
+  --link: var(--text-secondary);
+  --linkHover: var(--text);
 
   --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.5);
   --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.3), 0 2px 4px -1px rgba(0, 0, 0, 0.2);
@@ -124,8 +124,8 @@
   --primary-hover: var(--accent-blue-hover);
   --primary-light: var(--accent-blue-light);
 
-  --link: var(--accent-blue);
-  --linkHover: var(--accent-blue-hover);
+  --link: var(--text-secondary);
+  --linkHover: var(--text);
 
   --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.04);
   --shadow-md: 0 2px 4px rgba(0, 0, 0, 0.04), 0 1px 2px rgba(0, 0, 0, 0.06);

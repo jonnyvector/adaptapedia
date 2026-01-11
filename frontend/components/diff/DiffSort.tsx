@@ -27,7 +27,7 @@ export default function DiffSort({ value, onChange }: DiffSortProps): JSX.Elemen
           id="diff-sort"
           value={value}
           onChange={(e) => onChange(e.target.value as SortOption)}
-          className={`pl-3 pr-10 ${TEXT.body} bg-white dark:bg-black text-black dark:text-white border ${BORDERS.medium} ${RADIUS.input} focus:outline-none focus:border-black focus:dark:border-white h-[40px] cursor-pointer appearance-none w-full box-border font-bold`}
+          className={`pl-3 pr-10 ${TEXT.body} bg-white dark:bg-black text-black dark:text-white border ${BORDERS.medium} ${RADIUS.input} focus:outline-none focus:border-black focus:dark:border-white min-h-[44px] cursor-pointer appearance-none w-full box-border font-bold`}
           style={{ fontFamily: FONTS.mono, letterSpacing: LETTER_SPACING.tight }}
         >
           {SORT_OPTIONS.map((option) => (

@@ -1,0 +1,15 @@
+<svg width="200" height="200" viewBox="0 0 200 200" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <!-- Be Civil & Constructive - Speech bubble -->
+  <rect width="200" height="200" fill="transparent"/>
+
+  <!-- Main speech bubble -->
+  <rect x="30" y="40" width="140" height="100" fill="transparent" stroke="currentColor" stroke-width="8"/>
+
+  <!-- Tail -->
+  <path d="M 60 140 L 60 165 L 85 140" fill="currentColor"/>
+
+  <!-- Dots inside (conversation) -->
+  <rect x="55" y="75" width="20" height="20" fill="currentColor"/>
+  <rect x="90" y="75" width="20" height="20" fill="currentColor"/>
+  <rect x="125" y="75" width="20" height="20" fill="currentColor"/>
+</svg>

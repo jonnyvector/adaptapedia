@@ -17,7 +17,7 @@ export default function DiffSearch({ value, onChange, resultsCount }: DiffSearch
           value={value}
           onChange={(e) => onChange(e.target.value)}
           placeholder="SEARCH DIFFS..."
-          className={`w-full px-4 pr-10 ${TEXT.body} bg-white dark:bg-black text-black dark:text-white border ${BORDERS.medium} ${RADIUS.control} focus:outline-none focus:border-black focus:dark:border-white placeholder:${TEXT.mutedLight} placeholder:uppercase h-[40px]`}
+          className={`w-full px-4 pr-10 ${TEXT.body} bg-white dark:bg-black text-black dark:text-white border ${BORDERS.medium} ${RADIUS.control} focus:outline-none focus:border-black focus:dark:border-white placeholder:${TEXT.mutedLight} placeholder:uppercase min-h-[44px]`}
           style={{ fontFamily: FONTS.mono, letterSpacing: LETTER_SPACING.normal }}
           aria-label="Search diffs"
         />

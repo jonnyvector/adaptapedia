@@ -3,33 +3,33 @@
   <rect width="200" height="200" fill="transparent"/>
 
   <!-- Central node (larger) -->
-  <circle cx="100" cy="100" r="35" fill="transparent" stroke="white" stroke-width="8"/>
-  <circle cx="100" cy="100" r="18" fill="white"/>
+  <circle cx="100" cy="100" r="35" fill="transparent" stroke="currentColor" stroke-width="8"/>
+  <circle cx="100" cy="100" r="18" fill="currentColor"/>
 
   <!-- Surrounding nodes (contributors) -->
   <!-- Top left -->
-  <circle cx="40" cy="40" r="25" fill="transparent" stroke="white" stroke-width="7"/>
-  <circle cx="40" cy="40" r="12" fill="white"/>
-  <line x1="60" y1="60" x2="75" y2="75" stroke="white" stroke-width="6"/>
+  <circle cx="40" cy="40" r="25" fill="transparent" stroke="currentColor" stroke-width="7"/>
+  <circle cx="40" cy="40" r="12" fill="currentColor"/>
+  <line x1="60" y1="60" x2="75" y2="75" stroke="currentColor" stroke-width="6"/>
 
   <!-- Top right -->
-  <circle cx="160" cy="40" r="25" fill="transparent" stroke="white" stroke-width="7"/>
-  <circle cx="160" cy="40" r="12" fill="white"/>
-  <line x1="140" y1="60" x2="125" y2="75" stroke="white" stroke-width="6"/>
+  <circle cx="160" cy="40" r="25" fill="transparent" stroke="currentColor" stroke-width="7"/>
+  <circle cx="160" cy="40" r="12" fill="currentColor"/>
+  <line x1="140" y1="60" x2="125" y2="75" stroke="currentColor" stroke-width="6"/>
 
   <!-- Bottom left -->
-  <circle cx="40" cy="160" r="25" fill="transparent" stroke="white" stroke-width="7"/>
-  <circle cx="40" cy="160" r="12" fill="white"/>
-  <line x1="60" y1="140" x2="75" y2="125" stroke="white" stroke-width="6"/>
+  <circle cx="40" cy="160" r="25" fill="transparent" stroke="currentColor" stroke-width="7"/>
+  <circle cx="40" cy="160" r="12" fill="currentColor"/>
+  <line x1="60" y1="140" x2="75" y2="125" stroke="currentColor" stroke-width="6"/>
 
   <!-- Bottom right -->
-  <circle cx="160" cy="160" r="25" fill="transparent" stroke="white" stroke-width="7"/>
-  <circle cx="160" cy="160" r="12" fill="white"/>
-  <line x1="140" y1="140" x2="125" y2="125" stroke="white" stroke-width="6"/>
+  <circle cx="160" cy="160" r="25" fill="transparent" stroke="currentColor" stroke-width="7"/>
+  <circle cx="160" cy="160" r="12" fill="currentColor"/>
+  <line x1="140" y1="140" x2="125" y2="125" stroke="currentColor" stroke-width="6"/>
 
   <!-- Corner accent boxes -->
-  <rect x="30" y="30" width="10" height="10" fill="white"/>
-  <rect x="160" y="30" width="10" height="10" fill="white"/>
-  <rect x="30" y="160" width="10" height="10" fill="white"/>
-  <rect x="160" y="160" width="10" height="10" fill="white"/>
+  <rect x="30" y="30" width="10" height="10" fill="currentColor"/>
+  <rect x="160" y="30" width="10" height="10" fill="currentColor"/>
+  <rect x="30" y="160" width="10" height="10" fill="currentColor"/>
+  <rect x="160" y="160" width="10" height="10" fill="currentColor"/>
 </svg>

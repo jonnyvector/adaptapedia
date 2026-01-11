@@ -151,7 +151,11 @@ export default async function BrowsePage(): Promise<JSX.Element> {
         )}
 
         <div className="mt-12 text-center">
-          <a href="/" className="text-link hover:underline">
+          <a
+            href="/"
+            className={`${TEXT.secondary} font-bold hover:text-black dark:hover:text-white transition-colors uppercase tracking-wider`}
+            style={{ fontFamily: FONTS.mono }}
+          >
             ← Back to Home
           </a>
         </div>

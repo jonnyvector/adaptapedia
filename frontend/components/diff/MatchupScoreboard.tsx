@@ -151,8 +151,8 @@ export default function MatchupScoreboard({
   // Shared component: Vote buttons
   const renderVoteButtons = (size: 'large' | 'small' = 'large') => {
     const buttonClass = size === 'large'
-      ? 'py-4 px-3 text-sm border'
-      : 'py-3 px-2 text-sm';
+      ? 'py-2 px-3 text-sm border min-h-[44px]'
+      : 'py-2 px-2 text-sm min-h-[44px]';
     const borderWidth = size === 'large' ? '' : '';
 
     return (
@@ -285,7 +285,7 @@ export default function MatchupScoreboard({
   const renderCTAButton = () => (
     <button
       onClick={onAddDiff}
-      className="w-full py-3 px-3 border border-black dark:border-white bg-transparent text-black dark:text-white hover:bg-black hover:dark:bg-white hover:text-white hover:dark:text-black font-bold transition-all text-xs ${RADIUS.control}"
+      className="w-full py-2 px-3 border border-black dark:border-white bg-transparent text-black dark:text-white hover:bg-black hover:dark:bg-white hover:text-white hover:dark:text-black font-bold transition-all text-sm min-h-[44px] ${RADIUS.control}"
       style={{
         fontFamily: 'JetBrains Mono, monospace',
         letterSpacing: '0.05em'
@@ -742,7 +742,7 @@ export default function MatchupScoreboard({
               <button
                 onClick={() => handleVote('TIE')}
                 disabled={isSubmitting}
-                className="w-full py-2 font-bold border border-black/30 dark:border-white/30 text-black/70 dark:text-white/70 text-xs disabled:opacity-50 transition-all ${RADIUS.control} hover:border-black hover:dark:border-white hover:bg-black hover:dark:bg-white hover:text-white hover:dark:text-black"
+                className="w-full py-2 font-bold border border-black/30 dark:border-white/30 text-black/70 dark:text-white/70 text-sm disabled:opacity-50 transition-all min-h-[44px] ${RADIUS.control} hover:border-black hover:dark:border-white hover:bg-black hover:dark:bg-white hover:text-white hover:dark:text-black"
                 style={{
                   fontFamily: 'JetBrains Mono, monospace',
                   letterSpacing: '0.05em',
@@ -759,7 +759,7 @@ export default function MatchupScoreboard({
                 <button
                   onClick={() => handleVote('BOOK')}
                   disabled={isSubmitting}
-                  className="py-4 font-bold border text-xs disabled:opacity-50 transition-all ${RADIUS.control}"
+                  className="py-2 font-bold border text-sm disabled:opacity-50 transition-all min-h-[44px] ${RADIUS.control}"
                   style={{
                     borderColor: bookAccent,
                     backgroundColor: 'transparent',
@@ -773,7 +773,7 @@ export default function MatchupScoreboard({
                 <button
                   onClick={() => handleVote('SCREEN')}
                   disabled={isSubmitting}
-                  className="py-4 font-bold border text-xs disabled:opacity-50 transition-all ${RADIUS.control}"
+                  className="py-2 font-bold border text-sm disabled:opacity-50 transition-all min-h-[44px] ${RADIUS.control}"
                   style={{
                     borderColor: screenAccent,
                     backgroundColor: 'transparent',
@@ -788,7 +788,7 @@ export default function MatchupScoreboard({
               <button
                 onClick={() => handleVote('TIE')}
                 disabled={isSubmitting}
-                className="w-full py-2 font-bold border border-black/30 dark:border-white/30 text-black/70 dark:text-white/70 text-xs disabled:opacity-50 transition-all ${RADIUS.control} hover:border-black hover:dark:border-white hover:bg-black hover:dark:bg-white hover:text-white hover:dark:text-black"
+                className="w-full py-2 font-bold border border-black/30 dark:border-white/30 text-black/70 dark:text-white/70 text-sm disabled:opacity-50 transition-all min-h-[44px] ${RADIUS.control} hover:border-black hover:dark:border-white hover:bg-black hover:dark:bg-white hover:text-white hover:dark:text-black"
                 style={{
                   fontFamily: 'JetBrains Mono, monospace',
                   letterSpacing: '0.05em'
@@ -824,7 +824,7 @@ export default function MatchupScoreboard({
                       key={rating}
                       onClick={() => handleFaithfulnessRate(rating)}
                       disabled={isSubmitting}
-                      className="flex-1 py-3 border border-black/20 dark:border-white/20 bg-transparent text-black dark:text-white font-bold text-xs transition-all disabled:opacity-50 hover:bg-black hover:dark:bg-white hover:text-white hover:dark:text-black ${RADIUS.control}"
+                      className="flex-1 py-2 border border-black/20 dark:border-white/20 bg-transparent text-black dark:text-white font-bold text-sm transition-all disabled:opacity-50 min-h-[44px] hover:bg-black hover:dark:bg-white hover:text-white hover:dark:text-black ${RADIUS.control}"
                       style={{
                         fontFamily: 'JetBrains Mono, monospace'
                       }}
@@ -850,7 +850,7 @@ export default function MatchupScoreboard({
           {/* Primary CTA - big button */}
           <button
             onClick={onAddDiff}
-            className="w-full py-3 px-3 font-bold border border-black dark:border-white bg-black dark:bg-white text-white dark:text-black hover:bg-transparent hover:text-black dark:hover:bg-transparent dark:hover:text-white transition-all text-xs ${RADIUS.control}"
+            className="w-full py-2 px-3 font-bold border border-black dark:border-white bg-black dark:bg-white text-white dark:text-black hover:bg-transparent hover:text-black dark:hover:bg-transparent dark:hover:text-white transition-all text-sm min-h-[44px] ${RADIUS.control}"
             style={{
               fontFamily: 'JetBrains Mono, monospace',
               letterSpacing: '0.05em'

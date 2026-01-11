@@ -1,0 +1,14 @@
+<svg width="200" height="200" viewBox="0 0 200 200" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <!-- Build Reputation - Medal/Badge -->
+  <rect width="200" height="200" fill="transparent"/>
+
+  <!-- Octagon badge -->
+  <path d="M 70 30 L 130 30 L 170 70 L 170 130 L 130 170 L 70 170 L 30 130 L 30 70 Z" fill="transparent" stroke="currentColor" stroke-width="8"/>
+
+  <!-- Inner star -->
+  <path d="M 100 55 L 110 85 L 140 90 L 115 110 L 120 140 L 100 125 L 80 140 L 85 110 L 60 90 L 90 85 Z" fill="currentColor"/>
+
+  <!-- Ribbon at bottom -->
+  <rect x="85" y="150" width="10" height="40" fill="currentColor"/>
+  <rect x="105" y="150" width="10" height="40" fill="currentColor"/>
+</svg>
