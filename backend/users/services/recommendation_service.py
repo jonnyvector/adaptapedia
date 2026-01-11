@@ -32,19 +32,33 @@ class RecommendationService:
         intent = preferences.contribution_interest if preferences else 'EXPLORE'
 
         # Get adaptation edges with related work/screen data
-        edges = AdaptationEdge.objects.select_related('work', 'screen_work').all()
+        base_edges = AdaptationEdge.objects.select_related('work', 'screen_work').all()
+
+        # Annotate with diff count for this specific pairing
+        base_edges = base_edges.annotate(
+            diff_count=Count('work__diffs', filter=Q(work__diffs__screen_work=F('screen_work')))
+        )
 
         # Filter by user's preferred genres if they exist
+        # Check both work genres AND screen_work genres for better matching
         if preferences and preferences.genres:
             genre_filters = Q()
             for genre in preferences.genres:
+                # Check work genre (book genre from Open Library)
                 genre_filters |= Q(work__genre__icontains=genre)
-            edges = edges.filter(genre_filters)
+                # Also check screen_work genres (from TMDb) - stored as JSON array
+                genre_filters |= Q(screen_work__genres__icontains=genre)
 
-        # Annotate with diff count for this specific pairing
-        edges = edges.annotate(
-            diff_count=Count('work__diffs', filter=Q(work__diffs__screen_work=F('screen_work')))
-        )
+            filtered_edges = base_edges.filter(genre_filters)
+
+            # If genre filtering returns too few results (< 5), fall back to popular comparisons
+            # This prevents recommending the same single comparison repeatedly
+            if filtered_edges.count() < 5:
+                edges = base_edges
+            else:
+                edges = filtered_edges
+        else:
+            edges = base_edges
 
         # Order by diff count (descending) and popularity
         # TODO: Implement intent-based ranking
