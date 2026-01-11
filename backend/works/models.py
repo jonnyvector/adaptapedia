@@ -12,7 +12,8 @@ class Work(models.Model):
     summary = models.TextField(blank=True)
     year = models.IntegerField(null=True, blank=True)
     language = models.CharField(max_length=10, blank=True)
-    genre = models.CharField(max_length=100, blank=True)
+    genre = models.CharField(max_length=100, blank=True)  # Legacy field from Open Library (often inaccurate)
+    genres = models.JSONField(default=list, blank=True)  # Accurate genres from TMDb
     wikidata_qid = models.CharField(max_length=20, unique=True, null=True, blank=True, db_index=True)
     openlibrary_work_id = models.CharField(max_length=50, unique=True, null=True, blank=True, db_index=True)
     cover_url = models.URLField(blank=True)

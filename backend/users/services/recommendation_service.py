@@ -44,8 +44,8 @@ class RecommendationService:
         if preferences and preferences.genres:
             genre_filters = Q()
             for genre in preferences.genres:
-                # Check work genre (book genre from Open Library)
-                genre_filters |= Q(work__genre__icontains=genre)
+                # Check work genres (from TMDb via screen adaptation)
+                genre_filters |= Q(work__genres__icontains=genre)
                 # Also check screen_work genres (from TMDb) - stored as JSON array
                 genre_filters |= Q(screen_work__genres__icontains=genre)
 
@@ -82,13 +82,14 @@ class RecommendationService:
         """
         comparisons = []
         for edge in edges:
-            # Get genres from work or screen_work
+            # Get genres from work (TMDb genres) or screen_work
             genres = []
-            if edge.work.genre:
-                genres = [edge.work.genre]
-            if edge.screen_work.genres:
-                genres.extend(edge.screen_work.genres[:2])
-            genres = list(set(genres))[:3]  # Dedupe and limit to 3
+            if edge.work.genres:
+                genres = edge.work.genres[:2]  # Take first 2 from work
+            if edge.screen_work.genres and len(genres) < 3:
+                # Add screen genres if we need more
+                genres.extend([g for g in edge.screen_work.genres if g not in genres])
+            genres = genres[:3]  # Limit to 3 total
 
             comparisons.append({
                 'work_slug': edge.work.slug,
