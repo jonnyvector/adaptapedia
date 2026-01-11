@@ -18,11 +18,11 @@ const SORT_OPTIONS: { value: SortOption; label: string }[] = [
 
 export default function DiffSort({ value, onChange }: DiffSortProps): JSX.Element {
   return (
-    <div className="flex items-center gap-2">
+    <div className="flex items-center gap-2 w-full sm:w-auto">
       <label htmlFor="diff-sort" className={`${TEXT.label} ${monoUppercase} ${TEXT.mutedMedium} font-bold whitespace-nowrap`} style={{ fontFamily: FONTS.mono, letterSpacing: LETTER_SPACING.wider }}>
         Sort by
       </label>
-      <div className="relative">
+      <div className="relative flex-1 sm:flex-initial">
         <select
           id="diff-sort"
           value={value}
