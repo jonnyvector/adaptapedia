@@ -802,8 +802,13 @@ export default function MatchupScoreboard({
           {/* Faithfulness - inline tight row */}
           <div className="!mt-0 border-t border-black/10 dark:border-white/10 pt-3 space-y-2">
             {avgFaithfulness !== null && (
-              <div className="text-center ${TEXT.metadata} font-bold text-black dark:text-white uppercase tracking-wider" style={{ fontFamily: 'JetBrains Mono, monospace', letterSpacing: '0.12em' }}>
-                FAITHFULNESS {avgFaithfulness.toFixed(1)}/5 ({faithfulnessCount} {faithfulnessCount === 1 ? 'RATING' : 'RATINGS'})
+              <div className="text-center space-y-1">
+                <div className="${TEXT.metadata} font-bold text-black dark:text-white uppercase tracking-wider" style={{ fontFamily: 'JetBrains Mono, monospace', letterSpacing: '0.12em' }}>
+                  FAITHFULNESS {avgFaithfulness.toFixed(1)}/5
+                </div>
+                <div className="${TEXT.metadata} text-black/60 dark:text-white/60 uppercase tracking-wider" style={{ fontFamily: 'JetBrains Mono, monospace', letterSpacing: '0.12em' }}>
+                  ({faithfulnessCount} {faithfulnessCount === 1 ? 'RATING' : 'RATINGS'})
+                </div>
               </div>
             )}
             {!userFaithfulness ? (
