@@ -22,6 +22,7 @@ export default function SearchInput({ mobile = false, className = '' }: SearchIn
   const [searchResults, setSearchResults] = useState<SearchWithAdaptationsResponse | null>(null);
   const [showDropdown, setShowDropdown] = useState(false);
   const searchRef = useRef<HTMLDivElement>(null);
+  const inputRef = useRef<HTMLInputElement>(null);
   const justSubmittedRef = useRef(false);
 
   // Fetch search results for dropdown (debounced)
@@ -76,8 +77,12 @@ export default function SearchInput({ mobile = false, className = '' }: SearchIn
   };
 
   const handleResultClick = (): void => {
-    // Don't close immediately - let navigation happen first
-    // Dropdown will close when component unmounts on page change
+    // Clear search and close dropdown
+    setSearchQuery('');
+    setShowDropdown(false);
+    setSearchResults(null);
+    // Blur the input to remove focus
+    inputRef.current?.blur();
   };
 
   const handleClearSearch = () => {
@@ -90,6 +95,7 @@ export default function SearchInput({ mobile = false, className = '' }: SearchIn
     <div className={`relative ${className}`} ref={searchRef}>
       <form onSubmit={handleSearch} className="w-full relative">
         <input
+          ref={inputRef}
           type="search"
           value={searchQuery}
           onChange={(e) => setSearchQuery(e.target.value)}

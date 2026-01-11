@@ -855,8 +855,8 @@ input[type="search"]:focus,
 textarea:focus,
 select:focus {
   outline: none;
-  border-color: var(--accent-blue);
-  box-shadow: 0 0 0 3px var(--accent-blue-light);
+  border-color: #000000;
+  box-shadow: none;
 }
 
 input::placeholder,
@@ -980,7 +980,7 @@ hr {
    ═══════════════════════════════════════════════════════════ */
 
 @media (hover: none) and (pointer: coarse) {
-  button, .btn, a {
+  button, .btn {
     min-height: 44px;
     min-width: 44px;
   }
