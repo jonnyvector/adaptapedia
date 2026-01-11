@@ -41,7 +41,7 @@ export default function UserProfileClient({ profile }: UserProfileClientProps): 
         } else if (activeTab === 'votes') {
           if (isOwnProfile) {
             const response = await api.users.getVotes(profile.username);
-            setVotes((response as unknown as ApiResponse<ComparisonVote>).results || []);
+            setVotes(response.results || []);
           }
         } else if (activeTab === 'comments') {
           const response = await api.users.getComments(profile.username);

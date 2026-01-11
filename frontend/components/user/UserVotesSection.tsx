@@ -3,7 +3,7 @@
 import { useEffect, useState } from 'react';
 import { useAuth } from '@/lib/auth-context';
 import { api } from '@/lib/api';
-import type { Vote, ApiResponse } from '@/lib/types';
+import type { ComparisonVote, ApiResponse } from '@/lib/types';
 import UserVotesList from './UserVotesList';
 import LoadingSkeleton from '@/components/ui/LoadingSkeleton';
 import { FONTS, LETTER_SPACING, BORDERS, TEXT, monoUppercase, RADIUS} from '@/lib/brutalist-design';
@@ -18,7 +18,7 @@ export default function UserVotesSection({
   votesCount,
 }: UserVotesSectionProps): JSX.Element | null {
   const { isAuthenticated, user } = useAuth();
-  const [votes, setVotes] = useState<Vote[]>([]);
+  const [votes, setVotes] = useState<ComparisonVote[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [hasMore, setHasMore] = useState(false);
@@ -35,10 +35,10 @@ export default function UserVotesSection({
     const fetchVotes = async (): Promise<void> => {
       try {
         setLoading(true);
-        const response = (await api.users.getVotes(username, {
+        const response = await api.users.getVotes(username, {
           ordering: 'newest',
           page_size: '20',
-        })) as ApiResponse<Vote>;
+        });
 
         setVotes(response.results);
         setHasMore(response.next !== null);

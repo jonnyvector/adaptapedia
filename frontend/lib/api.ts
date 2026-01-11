@@ -11,6 +11,7 @@ import type {
   CreateDiffData,
   DiffItem,
   CreateComparisonVoteData,
+  ComparisonVote,
   ComparisonVoteStats,
   SearchWithAdaptationsResponse,
   GenreListResponse,
@@ -392,9 +393,9 @@ export const api = {
       const query = params ? `?${new URLSearchParams(params)}` : '';
       return fetchApi<ApiResponse<Comment>>(`/users/${username}/comments/${query}`);
     },
-    getVotes: async (username: string, params?: Record<string, string>): Promise<ApiResponse<Vote>> => {
+    getVotes: async (username: string, params?: Record<string, string>): Promise<ApiResponse<ComparisonVote>> => {
       const query = params ? `?${new URLSearchParams(params)}` : '';
-      return fetchApi<ApiResponse<Vote>>(`/users/${username}/votes/${query}`);
+      return fetchApi<ApiResponse<ComparisonVote>>(`/users/${username}/votes/${query}`);
     },
   },
 
