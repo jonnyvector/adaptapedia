@@ -44,8 +44,8 @@ export const PasswordInput = React.forwardRef<HTMLInputElement, PasswordInputPro
               strokeLinejoin="miter"
               className="w-5 h-5"
             >
-              {/* Almond eye shape */}
-              <path d="M2 12C2 12 5 6 12 6C19 6 22 12 22 12C22 12 19 18 12 18C5 18 2 12 2 12Z" />
+              {/* Diamond eye shape */}
+              <path d="M1 12L12 6L23 12L12 18Z" />
               {/* Pupil */}
               <circle cx="12" cy="12" r="3" />
               {/* Diagonal slash */}
@@ -63,8 +63,8 @@ export const PasswordInput = React.forwardRef<HTMLInputElement, PasswordInputPro
               strokeLinejoin="miter"
               className="w-5 h-5"
             >
-              {/* Almond eye shape */}
-              <path d="M2 12C2 12 5 6 12 6C19 6 22 12 22 12C22 12 19 18 12 18C5 18 2 12 2 12Z" />
+              {/* Diamond eye shape */}
+              <path d="M1 12L12 6L23 12L12 18Z" />
               {/* Pupil */}
               <circle cx="12" cy="12" r="3" />
             </svg>
