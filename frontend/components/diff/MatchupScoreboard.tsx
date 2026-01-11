@@ -383,7 +383,7 @@ export default function MatchupScoreboard({
           <div className="flex flex-col gap-4">
 
           {/* Index card vote panel */}
-          {!hasVotes && !showEditVote && (
+          {!loading && !hasVotes && !showEditVote && (
             <div className="relative border border-black/20 dark:border-white/20 bg-stone-50 dark:bg-stone-950 p-5 space-y-4">
               {/* Paper grain overlay - subtle */}
               <div className="absolute inset-0 opacity-[0.02] pointer-events-none" style={{ backgroundImage: 'url("data:image/svg+xml,%3Csvg viewBox=\'0 0 200 200\' xmlns=\'http://www.w3.org/2000/svg\'%3E%3Cfilter id=\'noise\'%3E%3CfeTurbulence type=\'fractalNoise\' baseFrequency=\'0.9\' numOctaves=\'4\' /%3E%3C/filter%3E%3Crect width=\'100%25\' height=\'100%25\' filter=\'url(%23noise)\' /%3E%3C/svg%3E")', backgroundRepeat: 'repeat', backgroundSize: '128px' }} />
@@ -425,7 +425,7 @@ export default function MatchupScoreboard({
           )}
 
           {/* State B: Has votes - Index card */}
-          {(hasVotes || showEditVote) && (
+          {!loading && (hasVotes || showEditVote) && (
             <div className="relative border border-black/20 dark:border-white/20 bg-stone-50 dark:bg-stone-950 p-5 space-y-4">
               {/* Paper grain overlay - subtle */}
               <div className="absolute inset-0 opacity-[0.02] pointer-events-none" style={{ backgroundImage: 'url("data:image/svg+xml,%3Csvg viewBox=\'0 0 200 200\' xmlns=\'http://www.w3.org/2000/svg\'%3E%3Cfilter id=\'noise\'%3E%3CfeTurbulence type=\'fractalNoise\' baseFrequency=\'0.9\' numOctaves=\'4\' /%3E%3C/filter%3E%3Crect width=\'100%25\' height=\'100%25\' filter=\'url(%23noise)\' /%3E%3C/svg%3E")', backgroundRepeat: 'repeat', backgroundSize: '128px' }} />
@@ -632,6 +632,7 @@ export default function MatchupScoreboard({
         </div>
 
         {/* Combined MODULE: Community bar + voting + faithfulness */}
+        {!loading && (
         <div className="border border-black/20 dark:border-white/20 bg-stone-50 dark:bg-stone-950 p-2 sm:p-3 space-y-3">
           {/* Community bar - shows if votes exist */}
           {hasVotes && (
@@ -844,6 +845,7 @@ export default function MatchupScoreboard({
             )}
           </div>
         </div>
+        )}
 
         {/* MODULE 3: CTA module - primary + secondary */}
         <div className="space-y-2">
