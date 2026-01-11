@@ -50,10 +50,10 @@ export default function QuizStep({ onComplete, onSkip }: QuizStepProps): JSX.Ele
                 role="checkbox"
                 aria-checked={isSelected}
                 onClick={() => toggleGenre(genre)}
-                className={`px-4 py-3 border ${BORDERS.medium} ${RADIUS.control} font-bold transition-colors ${
+                className={`px-4 py-3 border ${BORDERS.medium} ${RADIUS.control} font-bold transition-all ${
                   isSelected
                     ? 'bg-black dark:bg-white text-white dark:text-black border-black dark:border-white'
-                    : 'bg-white dark:bg-black hover:bg-gray-100 hover:dark:bg-gray-900'
+                    : 'bg-white dark:bg-black hover:bg-black hover:dark:bg-white hover:text-white hover:dark:text-black'
                 }`}
                 style={{ fontFamily: FONTS.mono }}
               >
@@ -84,10 +84,10 @@ export default function QuizStep({ onComplete, onSkip }: QuizStepProps): JSX.Ele
                 role="radio"
                 aria-checked={isSelected}
                 onClick={() => setBookVsScreen(value)}
-                className={`w-full px-4 py-3 border ${BORDERS.medium} ${RADIUS.control} text-left font-bold transition-colors ${
+                className={`w-full px-4 py-3 border ${BORDERS.medium} ${RADIUS.control} text-left font-bold transition-all ${
                   isSelected
                     ? 'bg-black dark:bg-white text-white dark:text-black border-black dark:border-white'
-                    : 'bg-white dark:bg-black hover:bg-gray-100 hover:dark:bg-gray-900'
+                    : 'bg-white dark:bg-black hover:bg-black hover:dark:bg-white hover:text-white hover:dark:text-black'
                 }`}
                 style={{ fontFamily: FONTS.mono }}
               >
@@ -117,10 +117,10 @@ export default function QuizStep({ onComplete, onSkip }: QuizStepProps): JSX.Ele
                 role="radio"
                 aria-checked={isSelected}
                 onClick={() => setContributionInterest(value)}
-                className={`w-full px-4 py-3 border ${BORDERS.medium} ${RADIUS.control} text-left font-bold transition-colors ${
+                className={`w-full px-4 py-3 border ${BORDERS.medium} ${RADIUS.control} text-left font-bold transition-all ${
                   isSelected
                     ? 'bg-black dark:bg-white text-white dark:text-black border-black dark:border-white'
-                    : 'bg-white dark:bg-black hover:bg-gray-100 hover:dark:bg-gray-900'
+                    : 'bg-white dark:bg-black hover:bg-black hover:dark:bg-white hover:text-white hover:dark:text-black'
                 }`}
                 style={{ fontFamily: FONTS.mono }}
               >
@@ -134,7 +134,7 @@ export default function QuizStep({ onComplete, onSkip }: QuizStepProps): JSX.Ele
       <div className="flex gap-3">
         <button
           onClick={onSkip}
-          className={`flex-1 px-6 py-3 border ${BORDERS.medium} ${RADIUS.control} font-bold hover:bg-gray-100 hover:dark:bg-gray-900 transition-colors ${TEXT.secondary} ${monoUppercase}`}
+          className={`flex-1 px-6 py-3 border ${BORDERS.medium} ${RADIUS.control} font-bold hover:bg-black hover:dark:bg-white hover:text-white hover:dark:text-black transition-all ${TEXT.secondary} ${monoUppercase}`}
           style={{ fontFamily: FONTS.mono }}
         >
           Skip
