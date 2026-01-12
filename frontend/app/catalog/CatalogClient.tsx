@@ -123,7 +123,7 @@ export default function CatalogClient({
                 if (currentLetter) params.letter = currentLetter;
                 window.location.href = `/catalog${buildQueryString(params)}`;
               }}
-              className={`w-full px-3 py-2 min-h-[44px] ${TEXT.body} border ${BORDERS.medium} ${RADIUS.input} bg-white dark:bg-black text-black dark:text-white focus:outline-none focus:ring-0 focus:border-black focus:dark:border-white`}
+              className={`w-full pl-3 pr-8 py-2 min-h-[44px] ${TEXT.body} border ${BORDERS.medium} ${RADIUS.input} bg-white dark:bg-black text-black dark:text-white focus:outline-none focus:ring-0 focus:border-black focus:dark:border-white`}
             >
               <option value="title">Title</option>
               <option value="year">Year</option>
@@ -145,7 +145,7 @@ export default function CatalogClient({
                 if (currentLetter) params.letter = currentLetter;
                 window.location.href = `/catalog${buildQueryString(params)}`;
               }}
-              className={`w-full px-3 py-2 min-h-[44px] ${TEXT.body} border ${BORDERS.medium} ${RADIUS.input} bg-white dark:bg-black text-black dark:text-white focus:outline-none focus:ring-0 focus:border-black focus:dark:border-white`}
+              className={`w-full pl-3 pr-8 py-2 min-h-[44px] ${TEXT.body} border ${BORDERS.medium} ${RADIUS.input} bg-white dark:bg-black text-black dark:text-white focus:outline-none focus:ring-0 focus:border-black focus:dark:border-white`}
             >
               <option value="asc">Ascending</option>
               <option value="desc">Descending</option>
@@ -166,7 +166,7 @@ export default function CatalogClient({
                 if (currentLetter) params.letter = currentLetter;
                 window.location.href = `/catalog${buildQueryString(params)}`;
               }}
-              className={`w-full px-3 py-2 min-h-[44px] ${TEXT.body} border ${BORDERS.medium} ${RADIUS.input} bg-white dark:bg-black text-black dark:text-white focus:outline-none focus:ring-0 focus:border-black focus:dark:border-white`}
+              className={`w-full pl-3 pr-8 py-2 min-h-[44px] ${TEXT.body} border ${BORDERS.medium} ${RADIUS.input} bg-white dark:bg-black text-black dark:text-white focus:outline-none focus:ring-0 focus:border-black focus:dark:border-white`}
             >
               <option value="all">All</option>
               <option value="with-covers">With Covers</option>
