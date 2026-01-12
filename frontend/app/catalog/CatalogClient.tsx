@@ -51,6 +51,19 @@ export default function CatalogClient({
   currentFilter,
   currentLetter,
 }: CatalogClientProps) {
+  // Defensive: ensure data has required properties
+  const safeData = {
+    count: data?.count || 0,
+    total_pages: data?.total_pages || 0,
+    current_page: data?.current_page || 1,
+    page_size: data?.page_size || 50,
+    has_next: data?.has_next || false,
+    has_prev: data?.has_prev || false,
+    results: data?.results || [],
+    available_letters: data?.available_letters || [],
+    letter_counts: data?.letter_counts || {},
+  };
+
   const buildQueryString = (params: Record<string, string>) => {
     const query = new URLSearchParams(params);
     return `?${query.toString()}`;
@@ -67,8 +80,8 @@ export default function CatalogClient({
 
   // Calculate "with covers" and "without covers" counts
   // Note: These counts are approximate since we're only looking at current page
-  const withCovers = data.results.filter((b) => b.cover_url).length;
-  const withoutCovers = data.results.filter((b) => !b.cover_url).length;
+  const withCovers = safeData.results.filter((b) => b.cover_url).length;
+  const withoutCovers = safeData.results.filter((b) => !b.cover_url).length;
 
   return (
     <div className="font-mono">
@@ -88,7 +101,7 @@ export default function CatalogClient({
           </Link>
 
           {/* Letter navigation */}
-          {data.available_letters.map((letter) => (
+          {safeData.available_letters.map((letter) => (
             <Link
               key={letter}
               href={buildLetterUrl(letter)}
@@ -97,9 +110,9 @@ export default function CatalogClient({
                   ? 'bg-black dark:bg-white text-white dark:text-black'
                   : 'bg-white dark:bg-black hover:bg-black hover:dark:bg-white hover:text-white hover:dark:text-black'
               } transition-colors ${TEXT.body} ${TEXT.primary} font-bold ${monoUppercase}`}
-              title={`${data.letter_counts[letter]} books`}
+              title={`${safeData.letter_counts[letter]} books`}
             >
-              {letter} <span className={`${TEXT.metadata}`}>({data.letter_counts[letter]})</span>
+              {letter} <span className={`${TEXT.metadata}`}>({safeData.letter_counts[letter]})</span>
             </Link>
           ))}
         </div>
@@ -175,17 +188,17 @@ export default function CatalogClient({
         </div>
 
         <div className={`mt-4 ${TEXT.secondary} ${TEXT.mutedMedium}`}>
-          Showing {data.results.length} of {data.count} books
+          Showing {safeData.results.length} of {safeData.count} books
           {currentLetter && ` (Letter: ${currentLetter})`}
-          {data.total_pages > 1 && ` • Page ${data.current_page} of ${data.total_pages}`}
+          {safeData.total_pages > 1 && ` • Page ${safeData.current_page} of ${safeData.total_pages}`}
         </div>
       </div>
 
       {/* Books Grid */}
-      {data.results.length > 0 ? (
+      {safeData.results.length > 0 ? (
         <>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-8">
-            {data.results.map((book) => (
+            {safeData.results.map((book) => (
               <div key={book.id} className={`border ${BORDERS.medium} p-4 hover:border-black hover:dark:border-white transition-colors bg-white dark:bg-black`}>
                 <div className="flex gap-4">
                   {/* Book Cover */}
@@ -260,8 +273,8 @@ export default function CatalogClient({
 
           {/* Pagination */}
           <Pagination
-            currentPage={data.current_page}
-            totalPages={data.total_pages}
+            currentPage={safeData.current_page}
+            totalPages={safeData.total_pages}
             basePath="/catalog"
             searchParams={{
               sort: currentSort,

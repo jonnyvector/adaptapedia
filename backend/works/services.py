@@ -130,22 +130,31 @@ class WorkService:
                 'adaptations': adaptation_list,
             })
 
-        # Get available letters (with counts)
-        all_works = Work.objects.all()
+        # Get available letters (with counts) - more efficiently
+        # Use raw SQL to get first character counts without loading all objects
+        from django.db import connection
+        with connection.cursor() as cursor:
+            cursor.execute("""
+                SELECT
+                    CASE
+                        WHEN LOWER(LEFT(title, 4)) = 'the ' AND LENGTH(title) > 4
+                            THEN UPPER(SUBSTRING(title, 5, 1))
+                        ELSE UPPER(LEFT(title, 1))
+                    END as first_char,
+                    COUNT(*) as count
+                FROM works_work
+                GROUP BY first_char
+                ORDER BY first_char
+            """)
+            rows = cursor.fetchall()
+
         letter_counts = {}
-        for work in all_works.only('title'):
-            title = work.title
-            # Handle "The" prefix
-            if title.lower().startswith('the ') and len(title) > 4:
-                first_char = title[4].upper()
-            else:
-                first_char = title[0].upper()
-
+        for first_char, count in rows:
             # Group numbers under #
-            if first_char.isdigit():
-                first_char = '#'
-
-            letter_counts[first_char] = letter_counts.get(first_char, 0) + 1
+            if first_char and first_char[0].isdigit():
+                letter_counts['#'] = letter_counts.get('#', 0) + count
+            elif first_char:
+                letter_counts[first_char] = count
 
         available_letters = sorted(letter_counts.keys(), key=lambda x: (x == '#', x))
 
