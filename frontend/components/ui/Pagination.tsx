@@ -57,14 +57,14 @@ export default function Pagination({ currentPage, totalPages, basePath, searchPa
       {currentPage > 1 ? (
         <Link
           href={buildUrl(currentPage - 1)}
-          className={`px-3 py-2 border ${BORDERS.medium} bg-white dark:bg-black hover:bg-black hover:dark:bg-white hover:text-white hover:dark:text-black transition-colors ${TEXT.secondary} font-bold ${monoUppercase}`}
+          className={`px-3 py-2 min-h-[44px] inline-flex items-center justify-center border ${BORDERS.medium} bg-white dark:bg-black hover:bg-black hover:dark:bg-white hover:text-white hover:dark:text-black transition-colors ${TEXT.secondary} font-bold ${monoUppercase}`}
           style={{ fontFamily: FONTS.mono }}
         >
           ← Prev
         </Link>
       ) : (
         <span
-          className={`px-3 py-2 border ${BORDERS.subtle} bg-stone-50 dark:bg-stone-950 ${TEXT.mutedMedium} ${monoUppercase}`}
+          className={`px-3 py-2 min-h-[44px] inline-flex items-center justify-center border ${BORDERS.subtle} bg-stone-50 dark:bg-stone-950 ${TEXT.mutedMedium} ${monoUppercase}`}
           style={{ fontFamily: FONTS.mono }}
         >
           ← Prev
@@ -76,7 +76,7 @@ export default function Pagination({ currentPage, totalPages, basePath, searchPa
         <>
           <Link
             href={buildUrl(1)}
-            className={`px-3 py-2 border ${BORDERS.medium} bg-white dark:bg-black hover:bg-black hover:dark:bg-white hover:text-white hover:dark:text-black transition-colors ${TEXT.secondary} font-bold`}
+            className={`px-3 py-2 min-h-[44px] min-w-[44px] inline-flex items-center justify-center border ${BORDERS.medium} bg-white dark:bg-black hover:bg-black hover:dark:bg-white hover:text-white hover:dark:text-black transition-colors ${TEXT.secondary} font-bold`}
             style={{ fontFamily: FONTS.mono }}
           >
             1
@@ -92,7 +92,7 @@ export default function Pagination({ currentPage, totalPages, basePath, searchPa
         page === currentPage ? (
           <span
             key={page}
-            className={`px-3 py-2 border ${BORDERS.solid} bg-black dark:bg-white text-white dark:text-black ${TEXT.secondary} font-bold`}
+            className={`px-3 py-2 min-h-[44px] min-w-[44px] inline-flex items-center justify-center border ${BORDERS.solid} bg-black dark:bg-white text-white dark:text-black ${TEXT.secondary} font-bold`}
             style={{ fontFamily: FONTS.mono }}
           >
             {page}
@@ -101,7 +101,7 @@ export default function Pagination({ currentPage, totalPages, basePath, searchPa
           <Link
             key={page}
             href={buildUrl(page)}
-            className={`px-3 py-2 border ${BORDERS.medium} bg-white dark:bg-black hover:bg-black hover:dark:bg-white hover:text-white hover:dark:text-black transition-colors ${TEXT.secondary} font-bold`}
+            className={`px-3 py-2 min-h-[44px] min-w-[44px] inline-flex items-center justify-center border ${BORDERS.medium} bg-white dark:bg-black hover:bg-black hover:dark:bg-white hover:text-white hover:dark:text-black transition-colors ${TEXT.secondary} font-bold`}
             style={{ fontFamily: FONTS.mono }}
           >
             {page}
@@ -117,7 +117,7 @@ export default function Pagination({ currentPage, totalPages, basePath, searchPa
           )}
           <Link
             href={buildUrl(totalPages)}
-            className={`px-3 py-2 border ${BORDERS.medium} bg-white dark:bg-black hover:bg-black hover:dark:bg-white hover:text-white hover:dark:text-black transition-colors ${TEXT.secondary} font-bold`}
+            className={`px-3 py-2 min-h-[44px] min-w-[44px] inline-flex items-center justify-center border ${BORDERS.medium} bg-white dark:bg-black hover:bg-black hover:dark:bg-white hover:text-white hover:dark:text-black transition-colors ${TEXT.secondary} font-bold`}
             style={{ fontFamily: FONTS.mono }}
           >
             {totalPages}
@@ -129,14 +129,14 @@ export default function Pagination({ currentPage, totalPages, basePath, searchPa
       {currentPage < totalPages ? (
         <Link
           href={buildUrl(currentPage + 1)}
-          className={`px-3 py-2 border ${BORDERS.medium} bg-white dark:bg-black hover:bg-black hover:dark:bg-white hover:text-white hover:dark:text-black transition-colors ${TEXT.secondary} font-bold ${monoUppercase}`}
+          className={`px-3 py-2 min-h-[44px] inline-flex items-center justify-center border ${BORDERS.medium} bg-white dark:bg-black hover:bg-black hover:dark:bg-white hover:text-white hover:dark:text-black transition-colors ${TEXT.secondary} font-bold ${monoUppercase}`}
           style={{ fontFamily: FONTS.mono }}
         >
           Next →
         </Link>
       ) : (
         <span
-          className={`px-3 py-2 border ${BORDERS.subtle} bg-stone-50 dark:bg-stone-950 ${TEXT.mutedMedium} ${monoUppercase}`}
+          className={`px-3 py-2 min-h-[44px] inline-flex items-center justify-center border ${BORDERS.subtle} bg-stone-50 dark:bg-stone-950 ${TEXT.mutedMedium} ${monoUppercase}`}
           style={{ fontFamily: FONTS.mono }}
         >
           Next →
