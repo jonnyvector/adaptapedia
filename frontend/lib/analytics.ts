@@ -5,6 +5,13 @@
 
 import { posthog } from './posthog';
 
+// Helper to safely capture events
+const safeCapture = (eventName: string, properties?: Record<string, any>) => {
+  if (typeof window !== 'undefined' && posthog && posthog.__loaded) {
+    posthog.capture(eventName, properties);
+  }
+};
+
 export const analytics = {
   // ============================================================================
   // USER EVENTS
@@ -12,7 +19,7 @@ export const analytics = {
 
   // Track user signup
   trackSignup: (method: 'email' | 'google' | 'facebook', userId: string) => {
-    posthog.capture('user_signed_up', {
+    safeCapture('user_signed_up', {
       method,
       user_id: userId,
     });
@@ -20,21 +27,21 @@ export const analytics = {
 
   // Track login
   trackLogin: (method: 'email' | 'google' | 'facebook') => {
-    posthog.capture('user_logged_in', {
+    safeCapture('user_logged_in', {
       method,
     });
   },
 
   // Track onboarding completion
   trackOnboardingComplete: (userId: string) => {
-    posthog.capture('onboarding_completed', {
+    safeCapture('onboarding_completed', {
       user_id: userId,
     });
   },
 
   // Track onboarding step
   trackOnboardingStep: (step: number, stepName: string) => {
-    posthog.capture('onboarding_step_completed', {
+    safeCapture('onboarding_step_completed', {
       step,
       step_name: stepName,
     });
@@ -52,7 +59,7 @@ export const analytics = {
     workId: string;
     screenWorkId: string;
   }) => {
-    posthog.capture('diff_created', data);
+    safeCapture('diff_created', data);
   },
 
   // Track diff vote
@@ -62,12 +69,12 @@ export const analytics = {
     workId: string;
     screenWorkId: string;
   }) => {
-    posthog.capture('diff_voted', data);
+    safeCapture('diff_voted', data);
   },
 
   // Track diff edit
   trackDiffEdited: (diffId: string) => {
-    posthog.capture('diff_edited', {
+    safeCapture('diff_edited', {
       diff_id: diffId,
     });
   },
@@ -83,7 +90,7 @@ export const analytics = {
     workTitle: string;
     screenWorkTitle: string;
   }) => {
-    posthog.capture('comparison_viewed', data);
+    safeCapture('comparison_viewed', data);
   },
 
   // Track comparison vote (book vs screen preference)
@@ -93,7 +100,7 @@ export const analytics = {
     preference: 'BOOK' | 'SCREEN' | 'BOTH';
     faithfulnessRating?: number;
   }) => {
-    posthog.capture('comparison_voted', data);
+    safeCapture('comparison_voted', data);
   },
 
   // Track spoiler level change
@@ -103,7 +110,7 @@ export const analytics = {
     workId: string;
     screenWorkId: string;
   }) => {
-    posthog.capture('spoiler_level_changed', data);
+    safeCapture('spoiler_level_changed', data);
   },
 
   // ============================================================================
@@ -116,7 +123,7 @@ export const analytics = {
     resultCount: number;
     type?: 'books' | 'adaptations' | 'all';
   }) => {
-    posthog.capture('search_performed', data);
+    safeCapture('search_performed', data);
   },
 
   // Track search result click
@@ -126,12 +133,12 @@ export const analytics = {
     resultType: 'book' | 'adaptation';
     position: number;
   }) => {
-    posthog.capture('search_result_clicked', data);
+    safeCapture('search_result_clicked', data);
   },
 
   // Track random comparison
   trackRandomComparison: () => {
-    posthog.capture('random_comparison_clicked');
+    safeCapture('random_comparison_clicked');
   },
 
   // ============================================================================
@@ -144,7 +151,7 @@ export const analytics = {
     isReply: boolean;
     depth: number;
   }) => {
-    posthog.capture('comment_posted', data);
+    safeCapture('comment_posted', data);
   },
 
   // Track report submitted
@@ -152,7 +159,7 @@ export const analytics = {
     contentType: 'diff' | 'comment';
     reason: string;
   }) => {
-    posthog.capture('report_submitted', data);
+    safeCapture('report_submitted', data);
   },
 
   // ============================================================================
@@ -164,7 +171,7 @@ export const analytics = {
     filterType: 'genre' | 'rating' | 'sort';
     filterValue: string;
   }) => {
-    posthog.capture('browse_filter_applied', data);
+    safeCapture('browse_filter_applied', data);
   },
 
   // Track external link clicks
@@ -172,19 +179,23 @@ export const analytics = {
     destination: string;
     source: string; // Which page/component
   }) => {
-    posthog.capture('external_link_clicked', data);
+    safeCapture('external_link_clicked', data);
   },
 };
 
 // Helper to identify user
 export const identifyUser = (userId: string, userProps?: Record<string, any>) => {
-  posthog.identify(userId, {
-    ...userProps,
-    $set: userProps,
-  });
+  if (typeof window !== 'undefined' && posthog && posthog.__loaded) {
+    posthog.identify(userId, {
+      ...userProps,
+      $set: userProps,
+    });
+  }
 };
 
 // Helper to reset user (on logout)
 export const resetUser = () => {
-  posthog.reset();
+  if (typeof window !== 'undefined' && posthog && posthog.__loaded) {
+    posthog.reset();
+  }
 };
