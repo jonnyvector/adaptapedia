@@ -18,7 +18,7 @@ export async function GET() {
     const timeoutId = setTimeout(() => controller.abort(), 30000);
 
     const response = await fetch(
-      `https://us.i.posthog.com/api/projects/${posthogProjectId}/events/?limit=1000`,
+      `https://app.posthog.com/api/projects/${posthogProjectId}/events/?limit=1000`,
       {
         headers: {
           'Authorization': `Bearer ${posthogApiKey}`,
