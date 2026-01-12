@@ -38,18 +38,23 @@ interface CatalogResponse {
   results: CatalogBook[];
   available_letters: string[];
   letter_counts: Record<string, number>;
+  available_genres: string[];
+  genre_counts: Record<string, number>;
 }
 
 async function getCatalogData(
   sort: string = 'title',
   order: string = 'asc',
-  filter: string = 'all',
+  genre?: string,
   letter?: string,
   page: number = 1
 ): Promise<CatalogResponse> {
   try {
     const API_URL = process.env.API_URL || 'http://localhost:8000/api';
-    const params: Record<string, string> = { sort, order, filter, page: page.toString() };
+    const params: Record<string, string> = { sort, order, page: page.toString() };
+    if (genre) {
+      params.genre = genre;
+    }
     if (letter) {
       params.letter = letter;
     }
@@ -78,6 +83,8 @@ async function getCatalogData(
       results: [],
       available_letters: [],
       letter_counts: {},
+      available_genres: [],
+      genre_counts: {},
     };
   }
 }
@@ -85,15 +92,15 @@ async function getCatalogData(
 export default async function CatalogPage({
   searchParams,
 }: {
-  searchParams: { sort?: string; order?: string; filter?: string; letter?: string; page?: string };
+  searchParams: { sort?: string; order?: string; genre?: string; letter?: string; page?: string };
 }) {
   const sort = searchParams.sort || 'title';
   const order = searchParams.order || 'asc';
-  const filter = searchParams.filter || 'all';
-  const letter = searchParams.letter || 'A'; // Default to 'A' if no letter specified
+  const genre = searchParams.genre;
+  const letter = searchParams.letter; // No default - "All" is the default state
   const page = parseInt(searchParams.page || '1', 10);
 
-  const data = await getCatalogData(sort, order, filter, letter, page);
+  const data = await getCatalogData(sort, order, genre, letter, page);
 
   return (
     <div className="container py-8 md:py-16 font-mono">
@@ -108,8 +115,12 @@ export default async function CatalogPage({
           className={`text-base sm:text-lg md:text-xl ${TEXT.mutedMedium}`}
 
         >
-          {letter ? (
-            <>Showing {data.count} book{data.count !== 1 ? 's' : ''} starting with "{letter}"</>
+          {genre && letter ? (
+            <>Showing {data.count} {genre} book{data.count !== 1 ? 's' : ''} starting with &quot;{letter}&quot;</>
+          ) : genre ? (
+            <>Showing {data.count} {genre} book{data.count !== 1 ? 's' : ''}</>
+          ) : letter ? (
+            <>Showing {data.count} book{data.count !== 1 ? 's' : ''} starting with &quot;{letter}&quot;</>
           ) : (
             <>Browse all books and their screen adaptations</>
           )}
@@ -120,7 +131,7 @@ export default async function CatalogPage({
         data={data}
         currentSort={sort}
         currentOrder={order}
-        currentFilter={filter}
+        currentGenre={genre}
         currentLetter={letter}
       />
     </div>

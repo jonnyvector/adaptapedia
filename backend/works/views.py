@@ -173,18 +173,18 @@ class WorkViewSet(viewsets.ReadOnlyModelViewSet):
         Query params:
         - sort: 'title' (default), 'year', 'adaptations'
         - order: 'asc' (default), 'desc'
-        - filter: 'all' (default), 'with-covers', 'without-covers'
+        - genre: Filter by genre (optional)
         - letter: Filter by first letter (A-Z or #)
         - page: Page number (default 1)
 
-        Returns paginated books with adaptation details and available letters.
+        Returns paginated books with adaptation details, available letters, and available genres.
         """
         from .services import WorkService
 
         # Get query params
         sort_by = request.query_params.get('sort', 'title')
         order = request.query_params.get('order', 'asc')
-        filter_type = request.query_params.get('filter', 'all')
+        genre = request.query_params.get('genre')
         letter = request.query_params.get('letter')
         page = int(request.query_params.get('page', 1))
 
@@ -192,7 +192,7 @@ class WorkViewSet(viewsets.ReadOnlyModelViewSet):
         data = WorkService.get_catalog(
             sort_by=sort_by,
             order=order,
-            filter_type=filter_type,
+            genre=genre,
             letter=letter,
             page=page
         )

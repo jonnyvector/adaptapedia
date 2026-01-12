@@ -35,13 +35,15 @@ interface CatalogData {
   results: CatalogBook[];
   available_letters: string[];
   letter_counts: Record<string, number>;
+  available_genres: string[];
+  genre_counts: Record<string, number>;
 }
 
 interface CatalogClientProps {
   data: CatalogData;
   currentSort: string;
   currentOrder: string;
-  currentFilter: string;
+  currentGenre?: string;
   currentLetter?: string;
 }
 
@@ -49,7 +51,7 @@ export default function CatalogClient({
   data,
   currentSort,
   currentOrder,
-  currentFilter,
+  currentGenre,
   currentLetter,
 }: CatalogClientProps) {
   const router = useRouter();
@@ -65,6 +67,8 @@ export default function CatalogClient({
     results: data?.results || [],
     available_letters: data?.available_letters || [],
     letter_counts: data?.letter_counts || {},
+    available_genres: data?.available_genres || [],
+    genre_counts: data?.genre_counts || {},
   };
 
   const buildQueryString = (params: Record<string, string>) => {
@@ -73,138 +77,207 @@ export default function CatalogClient({
   };
 
   const buildLetterUrl = (letter: string) => {
-    return `/catalog${buildQueryString({
-      letter,
+    const params: Record<string, string> = {
       sort: currentSort,
       order: currentOrder,
-      filter: currentFilter,
-    })}`;
+    };
+    if (letter) params.letter = letter;
+    if (currentGenre) params.genre = currentGenre;
+    return `/catalog${buildQueryString(params)}`;
   };
-
-  // Calculate "with covers" and "without covers" counts
-  // Note: These counts are approximate since we're only looking at current page
-  const withCovers = safeData.results.filter((b) => b.cover_url).length;
-  const withoutCovers = safeData.results.filter((b) => !b.cover_url).length;
 
   return (
     <div className="font-mono">
       {/* Alphabet Navigation */}
       <div className="mb-8">
         <div className="flex flex-wrap gap-2">
+          {/* "All" button */}
+          <Link
+            href={buildLetterUrl('')}
+            className={`px-3 py-2 min-h-[44px] min-w-[44px] inline-flex items-center justify-center border ${BORDERS.medium} ${
+              !currentLetter
+                ? 'bg-black dark:bg-white text-white dark:text-black'
+                : 'bg-white dark:bg-black text-black dark:text-white hover:bg-black hover:dark:bg-white hover:text-white hover:dark:text-black'
+            } transition-colors ${TEXT.body} font-bold ${monoUppercase}`}
+          >
+            All
+          </Link>
+
           {/* Letter navigation */}
-          {safeData.available_letters.map((letter) => (
-            <Link
-              key={letter}
-              href={buildLetterUrl(letter)}
-              className={`px-3 py-2 min-h-[44px] min-w-[44px] inline-flex items-center justify-center border ${BORDERS.medium} ${
-                currentLetter === letter
-                  ? 'bg-black dark:bg-white text-white dark:text-black'
-                  : 'bg-white dark:bg-black text-black dark:text-white hover:bg-black hover:dark:bg-white hover:text-white hover:dark:text-black'
-              } transition-colors ${TEXT.body} font-bold ${monoUppercase}`}
-              title={`${safeData.letter_counts[letter]} books`}
-            >
-              {letter}
-            </Link>
-          ))}
+          {safeData.available_letters.map((letter) => {
+            const count = safeData.letter_counts[letter] || 0;
+            const hasBooks = count > 0;
+
+            return (
+              <Link
+                key={letter}
+                href={buildLetterUrl(letter)}
+                className={`px-3 py-2 min-h-[44px] min-w-[44px] inline-flex items-center justify-center border ${BORDERS.medium} ${
+                  currentLetter === letter
+                    ? 'bg-black dark:bg-white text-white dark:text-black'
+                    : hasBooks
+                    ? 'bg-white dark:bg-black text-black dark:text-white hover:bg-black hover:dark:bg-white hover:text-white hover:dark:text-black'
+                    : 'bg-stone-50 dark:bg-stone-950 text-stone-300 dark:text-stone-700 cursor-not-allowed'
+                } transition-colors ${TEXT.body} font-bold ${monoUppercase}`}
+                title={`${count} book${count !== 1 ? 's' : ''}`}
+                onClick={(e) => {
+                  if (!hasBooks) {
+                    e.preventDefault();
+                  }
+                }}
+              >
+                {currentGenre ? `${letter} (${count})` : letter}
+              </Link>
+            );
+          })}
         </div>
       </div>
 
-      {/* Filters */}
-      <div className={`border ${BORDERS.medium} p-6 mb-8 bg-white dark:bg-black`}>
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-          {/* Sort By */}
-          <div>
-            <label className={`block ${TEXT.metadata} font-bold mb-2 ${monoUppercase}`}>Sort By</label>
-            <div className="relative">
-              <select
-                value={currentSort}
-                onChange={(e) => {
-                  const params: Record<string, string> = {
-                    sort: e.target.value,
-                    order: currentOrder,
-                    filter: currentFilter,
-                  };
-                  if (currentLetter) params.letter = currentLetter;
-                  router.push(`/catalog${buildQueryString(params)}`);
-                }}
-                className={`w-full appearance-none pl-3 pr-8 py-2 min-h-[44px] ${TEXT.body} border ${BORDERS.medium} ${RADIUS.input} bg-white dark:bg-black text-black dark:text-white focus:outline-none focus:ring-0 focus:border-black focus:dark:border-white`}
-              >
-                <option value="title">Title</option>
-                <option value="year">Year</option>
-                <option value="adaptations">Adaptations</option>
-              </select>
-              <div className="absolute right-3 top-1/2 -translate-y-1/2 pointer-events-none">
-                <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
-                </svg>
-              </div>
-            </div>
-          </div>
-
-          {/* Order */}
-          <div>
-            <label className={`block ${TEXT.metadata} font-bold mb-2 ${monoUppercase}`}>Order</label>
-            <div className="relative">
-              <select
-                value={currentOrder}
-                onChange={(e) => {
-                  const params: Record<string, string> = {
-                    sort: currentSort,
-                    order: e.target.value,
-                    filter: currentFilter,
-                  };
-                  if (currentLetter) params.letter = currentLetter;
-                  router.push(`/catalog${buildQueryString(params)}`);
-                }}
-                className={`w-full appearance-none pl-3 pr-8 py-2 min-h-[44px] ${TEXT.body} border ${BORDERS.medium} ${RADIUS.input} bg-white dark:bg-black text-black dark:text-white focus:outline-none focus:ring-0 focus:border-black focus:dark:border-white`}
-              >
-                <option value="asc">Ascending</option>
-                <option value="desc">Descending</option>
-              </select>
-              <div className="absolute right-3 top-1/2 -translate-y-1/2 pointer-events-none">
-                <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
-                </svg>
-              </div>
-            </div>
-          </div>
-
-          {/* Filter */}
-          <div>
-            <label className={`block ${TEXT.metadata} font-bold mb-2 ${monoUppercase}`}>Filter</label>
-            <div className="relative">
-              <select
-                value={currentFilter}
-                onChange={(e) => {
-                  const params: Record<string, string> = {
-                    sort: currentSort,
-                    order: currentOrder,
-                    filter: e.target.value,
-                  };
-                  if (currentLetter) params.letter = currentLetter;
-                  router.push(`/catalog${buildQueryString(params)}`);
-                }}
-                className={`w-full appearance-none pl-3 pr-8 py-2 min-h-[44px] ${TEXT.body} border ${BORDERS.medium} ${RADIUS.input} bg-white dark:bg-black text-black dark:text-white focus:outline-none focus:ring-0 focus:border-black focus:dark:border-white`}
-              >
-                <option value="all">All</option>
-                <option value="with-covers">With Covers</option>
-                <option value="without-covers">Without Covers</option>
-              </select>
-              <div className="absolute right-3 top-1/2 -translate-y-1/2 pointer-events-none">
-                <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
-                </svg>
-              </div>
+      {/* Compact Filters Row */}
+      <div className="flex flex-wrap items-center gap-3 mb-6">
+        {/* Genre */}
+        <div className="flex items-center gap-2">
+          <label className={`${TEXT.metadata} ${TEXT.mutedMedium} ${monoUppercase}`}>Genre:</label>
+          <div className="relative">
+            <select
+              value={currentGenre || ''}
+              onChange={(e) => {
+                const params: Record<string, string> = {
+                  sort: currentSort,
+                  order: currentOrder,
+                };
+                if (e.target.value) {
+                  params.genre = e.target.value;
+                }
+                if (currentLetter) {
+                  params.letter = currentLetter;
+                }
+                router.push(`/catalog${buildQueryString(params)}`);
+              }}
+              className={`appearance-none pl-3 pr-8 py-1.5 ${TEXT.secondary} border ${BORDERS.subtle} ${RADIUS.input} bg-white dark:bg-black text-black dark:text-white focus:outline-none focus:ring-0 focus:border-black focus:dark:border-white`}
+            >
+              <option value="">All</option>
+              {safeData.available_genres.map((genre) => (
+                <option key={genre} value={genre}>
+                  {genre} ({safeData.genre_counts[genre]})
+                </option>
+              ))}
+            </select>
+            <div className="absolute right-2 top-1/2 -translate-y-1/2 pointer-events-none">
+              <svg className="w-3 h-3" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+              </svg>
             </div>
           </div>
         </div>
 
-        <div className={`mt-4 ${TEXT.secondary} ${TEXT.mutedMedium}`}>
-          Showing {safeData.results.length} of {safeData.count} books
-          {currentLetter && ` (Letter: ${currentLetter})`}
+        {/* Sort */}
+        <div className="flex items-center gap-2">
+          <label className={`${TEXT.metadata} ${TEXT.mutedMedium} ${monoUppercase}`}>Sort:</label>
+          <div className="relative">
+            <select
+              value={currentSort}
+              onChange={(e) => {
+                const params: Record<string, string> = {
+                  sort: e.target.value,
+                  order: currentOrder,
+                };
+                if (currentGenre) params.genre = currentGenre;
+                if (currentLetter) params.letter = currentLetter;
+                router.push(`/catalog${buildQueryString(params)}`);
+              }}
+              className={`appearance-none pl-3 pr-8 py-1.5 ${TEXT.secondary} border ${BORDERS.subtle} ${RADIUS.input} bg-white dark:bg-black text-black dark:text-white focus:outline-none focus:ring-0 focus:border-black focus:dark:border-white`}
+            >
+              <option value="title">Title</option>
+              <option value="year">Year</option>
+              <option value="adaptations">Adaptations</option>
+            </select>
+            <div className="absolute right-2 top-1/2 -translate-y-1/2 pointer-events-none">
+              <svg className="w-3 h-3" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+              </svg>
+            </div>
+          </div>
+        </div>
+
+        {/* Order */}
+        <div className="flex items-center gap-2">
+          <label className={`${TEXT.metadata} ${TEXT.mutedMedium} ${monoUppercase}`}>Order:</label>
+          <div className="relative">
+            <select
+              value={currentOrder}
+              onChange={(e) => {
+                const params: Record<string, string> = {
+                  sort: currentSort,
+                  order: e.target.value,
+                };
+                if (currentGenre) params.genre = currentGenre;
+                if (currentLetter) params.letter = currentLetter;
+                router.push(`/catalog${buildQueryString(params)}`);
+              }}
+              className={`appearance-none pl-3 pr-8 py-1.5 ${TEXT.secondary} border ${BORDERS.subtle} ${RADIUS.input} bg-white dark:bg-black text-black dark:text-white focus:outline-none focus:ring-0 focus:border-black focus:dark:border-white`}
+            >
+              <option value="asc">Asc</option>
+              <option value="desc">Desc</option>
+            </select>
+            <div className="absolute right-2 top-1/2 -translate-y-1/2 pointer-events-none">
+              <svg className="w-3 h-3" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+              </svg>
+            </div>
+          </div>
+        </div>
+
+        {/* Status text */}
+        <div className={`ml-auto ${TEXT.metadata} ${TEXT.mutedMedium}`}>
+          {safeData.count} book{safeData.count !== 1 ? 's' : ''}
           {safeData.total_pages > 1 && ` • Page ${safeData.current_page} of ${safeData.total_pages}`}
         </div>
       </div>
+
+      {/* Active Filter Chips */}
+      {(currentGenre || currentLetter) && (
+        <div className="flex flex-wrap gap-2 mb-4">
+          {currentGenre && (
+            <div className={`inline-flex items-center gap-2 px-2 py-0.5 border ${BORDERS.subtle} bg-stone-100 dark:bg-stone-900 ${TEXT.metadata} ${TEXT.mutedMedium}`}>
+              <span>Genre: {currentGenre}</span>
+              <button
+                onClick={() => {
+                  const params: Record<string, string> = {
+                    sort: currentSort,
+                    order: currentOrder,
+                  };
+                  if (currentLetter) params.letter = currentLetter;
+                  router.push(`/catalog${buildQueryString(params)}`);
+                }}
+                className="hover:opacity-70 transition-opacity text-sm"
+                aria-label="Remove genre filter"
+              >
+                ×
+              </button>
+            </div>
+          )}
+          {currentLetter && (
+            <div className={`inline-flex items-center gap-2 px-2 py-0.5 border ${BORDERS.subtle} bg-stone-100 dark:bg-stone-900 ${TEXT.metadata} ${TEXT.mutedMedium}`}>
+              <span>Letter: {currentLetter}</span>
+              <button
+                onClick={() => {
+                  const params: Record<string, string> = {
+                    sort: currentSort,
+                    order: currentOrder,
+                  };
+                  if (currentGenre) params.genre = currentGenre;
+                  router.push(`/catalog${buildQueryString(params)}`);
+                }}
+                className="hover:opacity-70 transition-opacity text-sm"
+                aria-label="Remove letter filter"
+              >
+                ×
+              </button>
+            </div>
+          )}
+        </div>
+      )}
 
       {/* Books Grid */}
       {safeData.results.length > 0 ? (
@@ -291,14 +364,50 @@ export default function CatalogClient({
             searchParams={{
               sort: currentSort,
               order: currentOrder,
-              filter: currentFilter,
+              ...(currentGenre && { genre: currentGenre }),
               ...(currentLetter && { letter: currentLetter }),
             }}
           />
         </>
       ) : (
-        <div className={`text-center py-12 ${TEXT.mutedMedium}`}>
-          <p>No books found.</p>
+        <div className={`text-center py-12`}>
+          {currentGenre && currentLetter ? (
+            <div className="space-y-4">
+              <p className={`${TEXT.body} ${TEXT.mutedMedium}`}>
+                No {currentGenre} titles starting with &quot;{currentLetter}&quot;
+              </p>
+              <div className="flex gap-3 justify-center">
+                <button
+                  onClick={() => {
+                    const params: Record<string, string> = {
+                      sort: currentSort,
+                      order: currentOrder,
+                      genre: currentGenre,
+                    };
+                    router.push(`/catalog${buildQueryString(params)}`);
+                  }}
+                  className={`px-4 py-2 min-h-[44px] border ${BORDERS.medium} bg-white dark:bg-black hover:bg-black hover:dark:bg-white hover:text-white hover:dark:text-black transition-colors ${TEXT.body} font-bold`}
+                >
+                  Show all {currentGenre}
+                </button>
+                <button
+                  onClick={() => {
+                    const params: Record<string, string> = {
+                      sort: currentSort,
+                      order: currentOrder,
+                      letter: currentLetter,
+                    };
+                    router.push(`/catalog${buildQueryString(params)}`);
+                  }}
+                  className={`px-4 py-2 min-h-[44px] border ${BORDERS.medium} bg-white dark:bg-black hover:bg-black hover:dark:bg-white hover:text-white hover:dark:text-black transition-colors ${TEXT.body} font-bold`}
+                >
+                  Show all &quot;{currentLetter}&quot;
+                </button>
+              </div>
+            </div>
+          ) : (
+            <p className={`${TEXT.mutedMedium}`}>No books found.</p>
+          )}
         </div>
       )}
     </div>

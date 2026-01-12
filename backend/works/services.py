@@ -31,7 +31,7 @@ class WorkService:
     def get_catalog(
         sort_by: str = 'title',
         order: str = 'asc',
-        filter_type: str = 'all',
+        genre: Optional[str] = None,
         letter: Optional[str] = None,
         page: int = 1,
         page_size: int = 50
@@ -42,22 +42,20 @@ class WorkService:
         Args:
             sort_by: 'title' (default), 'year', or 'adaptations'
             order: 'asc' (default) or 'desc'
-            filter_type: 'all' (default), 'with-covers', or 'without-covers'
+            genre: Filter by genre (optional)
             letter: Filter by first letter (A-Z or #). If None, returns all books
             page: Page number (1-indexed)
             page_size: Number of books per page (default 50)
 
         Returns:
-            Dict with results, pagination metadata, and available letters
+            Dict with results, pagination metadata, available letters, and available genres
         """
         # Base queryset
         queryset = Work.objects.all()
 
-        # Apply cover filters
-        if filter_type == 'with-covers':
-            queryset = queryset.exclude(cover_url__isnull=True).exclude(cover_url='')
-        elif filter_type == 'without-covers':
-            queryset = queryset.filter(Q(cover_url__isnull=True) | Q(cover_url=''))
+        # Apply genre filter
+        if genre:
+            queryset = queryset.filter(genres__contains=[genre])
 
         # Annotate with adaptation count for sorting
         queryset = queryset.annotate(
@@ -130,12 +128,16 @@ class WorkService:
                 'adaptations': adaptation_list,
             })
 
-        # Get available letters (with counts)
-        # Query all titles to build letter index
-        all_titles = Work.objects.values_list('title', flat=True)
+        # Get available letters (with counts) - scoped to current filters
+        # Use the base queryset (after genre filter, before letter filter)
+        base_queryset = Work.objects.all()
+        if genre:
+            base_queryset = base_queryset.filter(genres__contains=[genre])
+
+        letter_titles = base_queryset.values_list('title', flat=True)
         letter_counts = {}
 
-        for title in all_titles:
+        for title in letter_titles:
             if not title:
                 continue
             # Handle "The" prefix
@@ -152,6 +154,19 @@ class WorkService:
 
         available_letters = sorted(letter_counts.keys(), key=lambda x: (x == '#', x))
 
+        # Get available genres (with counts)
+        # Extract all unique genres from JSONB arrays
+        all_works = Work.objects.exclude(genres__isnull=True).exclude(genres=[])
+        genre_counts = {}
+
+        for work in all_works.only('genres'):
+            if work.genres:
+                for g in work.genres:
+                    genre_counts[g] = genre_counts.get(g, 0) + 1
+
+        # Sort genres by count (most popular first)
+        available_genres = sorted(genre_counts.keys(), key=lambda x: genre_counts[x], reverse=True)
+
         return {
             'count': total_count,
             'total_pages': total_pages,
@@ -162,6 +177,8 @@ class WorkService:
             'results': results,
             'available_letters': available_letters,
             'letter_counts': letter_counts,
+            'available_genres': available_genres,
+            'genre_counts': genre_counts,
         }
 
 
