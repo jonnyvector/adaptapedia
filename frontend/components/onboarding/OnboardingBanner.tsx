@@ -44,9 +44,9 @@ export default function OnboardingBanner(): JSX.Element | null {
   };
 
   return (
-    <div className={`bg-black dark:bg-white text-white dark:text-black py-3 border-b ${BORDERS.solid} relative`}>
+    <div className={`bg-black dark:bg-white text-white dark:text-black py-3 border-b ${BORDERS.solid}`}>
       <div className="container">
-        <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 pr-10 sm:pr-0">
+        <div className="flex flex-col sm:flex-row sm:items-center gap-3 relative pr-10 sm:pr-0">
           <p className={`${TEXT.secondary} font-bold ${monoUppercase} flex-1`} style={{ fontFamily: FONTS.mono }}>
             Complete your profile to get personalized recommendations
           </p>
@@ -57,14 +57,14 @@ export default function OnboardingBanner(): JSX.Element | null {
           >
             Continue Setup →
           </Link>
+          <button
+            onClick={handleDismiss}
+            className="absolute top-0 right-0 sm:relative sm:top-auto sm:right-auto p-0"
+            aria-label="Dismiss banner"
+          >
+            <XMarkIcon className="w-5 h-5" />
+          </button>
         </div>
-        <button
-          onClick={handleDismiss}
-          className="absolute top-0 right-4 p-0"
-          aria-label="Dismiss banner"
-        >
-          <XMarkIcon className="w-5 h-5" />
-        </button>
       </div>
     </div>
   );
