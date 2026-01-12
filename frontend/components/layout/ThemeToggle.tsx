@@ -72,7 +72,7 @@ export default function ThemeToggle(): JSX.Element {
       <Button
         variant="ghost"
         size="sm"
-        className={`p-2 md:p-0 md:px-3 md:py-3 min-h-0 h-auto md:border md:${BORDERS.subtle} md:bg-transparent`}
+        className={`p-2 md:p-0 md:px-1 md:py-1.5 min-h-0 h-auto md:bg-transparent`}
         aria-label="Toggle theme"
         disabled
       >
@@ -88,7 +88,7 @@ export default function ThemeToggle(): JSX.Element {
       variant="ghost"
       size="sm"
       onClick={toggleTheme}
-      className={`p-2 md:p-0 md:px-3 md:py-3 min-h-0 h-auto md:border md:${BORDERS.subtle} md:bg-transparent opacity-70 hover:opacity-100 transition-opacity`}
+      className={`p-2 md:p-0 md:px-1 md:py-1.5 min-h-0 h-auto md:bg-transparent opacity-70 hover:opacity-100 transition-opacity`}
       aria-label={`Switch to ${displayTheme === 'light' ? 'dark' : 'light'} mode`}
       title={`Switch to ${displayTheme === 'light' ? 'dark' : 'light'} mode`}
     >

@@ -88,6 +88,12 @@ function HeaderContent(): JSX.Element {
                 <div className="w-16 h-10" />
               ) : isAuthenticated && user ? (
                 <>
+                  {/* User Dropdown */}
+                  <UserDropdown user={user} />
+
+                  {/* Divider */}
+                  <div className="w-px h-5 bg-stone-300 dark:bg-stone-700 mx-1" />
+
                   {/* Bookmarks Icon (Desktop only) */}
                   <Link
                     href={`/u/${user.username}/bookmarks`}
@@ -101,21 +107,23 @@ function HeaderContent(): JSX.Element {
                   {/* Notifications */}
                   <NotificationBell />
 
-                  {/* User Dropdown */}
-                  <UserDropdown user={user} />
+                  {/* Theme Toggle */}
+                  <ThemeToggle />
                 </>
               ) : (
-                <Link
-                  href="/auth/login"
-                  className={`px-3 py-1.5 border ${BORDERS.solid} bg-black dark:bg-white text-white dark:text-black hover:bg-white hover:dark:bg-black hover:text-black hover:dark:text-white font-bold transition-all ${TEXT.label} ${RADIUS.control} ${monoUppercase} flex items-center focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-black dark:focus-visible:outline-white`}
-                  style={{ fontFamily: FONTS.mono, letterSpacing: LETTER_SPACING.tight }}
-                >
-                  Login
-                </Link>
-              )}
+                <>
+                  <Link
+                    href="/auth/login"
+                    className={`px-3 py-1.5 border ${BORDERS.solid} bg-black dark:bg-white text-white dark:text-black hover:bg-white hover:dark:bg-black hover:text-black hover:dark:text-white font-bold transition-all ${TEXT.label} ${RADIUS.control} ${monoUppercase} flex items-center focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-black dark:focus-visible:outline-white`}
+                    style={{ fontFamily: FONTS.mono, letterSpacing: LETTER_SPACING.tight }}
+                  >
+                    Login
+                  </Link>
 
-              {/* Theme Toggle */}
-              <ThemeToggle />
+                  {/* Theme Toggle */}
+                  <ThemeToggle />
+                </>
+              )}
             </div>
           </nav>
 
