@@ -3,7 +3,7 @@
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { api } from '@/lib/api';
-import { FONTS, LETTER_SPACING, BORDERS, TEXT, RADIUS, monoUppercase } from '@/lib/brutalist-design';
+import { Button } from '@/components/ui/Button';
 import { BoltIcon, SpinnerIcon } from '@/components/ui/Icons';
 
 export default function RandomComparisonButton(): JSX.Element {
@@ -23,11 +23,11 @@ export default function RandomComparisonButton(): JSX.Element {
   };
 
   return (
-    <button
+    <Button
       onClick={handleClick}
       disabled={loading}
-      className={`inline-flex items-center gap-2 px-4 py-2 ${TEXT.secondary} font-bold border ${BORDERS.medium} bg-white dark:bg-black text-black dark:text-white hover:border-black hover:dark:border-white transition-colors ${RADIUS.control} disabled:opacity-50 ${monoUppercase}`}
-      style={{ fontFamily: FONTS.mono, letterSpacing: LETTER_SPACING.tight }}
+      variant="ghost"
+      size="lg"
     >
       {loading ? (
         <>
@@ -40,6 +40,6 @@ export default function RandomComparisonButton(): JSX.Element {
           Random comparison
         </>
       )}
-    </button>
+    </Button>
   );
 }
