@@ -2,6 +2,7 @@
 
 import Image from 'next/image';
 import Link from 'next/link';
+import { useRouter } from 'next/navigation';
 import { FilmIcon, TvIcon } from '@/components/ui/Icons';
 import Pagination from '@/components/ui/Pagination';
 import { FONTS, LETTER_SPACING, BORDERS, TEXT, RADIUS, monoUppercase } from '@/lib/brutalist-design';
@@ -51,6 +52,8 @@ export default function CatalogClient({
   currentFilter,
   currentLetter,
 }: CatalogClientProps) {
+  const router = useRouter();
+
   // Defensive: ensure data has required properties
   const safeData = {
     count: data?.count || 0,
@@ -122,7 +125,7 @@ export default function CatalogClient({
                     filter: currentFilter,
                   };
                   if (currentLetter) params.letter = currentLetter;
-                  window.location.href = `/catalog${buildQueryString(params)}`;
+                  router.push(`/catalog${buildQueryString(params)}`);
                 }}
                 className={`w-full appearance-none pl-3 pr-8 py-2 min-h-[44px] ${TEXT.body} border ${BORDERS.medium} ${RADIUS.input} bg-white dark:bg-black text-black dark:text-white focus:outline-none focus:ring-0 focus:border-black focus:dark:border-white`}
               >
@@ -151,7 +154,7 @@ export default function CatalogClient({
                     filter: currentFilter,
                   };
                   if (currentLetter) params.letter = currentLetter;
-                  window.location.href = `/catalog${buildQueryString(params)}`;
+                  router.push(`/catalog${buildQueryString(params)}`);
                 }}
                 className={`w-full appearance-none pl-3 pr-8 py-2 min-h-[44px] ${TEXT.body} border ${BORDERS.medium} ${RADIUS.input} bg-white dark:bg-black text-black dark:text-white focus:outline-none focus:ring-0 focus:border-black focus:dark:border-white`}
               >
@@ -179,7 +182,7 @@ export default function CatalogClient({
                     filter: e.target.value,
                   };
                   if (currentLetter) params.letter = currentLetter;
-                  window.location.href = `/catalog${buildQueryString(params)}`;
+                  router.push(`/catalog${buildQueryString(params)}`);
                 }}
                 className={`w-full appearance-none pl-3 pr-8 py-2 min-h-[44px] ${TEXT.body} border ${BORDERS.medium} ${RADIUS.input} bg-white dark:bg-black text-black dark:text-white focus:outline-none focus:ring-0 focus:border-black focus:dark:border-white`}
               >
