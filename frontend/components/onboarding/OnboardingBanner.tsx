@@ -44,27 +44,27 @@ export default function OnboardingBanner(): JSX.Element | null {
   };
 
   return (
-    <div className={`bg-black dark:bg-white text-white dark:text-black py-3 border-b ${BORDERS.solid}`}>
-      <div className="container flex items-center justify-between gap-3">
-        <p className={`${TEXT.secondary} font-bold ${monoUppercase} flex-1`} style={{ fontFamily: FONTS.mono }}>
-          Complete your profile to get personalized recommendations
-        </p>
-        <div className="flex items-center gap-2">
+    <div className={`bg-black dark:bg-white text-white dark:text-black py-3 border-b ${BORDERS.solid} relative`}>
+      <div className="container">
+        <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 pr-10 sm:pr-0">
+          <p className={`${TEXT.secondary} font-bold ${monoUppercase} flex-1`} style={{ fontFamily: FONTS.mono }}>
+            Complete your profile to get personalized recommendations
+          </p>
           <Link
             href="/onboarding"
-            className={`px-4 py-2 bg-white dark:bg-black text-black dark:text-white border ${BORDERS.medium} ${RADIUS.control} font-bold hover:bg-gray-100 hover:dark:bg-gray-900 transition-colors ${TEXT.metadata} ${monoUppercase}`}
+            className={`px-4 py-2 bg-white dark:bg-black text-black dark:text-white border ${BORDERS.medium} ${RADIUS.control} font-bold hover:bg-gray-100 hover:dark:bg-gray-900 transition-colors ${TEXT.metadata} ${monoUppercase} text-center sm:whitespace-nowrap`}
             style={{ fontFamily: FONTS.mono }}
           >
             Continue Setup →
           </Link>
-          <button
-            onClick={handleDismiss}
-            className="p-2 hover:bg-white/10 dark:hover:bg-black/10 transition-colors rounded"
-            aria-label="Dismiss banner"
-          >
-            <XMarkIcon className="w-5 h-5" />
-          </button>
         </div>
+        <button
+          onClick={handleDismiss}
+          className="absolute top-3 right-4 p-2 hover:bg-white/10 dark:hover:bg-black/10 transition-colors rounded"
+          aria-label="Dismiss banner"
+        >
+          <XMarkIcon className="w-5 h-5" />
+        </button>
       </div>
     </div>
   );
