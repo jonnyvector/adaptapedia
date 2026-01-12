@@ -19,8 +19,8 @@ export const LETTER_SPACING = {
 
 // Colors - Ink vs Ember palette
 export const COLORS = {
-  book: '#1E3A5F', // Deep navy/ink blue
-  screen: '#A0522D', // Dark rust/sienna
+  book: '#4A7C9E', // Medium slate blue (soft vintage)
+  screen: '#C17A4F', // Terracotta/clay (warm vintage)
 } as const;
 
 // Border Radius
