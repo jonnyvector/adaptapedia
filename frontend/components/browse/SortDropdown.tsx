@@ -13,8 +13,8 @@ const SORT_OPTIONS: SortOption[] = [
   { value: 'popularity', label: 'Popular', description: 'Most popular adaptations' },
   { value: 'trending', label: 'Trending', description: 'Recently active comparisons' },
   { value: 'most_documented', label: 'Most Documented', description: 'Highest diff count' },
-  { value: 'recently_updated', label: 'Recently Updated', description: 'Latest activity' },
-  { value: 'newest', label: 'Newest', description: 'Recently added comparisons' },
+  { value: 'recently_updated', label: 'Recently Updated', description: 'Latest diff activity' },
+  { value: 'newest', label: 'Newest', description: 'Recently added to database' },
 ];
 
 export default function SortDropdown(): JSX.Element {

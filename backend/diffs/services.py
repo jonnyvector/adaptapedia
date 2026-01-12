@@ -617,7 +617,12 @@ class DiffService:
 
         Args:
             limit: Number of comparisons to return (default 50)
-            sort: Sort order - 'popularity' (default), 'trending', 'most_documented', 'recently_updated', 'newest'
+            sort: Sort order
+                - 'popularity': TMDb popularity score (default)
+                - 'trending': Recent diff activity + engagement
+                - 'most_documented': Highest diff count
+                - 'recently_updated': Most recently updated diffs
+                - 'newest': Most recently added comparisons
 
         Returns comparisons sorted by the specified criteria, with diff/vote counts for each.
         """
@@ -635,7 +640,6 @@ class DiffService:
             total_diffs=Count('id', distinct=True),
             total_votes=Count('votes', distinct=True),
             last_updated=Max('updated_at'),
-            first_created=Max('created_at'),  # Use Max to get most recent, will sort by this for 'newest'
         )
 
         # Build lookup dicts
@@ -646,7 +650,6 @@ class DiffService:
                 'diff_count': item['total_diffs'],
                 'vote_count': item['total_votes'],
                 'last_updated': item['last_updated'],
-                'first_created': item['first_created'],
             }
 
         # Get comparison vote counts
@@ -662,7 +665,6 @@ class DiffService:
             diff_count = data.get('diff_count', 0)
             vote_count = data.get('vote_count', 0)
             last_updated = data.get('last_updated')
-            first_created = data.get('first_created')
 
             results.append({
                 'work_id': edge.work.id,
@@ -681,7 +683,7 @@ class DiffService:
                 'vote_count': vote_count,
                 'comparison_vote_count': comparison_votes.get(key, 0),
                 'last_updated': last_updated.isoformat() if last_updated else None,
-                'first_created': first_created.isoformat() if first_created else None,
+                'comparison_created_at': edge.created_at.isoformat() if edge.created_at else None,
                 'tmdb_popularity': edge.screen_work.tmdb_popularity or 0,  # For popularity sort
             })
 
@@ -698,7 +700,8 @@ class DiffService:
         elif sort == 'recently_updated':
             results.sort(key=lambda x: x['last_updated'] or '', reverse=True)
         elif sort == 'newest':
-            results.sort(key=lambda x: x['first_created'] or '', reverse=True)
+            # Sort by when the comparison was added to the database
+            results.sort(key=lambda x: x['comparison_created_at'] or '', reverse=True)
         else:  # popularity
             results.sort(key=lambda x: (x['tmdb_popularity'], x['work_title']), reverse=True)
 
