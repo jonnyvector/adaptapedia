@@ -44,7 +44,7 @@ export default function ComparisonCard({ comparison, showTrendingBadge = false }
       )}
     >
       {/* Visual: Book Cover ↔ Movie Poster */}
-      <div className="relative flex h-56 sm:h-48 bg-stone-50 dark:bg-stone-950 border-b border-black/40 dark:border-white/40">
+      <div className="relative flex h-56 sm:h-48 bg-stone-50 dark:bg-stone-950">
         {/* Book Cover */}
         <div className="flex-1 relative overflow-hidden border-r-2 border-black/20 dark:border-white/20">
           {cover_url ? (
