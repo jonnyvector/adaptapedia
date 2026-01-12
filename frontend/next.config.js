@@ -23,7 +23,6 @@ const nextConfig = {
   },
   // Performance optimizations
   experimental: {
-    optimizeCss: true, // Enable CSS optimization
     optimizePackageImports: ['@heroicons/react'], // Optimize icon imports
   },
   // Compiler optimizations
