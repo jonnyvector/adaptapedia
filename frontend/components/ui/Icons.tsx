@@ -741,16 +741,18 @@ export function BrutalistMoonIcon({ className = "w-6 h-6" }: IconProps) {
     <svg
       xmlns="http://www.w3.org/2000/svg"
       fill="none"
-      viewBox="0 0 200 200"
+      viewBox="0 0 24 24"
       className={className}
       aria-hidden="true"
     >
-      {/* Outlined crescent with tapered tips */}
+      {/* Thinner crescent moon */}
       <path
-        d="M 75 35 A 65 65 0 0 1 75 165 A 72 72 0 0 0 75 35"
+        d="M21 12.79A9 9 0 1 1 11.21 3 6 6 0 0 0 21 12.79z"
         fill="transparent"
         stroke="currentColor"
-        strokeWidth="12"
+        strokeWidth="1.5"
+        strokeLinecap="round"
+        strokeLinejoin="round"
       />
     </svg>
   );

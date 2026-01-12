@@ -143,7 +143,7 @@ export default function NotificationBell() {
       {/* Bell Button */}
       <button
         onClick={toggleDropdown}
-        className={`relative px-1 py-1.5 ${TEXT.mutedStrong} hover:text-black hover:dark:text-white transition-colors border-0 bg-transparent hover:bg-transparent`}
+        className={`relative px-1 py-1.5 opacity-70 hover:opacity-100 transition-opacity border-0 bg-transparent hover:bg-transparent`}
         aria-label="Notifications"
       >
         <BrutalistBellIcon className="w-5 h-5" />
