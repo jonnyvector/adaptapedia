@@ -72,7 +72,7 @@ export default function ComparisonCard({ comparison, showTrendingBadge = false }
         </div>
 
         {/* Subtle seam divider */}
-        <div className="absolute top-0 bottom-0 left-1/2 -translate-x-1/2 w-0.5 bg-black/40 dark:bg-white/40 z-10 group-hover:bg-black group-hover:dark:bg-white transition-colors" />
+        <div className="absolute top-0 bottom-0 left-1/2 -translate-x-1/2 w-px bg-black/40 dark:bg-white/40 z-10 group-hover:bg-black group-hover:dark:bg-white transition-colors" />
 
         {/* VS Chip on seam */}
         <div className="absolute inset-0 flex items-center justify-center pointer-events-none z-20">
