@@ -172,7 +172,7 @@ export default async function ScreenWorkPage({
 
   return (
     <main className="min-h-screen">
-      <div className="container">
+      <div className="container py-8 md:py-16">
         {/* Header */}
         <div className="mb-8">
           <div className="mb-2">

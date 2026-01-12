@@ -111,7 +111,7 @@ export default async function WorkPage({ params }: PageProps): Promise<JSX.Eleme
 
   return (
     <main className="min-h-screen">
-      <div className="container">
+      <div className="container py-8 md:py-16">
         {/* Header Section */}
         <div className="mb-8">
           <div className="mb-6">
