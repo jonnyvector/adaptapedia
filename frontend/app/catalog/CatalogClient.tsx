@@ -96,8 +96,8 @@ export default function CatalogClient({
               className={`px-3 py-2 min-h-[44px] min-w-[44px] inline-flex items-center justify-center border ${BORDERS.medium} ${
                 currentLetter === letter
                   ? 'bg-black dark:bg-white text-white dark:text-black'
-                  : 'bg-white dark:bg-black hover:bg-black hover:dark:bg-white hover:text-white hover:dark:text-black'
-              } transition-colors ${TEXT.body} ${TEXT.primary} font-bold ${monoUppercase}`}
+                  : 'bg-white dark:bg-black text-black dark:text-white hover:bg-black hover:dark:bg-white hover:text-white hover:dark:text-black'
+              } transition-colors ${TEXT.body} font-bold ${monoUppercase}`}
               title={`${safeData.letter_counts[letter]} books`}
             >
               {letter}
