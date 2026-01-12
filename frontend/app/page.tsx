@@ -41,17 +41,6 @@ export default async function Home(): Promise<JSX.Element> {
       <div className="relative py-12 md:py-20 mb-8 md:mb-12">
         <div className="container">
           <div className="max-w-4xl mx-auto text-center">
-            {/* Brutalist Icon */}
-            <div className="mb-6 md:mb-8 flex justify-center">
-              <Image
-                src="/brutalist-icon-outline.svg"
-                alt=""
-                width={120}
-                height={120}
-                className="opacity-90 invert dark:invert-0"
-              />
-            </div>
-
             {/* Clean, focused headline */}
             <h1 className="text-4xl sm:text-5xl md:text-7xl font-black mb-4 md:mb-6 leading-[1.1] tracking-tight" style={{ fontFamily: FONTS.mono }}>
               <span className={TEXT.primary}>
@@ -95,7 +84,7 @@ export default async function Home(): Promise<JSX.Element> {
               <RandomComparisonButton />
             </div>
 
-            {/* Simplified stats - inline proof */}
+            {/* Live activity signals - shows community is active */}
             <div className="flex flex-col items-center justify-center gap-3">
               <div className={`flex flex-wrap items-center justify-center gap-3 sm:gap-6 ${TEXT.secondary} ${TEXT.mutedMedium}`} style={{ fontFamily: FONTS.mono }}>
                 <div className="flex items-center gap-1">
@@ -111,6 +100,11 @@ export default async function Home(): Promise<JSX.Element> {
                 <div className="flex items-center gap-1">
                   <div className={`text-lg font-black ${TEXT.primary}`}>12.8K</div>
                   <span className="uppercase tracking-wider text-xs sm:text-sm">differences</span>
+                </div>
+                <div className="w-1 h-1 bg-black/20 dark:bg-white/20 hidden sm:block"></div>
+                <div className="flex items-center gap-1">
+                  <div className={`text-lg font-black ${TEXT.primary}`}>+27</div>
+                  <span className="uppercase tracking-wider text-xs sm:text-sm">today</span>
                 </div>
               </div>
               <p className={`${TEXT.secondary} ${TEXT.mutedMedium} uppercase tracking-wider text-center px-4`} style={{ fontFamily: FONTS.mono }}>
