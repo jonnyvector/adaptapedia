@@ -7,6 +7,7 @@ import SearchDropdown from './SearchDropdown';
 import { api } from '@/lib/api';
 import type { SearchWithAdaptationsResponse } from '@/lib/types';
 import { FONTS, LETTER_SPACING, BORDERS, TEXT, RADIUS } from '@/lib/brutalist-design';
+import { analytics } from '@/lib/analytics';
 
 interface SearchBarProps {
   defaultValue?: string;
@@ -52,6 +53,15 @@ function SearchBarContent({
         try {
           const results = await api.works.searchWithAdaptations(query, 5);
           setSearchResults(results);
+
+          // Track search analytics
+          const totalResults = (results.books?.length || 0) + (results.adaptations?.length || 0);
+          analytics.trackSearch({
+            query,
+            resultCount: totalResults,
+            type: 'all',
+          });
+
           // Only auto-show dropdown if user has interacted with the input
           if (hasInteractedRef.current) {
             setShowDropdown(true);

@@ -10,6 +10,7 @@ import { setUsername, savePreferences, completeOnboarding } from '@/lib/onboardi
 import { useAuth } from '@/lib/auth-context';
 import { useToast } from '@/hooks/useToast';
 import type { UserPreferences } from '@/lib/types';
+import { analytics } from '@/lib/analytics';
 
 export default function OnboardingPage(): JSX.Element {
   const router = useRouter();
@@ -77,6 +78,12 @@ export default function OnboardingPage(): JSX.Element {
   const handleComplete = async () => {
     try {
       await completeOnboarding();
+
+      // Track onboarding completion
+      analytics.trackOnboardingComplete({
+        stepsCompleted: 3,
+      });
+
       // Refresh user data to update onboarding status
       await refreshUser();
       router.push('/');

@@ -2,6 +2,7 @@ import { useState, useCallback } from 'react';
 import type { VoteType } from '@/lib/types';
 import { useToast } from '@/lib/toast-context';
 import { submitVote as submitVoteAction } from '@/app/actions/votes';
+import { analytics } from '@/lib/analytics';
 
 interface VoteCounts {
   accurate: number;
@@ -83,6 +84,16 @@ export function useVoting(
         }
 
         const response = result.data;
+
+        // Track vote in analytics (only for new votes, not removals)
+        if (!wasToggleOff) {
+          analytics.trackDiffVote({
+            diffId: diffId.toString(),
+            voteType,
+            workId: response.work_id?.toString() || '',
+            screenWorkId: response.screen_work_id?.toString() || '',
+          });
+        }
 
         // Show actionable toast with consensus data
         if (wasToggleOff) {

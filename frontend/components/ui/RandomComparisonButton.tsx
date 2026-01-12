@@ -5,6 +5,7 @@ import { useRouter } from 'next/navigation';
 import { api } from '@/lib/api';
 import { Button } from '@/components/ui/Button';
 import { BoltIcon, SpinnerIcon } from '@/components/ui/Icons';
+import { analytics } from '@/lib/analytics';
 
 interface RandomComparisonButtonProps {
   className?: string;
@@ -18,6 +19,10 @@ export default function RandomComparisonButton({ className }: RandomComparisonBu
     setLoading(true);
     try {
       const randomComparison = await api.diffs.getRandomComparison();
+
+      // Track random comparison click
+      analytics.trackRandomComparison();
+
       router.push(`/compare/${randomComparison.work_slug}/${randomComparison.screen_work_slug}`);
     } catch (error) {
       console.error('Failed to get random comparison:', error);

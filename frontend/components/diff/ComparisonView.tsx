@@ -27,6 +27,7 @@ import {
   getAllowedScopes,
 } from '@/lib/spoiler-utils';
 import { FONTS, BORDERS, TEXT, RADIUS } from '@/lib/brutalist-design';
+import { analytics } from '@/lib/analytics';
 
 interface ComparisonViewProps {
   work: Work;
@@ -50,6 +51,18 @@ export default function ComparisonView({
   useEffect(() => {
     setSpoilerPreference(loadSpoilerPreference());
   }, []);
+
+  // Track comparison view on mount
+  useEffect(() => {
+    analytics.trackComparisonView({
+      workId: work.id.toString(),
+      workTitle: work.title,
+      screenWorkId: screenWork.id.toString(),
+      screenWorkTitle: screenWork.title,
+      diffCount: initialDiffs.length,
+      spoilerPreference,
+    });
+  }, [work.id, work.title, screenWork.id, screenWork.title, initialDiffs.length, spoilerPreference]);
 
   // Use initialDiffs directly - no need to fetch client-side
   // All diffs are provided server-side with FULL scope, we filter client-side
