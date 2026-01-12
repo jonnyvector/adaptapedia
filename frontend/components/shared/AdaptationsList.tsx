@@ -105,7 +105,7 @@ export default function AdaptationsList({
                 <div className="flex flex-wrap gap-3 items-center">
                   <Link
                     href={compareUrl}
-                    className={`inline-flex items-center gap-2 px-6 py-3 bg-black dark:bg-white text-white dark:text-black ${RADIUS.control} hover:opacity-90 transition-opacity font-bold ${TEXT.body} border ${BORDERS.solid} ${monoUppercase}`}
+                    className={`inline-flex items-center gap-2 px-4 py-3 bg-black dark:bg-white text-white dark:text-black ${RADIUS.control} hover:opacity-90 transition-opacity font-bold ${TEXT.secondary} border ${BORDERS.solid} ${monoUppercase} min-h-[48px]`}
                     style={{ fontFamily: FONTS.mono, letterSpacing: LETTER_SPACING.tight }}
                   >
                     Compare →
@@ -114,7 +114,7 @@ export default function AdaptationsList({
                   {/* Secondary Actions */}
                   <Link
                     href={`/screen/${adaptation.slug}`}
-                    className={`inline-flex items-center gap-2 px-4 py-2 bg-white dark:bg-black border ${BORDERS.medium} text-black dark:text-white ${RADIUS.control} hover:border-black hover:dark:border-white transition-colors ${TEXT.secondary} font-bold ${monoUppercase}`}
+                    className={`inline-flex items-center gap-2 px-3 py-2 bg-white dark:bg-black border ${BORDERS.medium} text-black dark:text-white ${RADIUS.control} hover:border-black hover:dark:border-white transition-colors ${TEXT.secondary} font-bold ${monoUppercase} min-h-[44px]`}
                     style={{ fontFamily: FONTS.mono, letterSpacing: LETTER_SPACING.tight }}
                   >
                     View details
@@ -122,7 +122,7 @@ export default function AdaptationsList({
 
                   <Link
                     href={`${compareUrl}#add-diff`}
-                    className={`inline-flex items-center gap-2 px-4 py-2 bg-white dark:bg-black border ${BORDERS.medium} text-black dark:text-white ${RADIUS.control} hover:border-black hover:dark:border-white transition-colors ${TEXT.secondary} font-bold ${monoUppercase}`}
+                    className={`inline-flex items-center gap-2 px-3 py-2 bg-white dark:bg-black border ${BORDERS.medium} text-black dark:text-white ${RADIUS.control} hover:border-black hover:dark:border-white transition-colors ${TEXT.secondary} font-bold ${monoUppercase} min-h-[44px]`}
                     style={{ fontFamily: FONTS.mono, letterSpacing: LETTER_SPACING.tight }}
                   >
                     + Add difference
