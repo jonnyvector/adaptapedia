@@ -9,7 +9,7 @@ import { api } from '@/lib/api';
 import { calculateVotePercentage } from '@/lib/vote-utils';
 import AdaptationSwitcher from './AdaptationSwitcher';
 import BookmarkButton from './BookmarkButton';
-import { FONTS, RADIUS, TEXT } from '@/lib/brutalist-design';
+import { FONTS, RADIUS, TEXT, COLORS } from '@/lib/brutalist-design';
 
 // Inject Google Fonts for brutalist minimal + nerdy typography
 if (typeof document !== 'undefined' && !document.querySelector('link[href*="Space+Grotesk"]')) {
@@ -145,8 +145,8 @@ export default function MatchupScoreboard({
   const hasVotes = totalVotes > 0;
 
   // Accent colors - Ink vs Ember palette (archival feel)
-  const bookAccent = '#6F8FA8'; // Dusty steel blue (ink)
-  const screenAccent = '#C98A3A'; // Burnt amber (ember)
+  const bookAccent = COLORS.book;
+  const screenAccent = COLORS.screen;
 
   // Shared component: Vote buttons
   const renderVoteButtons = (size: 'large' | 'small' = 'large') => {
