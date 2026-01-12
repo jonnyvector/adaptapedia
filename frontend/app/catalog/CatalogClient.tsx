@@ -100,7 +100,7 @@ export default function CatalogClient({
               } transition-colors ${TEXT.body} ${TEXT.primary} font-bold ${monoUppercase}`}
               title={`${safeData.letter_counts[letter]} books`}
             >
-              {letter} <span className={`${TEXT.metadata}`}>({safeData.letter_counts[letter]})</span>
+              {letter}
             </Link>
           ))}
         </div>
