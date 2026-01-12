@@ -392,7 +392,6 @@ button, .btn, .btn-primary, .btn-secondary, .btn-ghost, .btn-outline, .btn-succe
   font-size: 16px;
   padding: 12px 28px;
   border-radius: var(--button-radius);
-  width: max-content;
 }
 
 /* Button Variants */
