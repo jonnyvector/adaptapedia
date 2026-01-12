@@ -127,6 +127,21 @@ export default function ComparisonVoting({ work, screenWork, initialStats = null
   };
 
   const handleFaithfulnessUpdate = async (rating: number) => {
+    // Check authentication first - redirect to login if not authenticated
+    if (!isAuthenticated) {
+      const voteData = {
+        work: work.id,
+        screen_work: screenWork.id,
+        has_read_book: true,
+        has_watched_adaptation: true,
+        preference: preference || 'BOOK', // Default to BOOK if no preference set yet
+        faithfulness_rating: rating,
+      };
+      sessionStorage.setItem(`pendingComparisonVote_${work.id}_${screenWork.id}`, JSON.stringify(voteData));
+      router.push('/auth/login?redirect=' + encodeURIComponent(window.location.pathname));
+      return;
+    }
+
     setFaithfulnessRating(rating);
     if (preference) {
       await submitVote(preference, rating);
