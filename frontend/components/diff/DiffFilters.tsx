@@ -63,7 +63,7 @@ export default function DiffFilters({
               className={`px-3 py-1.5 ${RADIUS.control} border ${TEXT.secondary} font-bold transition-all ${
                 isSelected
                   ? `bg-black dark:bg-white ${BORDERS.solid} text-white dark:text-black`
-                  : `bg-white dark:bg-black ${BORDERS.medium} ${TEXT.mutedStrong} hover:${BORDERS.solid}`
+                  : `bg-white dark:bg-black ${BORDERS.medium} text-black dark:text-white hover:border-black hover:dark:border-white`
               }`}
               style={{ fontFamily: FONTS.mono, letterSpacing: LETTER_SPACING.tight }}
               aria-pressed={isSelected}
