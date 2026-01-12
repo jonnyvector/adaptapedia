@@ -76,7 +76,7 @@ export default function ComparisonCard({ comparison, showTrendingBadge = false }
 
         {/* VS Chip on seam */}
         <div className="absolute inset-0 flex items-center justify-center pointer-events-none z-20">
-          <div className={`bg-white dark:bg-black text-black dark:text-white px-2 py-0.5 font-bold ${TEXT.metadata} border ${BORDERS.solid} group-hover:scale-110 transition-transform ${monoUppercase}`} style={{ fontFamily: FONTS.mono, letterSpacing: LETTER_SPACING.wide }}>
+          <div className={`bg-white dark:bg-black text-black dark:text-white px-2 py-0.5 font-bold ${TEXT.metadata} border ${BORDERS.medium} group-hover:border-black group-hover:dark:border-white transition-colors ${monoUppercase}`} style={{ fontFamily: FONTS.mono, letterSpacing: LETTER_SPACING.wide }}>
             VS
           </div>
         </div>
