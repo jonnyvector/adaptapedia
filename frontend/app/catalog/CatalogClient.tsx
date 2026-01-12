@@ -112,66 +112,87 @@ export default function CatalogClient({
           {/* Sort By */}
           <div>
             <label className={`block ${TEXT.metadata} font-bold mb-2 ${monoUppercase}`}>Sort By</label>
-            <select
-              value={currentSort}
-              onChange={(e) => {
-                const params: Record<string, string> = {
-                  sort: e.target.value,
-                  order: currentOrder,
-                  filter: currentFilter,
-                };
-                if (currentLetter) params.letter = currentLetter;
-                window.location.href = `/catalog${buildQueryString(params)}`;
-              }}
-              className={`w-full pl-3 pr-8 py-2 min-h-[44px] ${TEXT.body} border ${BORDERS.medium} ${RADIUS.input} bg-white dark:bg-black text-black dark:text-white focus:outline-none focus:ring-0 focus:border-black focus:dark:border-white`}
-            >
-              <option value="title">Title</option>
-              <option value="year">Year</option>
-              <option value="adaptations">Adaptations</option>
-            </select>
+            <div className="relative">
+              <select
+                value={currentSort}
+                onChange={(e) => {
+                  const params: Record<string, string> = {
+                    sort: e.target.value,
+                    order: currentOrder,
+                    filter: currentFilter,
+                  };
+                  if (currentLetter) params.letter = currentLetter;
+                  window.location.href = `/catalog${buildQueryString(params)}`;
+                }}
+                className={`w-full appearance-none pl-3 pr-8 py-2 min-h-[44px] ${TEXT.body} border ${BORDERS.medium} ${RADIUS.input} bg-white dark:bg-black text-black dark:text-white focus:outline-none focus:ring-0 focus:border-black focus:dark:border-white`}
+              >
+                <option value="title">Title</option>
+                <option value="year">Year</option>
+                <option value="adaptations">Adaptations</option>
+              </select>
+              <div className="absolute right-3 top-1/2 -translate-y-1/2 pointer-events-none">
+                <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+                </svg>
+              </div>
+            </div>
           </div>
 
           {/* Order */}
           <div>
             <label className={`block ${TEXT.metadata} font-bold mb-2 ${monoUppercase}`}>Order</label>
-            <select
-              value={currentOrder}
-              onChange={(e) => {
-                const params: Record<string, string> = {
-                  sort: currentSort,
-                  order: e.target.value,
-                  filter: currentFilter,
-                };
-                if (currentLetter) params.letter = currentLetter;
-                window.location.href = `/catalog${buildQueryString(params)}`;
-              }}
-              className={`w-full pl-3 pr-8 py-2 min-h-[44px] ${TEXT.body} border ${BORDERS.medium} ${RADIUS.input} bg-white dark:bg-black text-black dark:text-white focus:outline-none focus:ring-0 focus:border-black focus:dark:border-white`}
-            >
-              <option value="asc">Ascending</option>
-              <option value="desc">Descending</option>
-            </select>
+            <div className="relative">
+              <select
+                value={currentOrder}
+                onChange={(e) => {
+                  const params: Record<string, string> = {
+                    sort: currentSort,
+                    order: e.target.value,
+                    filter: currentFilter,
+                  };
+                  if (currentLetter) params.letter = currentLetter;
+                  window.location.href = `/catalog${buildQueryString(params)}`;
+                }}
+                className={`w-full appearance-none pl-3 pr-8 py-2 min-h-[44px] ${TEXT.body} border ${BORDERS.medium} ${RADIUS.input} bg-white dark:bg-black text-black dark:text-white focus:outline-none focus:ring-0 focus:border-black focus:dark:border-white`}
+              >
+                <option value="asc">Ascending</option>
+                <option value="desc">Descending</option>
+              </select>
+              <div className="absolute right-3 top-1/2 -translate-y-1/2 pointer-events-none">
+                <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+                </svg>
+              </div>
+            </div>
           </div>
 
           {/* Filter */}
           <div>
             <label className={`block ${TEXT.metadata} font-bold mb-2 ${monoUppercase}`}>Filter</label>
-            <select
-              value={currentFilter}
-              onChange={(e) => {
-                const params: Record<string, string> = {
-                  sort: currentSort,
-                  order: currentOrder,
-                  filter: e.target.value,
-                };
-                if (currentLetter) params.letter = currentLetter;
-                window.location.href = `/catalog${buildQueryString(params)}`;
-              }}
-              className={`w-full pl-3 pr-8 py-2 min-h-[44px] ${TEXT.body} border ${BORDERS.medium} ${RADIUS.input} bg-white dark:bg-black text-black dark:text-white focus:outline-none focus:ring-0 focus:border-black focus:dark:border-white`}
-            >
-              <option value="all">All</option>
-              <option value="with-covers">With Covers</option>
-              <option value="without-covers">Without Covers</option>
-            </select>
+            <div className="relative">
+              <select
+                value={currentFilter}
+                onChange={(e) => {
+                  const params: Record<string, string> = {
+                    sort: currentSort,
+                    order: currentOrder,
+                    filter: e.target.value,
+                  };
+                  if (currentLetter) params.letter = currentLetter;
+                  window.location.href = `/catalog${buildQueryString(params)}`;
+                }}
+                className={`w-full appearance-none pl-3 pr-8 py-2 min-h-[44px] ${TEXT.body} border ${BORDERS.medium} ${RADIUS.input} bg-white dark:bg-black text-black dark:text-white focus:outline-none focus:ring-0 focus:border-black focus:dark:border-white`}
+              >
+                <option value="all">All</option>
+                <option value="with-covers">With Covers</option>
+                <option value="without-covers">Without Covers</option>
+              </select>
+              <div className="absolute right-3 top-1/2 -translate-y-1/2 pointer-events-none">
+                <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+                </svg>
+              </div>
+            </div>
           </div>
         </div>
 
