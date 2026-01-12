@@ -81,7 +81,7 @@ export default async function Home(): Promise<JSX.Element> {
               </Link>
 
               {/* Tertiary: Random */}
-              <RandomComparisonButton />
+              <RandomComparisonButton className="w-full sm:w-auto" />
             </div>
 
             {/* Live activity signals - shows community is active */}

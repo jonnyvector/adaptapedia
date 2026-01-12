@@ -6,7 +6,11 @@ import { api } from '@/lib/api';
 import { Button } from '@/components/ui/Button';
 import { BoltIcon, SpinnerIcon } from '@/components/ui/Icons';
 
-export default function RandomComparisonButton(): JSX.Element {
+interface RandomComparisonButtonProps {
+  className?: string;
+}
+
+export default function RandomComparisonButton({ className }: RandomComparisonButtonProps): JSX.Element {
   const router = useRouter();
   const [loading, setLoading] = useState(false);
 
@@ -28,6 +32,7 @@ export default function RandomComparisonButton(): JSX.Element {
       disabled={loading}
       variant="ghost"
       size="lg"
+      className={className}
     >
       {loading ? (
         <>
