@@ -90,7 +90,7 @@ export default async function CatalogPage({
   const sort = searchParams.sort || 'title';
   const order = searchParams.order || 'asc';
   const filter = searchParams.filter || 'all';
-  const letter = searchParams.letter;
+  const letter = searchParams.letter || 'A'; // Default to 'A' if no letter specified
   const page = parseInt(searchParams.page || '1', 10);
 
   const data = await getCatalogData(sort, order, filter, letter, page);

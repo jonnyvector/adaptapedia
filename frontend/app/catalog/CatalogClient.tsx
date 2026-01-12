@@ -88,18 +88,6 @@ export default function CatalogClient({
       {/* Alphabet Navigation */}
       <div className="mb-8">
         <div className="flex flex-wrap gap-2">
-          {/* "All" option */}
-          <Link
-            href={`/catalog${buildQueryString({ sort: currentSort, order: currentOrder, filter: currentFilter })}`}
-            className={`px-3 py-1.5 border ${BORDERS.medium} ${
-              !currentLetter
-                ? 'bg-black dark:bg-white text-white dark:text-black'
-                : 'bg-white dark:bg-black hover:bg-black hover:dark:bg-white hover:text-white hover:dark:text-black'
-            } transition-colors ${TEXT.body} ${TEXT.primary} font-bold ${monoUppercase}`}
-          >
-            All
-          </Link>
-
           {/* Letter navigation */}
           {safeData.available_letters.map((letter) => (
             <Link
