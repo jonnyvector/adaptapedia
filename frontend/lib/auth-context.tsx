@@ -3,6 +3,7 @@
 import { createContext, useContext, useState, useEffect, ReactNode } from 'react';
 import type { User, SignupData, LoginData } from './types';
 import { api, tokenManager } from './api';
+import { identifyUser, resetUser, analytics } from './analytics';
 
 interface AuthContextType {
   user: User | null;
@@ -39,6 +40,14 @@ export function AuthProvider({ children }: { children: ReactNode }): JSX.Element
             const currentUser = await api.auth.getCurrentUser();
             setUser(currentUser);
             localStorage.setItem('user', JSON.stringify(currentUser));
+
+            // Identify user in PostHog
+            identifyUser(currentUser.id.toString(), {
+              email: currentUser.email,
+              username: currentUser.username,
+              role: currentUser.role,
+              onboarding_completed: currentUser.onboarding_completed,
+            });
           } catch (error) {
             // Token is invalid (expired or revoked), silently clear everything
             // Don't log this as it's expected behavior for expired sessions
@@ -73,6 +82,15 @@ export function AuthProvider({ children }: { children: ReactNode }): JSX.Element
     await setAuthCookie(response.access);
 
     setUser(response.user);
+
+    // Identify user in PostHog and track login
+    identifyUser(response.user.id.toString(), {
+      email: response.user.email,
+      username: response.user.username,
+      role: response.user.role,
+      onboarding_completed: response.user.onboarding_completed,
+    });
+    analytics.trackLogin('email');
   };
 
   const signup = async (data: SignupData): Promise<void> => {
@@ -86,6 +104,15 @@ export function AuthProvider({ children }: { children: ReactNode }): JSX.Element
     await setAuthCookie(response.access);
 
     setUser(response.user);
+
+    // Identify user in PostHog and track signup
+    identifyUser(response.user.id.toString(), {
+      email: response.user.email,
+      username: response.user.username,
+      role: response.user.role,
+      onboarding_completed: response.user.onboarding_completed,
+    });
+    analytics.trackSignup('email', response.user.id.toString());
   };
 
   const logout = async (): Promise<void> => {
@@ -104,6 +131,9 @@ export function AuthProvider({ children }: { children: ReactNode }): JSX.Element
       await clearAuthCookie();
 
       setUser(null);
+
+      // Reset PostHog user
+      resetUser();
     }
   };
 

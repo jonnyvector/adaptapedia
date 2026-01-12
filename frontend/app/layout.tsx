@@ -6,6 +6,8 @@ import Footer from '@/components/layout/Footer';
 import OnboardingBanner from '@/components/onboarding/OnboardingBanner';
 import { AuthProvider } from '@/lib/auth-context';
 import { ToastProvider } from '@/lib/toast-context';
+import { PostHogProvider, PostHogPageView } from '@/lib/posthog';
+import { Suspense } from 'react';
 
 const sora = Sora({
   subsets: ['latin'],
@@ -56,16 +58,21 @@ export default function RootLayout({
         />
       </head>
       <body className={`flex flex-col min-h-screen ${sora.variable} ${spaceGrotesk.variable} ${jetbrainsMono.variable}`} suppressHydrationWarning>
-        <ToastProvider>
-          <AuthProvider>
-            <Header />
-            <OnboardingBanner />
-            <div className="flex-1 bg-white dark:bg-black">
-              {children}
-            </div>
-            <Footer />
-          </AuthProvider>
-        </ToastProvider>
+        <PostHogProvider>
+          <Suspense fallback={null}>
+            <PostHogPageView />
+          </Suspense>
+          <ToastProvider>
+            <AuthProvider>
+              <Header />
+              <OnboardingBanner />
+              <div className="flex-1 bg-white dark:bg-black">
+                {children}
+              </div>
+              <Footer />
+            </AuthProvider>
+          </ToastProvider>
+        </PostHogProvider>
       </body>
     </html>
   );
