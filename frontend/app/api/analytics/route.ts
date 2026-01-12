@@ -1,10 +1,14 @@
 import { NextResponse } from 'next/server';
 
 export async function GET() {
-  const posthogProjectId = process.env.NEXT_PUBLIC_POSTHOG_KEY?.split('_')[1]; // Extract project ID from key
+  const posthogProjectId = process.env.POSTHOG_PROJECT_ID; // Numeric project ID from PostHog dashboard
   const posthogApiKey = process.env.POSTHOG_API_KEY; // Personal API key (different from public key)
 
   if (!posthogProjectId || !posthogApiKey) {
+    console.error('Missing PostHog config:', {
+      hasProjectId: !!posthogProjectId,
+      hasApiKey: !!posthogApiKey
+    });
     return NextResponse.json({ error: 'PostHog not configured' }, { status: 500 });
   }
 
