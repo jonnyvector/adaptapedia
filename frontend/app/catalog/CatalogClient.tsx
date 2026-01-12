@@ -1,9 +1,9 @@
 'use client';
 
-import { useState, useMemo } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
 import { FilmIcon, TvIcon } from '@/components/ui/Icons';
+import Pagination from '@/components/ui/Pagination';
 import { FONTS, LETTER_SPACING, BORDERS, TEXT, RADIUS, monoUppercase } from '@/lib/brutalist-design';
 
 interface CatalogBook {
@@ -24,121 +24,105 @@ interface CatalogBook {
   }[];
 }
 
-interface CatalogResponse {
+interface CatalogData {
   count: number;
+  total_pages: number;
+  current_page: number;
+  page_size: number;
+  has_next: boolean;
+  has_prev: boolean;
   results: CatalogBook[];
+  available_letters: string[];
+  letter_counts: Record<string, number>;
 }
 
 interface CatalogClientProps {
-  initialData: CatalogResponse;
-  initialSort: string;
-  initialOrder: string;
-  initialFilter: string;
+  data: CatalogData;
+  currentSort: string;
+  currentOrder: string;
+  currentFilter: string;
+  currentLetter?: string;
 }
 
 export default function CatalogClient({
-  initialData,
-  initialSort,
-  initialOrder,
-  initialFilter,
+  data,
+  currentSort,
+  currentOrder,
+  currentFilter,
+  currentLetter,
 }: CatalogClientProps) {
-  const [sortBy, setSortBy] = useState(initialSort);
-  const [order, setOrder] = useState(initialOrder);
-  const [filter, setFilter] = useState(initialFilter);
-  const [searchTerm, setSearchTerm] = useState('');
+  const buildQueryString = (params: Record<string, string>) => {
+    const query = new URLSearchParams(params);
+    return `?${query.toString()}`;
+  };
 
-  // Filter and search client-side
-  const filteredBooks = useMemo(() => {
-    let books = initialData.results;
+  const buildLetterUrl = (letter: string) => {
+    return `/catalog${buildQueryString({
+      letter,
+      sort: currentSort,
+      order: currentOrder,
+      filter: currentFilter,
+    })}`;
+  };
 
-    // Apply search filter
-    if (searchTerm) {
-      const search = searchTerm.toLowerCase();
-      books = books.filter(
-        (book) =>
-          book.title.toLowerCase().includes(search) ||
-          book.author?.toLowerCase().includes(search)
-      );
-    }
-
-    // Sort
-    books = [...books].sort((a, b) => {
-      let comparison = 0;
-
-      if (sortBy === 'title') {
-        comparison = a.title.localeCompare(b.title);
-      } else if (sortBy === 'year') {
-        comparison = a.year - b.year;
-      } else if (sortBy === 'adaptations') {
-        comparison = a.adaptation_count - b.adaptation_count;
-      }
-
-      return order === 'desc' ? -comparison : comparison;
-    });
-
-    return books;
-  }, [initialData.results, searchTerm, sortBy, order]);
-
-  // Group by first letter
-  const groupedBooks = useMemo(() => {
-    const groups: Record<string, CatalogBook[]> = {};
-
-    filteredBooks.forEach((book) => {
-      let firstChar = book.title[0].toUpperCase();
-      // Handle "The" prefix
-      if (book.title.toLowerCase().startsWith('the ')) {
-        firstChar = book.title[4].toUpperCase();
-      }
-      // Numbers
-      if (/\d/.test(firstChar)) {
-        firstChar = '#';
-      }
-
-      if (!groups[firstChar]) {
-        groups[firstChar] = [];
-      }
-      groups[firstChar].push(book);
-    });
-
-    return groups;
-  }, [filteredBooks]);
-
-  const sortedLetters = Object.keys(groupedBooks).sort((a, b) => {
-    if (a === '#') return -1;
-    if (b === '#') return 1;
-    return a.localeCompare(b);
-  });
-
-  // Count books with/without covers
-  const withCovers = initialData.results.filter((b) => b.cover_url).length;
-  const withoutCovers = initialData.results.filter((b) => !b.cover_url).length;
+  // Calculate "with covers" and "without covers" counts
+  // Note: These counts are approximate since we're only looking at current page
+  const withCovers = data.results.filter((b) => b.cover_url).length;
+  const withoutCovers = data.results.filter((b) => !b.cover_url).length;
 
   return (
     <div className="font-mono">
-      {/* Filters and Search */}
+      {/* Alphabet Navigation */}
+      <div className="mb-8">
+        <div className="flex flex-wrap gap-2">
+          {/* "All" option */}
+          <Link
+            href={`/catalog${buildQueryString({ sort: currentSort, order: currentOrder, filter: currentFilter })}`}
+            className={`px-3 py-1.5 border ${BORDERS.medium} ${
+              !currentLetter
+                ? 'bg-black dark:bg-white text-white dark:text-black'
+                : 'bg-white dark:bg-black hover:bg-black hover:dark:bg-white hover:text-white hover:dark:text-black'
+            } transition-colors ${TEXT.body} ${TEXT.primary} font-bold ${monoUppercase}`}
+          >
+            All
+          </Link>
+
+          {/* Letter navigation */}
+          {data.available_letters.map((letter) => (
+            <Link
+              key={letter}
+              href={buildLetterUrl(letter)}
+              className={`px-3 py-1.5 border ${BORDERS.medium} ${
+                currentLetter === letter
+                  ? 'bg-black dark:bg-white text-white dark:text-black'
+                  : 'bg-white dark:bg-black hover:bg-black hover:dark:bg-white hover:text-white hover:dark:text-black'
+              } transition-colors ${TEXT.body} ${TEXT.primary} font-bold ${monoUppercase}`}
+              title={`${data.letter_counts[letter]} books`}
+            >
+              {letter} <span className={`${TEXT.metadata}`}>({data.letter_counts[letter]})</span>
+            </Link>
+          ))}
+        </div>
+      </div>
+
+      {/* Filters */}
       <div className={`border ${BORDERS.medium} p-6 mb-8 bg-white dark:bg-black`}>
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
-          {/* Search */}
-          <div>
-            <label className={`block ${TEXT.metadata} font-bold mb-2 ${monoUppercase}`}>Search</label>
-            <input
-              type="text"
-              placeholder="Search books..."
-              value={searchTerm}
-              onChange={(e) => setSearchTerm(e.target.value)}
-              className={`w-full px-3 py-2 ${TEXT.body} border ${BORDERS.medium} ${RADIUS.input} bg-white dark:bg-black text-black dark:text-white focus:outline-none focus:ring-0 focus:border-black focus:dark:border-white`}
-
-            />
-          </div>
-
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
           {/* Sort By */}
           <div>
             <label className={`block ${TEXT.metadata} font-bold mb-2 ${monoUppercase}`}>Sort By</label>
             <select
-              value={sortBy}
-              onChange={(e) => setSortBy(e.target.value)}
+              value={currentSort}
+              onChange={(e) => {
+                const params: Record<string, string> = {
+                  sort: e.target.value,
+                  order: currentOrder,
+                  filter: currentFilter,
+                };
+                if (currentLetter) params.letter = currentLetter;
+                window.location.href = `/catalog${buildQueryString(params)}`;
+              }}
               className={`w-full px-3 py-2 ${TEXT.body} border ${BORDERS.medium} ${RADIUS.input} bg-white dark:bg-black text-black dark:text-white focus:outline-none focus:ring-0 focus:border-black focus:dark:border-white`}
-
             >
               <option value="title">Title</option>
               <option value="year">Year</option>
@@ -150,10 +134,17 @@ export default function CatalogClient({
           <div>
             <label className={`block ${TEXT.metadata} font-bold mb-2 ${monoUppercase}`}>Order</label>
             <select
-              value={order}
-              onChange={(e) => setOrder(e.target.value)}
+              value={currentOrder}
+              onChange={(e) => {
+                const params: Record<string, string> = {
+                  sort: currentSort,
+                  order: e.target.value,
+                  filter: currentFilter,
+                };
+                if (currentLetter) params.letter = currentLetter;
+                window.location.href = `/catalog${buildQueryString(params)}`;
+              }}
               className={`w-full px-3 py-2 ${TEXT.body} border ${BORDERS.medium} ${RADIUS.input} bg-white dark:bg-black text-black dark:text-white focus:outline-none focus:ring-0 focus:border-black focus:dark:border-white`}
-
             >
               <option value="asc">Ascending</option>
               <option value="desc">Descending</option>
@@ -164,49 +155,37 @@ export default function CatalogClient({
           <div>
             <label className={`block ${TEXT.metadata} font-bold mb-2 ${monoUppercase}`}>Filter</label>
             <select
-              value={filter}
-              onChange={(e) => setFilter(e.target.value)}
+              value={currentFilter}
+              onChange={(e) => {
+                const params: Record<string, string> = {
+                  sort: currentSort,
+                  order: currentOrder,
+                  filter: e.target.value,
+                };
+                if (currentLetter) params.letter = currentLetter;
+                window.location.href = `/catalog${buildQueryString(params)}`;
+              }}
               className={`w-full px-3 py-2 ${TEXT.body} border ${BORDERS.medium} ${RADIUS.input} bg-white dark:bg-black text-black dark:text-white focus:outline-none focus:ring-0 focus:border-black focus:dark:border-white`}
-
             >
-              <option value="all">All ({initialData.count})</option>
-              <option value="with-covers">With Covers ({withCovers})</option>
-              <option value="without-covers">Without Covers ({withoutCovers})</option>
+              <option value="all">All</option>
+              <option value="with-covers">With Covers</option>
+              <option value="without-covers">Without Covers</option>
             </select>
           </div>
         </div>
 
         <div className={`mt-4 ${TEXT.secondary} ${TEXT.mutedMedium}`}>
-          Showing {filteredBooks.length} of {initialData.count} books
+          Showing {data.results.length} of {data.count} books
+          {currentLetter && ` (Letter: ${currentLetter})`}
+          {data.total_pages > 1 && ` • Page ${data.current_page} of ${data.total_pages}`}
         </div>
       </div>
 
-      {/* Alphabetical Index */}
-      <div className="mb-8 flex flex-wrap gap-2">
-        {sortedLetters.map((letter) => (
-          <a
-            key={letter}
-            href={`#${letter}`}
-            className={`px-3 py-1.5 border ${BORDERS.medium} bg-white dark:bg-black hover:bg-black hover:dark:bg-white hover:text-white hover:dark:text-black transition-colors ${TEXT.body} ${TEXT.primary} font-bold ${monoUppercase}`}
-           
-          >
-            {letter}
-          </a>
-        ))}
-      </div>
-
-      {/* Books grouped by letter */}
-      {sortedLetters.map((letter) => (
-        <div key={letter} id={letter} className="mb-16">
-          <h2
-            className={`text-4xl font-black mb-6 pb-3 border-b ${BORDERS.medium} tracking-tight ${TEXT.primary}`}
-           
-          >
-            {letter}
-          </h2>
-
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {groupedBooks[letter].map((book) => (
+      {/* Books Grid */}
+      {data.results.length > 0 ? (
+        <>
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-8">
+            {data.results.map((book) => (
               <div key={book.id} className={`border ${BORDERS.medium} p-4 hover:border-black hover:dark:border-white transition-colors bg-white dark:bg-black`}>
                 <div className="flex gap-4">
                   {/* Book Cover */}
@@ -254,7 +233,6 @@ export default function CatalogClient({
                               key={adaptation.id}
                               href={`/compare/${book.slug}/${adaptation.slug}`}
                               className={`flex items-center gap-1.5 ${TEXT.secondary} ${TEXT.primary} hover:underline`}
-                             
                             >
                               {adaptation.type === 'MOVIE' ? (
                                 <FilmIcon className="w-3.5 h-3.5 flex-shrink-0" />
@@ -279,12 +257,23 @@ export default function CatalogClient({
               </div>
             ))}
           </div>
-        </div>
-      ))}
 
-      {filteredBooks.length === 0 && (
+          {/* Pagination */}
+          <Pagination
+            currentPage={data.current_page}
+            totalPages={data.total_pages}
+            basePath="/catalog"
+            searchParams={{
+              sort: currentSort,
+              order: currentOrder,
+              filter: currentFilter,
+              ...(currentLetter && { letter: currentLetter }),
+            }}
+          />
+        </>
+      ) : (
         <div className={`text-center py-12 ${TEXT.mutedMedium}`}>
-          <p>No books found matching your search.</p>
+          <p>No books found.</p>
         </div>
       )}
     </div>

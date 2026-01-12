@@ -168,14 +168,16 @@ class WorkViewSet(viewsets.ReadOnlyModelViewSet):
     @action(detail=False, methods=['get'], url_path='catalog')
     def catalog(self, request):
         """
-        Get all books with their adaptations for catalog page.
+        Get books with their adaptations for catalog page with letter-based pagination.
 
         Query params:
         - sort: 'title' (default), 'year', 'adaptations'
         - order: 'asc' (default), 'desc'
         - filter: 'all' (default), 'with-covers', 'without-covers'
+        - letter: Filter by first letter (A-Z or #)
+        - page: Page number (default 1)
 
-        Returns all books with adaptation counts and cover URLs.
+        Returns paginated books with adaptation details and available letters.
         """
         from .services import WorkService
 
@@ -183,11 +185,16 @@ class WorkViewSet(viewsets.ReadOnlyModelViewSet):
         sort_by = request.query_params.get('sort', 'title')
         order = request.query_params.get('order', 'asc')
         filter_type = request.query_params.get('filter', 'all')
+        letter = request.query_params.get('letter')
+        page = int(request.query_params.get('page', 1))
 
         # Get catalog data from service (handles all business logic and query optimization)
-        results = WorkService.get_catalog(sort_by, order, filter_type)
+        data = WorkService.get_catalog(
+            sort_by=sort_by,
+            order=order,
+            filter_type=filter_type,
+            letter=letter,
+            page=page
+        )
 
-        return Response({
-            'count': len(results),
-            'results': results,
-        })
+        return Response(data)

@@ -30,19 +30,32 @@ interface CatalogBook {
 
 interface CatalogResponse {
   count: number;
+  total_pages: number;
+  current_page: number;
+  page_size: number;
+  has_next: boolean;
+  has_prev: boolean;
   results: CatalogBook[];
+  available_letters: string[];
+  letter_counts: Record<string, number>;
 }
 
 async function getCatalogData(
   sort: string = 'title',
   order: string = 'asc',
-  filter: string = 'all'
+  filter: string = 'all',
+  letter?: string,
+  page: number = 1
 ): Promise<CatalogResponse> {
   try {
     const API_URL = process.env.API_URL || 'http://localhost:8000/api';
-    const params = new URLSearchParams({ sort, order, filter });
+    const params: Record<string, string> = { sort, order, filter, page: page.toString() };
+    if (letter) {
+      params.letter = letter;
+    }
+    const queryString = new URLSearchParams(params).toString();
     const res = await fetch(
-      `${API_URL}/works/catalog/?${params}`,
+      `${API_URL}/works/catalog/?${queryString}`,
       {
         next: { revalidate: 60 }, // Cache for 1 minute
       }
@@ -55,20 +68,32 @@ async function getCatalogData(
     return await res.json();
   } catch (error) {
     console.error('Error fetching catalog:', error);
-    return { count: 0, results: [] };
+    return {
+      count: 0,
+      total_pages: 0,
+      current_page: 1,
+      page_size: 50,
+      has_next: false,
+      has_prev: false,
+      results: [],
+      available_letters: [],
+      letter_counts: {},
+    };
   }
 }
 
 export default async function CatalogPage({
   searchParams,
 }: {
-  searchParams: { sort?: string; order?: string; filter?: string };
+  searchParams: { sort?: string; order?: string; filter?: string; letter?: string; page?: string };
 }) {
   const sort = searchParams.sort || 'title';
   const order = searchParams.order || 'asc';
   const filter = searchParams.filter || 'all';
+  const letter = searchParams.letter;
+  const page = parseInt(searchParams.page || '1', 10);
 
-  const data = await getCatalogData(sort, order, filter);
+  const data = await getCatalogData(sort, order, filter, letter, page);
 
   return (
     <div className="container py-8 md:py-16 font-mono">
@@ -83,11 +108,21 @@ export default async function CatalogPage({
           className={`text-base sm:text-lg md:text-xl ${TEXT.mutedMedium}`}
 
         >
-          Browse all {data.count} books and their screen adaptations
+          {letter ? (
+            <>Showing {data.count} book{data.count !== 1 ? 's' : ''} starting with "{letter}"</>
+          ) : (
+            <>Browse all books and their screen adaptations</>
+          )}
         </p>
       </div>
 
-      <CatalogClient initialData={data} initialSort={sort} initialOrder={order} initialFilter={filter} />
+      <CatalogClient
+        data={data}
+        currentSort={sort}
+        currentOrder={order}
+        currentFilter={filter}
+        currentLetter={letter}
+      />
     </div>
   );
 }

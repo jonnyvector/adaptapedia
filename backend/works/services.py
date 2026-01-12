@@ -31,23 +31,29 @@ class WorkService:
     def get_catalog(
         sort_by: str = 'title',
         order: str = 'asc',
-        filter_type: str = 'all'
-    ) -> List[Dict[str, Any]]:
+        filter_type: str = 'all',
+        letter: Optional[str] = None,
+        page: int = 1,
+        page_size: int = 50
+    ) -> Dict[str, Any]:
         """
-        Get all books with their adaptations for catalog page.
+        Get books with their adaptations for catalog page with letter-based pagination.
 
         Args:
             sort_by: 'title' (default), 'year', or 'adaptations'
             order: 'asc' (default) or 'desc'
             filter_type: 'all' (default), 'with-covers', or 'without-covers'
+            letter: Filter by first letter (A-Z or #). If None, returns all books
+            page: Page number (1-indexed)
+            page_size: Number of books per page (default 50)
 
         Returns:
-            List of work dictionaries with adaptation details
+            Dict with results, pagination metadata, and available letters
         """
         # Base queryset
         queryset = Work.objects.all()
 
-        # Apply filters
+        # Apply cover filters
         if filter_type == 'with-covers':
             queryset = queryset.exclude(cover_url__isnull=True).exclude(cover_url='')
         elif filter_type == 'without-covers':
@@ -57,6 +63,20 @@ class WorkService:
         queryset = queryset.annotate(
             adaptation_count=Count('adaptations')
         )
+
+        # Apply letter filter
+        if letter:
+            if letter == '#':
+                # Filter for titles starting with numbers
+                queryset = queryset.filter(title__regex=r'^[0-9]')
+            else:
+                # Filter for titles starting with the letter
+                # Handle "The" prefix: "The Lord" should be under "L"
+                letter_upper = letter.upper()
+                queryset = queryset.filter(
+                    Q(title__istartswith=letter_upper) |
+                    Q(title__istartswith=f'The {letter_upper}')
+                )
 
         # Apply sorting
         sort_field = {
@@ -68,17 +88,28 @@ class WorkService:
         if order == 'desc':
             sort_field = f'-{sort_field}'
 
+        queryset = queryset.order_by(sort_field)
+
+        # Get total count before pagination
+        total_count = queryset.count()
+        total_pages = (total_count + page_size - 1) // page_size  # Ceiling division
+
+        # Apply pagination
+        start = (page - 1) * page_size
+        end = start + page_size
+        paginated_queryset = queryset[start:end]
+
         # Prefetch adaptations to avoid N+1 queries
         adaptations_prefetch = Prefetch(
             'adaptations',
             queryset=AdaptationEdge.objects.select_related('screen_work').order_by('screen_work__year')
         )
 
-        queryset = queryset.prefetch_related(adaptations_prefetch).order_by(sort_field)
+        paginated_queryset = paginated_queryset.prefetch_related(adaptations_prefetch)
 
-        # Build response
+        # Build results
         results = []
-        for work in queryset:
+        for work in paginated_queryset:
             adaptation_list = [{
                 'id': edge.screen_work.id,
                 'title': edge.screen_work.title,
@@ -99,7 +130,36 @@ class WorkService:
                 'adaptations': adaptation_list,
             })
 
-        return results
+        # Get available letters (with counts)
+        all_works = Work.objects.all()
+        letter_counts = {}
+        for work in all_works.only('title'):
+            title = work.title
+            # Handle "The" prefix
+            if title.lower().startswith('the ') and len(title) > 4:
+                first_char = title[4].upper()
+            else:
+                first_char = title[0].upper()
+
+            # Group numbers under #
+            if first_char.isdigit():
+                first_char = '#'
+
+            letter_counts[first_char] = letter_counts.get(first_char, 0) + 1
+
+        available_letters = sorted(letter_counts.keys(), key=lambda x: (x == '#', x))
+
+        return {
+            'count': total_count,
+            'total_pages': total_pages,
+            'current_page': page,
+            'page_size': page_size,
+            'has_next': page < total_pages,
+            'has_prev': page > 1,
+            'results': results,
+            'available_letters': available_letters,
+            'letter_counts': letter_counts,
+        }
 
 
 class SimilarBooksService:
