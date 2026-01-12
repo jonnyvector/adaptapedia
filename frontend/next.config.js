@@ -21,6 +21,17 @@ const nextConfig = {
       'i.gr-assets.com',
     ],
   },
+  // Performance optimizations
+  experimental: {
+    optimizeCss: true, // Enable CSS optimization
+    optimizePackageImports: ['@heroicons/react'], // Optimize icon imports
+  },
+  // Compiler optimizations
+  compiler: {
+    removeConsole: process.env.NODE_ENV === 'production' ? {
+      exclude: ['error', 'warn'],
+    } : false,
+  },
 };
 
 module.exports = nextConfig;

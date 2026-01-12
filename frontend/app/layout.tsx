@@ -13,18 +13,24 @@ const sora = Sora({
   subsets: ['latin'],
   variable: '--font-sora',
   display: 'swap',
+  weight: ['400', '600', '700'], // Only load weights you use
+  preload: false, // Don't preload unused font
 });
 
 const spaceGrotesk = Space_Grotesk({
   subsets: ['latin'],
   variable: '--font-space-grotesk',
   display: 'swap',
+  weight: ['400', '500', '600', '700'], // Only load weights you use
+  preload: true, // Preload main body font
 });
 
 const jetbrainsMono = JetBrains_Mono({
   subsets: ['latin'],
   variable: '--font-jetbrains-mono',
   display: 'swap',
+  weight: ['400', '600', '700'], // Only load weights you use
+  preload: true, // Preload for headings
 });
 
 export const metadata: Metadata = {
