@@ -4,6 +4,7 @@ import SearchBar from '@/components/search/SearchBar';
 import RandomComparisonButton from '@/components/ui/RandomComparisonButton';
 import ComparisonCard from '@/components/browse/ComparisonCard';
 import PopularComparisons from '@/components/home/PopularComparisons';
+import { Button } from '@/components/ui/Button';
 import type { BrowseComparison } from '@/lib/types';
 import { FONTS, BORDERS, TEXT, RADIUS } from '@/lib/brutalist-design';
 import { ClipboardDocumentListIcon, UserGroupIcon, ShieldCheckIcon, ChartBarIcon, EyeSlashIcon, PlusIcon, ChatBubbleIcon } from '@/components/ui/Icons';
@@ -61,7 +62,7 @@ export default async function Home(): Promise<JSX.Element> {
             </h1>
 
             <p className={`text-lg sm:text-xl md:text-2xl ${TEXT.mutedMedium} max-w-2xl mx-auto mb-6 md:mb-8 leading-relaxed px-4`} style={{ fontFamily: FONTS.mono }}>
-              Adaptapedia is where fans log, vote on, and discuss what changed from book to screen — with spoiler controls so everyone can participate safely.
+              Log differences. Vote for accuracy. Debate what changed — spoiler-safe by default.
             </p>
 
             {/* Search Bar - Primary Action */}
@@ -71,15 +72,26 @@ export default async function Home(): Promise<JSX.Element> {
 
             {/* Helper text */}
             <p className={`${TEXT.secondary} ${TEXT.mutedMedium} max-w-2xl mx-auto mb-6`} style={{ fontFamily: FONTS.mono }}>
-              New pages start empty — that&apos;s the point. Your diffs build the database.
+              New pages start empty — that&apos;s the point. <span className="font-bold text-black dark:text-white">Your diffs build the database.</span>
             </p>
 
-            {/* Secondary CTAs */}
+            {/* CTAs */}
             <div className="flex flex-col sm:flex-row gap-3 justify-center items-center mb-8">
-              <Link href="/search" className={`${TEXT.secondary} ${TEXT.primary} hover:underline font-bold transition-colors uppercase tracking-wider`} style={{ fontFamily: FONTS.mono }}>
-                Browse all comparisons →
+              {/* Primary: Browse */}
+              <Link href="/browse">
+                <Button variant="primary" size="lg" className="w-full sm:w-auto">
+                  Browse comparisons
+                </Button>
               </Link>
-              <span className={`${TEXT.mutedMedium} hidden sm:inline`} style={{ fontFamily: FONTS.mono }}>or</span>
+
+              {/* Secondary: Add a diff */}
+              <Link href="/search">
+                <Button variant="secondary" size="lg" className="w-full sm:w-auto">
+                  + Add a diff
+                </Button>
+              </Link>
+
+              {/* Tertiary: Random */}
               <RandomComparisonButton />
             </div>
 
