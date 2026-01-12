@@ -12,13 +12,15 @@ export default function OnboardingBanner(): JSX.Element | null {
   const pathname = usePathname();
   const [isDismissed, setIsDismissed] = useState(false);
 
-  // Check localStorage for dismissed state
+  // Check localStorage for dismissed state (user-specific)
   useEffect(() => {
-    const dismissed = localStorage.getItem('onboarding-banner-dismissed');
-    if (dismissed === 'true') {
-      setIsDismissed(true);
+    if (user?.id) {
+      const dismissed = localStorage.getItem(`onboarding-banner-dismissed-${user.id}`);
+      if (dismissed === 'true') {
+        setIsDismissed(true);
+      }
     }
-  }, []);
+  }, [user?.id]);
 
   // Don't show banner while loading, if not authenticated, if onboarding is complete,
   // if dismissed, or if on onboarding/auth pages
@@ -35,8 +37,10 @@ export default function OnboardingBanner(): JSX.Element | null {
   }
 
   const handleDismiss = () => {
-    localStorage.setItem('onboarding-banner-dismissed', 'true');
-    setIsDismissed(true);
+    if (user?.id) {
+      localStorage.setItem(`onboarding-banner-dismissed-${user.id}`, 'true');
+      setIsDismissed(true);
+    }
   };
 
   return (
