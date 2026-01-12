@@ -59,10 +59,8 @@ export default function ComparisonView({
       workTitle: work.title,
       screenWorkId: screenWork.id.toString(),
       screenWorkTitle: screenWork.title,
-      diffCount: initialDiffs.length,
-      spoilerPreference,
     });
-  }, [work.id, work.title, screenWork.id, screenWork.title, initialDiffs.length, spoilerPreference]);
+  }, [work.id, work.title, screenWork.id, screenWork.title]);
 
   // Use initialDiffs directly - no need to fetch client-side
   // All diffs are provided server-side with FULL scope, we filter client-side

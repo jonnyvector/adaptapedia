@@ -80,9 +80,9 @@ export default function OnboardingPage(): JSX.Element {
       await completeOnboarding();
 
       // Track onboarding completion
-      analytics.trackOnboardingComplete({
-        stepsCompleted: 3,
-      });
+      if (user) {
+        analytics.trackOnboardingComplete(user.id.toString());
+      }
 
       // Refresh user data to update onboarding status
       await refreshUser();

@@ -55,7 +55,7 @@ function SearchBarContent({
           setSearchResults(results);
 
           // Track search analytics
-          const totalResults = (results.books?.length || 0) + (results.adaptations?.length || 0);
+          const totalResults = results.total_count || results.results.length;
           analytics.trackSearch({
             query,
             resultCount: totalResults,
