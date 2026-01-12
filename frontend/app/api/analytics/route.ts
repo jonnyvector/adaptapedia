@@ -9,18 +9,26 @@ export async function GET() {
   }
 
   try {
-    // Fetch events from last 7 days
+    // Fetch events from last 7 days with 30 second timeout
+    const controller = new AbortController();
+    const timeoutId = setTimeout(() => controller.abort(), 30000);
+
     const response = await fetch(
       `https://us.i.posthog.com/api/projects/${posthogProjectId}/events/?limit=1000`,
       {
         headers: {
           'Authorization': `Bearer ${posthogApiKey}`,
         },
+        signal: controller.signal,
       }
     );
 
+    clearTimeout(timeoutId);
+
     if (!response.ok) {
-      throw new Error('Failed to fetch PostHog data');
+      const errorText = await response.text();
+      console.error('PostHog API error:', response.status, errorText);
+      throw new Error(`Failed to fetch PostHog data: ${response.status}`);
     }
 
     const data = await response.json();
