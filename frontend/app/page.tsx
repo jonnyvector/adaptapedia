@@ -65,17 +65,17 @@ export default async function Home(): Promise<JSX.Element> {
             </p>
 
             {/* CTAs */}
-            <div className="flex flex-col sm:flex-row gap-3 justify-center items-center mb-8">
+            <div className="flex flex-col sm:flex-row gap-3 justify-center items-stretch sm:items-center mb-8 w-full sm:w-auto">
               {/* Primary: Browse */}
-              <Link href="/browse">
-                <Button variant="primary" size="lg" className="w-full sm:w-auto">
+              <Link href="/browse" className="w-full sm:w-auto">
+                <Button variant="primary" size="lg" className="w-full">
                   Browse comparisons
                 </Button>
               </Link>
 
               {/* Secondary: Add a diff */}
-              <Link href="/search">
-                <Button variant="secondary" size="lg" className="w-full sm:w-auto">
+              <Link href="/search" className="w-full sm:w-auto">
+                <Button variant="secondary" size="lg" className="w-full">
                   + Add a diff
                 </Button>
               </Link>
