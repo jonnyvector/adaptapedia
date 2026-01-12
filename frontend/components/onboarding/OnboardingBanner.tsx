@@ -60,7 +60,7 @@ export default function OnboardingBanner(): JSX.Element | null {
         </div>
         <button
           onClick={handleDismiss}
-          className="absolute top-3 right-4 p-2 hover:bg-white/10 dark:hover:bg-black/10 transition-colors rounded"
+          className="absolute top-3 right-4 p-1 hover:bg-white/10 dark:hover:bg-black/10 transition-colors rounded"
           aria-label="Dismiss banner"
         >
           <XMarkIcon className="w-5 h-5" />
