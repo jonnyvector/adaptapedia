@@ -130,7 +130,7 @@ export default async function WorkPage({ params }: PageProps): Promise<JSX.Eleme
 
           {/* Quick Stats */}
           {adaptations.length > 0 && (
-            <div className="flex items-center gap-3 text-sm text-muted bg-muted/5 rounded-lg px-4 py-3 border border-border/50">
+            <div className="flex items-center gap-3 text-sm text-muted bg-muted/5 px-4 py-3 border border-border/50">
               <span className="font-medium">
                 {adaptations.length} {adaptations.length === 1 ? 'adaptation' : 'adaptations'}
               </span>
