@@ -187,13 +187,21 @@ export default function ComparisonVoting({ work, screenWork, initialStats = null
           <div className={`h-7 flex overflow-hidden border ${BORDERS.solid}`}>
             <div
               className={`flex items-center justify-center text-white ${TEXT.metadata} font-bold transition-all duration-300`}
-              style={{ width: `${getPreferencePercentage('BOOK')}%`, backgroundColor: COLORS.book, fontFamily: FONTS.mono }}
+              style={{
+                width: `${getPreferencePercentage('BOOK')}%`,
+                background: `repeating-linear-gradient(45deg, ${COLORS.book}, ${COLORS.book} 10px, rgba(255,255,255,0.1) 10px, rgba(255,255,255,0.1) 20px)`,
+                fontFamily: FONTS.mono
+              }}
             >
               {getPreferencePercentage('BOOK') > 12 && `${getPreferencePercentage('BOOK')}%`}
             </div>
             <div
               className={`flex items-center justify-center text-white ${TEXT.metadata} font-bold transition-all duration-300`}
-              style={{ width: `${getPreferencePercentage('SCREEN')}%`, backgroundColor: COLORS.screen, fontFamily: FONTS.mono }}
+              style={{
+                width: `${getPreferencePercentage('SCREEN')}%`,
+                background: `repeating-linear-gradient(45deg, ${COLORS.screen}, ${COLORS.screen} 10px, rgba(255,255,255,0.1) 10px, rgba(255,255,255,0.1) 20px)`,
+                fontFamily: FONTS.mono
+              }}
             >
               {getPreferencePercentage('SCREEN') > 12 && `${getPreferencePercentage('SCREEN')}%`}
             </div>

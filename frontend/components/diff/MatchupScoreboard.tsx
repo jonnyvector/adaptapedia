@@ -438,7 +438,7 @@ export default function MatchupScoreboard({
                             className="transition-all duration-500"
                             style={{
                               width: `${bookPct}%`,
-                              backgroundColor: bookAccent
+                              background: `repeating-linear-gradient(45deg, ${bookAccent}, ${bookAccent} 10px, rgba(255,255,255,0.1) 10px, rgba(255,255,255,0.1) 20px)`
                             }}
                           />
                         )}
@@ -448,7 +448,7 @@ export default function MatchupScoreboard({
                             className="transition-all duration-500"
                             style={{
                               width: `${screenPct}%`,
-                              backgroundColor: screenAccent
+                              background: `repeating-linear-gradient(45deg, ${screenAccent}, ${screenAccent} 10px, rgba(255,255,255,0.1) 10px, rgba(255,255,255,0.1) 20px)`
                             }}
                           />
                         )}
